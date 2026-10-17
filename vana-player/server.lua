@@ -224,14 +224,17 @@ local function restart(player, kind)
     local rules, points = PlayerConfig[kind], Restarts[kind == "busted" and "police" or "hospital"]
     local d = data[player]
     if not d then return end
-    snapshot(player)
     -- Earned perks (vanilla girlfriends: Barbara gets you out of jail, Katie out of hospital, for free
     -- and with your weapons): progress "perk.free_busted" / "perk.free_wasted".
     local free = d.progress and d.progress["perk.free_" .. kind] == true
+    -- The penalty goes on the live player, not just the record: any save before the respawn snapshots
+    -- the live state and would otherwise undo it.
     if not free then
-        d.money = math.max(0, d.money - rules.fee)
-        if rules.loseWeapons then d.weapons, d.slot = {}, 0 end
+        setPlayerMoney(player, math.max(0, getPlayerMoney(player) - rules.fee), true)
+        if rules.loseWeapons then takeAllWeapons(player) end
     end
+    snapshot(player)
+    if not free and rules.loseWeapons then d.weapons, d.slot = {}, 0 end
     triggerClientEvent(player, "vana-player:restartText", resourceRoot, kind)
     setTimer(function()
         if not isElement(player) then return end
