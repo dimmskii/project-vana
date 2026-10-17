@@ -44,6 +44,8 @@ its orange marker to open the menu.
 | Cluckin' Bell, Well Stacked Pizza, Burger Shot | the three meal sizes and a salad | `calories N`: +N health (up to max) and fat; `health N`: +N health |
 | Binco, Pro-Laps, SubUrban, ZIP, Victim, Didier Sachs | shopping.dat's clothes per shop | `addPedClothes` (CJ only) |
 | 24/7 counters | ours: camera, flowers, cane, brass knuckles, spraycan, extinguisher, parachute | Weapon item |
+| Barbers (`BARBERS`, `BARBER2`, `BARBER3`) | shopping.dat's haircuts per shop | `addPedClothes` on the head (CJ only), paid each time |
+| Tattoo parlours (`TATTOO`, `TATTO2`, `TATTO3`) | shopping.dat's tattoos per shop | By body part (`tattooCategories`), paid each time; "Remove tattoo" per body part |
 
 The 24/7 stock is not vanilla; edit it in `config/shops.lua`, along with the weapon ID mapping,
 price overrides and `fatPerCalorie`.
@@ -113,5 +115,4 @@ objects.
 - **Dumbbells:** vanilla's `gymdumb.scm` free weights aren't placed objects in the map data.
 - **Vanilla shop behaviour:** item preview (trying clothes on, weapon close-ups).
 
-- **Other shops:** barbers, tattoos, car mod shops, vending machines and food carts (script
-  brains on objects).
+- **Other shops:** car mod shops (TransFender, Loco Low Co., Wheel Arch Angels).

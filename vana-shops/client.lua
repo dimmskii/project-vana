@@ -1,7 +1,7 @@
 -- The shop menu, in the vanilla style: a box top-left, arrow keys to choose, Enter to buy,
 -- Backspace to go back or leave. Clothes are grouped by apparel category; owned clothes say OWNED.
 -- Purchases are only requests; the server decides.
-local TITLES = { weapons = "Ammu-Nation", food = "Order", clothes = "Clothes", misc = "24/7", closet = "Closet", fighting = "Fighting style" }
+local TITLES = { weapons = "Ammu-Nation", food = "Order", clothes = "Clothes", misc = "24/7", closet = "Closet", fighting = "Fighting style", hair = "Barber", tattoo = "Tattoos" }
 local menu       -- { title, items, list, selected, category, categories, message, messageAt }
 
 local function close()
@@ -33,7 +33,7 @@ end
 
 addEvent("vana-shops:open", true)
 addEventHandler("vana-shops:open", resourceRoot, function(shopName, kind, items, categories)
-    local grouped = kind == "clothes" or kind == "closet"
+    local grouped = kind == "clothes" or kind == "closet" or kind == "tattoo"
     menu = { title = TITLES[kind] or shopName, items = items, selected = 1, categories = grouped and categories or nil }
     rebuild()
     toggleAllControls(false, true, false)

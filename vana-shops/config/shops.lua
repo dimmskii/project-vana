@@ -42,6 +42,13 @@ ShopConfig = {
         { style = 5, name = "Boxing" }, { style = 6, name = "Kung Fu" }, { style = 7, name = "Kickboxing" },
     },
     fightingMinMuscle = 350, -- muscle stat (0-1000) needed to learn a style
+    -- Tattoo menus are grouped by body part (shopping.dat's tattoo type = clothes slot).
+    tattooCategories = {
+        { type = 4, name = "Left upper arm" }, { type = 5, name = "Left lower arm" },
+        { type = 6, name = "Right upper arm" }, { type = 7, name = "Right lower arm" },
+        { type = 8, name = "Back" }, { type = 9, name = "Left chest" }, { type = 10, name = "Right chest" },
+        { type = 11, name = "Stomach" }, { type = 12, name = "Lower back" },
+    },
     -- The closet: arriving through this entrance's hub (the changing room every safehouse closet door
     -- leads into) opens a menu of every clothing item the player owns.
     closetEntrance = "CHANGER",

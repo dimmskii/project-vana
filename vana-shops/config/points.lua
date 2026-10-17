@@ -26,4 +26,11 @@ ShopPoints = {
     GYM1       = { kind = "fighting", style = 5, interior = 5, x = 772.99, y = 5.38, z = 999.73 }, -- Ganton: boxing
     GYM2       = { kind = "fighting", style = 6, interior = 6, x = 756.41, y = -47.92, z = 999.73 }, -- Cobra (SF): kung fu
     GYM3       = { kind = "fighting", style = 7, interior = 7, x = 759.18, y = -60.06, z = 999.73 }, -- Below the Belt (LV): kickboxing
+    -- Barbers and tattoo parlours: 4 m inside the door (no counter object found); refine with /shoppoint.
+    BARBERS    = { kind = "hair", interior = 2, x = 411.63, y = -17.43, z = 1000.80 },
+    BARBER2    = { kind = "hair", interior = 3, x = 418.65, y = -78.64, z = 1000.96 },
+    BARBER3    = { kind = "hair", interior = 12, x = 412.02, y = -48.65, z = 1000.96 },
+    TATTOO     = { kind = "tattoo", interior = 16, x = -204.44, y = -22.45, z = 1001.30 },
+    TATTO2     = { kind = "tattoo", interior = 17, x = -204.44, y = -4.47, z = 1001.30 },
+    TATTO3     = { kind = "tattoo", interior = 3, x = -204.44, y = -39.65, z = 1001.30 },
 }

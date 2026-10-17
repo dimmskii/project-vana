@@ -95,6 +95,8 @@ local function catalogue(shopName, player)
         local f
         if point.kind == "weapons" then f = prices.weapons[name]
         elseif point.kind == "food" then f = prices.food[name]
+        elseif point.kind == "hair" then f = prices.haircuts[name]
+        elseif point.kind == "tattoo" then f = prices.tattoos[name]
         else f = prices.clothes[name] end
         if f then
             -- Vanilla names: shopping.dat's nametag is a GXT key (field 2), e.g. VESTA -> "Black Tank".
@@ -105,8 +107,18 @@ local function catalogue(shopName, player)
             if point.kind == "clothes" then
                 item.category = tonumber(f[4])
                 item.owned = player and playerCall("isOwned", player, "clothes", name) or false
+            elseif point.kind == "tattoo" then
+                item.category = tonumber(f[3]) -- body part
             end
             items[#items + 1] = item
+        end
+    end
+    if point.kind == "tattoo" then
+        -- Tattoos are paid for each time, as in vanilla; each body part can have its tattoo removed.
+        local parts = {}
+        for _, item in ipairs(items) do parts[item.category] = true end
+        for part in pairs(parts) do
+            items[#items + 1] = { key = "takeoff:" .. part, label = "Remove tattoo", price = 0, category = part, owned = true, takeOff = true }
         end
     end
     if point.kind == "clothes" then
@@ -151,6 +163,20 @@ local function deliver(player, kind, key)
         setElementHealth(player, health)
         if stat == "calories" then
             setPedStat(player, 21, math.min(1000, getPedStat(player, 21) + value * ShopConfig.fatPerCalorie))
+        end
+    elseif kind == "hair" then
+        if getElementModel(player) ~= 0 then return false, "Only CJ can get a haircut here." end
+        local f = prices.haircuts[key]
+        addPedClothes(player, f[1], f[3], tonumber(f[4]))
+    elseif kind == "tattoo" then
+        if getElementModel(player) ~= 0 then return false, "Only CJ can get a tattoo here." end
+        local part = tonumber(key:match("^takeoff:(%d+)$"))
+        if part then
+            removePedClothes(player, part)
+        else
+            -- A tattoo's model is its texture name; its clothes slot is the body part.
+            local f = prices.tattoos[key]
+            addPedClothes(player, f[1], f[1], tonumber(f[3]))
         end
     elseif kind == "fighting" then
         local id = tonumber(key:match("^style(%d+)$"))
@@ -216,7 +242,7 @@ addEventHandler("vana-shops:buy", resourceRoot, function(key)
     if price > 0 then takePlayerMoney(client, price) end
     if point.kind == "clothes" and not item.owned then playerCall("grantOwned", client, "clothes", key) end
     savePlayer(client)
-    local verb = point.kind == "fighting" and (item.owned and "Fighting style" or "Learned") or item.takeOff and "Took off" or item.owned and "Wearing" or "Bought"
+    local verb = item.takeOff and point.kind == "tattoo" and "Removed" or point.kind == "fighting" and (item.owned and "Fighting style" or "Learned") or item.takeOff and "Took off" or item.owned and "Wearing" or "Bought"
     triggerClientEvent(client, "vana-shops:result", resourceRoot, true, verb .. ": " .. item.label, key, point.kind == "clothes" or point.kind == "fighting")
 end)
 
@@ -229,7 +255,8 @@ local function onMarkerHit(player, matching)
     local point = ShopPoints[shopName]
     if not point or getElementInterior(player) ~= point.interior then return end
     open[player] = shopName
-    triggerClientEvent(player, "vana-shops:open", resourceRoot, shopName, point.kind, catalogue(shopName, player), ShopConfig.clothesCategories)
+    local categories = point.kind == "tattoo" and ShopConfig.tattooCategories or ShopConfig.clothesCategories
+    triggerClientEvent(player, "vana-shops:open", resourceRoot, shopName, point.kind, catalogue(shopName, player), categories)
 end
 
 local pointMarkers = {}
@@ -314,9 +341,13 @@ addCommandHandler("shoptest", function(source)
     table.sort(chains)
     outputServerLog(("[shoptest] clothes chains: %s; %d items sold by only one chain"):format(table.concat(chains, ", "), exclusive))
 
+    local barber, tattoo = catalogue("BARBERS"), catalogue("TATTOO")
+    outputServerLog(("[shoptest] barber sells %d (e.g. %s $%d), tattoo parlour %d (e.g. %s $%d)"):format(#barber,
+        barber[2] and barber[2].label or "?", barber[2] and barber[2].price or 0, #tattoo, tattoo[1] and tattoo[1].label or "?", tattoo[1] and tattoo[1].price or 0))
+    ok = ok and #barber > 0 and #tattoo > 0
     -- Every shopping.dat item should have a vanilla name.
     local missing = {}
-    for _, section in ipairs({ "weapons", "food", "clothes" }) do
+    for _, section in ipairs({ "weapons", "food", "clothes", "haircuts", "tattoos" }) do
         for name, f in pairs(prices[section] or {}) do
             if not Gxt.get(f[2]) then missing[#missing + 1] = name .. "/" .. tostring(f[2]) end
         end
