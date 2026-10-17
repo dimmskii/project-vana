@@ -18,7 +18,10 @@ end
 addEvent("vana-map:points", true)
 addEventHandler("vana-map:points", resourceRoot, function(changes, full)
     if full then
-        for id in pairs(Map.blips) do Map.points[id] = nil draw(id) end
+        for id, blip in pairs(Map.blips) do
+            if isElement(blip) then destroyElement(blip) end
+        end
+        Map.points, Map.blips = {}, {}
     end
     for id, p in pairs(changes) do
         Map.points[id] = p or nil

@@ -3,6 +3,13 @@
 -- setPoint / removePoint; their points go when they stop. Clients get the whole set on join and changes
 -- as they happen. Point: { category | tag, x, y, z, interior (0), label }.
 local points = {} -- id -> point (with .owner)
+local ready = {} -- players whose client has said hello
+
+local function send(changes)
+    local to = {}
+    for player in pairs(ready) do to[#to + 1] = player end
+    if #to > 0 then triggerClientEvent(to, "vana-map:points", resourceRoot, changes) end
+end
 
 local function resolve(p)
     if p.category and MapCategories[p.category] then return p.category end
@@ -20,21 +27,24 @@ function setPoint(id, p)
     local point = { category = category, x = p.x, y = p.y, z = p.z or 0, interior = p.interior or 0, label = p.label,
                     owner = sourceResource and getResourceName(sourceResource) or "vana-map" }
     points[id] = point
-    triggerClientEvent(root, "vana-map:points", resourceRoot, { [id] = point })
+    send({ [id] = point })
     return true
 end
 
 function removePoint(id)
     if not points[id] then return false end
     points[id] = nil
-    triggerClientEvent(root, "vana-map:points", resourceRoot, { [id] = false })
+    send({ [id] = false })
     return true
 end
 
 addEvent("vana-map:hello", true)
 addEventHandler("vana-map:hello", resourceRoot, function()
+    ready[client] = true
     triggerClientEvent(client, "vana-map:points", resourceRoot, points, true)
 end)
+
+addEventHandler("onPlayerQuit", root, function() ready[source] = nil end)
 
 -- A provider stopping takes its points with it.
 addEventHandler("onResourceStop", root, function(resource)
@@ -43,7 +53,7 @@ addEventHandler("onResourceStop", root, function(resource)
     for id, p in pairs(points) do
         if p.owner == name then points[id], gone[id] = nil, false end
     end
-    if next(gone) then triggerClientEvent(root, "vana-map:points", resourceRoot, gone) end
+    if next(gone) then send(gone) end
 end)
 
 -- Providers that started first publish again when the map starts.
