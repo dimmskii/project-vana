@@ -97,27 +97,33 @@ the money, adds health and fat and plays the vanilla `VENDING` animation. Prices
 
 The equipment is seeded from `gta_int.img` by `tools/seed/seed_gym.py` into
 `vana-gym/config/equipment.lua`: 4 bikes, 4 treadmills, 5 benches and 4 mats in the three public
-gyms and Madd Dogg's home gym. Vanilla's gym scripts (`gym*.scm`) are script brains on those
-objects.
+gyms and Madd Dogg's home gym. Vanilla's gym scripts (`GYMBIKE`, `GYMBENC`, `GYMTREA`, `GYMDUMB` in
+`main.scm`) are script brains on those objects; the mats are the dumbbell stations.
 
-- **Working out:** walk into a machine's marker to get on (vanilla `GYMNASIUM` and `benchpress`
-  animations). Tap the sprint key to fill the bar; a full bar is one rep. F or Backspace gets off.
+- **Working out:** walk into a machine's marker to get on (vanilla `GYMNASIUM`, `benchpress` and
+  `freeweights` animations, played for their full length). Tap the sprint key to fill the power
+  bar; a full bar is one rep. F or Backspace gets off.
+- **Props** (`props.lua`, `props` in `gym.lua`): as in vanilla, the barbell rests on the bench and
+  the dumbbells by the mat until the hands pick them up partway through getting on, and go back
+  partway through getting off; the bike's pedals turn while someone rides. Every client draws them,
+  following the user's hand bones each frame.
 - **Gains per rep** (`vana-gym/config/gym.lua`):
 
   | Machine | Trains | Fat |
   | --- | --- | --- |
   | Exercise bike, treadmill | stamina +2 | -1 |
   | Bench press | muscle +3 | -1 |
+  | Dumbbells | muscle +2 | -1 |
 
   The server checks the pace (a rep takes at least 0.9 s) and caps gains at 60 points per stat per
   real hour (vanilla caps a day's workout). `vana-player` saves the stats.
-- **Placement:** the player is put at the machine's position and heading, with per-machine offsets
-  in `placement` for fine-tuning in game.
-- **Fighting styles:** the mats are `fighting` shop points (`GYM1`-`3` in
+- **Placement:** the player starts in front of the machine (`placement`: the inverse of how far
+  each get-on animation carries the root), and the marker sits there.
+- **Fighting styles:** `fighting` shop points at the vanilla trainers' spots (`GYM1`-`3` in
   `vana-shops/config/points.lua`). Ganton teaches boxing, Cobra in San Fierro kung fu, Below the
   Belt in Las Venturas kickboxing.
   - Learning a style needs 35% muscle (`fightingMinMuscle`).
-  - Learned styles are owned for good, and any mat lets you switch between them or back to the
+  - Learned styles are owned for good, and any trainer lets you switch between them or back to the
     default. The current style is saved with the player.
 
 `gymtest` (console) checks the equipment data and the hourly cap.
