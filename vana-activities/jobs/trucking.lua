@@ -9,13 +9,13 @@ Assets.define("rshaul", T.income)
 local function startMarker()
     local s = T.start
     local m = createMarker(s[1], s[2], s[3] - 0.1, "cylinder", 1.5, 255, 200, 0, 120)
-    local blip = createBlip(s[1], s[2], s[3], 51, 2, 255, 255, 255, 255, 0, 600)
+    MapPoints.set("trucking", { category = "trucking", x = s[1], y = s[2], z = s[3] })
     addEventHandler("onMarkerHit", m, function(player, matching)
         if matching and getElementType(player) == "player" and not getPedOccupiedVehicle(player) and not Activity.of(player) then
             Activity.start(player, "trucking")
         end
     end)
-    return m, blip
+    return m
 end
 
 Activity.register("trucking", {

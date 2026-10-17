@@ -95,7 +95,7 @@ Activity.register("triathlon", {
 addEventHandler("onResourceStart", resourceRoot, function()
     for key, p in pairs(T.entries) do
         local m = createMarker(p[1], p[2], p[3] - 1, "cylinder", 3, 255, 200, 0, 110)
-        createBlip(p[1], p[2], p[3], 33, 2, 255, 255, 255, 255, 0, 600)
+        MapPoints.set("triathlon:" .. key, { category = "race", x = p[1], y = p[2], z = p[3] })
         addEventHandler("onMarkerHit", m, function(player, matching)
             if matching and getElementType(player) == "player" and not getPedOccupiedVehicle(player) and not Activity.of(player) then
                 Activity.start(player, "triathlon", key)

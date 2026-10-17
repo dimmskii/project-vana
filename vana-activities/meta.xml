@@ -11,6 +11,7 @@
     <script src="config/minigames.lua" type="shared" />
     <script src="config/races.lua" type="server" />
     <script src="core/gxt.lua" type="server" />
+    <script src="core/map_points.lua" type="server" />
     <script src="core/server.lua" type="server" />
     <script src="core/test.lua" type="server" />
     <script src="core/client.lua" type="client" />

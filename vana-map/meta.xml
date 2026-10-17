@@ -1,0 +1,8 @@
+<meta>
+    <info author="ProjectVana" name="Vana map" description="Map points and radar blips for every resource: categories, icons, ranges" version="0.1.0" type="script" />
+    <script src="config/categories.lua" type="shared" />
+    <script src="server.lua" type="server" />
+    <script src="client.lua" type="client" />
+    <export function="setPoint" type="server" />
+    <export function="removePoint" type="server" />
+</meta>

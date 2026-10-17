@@ -241,6 +241,7 @@ addEventHandler("onResourceStart", resourceRoot, function()
             OwnedCars.define(key .. reward.medal, reward)
         end
         local m = school.menu
+        if (m.interior or 0) == 0 then MapPoints.set("school:" .. key, { category = "school", x = m[1], y = m[2], z = m[3], label = school.title }) end
         local marker = createMarker(m[1], m[2], m[3] - 0.1, "cylinder", 1.2, 255, 200, 0, 120)
         setElementInterior(marker, m.interior or 0)
         addEventHandler("onMarkerHit", marker, function(player, matching)

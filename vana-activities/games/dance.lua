@@ -63,7 +63,7 @@ addEventHandler("onResourceStart", resourceRoot, function()
     end
     -- The lowrider contest: a lowrider with hydraulics into the marker, then the wager.
     local m = createMarker(L.x, L.y, L.z - 0.5, "cylinder", 5, 255, 200, 0, 100)
-    createBlip(L.x, L.y, L.z, 0, 2, 255, 200, 0, 255, 0, 400)
+    MapPoints.set("lowrider", { category = "lowrider", x = L.x, y = L.y, z = L.z })
     addEventHandler("onMarkerHit", m, function(player, matching)
         local v = matching and getElementType(player) == "player" and getPedOccupiedVehicle(player)
         if not v or Activity.of(player) then return end

@@ -109,6 +109,8 @@ addEventHandler("onResourceStart", resourceRoot, function()
             local marker = createMarker(e.x, e.y, e.z + 1.5, "arrow", 1.0, 255, 220, 0, 170)
             setElementInterior(marker, e.interior)
             e.marker = marker
+            -- Street doors go on the map; vana-map knows which names to show and as what.
+            if e.interior == 0 then MapPoints.set("enex:" .. e.name .. ":" .. math.floor(e.x) .. ":" .. math.floor(e.y), { tag = e.name, x = e.x, y = e.y, z = e.z }) end
         end
     end
 end)

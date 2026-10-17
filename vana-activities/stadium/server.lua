@@ -171,7 +171,7 @@ Activity.register("bloodring", {
 addEventHandler("onResourceStart", resourceRoot, function()
     local e = B.entry
     local m = createMarker(e.x, e.y, e.z - 0.1, "cylinder", 1.5, 255, 200, 0, 120)
-    createBlip(e.x, e.y, e.z, 33, 2, 255, 255, 255, 255, 0, 600)
+    MapPoints.set("bloodring", { category = "stadium", x = e.x, y = e.y, z = e.z })
     addEventHandler("onMarkerHit", m, function(player, matching)
         if matching and getElementType(player) == "player" and not getPedOccupiedVehicle(player) and not Activity.of(player) then
             Activity.start(player, "bloodring")

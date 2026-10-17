@@ -114,7 +114,7 @@ addEventHandler("onResourceStart", resourceRoot, function()
     for i, city in ipairs(C.cities) do
         local b = city.base
         local m = createMarker(b[1], b[2], b[3] - 0.5, "cylinder", 2.5, 255, 200, 0, 110)
-        createBlip(b[1], b[2], b[3], 0, 2, 255, 200, 0, 255, 0, 400)
+        MapPoints.set("courier:" .. i, { category = "courier", x = b[1], y = b[2], z = b[3] })
         addEventHandler("onMarkerHit", m, function(player, matching)
             local bike = isElement(player) and getElementType(player) == "player" and getPedOccupiedVehicle(player)
             if matching and bike and getElementModel(bike) == city.bike and not Activity.of(player) then

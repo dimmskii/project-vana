@@ -359,7 +359,7 @@ Activity.register("quarry", {
 addEventHandler("onResourceStart", resourceRoot, function()
     local p = Q.start
     local m = createMarker(p[1], p[2], p[3] - 1, "cylinder", 1.5, 255, 200, 0, 120)
-    createBlip(p[1], p[2], p[3], 11, 2, 255, 255, 255, 255, 0, 600)
+    MapPoints.set("quarry", { category = "quarry", x = p[1], y = p[2], z = p[3] })
     addEventHandler("onMarkerHit", m, function(player, matching)
         if matching and getElementType(player) == "player" and not getPedOccupiedVehicle(player) and not Activity.of(player) then
             Activity.start(player, "quarry")
