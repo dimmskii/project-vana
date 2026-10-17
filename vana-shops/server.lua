@@ -213,13 +213,63 @@ end
 -- Closets: the changing room safehouse closet doors lead into. Arriving there opens the closet.
 local closets = {} -- player -> point where they arrived
 
+-- Trying things on: wearable menus snapshot the player's clothes when they open, previews are
+-- applied on top of it, and closing puts the snapshot back. A purchase becomes the new snapshot.
+local WEARABLE = { clothes = true, closet = true, hair = true, tattoo = true }
+local outfits = {} -- player -> { [slot] = { texture, model } }
+
+local function snapshotClothes(player)
+    local outfit = {}
+    for slot = 0, 17 do
+        local texture, model = getPedClothes(player, slot)
+        if texture then outfit[slot] = { texture, model } end
+    end
+    outfits[player] = outfit
+end
+
+local function restoreClothes(player)
+    local outfit = outfits[player]
+    if not outfit or getElementModel(player) ~= 0 then return end
+    for slot = 0, 17 do
+        local texture, model = getPedClothes(player, slot)
+        local want = outfit[slot]
+        if not want then
+            if texture then removePedClothes(player, slot) end
+        elseif texture ~= want[1] or model ~= want[2] then
+            addPedClothes(player, want[1], want[2], slot)
+        end
+    end
+end
+
+local function openMenu(player, shopName, kind, categories)
+    open[player] = shopName
+    if WEARABLE[kind] and getElementModel(player) == 0 then snapshotClothes(player) else outfits[player] = nil end
+    triggerClientEvent(player, "vana-shops:open", resourceRoot, shopName, kind, catalogue(shopName, player), categories)
+end
+
+local function closeMenu(player)
+    restoreClothes(player)
+    open[player], outfits[player] = nil, nil
+end
+
+addEvent("vana-shops:preview", true)
+addEventHandler("vana-shops:preview", resourceRoot, function(key)
+    local shopName = open[client]
+    local point = shopName == "CLOSET" and closets[client] or shopName and ShopPoints[shopName]
+    if not point or not outfits[client] then return end
+    restoreClothes(client)
+    if type(key) ~= "string" then return end
+    for _, entry in ipairs(catalogue(shopName, client)) do
+        if entry.key == key then return deliver(client, point.kind, key) end
+    end
+end)
+
 addEventHandler("onPlayerUseEntrance", root, function(name, _, toInterior, atHub)
     if name ~= ShopConfig.closetEntrance or not atHub then return end
     local player = source
     local x, y, z = getElementPosition(player)
     closets[player] = { kind = "closet", interior = toInterior, x = x, y = y, z = z - 1 }
-    open[player] = "CLOSET"
-    triggerClientEvent(player, "vana-shops:open", resourceRoot, "CLOSET", "closet", catalogue("CLOSET", player), ShopConfig.clothesCategories)
+    openMenu(player, "CLOSET", "closet", ShopConfig.clothesCategories)
 end)
 
 addEvent("vana-shops:buy", true)
@@ -241,6 +291,7 @@ addEventHandler("vana-shops:buy", resourceRoot, function(key)
     if not ok then return triggerClientEvent(client, "vana-shops:result", resourceRoot, false, reason) end
     if price > 0 then takePlayerMoney(client, price) end
     if point.kind == "clothes" and not item.owned then playerCall("grantOwned", client, "clothes", key) end
+    if outfits[client] then snapshotClothes(client) end
     savePlayer(client)
     local verb = item.takeOff and point.kind == "tattoo" and "Removed" or point.kind == "fighting" and (item.owned and "Fighting style" or "Learned") or item.takeOff and "Took off" or item.owned and "Wearing" or "Bought"
     triggerClientEvent(client, "vana-shops:result", resourceRoot, true, verb .. ": " .. item.label, key, point.kind == "clothes" or point.kind == "fighting")
@@ -267,16 +318,15 @@ addEventHandler("vana-shops:vend", resourceRoot, function(index)
 end)
 
 addEvent("vana-shops:close", true)
-addEventHandler("vana-shops:close", resourceRoot, function() open[client] = nil end)
+addEventHandler("vana-shops:close", resourceRoot, function() closeMenu(client) end)
 
 local function onMarkerHit(player, matching)
     if not matching or getElementType(player) ~= "player" or getPedOccupiedVehicle(player) or open[player] then return end
     local shopName = markers[source]
     local point = ShopPoints[shopName]
     if not point or getElementInterior(player) ~= point.interior then return end
-    open[player] = shopName
     local categories = point.kind == "tattoo" and ShopConfig.tattooCategories or ShopConfig.clothesCategories
-    triggerClientEvent(player, "vana-shops:open", resourceRoot, shopName, point.kind, catalogue(shopName, player), categories)
+    openMenu(player, shopName, point.kind, categories)
 end
 
 local pointMarkers = {}
@@ -301,7 +351,8 @@ addEventHandler("onResourceStart", resourceRoot, function()
     for shopName, point in pairs(ShopPoints) do placeMarker(shopName, point) end
 end)
 
-addEventHandler("onPlayerQuit", root, function() open[source], closets[source], lastVend[source] = nil, nil, nil end)
+addEventHandler("onPlayerQuit", root, function() open[source], closets[source], lastVend[source], outfits[source] = nil, nil, nil, nil end)
+addEventHandler("onPlayerWasted", root, function() if open[source] then closeMenu(source) end end)
 
 -- Admin: put a shop's point where you stand, and print the config line to keep it.
 -- Restricted: needs command.shoppoint in the ACL.

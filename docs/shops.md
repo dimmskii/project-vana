@@ -58,6 +58,9 @@ price overrides and `fatPerCalorie`.
     shoes, hats, glasses, necklaces, watches); each category lists its items, plus "Take off".
   - Clothes are bought once and owned for good (saved with the player by `vana-player`). Owned
     items show OWNED instead of a price, and choosing one just puts it on.
+- **Trying on:** in clothes shops, the closet, barbers and tattoo parlours, the highlighted item is
+  put on while browsing. Leaving (or dying) puts back what the player came in wearing; a purchase
+  becomes the new outfit. The server applies previews only for items on that menu.
 - **Purchases:** every purchase is checked on the server (still at the counter, item really sold
   there, enough money). The server applies it, takes the money and saves the player.
 
