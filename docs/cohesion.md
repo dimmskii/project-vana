@@ -1,0 +1,61 @@
+# Cohesion
+
+Rules that keep the gamemode feeling like one product instead of a pile of scripts.
+
+## Permissions
+
+- **The server decides.** Every privileged action is checked on the server against the ACL.
+  Never trust the client for permissions. Element data such as `"Admin"`, client-side
+  `isPlayerAdmin` checks and hidden buttons are presentation only. The old mod gated its admin
+  window on client-readable element data; don't repeat that.
+- **Use MTA's own mechanisms:**
+  - Commands use `addCommandHandler(name, fn, true)` (restricted), which checks
+    `command.<name>` in the ACL automatically.
+  - Feature rights that aren't commands use custom rights named
+    `resource.<resource>.<right>`, checked with
+    `hasObjectPermissionTo(player, "resource.vana-admin.vehicles", false)`.
+  - Resources that need privileged MTA functions declare them with `<aclrequest>` in
+    `meta.xml`, not by editing `acl.xml` by hand.
+- **Groups:** the stock ACL groups (`Everyone`, `Moderator`, `SuperModerator`, `Admin`,
+  `Console`) are the vocabulary. Docs and setup list exactly which rights each group needs.
+- **Validate every remote event.** Treat client-triggered events as untrusted input: check
+  `client` against the expected player, the rights, distances and cooldowns before acting.
+
+## Commands
+
+- **One implementation per action.** A command and its UI button call the same server-side
+  function. There's never a UI-only or a command-only version of a privileged action.
+- **Consistent naming:** lowercase full names (`/vehicle`, `/weapon`). Short aliases are
+  optional and must be registered through the same handler.
+- **One help registry.** Each resource registers its commands (name, aliases, arguments, required
+  right, description) with one shared registry. The help UI and `/help` read from it, so a player
+  only sees the commands they can actually use.
+- **Feedback:** one shared helper for success and error messages, so wording and colours match
+  everywhere.
+
+## Freeroam tools are admin tools
+
+- **Ordinary players get the game, not a trainer.** Spawning vehicles, giving weapons, setting
+  time or weather, warping, jetpacks, gravity and so on are not available to them. They get
+  vehicles, weapons, money and so on the way single player provides them.
+- **Admins get the full freeroam toolset.** Vehicle spawning and tuning, weapons, skins and
+  clothes, warp and teleport, time, weather, game speed, and spawning or controlling ambient
+  peds and traffic. All of it sits behind ACL rights, so it can be handed out per group.
+
+## UI layout
+
+Each layer has one home; don't scatter windows.
+
+| Key | Layer | Contents |
+| --- | --- | --- |
+| F1 | Gameplay | Player-facing game functions: stats, map and progress, owned properties and vehicles, activities. Long-term this becomes an immersive in-world cell phone. |
+| F2 (proposed) | Meta and social | Friends, social features, settings, help, server info. Nothing that affects the game world. |
+| F3 (proposed) | Admin | The admin toolset. The panel only opens for players whose rights the server confirms, and every action is still checked on the server. |
+
+- **Leave MTA and player-expected keys alone:** F8 (console), F9 (help), F11 (map), F12
+  (screenshot), T and Y (chat), Tab (scoreboard).
+- **One visual style.** Shared colours, fonts and window chrome come from one place. Prefer
+  diegetic, vanilla-style presentation (HUD-style text, the phone, in-world markers) over
+  generic windows for gameplay.
+- **In-world interactions stay in-world.** Shops, food, gyms, clothes and similar use vanilla
+  markers and menus, not F1 buttons.

@@ -1,0 +1,5 @@
+<meta>
+    <info author="ProjectVana" name="Vana interiors" description="Vanilla entry/exit markers into interiors" version="0.1.0" type="script" />
+    <script src="config/entrances.lua" type="server" />
+    <script src="server.lua" type="server" />
+</meta>

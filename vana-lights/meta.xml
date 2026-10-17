@@ -1,0 +1,5 @@
+<meta>
+    <info author="ProjectVana" name="Vana lights" description="Traffic lights on the vanilla single-player cycle" version="0.1.0" type="script" />
+    <script src="server.lua" type="server" />
+    <export function="getPhase" type="server" />
+</meta>

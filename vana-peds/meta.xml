@@ -1,0 +1,12 @@
+<meta>
+    <info author="ProjectVana" name="Vana peds" description="Server-planned ambient pedestrians walking with native follow-route tasks" version="0.1.0" type="script" />
+    <include resource="vana-paths" />
+    <include resource="vana-lights" />
+    <include resource="vana-population" />
+    <script src="planner.lua" type="server" />
+    <script src="server.lua" type="server" />
+    <script src="test.lua" type="server" />
+    <script src="client.lua" type="client" />
+    <export function="adoptPed" type="server" />
+    <export function="engagePed" type="server" />
+</meta>

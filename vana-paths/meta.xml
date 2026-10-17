@@ -1,0 +1,17 @@
+<meta>
+    <info author="ProjectVana" name="Vana paths" description="Retail NODES*.DAT path graph reader" version="0.1.0" type="script" />
+    <script src="paths_format.lua" type="server" />
+    <script src="paths.lua" type="server" />
+    <script src="lights.lua" type="server" />
+    <script src="server.lua" type="server" />
+    <export function="getNode" type="server" />
+    <export function="getNodeLinks" type="server" />
+    <export function="getNaviNode" type="server" />
+    <export function="getAreaAt" type="server" />
+    <export function="getNodePosition" type="server" />
+    <export function="findNearestNode" type="server" />
+    <export function="getCarLight" type="server" />
+    <export function="getPedSignal" type="server" />
+    <export function="getGoverningLight" type="server" />
+    <export function="shouldCarStop" type="server" />
+</meta>

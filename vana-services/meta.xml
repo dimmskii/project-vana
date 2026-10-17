@@ -1,0 +1,9 @@
+<meta>
+    <info author="ProjectVana" name="Vana services" description="Wanted levels, police response and ambulances" version="0.1.0" type="script" />
+    <include resource="vana-paths" />
+    <include resource="vana-population" />
+    <script src="config/wanted.lua" type="server" />
+    <script src="server.lua" type="server" />
+    <script src="client.lua" type="client" />
+    <export function="reportCrime" type="server" />
+</meta>

@@ -1,0 +1,9 @@
+<meta>
+    <info author="ProjectVana" name="Vana shops" description="Ammu-Nation, fast food, clothes and 24/7 counters" version="0.1.0" type="script" />
+    <include resource="vana-interiors" />
+    <script src="config/shops.lua" type="server" />
+    <script src="config/points.lua" type="server" />
+    <script src="gxt.lua" type="server" />
+    <script src="server.lua" type="server" />
+    <script src="client.lua" type="client" />
+</meta>

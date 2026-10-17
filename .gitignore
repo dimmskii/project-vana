@@ -1,0 +1,24 @@
+# Rockstar game data: copied from your own GTA:SA install, never committed (see docs/setup.md)
+*.DAT
+*.dat
+*.img
+*.IMG
+*.ide
+*.zon
+*.ZON
+*.ipl
+*.col
+*.dff
+*.txd
+*.ifp
+*.scm
+*.cut
+
+# Runtime output
+*.log
+*.jsonl
+
+# Player database
+*.db
+*.gxt
+*.GXT

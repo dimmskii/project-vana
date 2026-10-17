@@ -1,0 +1,16 @@
+<meta>
+    <info author="ProjectVana" name="Vana player" description="Server-side player persistence, spawning, wasted and busted" version="0.1.0" type="script" />
+    <!-- Accounts named after each player's serial, for per-player ACL rights (docs/player.md). -->
+    <aclrequest>
+        <right name="function.addAccount" access="true" />
+        <right name="function.aclGroupAddObject" access="true" />
+        <right name="function.aclSave" access="true" />
+        <right name="function.aclSetRight" access="true" />
+    </aclrequest>
+    <script src="config/player.lua" type="server" />
+    <script src="config/restarts.lua" type="server" />
+    <script src="server.lua" type="server" />
+    <script src="client.lua" type="client" />
+    <export function="savePlayer" type="server" />
+    <export function="bustPlayer" type="server" />
+</meta>

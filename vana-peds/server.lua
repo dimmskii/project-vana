@@ -1,0 +1,475 @@
+-- Server-owned ambient pedestrians. The server plans walking routes and road crossings
+-- (planner.lua); the owning client runs GTA's native follow-node-route task toward the targets sent
+-- here, and GTA's own event responses (avoid, flee, fight) via the ambient-wander event profile.
+local paths = exports["vana-paths"]
+local population = exports["vana-population"]
+local rules = population:getPersonalityRules()
+local companions = population:getCompanionRules()
+
+local CONFIG = {
+    density = 1,        -- multiplies vanilla popcycle targets
+    maxPerPlayer = 40,  -- hard cap on peds around one player
+    spawnMin = 40, spawnMax = 110,
+    despawn = 200,
+    ownerRadius = 150,
+    pedSpacing = 6,
+    tick = 500,
+    clearRadius = 18,   -- an unlit crossing is clear when no moving vehicle is this close to it
+}
+
+local walkers = {}    -- ped -> walker
+local released = {}
+local enabled = true
+
+local function eligiblePlayers()
+    local list = {}
+    for _, player in ipairs(getElementsByType("player")) do
+        if getElementDimension(player) == 0 and getElementInterior(player) == 0 then list[#list + 1] = player end
+    end
+    return list
+end
+
+local function nearestPlayer(x, y, z, players, maxDist)
+    local best, bestDist = false, maxDist or math.huge
+    for _, player in ipairs(players) do
+        local px, py, pz = getElementPosition(player)
+        local d = getDistanceBetweenPoints3D(x, y, z, px, py, pz)
+        if d < bestDist then best, bestDist = player, d end
+    end
+    return best, bestDist
+end
+
+local function isCrossingClear(from, to)
+    local mx, my, mz = (from.x + to.x) / 2, (from.y + to.y) / 2, (from.z + to.z) / 2
+    for _, vehicle in ipairs(getElementsWithinRange(mx, my, mz, CONFIG.clearRadius, "vehicle")) do
+        local vx, vy, vz = getElementVelocity(vehicle)
+        if (vx * vx + vy * vy + vz * vz) * 2500 > 1 then return false end
+    end
+    return true
+end
+
+local function sendTarget(walker, target)
+    walker.target, walker.sentAt = target, getTickCount()
+    if isElement(walker.owner) then
+        triggerClientEvent(walker.owner, "vana-peds:walk", resourceRoot, walker.ped, target.x, target.y, target.z, target.hold)
+    end
+end
+
+local function sendEngage(walker)
+    local e = walker.encounter
+    if e and isElement(walker.owner) then
+        triggerClientEvent(walker.owner, "vana-peds:engage", resourceRoot, walker.ped, e.mode, e.target, e.vehicle,
+            math.max(1000, e.untilTick - getTickCount()))
+    end
+end
+
+local function setOwner(walker, owner)
+    if walker.owner == owner then return end
+    if isElement(walker.owner) then triggerClientEvent(walker.owner, "vana-peds:release", resourceRoot, walker.ped) end
+    walker.owner = owner
+    if owner then
+        setElementSyncer(walker.ped, owner, true, true)
+        if walker.encounter then sendEngage(walker) elseif walker.target then sendTarget(walker, walker.target) end
+    end
+end
+
+local function removeWalker(walker, keepElement)
+    walkers[walker.ped] = nil
+    if isElement(walker.owner) then triggerClientEvent(walker.owner, "vana-peds:release", resourceRoot, walker.ped) end
+    if not isElement(walker.ped) then return end
+    if keepElement then
+        -- Back to automatic syncing: a ped (or body) nobody syncs freezes wherever it was.
+        setElementSyncer(walker.ped, true)
+        released[walker.ped] = true
+    else
+        destroyElement(walker.ped)
+    end
+end
+
+-- What already walks around a point, by population kind (for vana-population's picks).
+local function countsNear(x, y, z)
+    local counts, total = { gangs = {} }, 0
+    for ped, walker in pairs(walkers) do
+        local wx, wy, wz = getElementPosition(ped)
+        if getDistanceBetweenPoints3D(x, y, z, wx, wy, wz) < CONFIG.spawnMax + 30 then
+            total = total + 1
+            counts[walker.kind] = (counts[walker.kind] or 0) + 1
+            if walker.gang then counts.gangs[walker.gang] = (counts.gangs[walker.gang] or 0) + 1 end
+        end
+    end
+    return counts, total
+end
+
+local function startWalker(ped, route, owner, kind, gang, personality)
+    -- Clients lease GTA's ambient event profile (cops: the safe cop profile) for peds carrying this.
+    setElementData(ped, "vana:ambient", kind)
+    local x, y = getElementPosition(ped)
+    local walker = { ped = ped, route = route, kind = kind, gang = gang, lastX = x, lastY = y, lastMoved = getTickCount(),
+                     personality = personality or population:getPersonality(getElementModel(ped)) }
+    walkers[ped] = walker
+    setOwner(walker, owner)
+    return walker
+end
+
+-- Where companion number `slot` walks relative to a leader at (x, y) facing `heading` (degrees):
+-- alternately to the right and left, further rows slightly behind.
+local function followerSlot(x, y, heading, slot)
+    local h = math.rad(heading)
+    local fx, fy = -math.sin(h), math.cos(h)
+    local rx, ry = fy, -fx
+    local row = math.ceil(slot / 2)
+    local side = (slot % 2 == 1) and 1 or -1
+    local across, back = side * companions.spacing * row, 0.6 * (row - 1)
+    return x + rx * across - fx * back, y + ry * across - fy * back
+end
+
+local function trySpawnNear(player, players, counts)
+    local px, py, pz = getElementPosition(player)
+    local angle, r = math.random() * 2 * math.pi, CONFIG.spawnMin + math.random() * (CONFIG.spawnMax - CONFIG.spawnMin)
+    local area, id = paths:findNearestNode(px + math.cos(angle) * r, py + math.sin(angle) * r, pz, "ped", 30)
+    if not area then return false end
+
+    local node = PedPlanner.getNode(area, id)
+    if not node or node.spawnProbability == 0 then return false end
+    local _, nearest = nearestPlayer(node.x, node.y, node.z, players)
+    if nearest < CONFIG.spawnMin * 0.8 then return false end
+    for ped in pairs(walkers) do
+        local wx, wy, wz = getElementPosition(ped)
+        if getDistanceBetweenPoints3D(wx, wy, wz, node.x, node.y, node.z) < CONFIG.pedSpacing then return false end
+    end
+
+    local route = PedPlanner.newRoute(area, id)
+    if not route or route[2].crossing or not PedPlanner.isRouteOpen(route) then return false end
+    local nxt = route[2]
+
+    -- Vanilla population rules decide who walks here, or that the area is already full.
+    local spec = population:pickPed(node.x, node.y, node.z, counts, CONFIG.density)
+    if not spec then return false end
+
+    local ped = createPed(spec.model, node.x, node.y, node.z + 1, math.deg(math.atan2(nxt.y - node.y, nxt.x - node.x)) - 90)
+    if not ped then return false end
+    if spec.weapon then giveWeapon(ped, spec.weapon, 500, spec.weaponDrawn) end
+    if spec.kind == "cop" then giveWeapon(ped, 3, 1, false) end
+    local leader = startWalker(ped, route, player, spec.kind, spec.gang, spec.personality)
+
+    -- Couples and gang groups: companions keep a slot beside the leader, who walks the route.
+    local size = 0
+    if spec.kind == "civilian" and math.random() < companions.coupleChance then
+        size = 1
+    elseif spec.kind == "gang" and math.random() < companions.gangGroupChance then
+        size = math.random(companions.gangGroupSize[1], companions.gangGroupSize[2])
+    end
+    local heading = math.deg(math.atan2(nxt.y - node.y, nxt.x - node.x)) - 90
+    for slot = 1, size do
+        local cspec = population:pickCompanion(node.x, node.y, node.z, spec)
+        if not cspec then break end
+        local cx, cy = followerSlot(node.x, node.y, heading, slot)
+        local companion = createPed(cspec.model, cx, cy, node.z + 1, heading)
+        if companion then
+            if cspec.weapon then giveWeapon(companion, cspec.weapon, 500, cspec.weaponDrawn) end
+            local follower = startWalker(companion, nil, player, cspec.kind, cspec.gang, cspec.personality)
+            follower.leader, follower.slot = leader, slot
+        end
+    end
+    return true
+end
+
+-- A fresh walking route from wherever the ped is now.
+local function routeFromHere(ped)
+    local x, y, z = getElementPosition(ped)
+    local area, id = paths:findNearestNode(x, y, z, "ped", 60)
+    local route = area and PedPlanner.newRoute(area, id)
+    if route then route.idx = 1 end -- head for the nearest sidewalk node first
+    return route
+end
+
+-- Encounters: the server decides (personality, kind), the owner runs native tasks:
+-- fight (kill on foot), flee (smart flee), jack (enter the target's car) or react (leave GTA's own
+-- event response alone). Walking resumes from the nearest sidewalk when it ends.
+local function startEncounter(walker, mode, target, vehicle)
+    local e = rules.encounter
+    local seconds = (mode == "fight" or mode == "jack" or mode == "arrest") and e.fightSeconds or mode == "flee" and e.fleeSeconds or e.reactSeconds
+    walker.encounter = { mode = mode, target = target, vehicle = vehicle, untilTick = getTickCount() + seconds * 1000 }
+    walker.target = nil
+    if mode == "fight" then
+        -- Draw the best carried weapon (cops and gang members holster theirs while walking).
+        for slot = 7, 2, -1 do
+            if (getPedWeapon(walker.ped, slot) or 0) > 0 then setPedWeaponSlot(walker.ped, slot) break end
+        end
+    elseif mode == "arrest" then
+        -- Nightstick out: beat the player down for the bust, no shooting.
+        if (getPedWeapon(walker.ped, 1) or 0) == 0 then giveWeapon(walker.ped, 3, 1, false) end
+        setPedWeaponSlot(walker.ped, 1)
+    end
+    sendEngage(walker)
+end
+
+local function endEncounter(walker)
+    walker.encounter, walker.target = nil, nil
+    walker.route = routeFromHere(walker.ped) or walker.route
+end
+
+-- Takes over an existing ped as a pedestrian, e.g. an occupant who got out of (or was pulled from)
+-- a traffic car, so car occupants and sidewalk pedestrians are one population. An encounter (from
+-- the traffic collision that made them get out) starts straight away.
+function adoptPed(ped, kind, gang, personality, encounter)
+    if walkers[ped] or not isElement(ped) or isPedDead(ped) or getPedOccupiedVehicle(ped) then return false end
+    local x, y, z = getElementPosition(ped)
+    local owner = nearestPlayer(x, y, z, eligiblePlayers(), CONFIG.despawn)
+    local route = owner and routeFromHere(ped)
+    if not route then return false end
+    local walker = startWalker(ped, route, owner, kind or "civilian", gang, personality)
+    if encounter and isElement(encounter.target) then startEncounter(walker, encounter.mode, encounter.target, encounter.vehicle) end
+    return true
+end
+
+-- A ped who has jacked a car drives off in it as traffic.
+local function handToTraffic(walker, vehicle)
+    local res = getResourceFromName("vana-traffic")
+    if not res or getResourceState(res) ~= "running" then return false end
+    local ok, adopted = pcall(function()
+        return exports["vana-traffic"]:adoptVehicle(vehicle, walker.ped, walker.kind, walker.gang, walker.personality)
+    end)
+    if ok and adopted then
+        walkers[walker.ped] = nil
+        removeElementData(walker.ped, "vana:ambient")
+        return true
+    end
+    return false
+end
+
+local function updateWalker(walker, players, signal, walkMsLeft)
+    local ped = walker.ped
+    if not isElement(ped) then return removeWalker(walker) end
+    local e = walker.encounter
+    local inVehicle = getPedOccupiedVehicle(ped)
+    if e and e.mode == "jack" and inVehicle == e.vehicle and getVehicleOccupant(inVehicle, 0) == ped and handToTraffic(walker, inVehicle) then
+        return
+    end
+    if isPedDead(ped) or inVehicle then return removeWalker(walker, true) end
+
+    local x, y, z = getElementPosition(ped)
+    local owner = nearestPlayer(x, y, z, players, CONFIG.despawn)
+    if not owner then return removeWalker(walker) end
+    local ownerGone = not isElement(walker.owner) or select(2, nearestPlayer(x, y, z, { walker.owner })) > CONFIG.ownerRadius
+    if ownerGone and walker.owner ~= owner then setOwner(walker, owner) end
+
+    if e then
+        local target = e.target
+        local tx, ty, tz
+        if isElement(target) then tx, ty, tz = getElementPosition(target) end
+        local over = getTickCount() > e.untilTick or not tx or (getElementType(target) ~= "vehicle" and isPedDead(target))
+            or getDistanceBetweenPoints3D(x, y, z, tx, ty, tz) > rules.encounter.giveUpDistance
+            -- An arrest is off once the player isn't wanted any more.
+            or (e.mode == "arrest" and getElementType(target) == "player" and getPlayerWantedLevel(target) == 0)
+        if not over then
+            walker.lastX, walker.lastY, walker.lastMoved = x, y, getTickCount()
+            return
+        end
+        endEncounter(walker)
+    end
+
+    -- Companions follow their leader instead of planning a route; on their own once the leader is gone.
+    local leader = walker.leader
+    if leader and (walkers[leader.ped] ~= leader or not isElement(leader.ped)) then
+        walker.leader = nil
+        walker.route = routeFromHere(ped)
+        if not walker.route then return removeWalker(walker) end
+    elseif leader then
+        local le = leader.encounter
+        if le and isElement(le.target) and (le.mode == "fight" or le.mode == "flee") then
+            -- A gang fights alongside; a civilian partner runs from a fight their partner picks.
+            startEncounter(walker, (le.mode == "fight" and walker.kind ~= "gang") and "flee" or le.mode, le.target)
+            return
+        end
+        local lx, ly, lz = getElementPosition(leader.ped)
+        local _, _, rz = getElementRotation(leader.ped)
+        local sx, sy = followerSlot(lx, ly, rz, walker.slot)
+        local hold = leader.target and leader.target.hold or false
+        local current = walker.target
+        if not current or current.hold ~= hold or (current.x - sx) ^ 2 + (current.y - sy) ^ 2 > 6 then
+            sendTarget(walker, { x = sx, y = sy, z = lz, hold = hold })
+        end
+        walker.lastX, walker.lastY, walker.lastMoved = x, y, getTickCount()
+        return
+    end
+
+    local route = walker.route
+    PedPlanner.advance(route, x, y)
+    if not PedPlanner.extend(route) and route.idx >= #route then return removeWalker(walker) end
+
+    local target = PedPlanner.chooseTarget(route, x, y, signal, walkMsLeft, isCrossingClear)
+    if PedPlanner.needsNewTarget(walker.target, target, x, y, getTickCount() - (walker.sentAt or 0)) then
+        sendTarget(walker, target)
+    end
+
+    -- Stuck recovery, as for traffic. Fleeing or fighting peds also land here and get re-tasked.
+    local now = getTickCount()
+    if getDistanceBetweenPoints2D(x, y, walker.lastX, walker.lastY) > 1.5 or target.hold then
+        walker.lastX, walker.lastY, walker.lastMoved = x, y, now
+    elseif now - walker.lastMoved > 20000 then
+        local _, ownerDist = nearestPlayer(x, y, z, players)
+        if ownerDist > 50 and now - walker.lastMoved > 60000 then return removeWalker(walker) end
+        if not walker.retried or now - walker.retried > 20000 then
+            walker.retried = now
+            sendTarget(walker, target)
+        end
+    end
+end
+
+setTimer(function()
+    local players = eligiblePlayers()
+    local signal = paths:getPedSignal()
+    local _, _, walkMsLeft = exports["vana-lights"]:getPhase()
+    if signal ~= "walk" then walkMsLeft = 0 end
+    for _, walker in pairs(walkers) do updateWalker(walker, players, signal, walkMsLeft or 0) end
+
+    for ped in pairs(released) do
+        if not isElement(ped) then
+            released[ped] = nil
+        else
+            local x, y, z = getElementPosition(ped)
+            if not nearestPlayer(x, y, z, players, CONFIG.despawn) then
+                released[ped] = nil
+                destroyElement(ped)
+            end
+        end
+    end
+
+    if not enabled then return end
+    for _, player in ipairs(players) do
+        local counts, total = countsNear(getElementPosition(player))
+        if total < CONFIG.maxPerPlayer then trySpawnNear(player, players, counts) end
+    end
+end, CONFIG.tick, 0)
+
+addEventHandler("onPlayerQuit", root, function()
+    for _, walker in pairs(walkers) do
+        if walker.owner == source then walker.owner = nil end
+    end
+end)
+
+addEventHandler("onResourceStop", resourceRoot, function()
+    for _, walker in pairs(walkers) do removeWalker(walker) end
+end)
+
+-- Admin control. Restricted: needs command.peds in the ACL (see docs/setup.md).
+addCommandHandler("peds", function(source, _, action, value)
+    local reply = function(msg)
+        if getElementType(source) == "console" then outputServerLog("[peds] " .. msg) else outputChatBox(msg, source, 200, 200, 255) end
+    end
+    local count = 0
+    for _ in pairs(walkers) do count = count + 1 end
+    if action == "on" then
+        enabled = true
+        reply("Pedestrian spawning on.")
+    elseif action == "off" then
+        enabled = false
+        reply("Pedestrian spawning off; existing pedestrians walk on until out of range.")
+    elseif action == "clear" then
+        for _, walker in pairs(walkers) do removeWalker(walker) end
+        reply(("Removed %d pedestrians."):format(count))
+    elseif action == "density" and tonumber(value) then
+        CONFIG.density = math.max(0, math.min(300, tonumber(value))) / 100
+        reply(("Pedestrian density set to %d%% of vanilla."):format(CONFIG.density * 100))
+    else
+        reply(("Pedestrians are %s: %d walking, density %d%% of vanilla. Usage: /peds on|off|clear|density <percent>")
+            :format(enabled and "on" or "off", count, CONFIG.density * 100))
+    end
+end, true)
+
+
+-- Forwards a crime to vana-services (wanted levels), when it runs.
+local function reportCrime(player, crime, x, y, z)
+    local res = getResourceFromName("vana-services")
+    if not res or getResourceState(res) ~= "running" then return end
+    pcall(function() exports["vana-services"]:reportCrime(player, crime, x, y, z) end)
+end
+
+-- Lets other resources (police response) send one of our peds into an encounter.
+function engagePed(ped, mode, target)
+    local walker = walkers[ped]
+    if not walker or not isElement(target) then return false end
+    local e = walker.encounter
+    if e and e.mode == mode and e.target == target then return true end
+    startEncounter(walker, mode, target)
+    return true
+end
+
+-- A player attacked one of our peds (reported by its owner): kind and personality decide.
+addEvent("vana-peds:attacked", true)
+addEventHandler("vana-peds:attacked", resourceRoot, function(ped, attacker, weapon)
+    local walker = walkers[ped]
+    if not walker or walker.owner ~= client or not isElement(attacker) or getElementType(attacker) ~= "player" then return end
+    local x, y, z = getElementPosition(ped)
+    local ax, ay, az = getElementPosition(attacker)
+    if getDistanceBetweenPoints3D(x, y, z, ax, ay, az) > 60 then return end
+    local stab = weapon == 4
+    if walker.kind == "cop" then
+        reportCrime(attacker, stab and "stab_cop" or "damaged_cop", x, y, z)
+    else
+        reportCrime(attacker, stab and "stab_ped" or "damaged_ped", x, y, z)
+    end
+    local current = walker.encounter
+    if current and current.target == attacker and current.mode ~= "react" then return end
+
+    local p = walker.personality or {}
+    local mode
+    if walker.kind == "cop" then
+        -- Hitting a cop makes the player wanted (vana-services). Under two stars with nothing in hand
+        -- cops arrest (nightstick); otherwise they shoot.
+        mode = (getPlayerWantedLevel(attacker) <= 1 and (getPedWeapon(attacker) or 0) == 0) and "arrest" or "fight"
+    elseif walker.kind == "gang" then
+        mode = (p.fear or 0) >= 70 and "flee" or "fight"
+    elseif (p.fear or 50) >= rules.collision.fleeFear then
+        mode = "flee"
+    elseif (p.temper or 50) >= 70 then
+        mode = "fight"
+    else
+        mode = "react"
+    end
+    startEncounter(walker, mode, attacker)
+
+    -- Gang members come to each other's aid.
+    if walker.kind == "gang" then
+        for other, w in pairs(walkers) do
+            if w ~= walker and w.gang == walker.gang and not (w.encounter and w.encounter.mode == "fight") then
+                local ox, oy, oz = getElementPosition(other)
+                if getDistanceBetweenPoints3D(x, y, z, ox, oy, oz) < rules.gangBackupRadius then startEncounter(w, "fight", attacker) end
+            end
+        end
+    end
+end)
+
+-- Dead ambient peds and traffic occupants drop their weapons and sometimes cash (config/drops.lua).
+local drops = population:getDropRules()
+
+local function temporaryPickup(pickup, onHit)
+    if not pickup then return end
+    setTimer(function() if isElement(pickup) then destroyElement(pickup) end end, drops.lifetimeSeconds * 1000, 1)
+    addEventHandler("onPickupHit", pickup, function(player)
+        if getElementType(player) ~= "player" or isPedDead(player) then return end
+        if onHit then onHit(player) end
+        setTimer(function() if isElement(pickup) then destroyElement(pickup) end end, 50, 1)
+    end)
+end
+
+addEventHandler("onPedWasted", root, function()
+    local ped = source
+    local kind = getElementData(ped, "vana:ambient") or getElementData(ped, "vana:traffic")
+    if not kind then return end
+    local x, y, z = getElementPosition(ped)
+    for slot = 1, 12 do
+        local weapon, ammo = getPedWeapon(ped, slot), getPedTotalAmmo(ped, slot)
+        if weapon and weapon > 0 and ammo and ammo > 0 then
+            -- Weapon pickups hand over the weapon themselves when walked over.
+            temporaryPickup(createPickup(x + math.random() - 0.5, y + math.random() - 0.5, z - 0.5, 2, weapon, 3600000,
+                math.min(ammo, drops.maxAmmo)))
+        end
+    end
+    local money = drops.money[kind] or drops.money.civilian
+    if money and math.random() < money.chance then
+        local amount = math.random(money.min, money.max)
+        temporaryPickup(createPickup(x, y, z - 0.5, 3, 1212, 3600000), function(player) givePlayerMoney(player, amount) end)
+    end
+end)
