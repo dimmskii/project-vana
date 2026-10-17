@@ -1,5 +1,5 @@
 -- Dating, the player's side: talking to girls you meet, getting her into the car, the cruise report
--- (jumps, radio), the venue fade, the dance minigame (ours until DANCE is ported) and the coffee scene.
+-- (jumps, radio), the venue fade, the dance (the club rhythm game) and the coffee scene.
 local state, talkText = {}, nil
 local date -- { kind, radio }
 local hurtSent = false
@@ -68,57 +68,18 @@ addEventHandler("vana-dating:leave", resourceRoot, function(ped)
     setTimer(function() if isElement(ped) then setPedWander(ped, "walk") end end, 1500, 1)
 end)
 
--- Dancing: hit the shown direction before the next beat.
-local dance -- { beats, index, shown, hits, deadline }
-local ARROWS = { { "forwards", "UP" }, { "backwards", "DOWN" }, { "left", "LEFT" }, { "right", "RIGHT" } }
-
-local function nextBeat()
-    dance.index = dance.index + 1
-    if dance.index > Dating.dance.beats then
-        local share = dance.hits / Dating.dance.beats
-        dance = nil
-        fadeCamera(false, 0.5)
-        setTimer(function() fadeCamera(true, 1) setCameraTarget(localPlayer) end, 800, 1)
-        triggerServerEvent("vana-dating:danced", resourceRoot, share)
-        return
-    end
-    dance.shown, dance.answered = ARROWS[math.random(#ARROWS)], false
-    dance.deadline = getTickCount() + Dating.dance.beatMs
-end
-
 addEvent("vana-dating:venue", true)
 addEventHandler("vana-dating:venue", resourceRoot, function(kind)
     fadeCamera(false, 1)
     setTimer(function()
         fadeCamera(true, 1)
         if kind == "dance" then
-            dance = { index = 0, hits = 0 }
-            nextBeat()
+            -- The dance date uses the club rhythm game (games/rhythm_client.lua).
+            Rhythm.start({ beats = Dating.dance.beats, beatMs = Dating.dance.beatMs, title = "Dance" }, function(share)
+                triggerServerEvent("vana-dating:danced", resourceRoot, share)
+            end)
         end
     end, 2500, 1)
-end)
-
-addEventHandler("onClientKey", root, function(key, pressed)
-    if not dance or not pressed or dance.answered then return end
-    for _, a in ipairs(ARROWS) do
-        for k in pairs(getBoundKeys(a[1]) or {}) do
-            if k == key then
-                dance.answered = true
-                if a == dance.shown then dance.hits = dance.hits + 1 end
-                cancelEvent()
-                return
-            end
-        end
-    end
-end)
-
-addEventHandler("onClientRender", root, function()
-    if not dance then return end
-    if getTickCount() > dance.deadline then return nextBeat() end
-    local w, h = guiGetScreenSize()
-    local colour = dance.answered and tocolor(120, 255, 120) or tocolor(255, 255, 255)
-    dxDrawText(dance.shown[2], 0, h * 0.4, w, h * 0.5, colour, 3, "pricedown", "center", "center")
-    dxDrawText(("%d / %d"):format(dance.hits, Dating.dance.beats), 0, h * 0.5, w, h * 0.56, tocolor(225, 196, 130), 1.5, "bankgothic", "center", "center")
 end)
 
 -- Coffee (censored, as vanilla's release): the camera waits outside her door.

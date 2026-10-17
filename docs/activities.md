@@ -76,7 +76,7 @@ Vanilla `GF_MEETING`, `GFAGNT`, `GF_DATE` and `GF_SEX`, per player (`config/dati
 - **Dates:** stop a car with a free seat at her house when she isn't busy. She picks food, a
   cruise or dancing as vanilla does. Food: stop at a diner, bar, restaurant or fast food place; she
   judges the kind. Cruise: vanilla's fun meter (areas, speed, jumps, crashes, her radio station,
-  parking at night), per second. Dancing: a club and a timing minigame (ours until DANCE is ported).
+  parking at night), per second. Dancing: a club and the club rhythm game (below).
 - **After:** take her home for +5 liking; past 50 she asks you in for coffee (censored, as the
   release). Bad dates cost 4, abandoning or hurting her 10; at -15 she dumps you.
 - **Rewards:** car keys at 50 (her car with its vanilla plate at her house, only yours), the gift
@@ -84,7 +84,7 @@ Vanilla `GF_MEETING`, `GFAGNT`, `GF_DATE` and `GF_SEX`, per player (`config/dati
   Helena's stash (ours: chainsaw, molotovs, flamethrower), Barbara and Katie get you out of jail and
   hospital free with your weapons (`vana-player`).
 - **Not yet:** phone calls asking for dates (and missed-date penalties), two-timing, Michelle driving,
-  Denise's drive-bys, the dance minigame proper, her walking to the car (she may warp in).
+  Denise's drive-bys, her walking to the car (she may warp in).
 
 ## Vehicle side jobs
 
@@ -280,3 +280,17 @@ All outcomes and money are decided on the server; the client draws the panels.
   Ours: the games themselves (vanilla's are full 2D games of their own).
 - **Basketball** (27 hoops): a minute to score as much as you can, shooting when the meter reaches
   the top; best scores kept; vanilla's jump-shot animations. Ours: the meter.
+
+### Pool, dancing and the lowrider contest
+
+- **Pool** (`POOL2`, at the bars' tables): wager $50-$1000 and play 8-ball against the CPU with
+  vanilla's rules as its texts name them (open table, solids and stripes, scratches give ball in hand,
+  the black last); a win pays double. Ours: a top-down table with 2D physics, the CPU's shot choice
+  (the straightest pot, with a little error), and that the game is judged on your client. Walking out
+  forfeits the wager.
+- **Dancing** (`DANCE`): on the Alhambra's floor (vanilla's spot) and in two more bars (ours), a
+  rhythm game: press each arrow as it crosses the line, judged PERFECT / GOOD / BAD with vanilla's
+  lines; best scores are kept. Dance dates use it too.
+- **Lowrider contest** (`LOWR`, by the Unity Station car park): drive in with a lowrider with
+  hydraulics, choose a wager, and play the rhythm game against a rival; out-bounce them for double.
+  Ours: the rival's score.

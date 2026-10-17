@@ -62,4 +62,18 @@ Games = {
                price = 1 },
     -- Basketball (vanilla BASKETB): a minute to score as much as you can. Ours: the timing meter.
     basketball = { timeMs = 60000, points = 2, farPoints = 3, sweet = 0.12 },
+    -- Pool (vanilla POOL2 / POOL_SCRIPT): 8-ball against the bar's player for a wager (vanilla $50-$1000).
+    -- Ours: a top-down table with 2D physics.
+    pool = { minBet = 50, maxBet = 1000 },
+    -- Dancing (vanilla DANCE) on club floors, and the lowrider contest (vanilla LOWR): a rhythm game.
+    dance = {
+        floors = {
+            { interior = 17, x = 488.00, y = -14.08, z = 999.68 },   -- the Alhambra (vanilla's floor)
+            { interior = 11, x = 501.98, y = -72.15, z = 997.84 },   -- ours: inside BAR2
+            { interior = 18, x = -224.03, y = 1404.23, z = 26.77 },  -- ours: inside the Lil' Probe Inn
+        },
+        beats = 40, beatMs = 700, anims = { "dnce_M_a", "dnce_M_b", "dnce_M_c", "dnce_M_d", "dnce_M_e" },
+    },
+    lowrider = { x = 2644.44, y = -2012.56, z = 12.55, minBet = 50, maxBet = 2000, beats = 30, beatMs = 800,
+                 hydraulics = 1087, rival = { 0.55, 0.85 } },  -- ours: the rival's score share range
 }

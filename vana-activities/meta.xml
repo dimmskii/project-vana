@@ -48,4 +48,9 @@
     <script src="games/minigames_client.lua" type="client" />
     <script src="games/side.lua" type="server" />
     <script src="games/side_client.lua" type="client" />
+    <script src="games/pool.lua" type="server" />
+    <script src="games/pool_client.lua" type="client" />
+    <script src="games/rhythm_client.lua" type="client" />
+    <script src="games/dance.lua" type="server" />
+    <script src="games/dance_client.lua" type="client" />
 </meta>

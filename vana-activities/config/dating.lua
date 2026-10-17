@@ -103,7 +103,7 @@ Dating = {
     -- she likes it +4, and boredom -0.4.
     fun = { start = 30, area = 0.5, speed = 1.5, slow = -2.5, moderate = 0.5, jump = 1.5, crash = 1.5, damage = -1,
             radio = 1.5, parking = 4, boredom = -0.4, fastSpeed = 22, moderateMin = 8, moderateMax = 20 },
-    -- Dancing (ours until the DANCE minigame is ported): hit the shown direction in time.
+    -- Dancing: the club rhythm game (games/rhythm_client.lua): beats and their spacing.
     dance = { beats = 16, beatMs = 900, goodShare = 0.6 },
     coffeeMs = 8000,            -- ours: the (censored) visit
     -- Her perks (vanilla help GF_H001-H004): Michelle fixes your car at her place; Helena keeps a stash
