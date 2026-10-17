@@ -153,3 +153,13 @@ end)
 function Hud.activity()
     return current
 end
+
+-- Perks this player has earned (sent by the server); some act here.
+Hud.perks = {}
+addEvent("vana-activities:perks", true)
+addEventHandler("vana-activities:perks", resourceRoot, function(held) Hud.perks = held or {} end)
+
+-- Firefighter's reward (vanilla): fire doesn't hurt you.
+addEventHandler("onClientPlayerDamage", localPlayer, function(_, weapon)
+    if Hud.perks.fireproof and weapon == 37 then cancelEvent() end
+end)

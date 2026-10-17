@@ -189,10 +189,18 @@ function Activity.hasPerk(player, name)
     return Activity.progress(player, "perk." .. name) == true
 end
 
+-- The client knows its player's perks (some act there, e.g. fireproof).
+local function sendPerks(player)
+    local held = {}
+    for name in pairs(perks) do held[name] = Activity.hasPerk(player, name) or nil end
+    triggerClientEvent(player, "vana-activities:perks", resourceRoot, held)
+end
+
 function Activity.grantPerk(player, name)
     if Activity.hasPerk(player, name) then return false end
     Activity.setProgress(player, "perk." .. name, true)
     if perks[name] then perks[name](player) end
+    sendPerks(player)
     return true
 end
 
@@ -204,6 +212,7 @@ addEventHandler("onPlayerSpawn", root, function()
         for name, apply in pairs(perks) do
             if Activity.hasPerk(player, name) then apply(player) end
         end
+        sendPerks(player)
     end, 500, 1)
 end)
 

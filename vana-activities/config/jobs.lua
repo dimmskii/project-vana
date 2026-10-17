@@ -19,4 +19,29 @@ Jobs = {
         outOfTaxiMs = 10000,       -- ours: time to get back in before the job ends
         rewardFares = 50,          -- vanilla: 50 fares in total -> all taxis get nitro
     },
+    paramedic = {
+        vehicles = { 416 },
+        levels = 12,               -- level N: N patients; level 12 done = the reward
+        pay = 50,                  -- each level pays level x level x this
+        patientMs = { 15000, 45000 }, minimumMs = 60000, -- vanilla clamps per patient and overall
+        msPerMetre = 70,           -- ours: per patient, from where you are via them to the hospital
+        patientRange = { 100, 600 }, -- ours: how far patients are
+        pickupRadius = 7, dropRadius = 7,
+        bump = 40,                 -- ours: ambulance damage in one jolt that hurts patients aboard (life 100 each)
+        outMs = 10000,
+        completeBonus = 5000,
+        -- Hospitals (vanilla's drop-offs).
+        hospitals = { { 2004.96, -1442.96, 12.56 }, { 1180.85, -1325.57, 12.58 }, { 1244.44, 331.23, 18.55 },
+                      { -2198.69, -2290.11, 29.63 }, { -2670.29, 616.44, 13.45 }, { -316.38, 1056.05, 18.73 },
+                      { -1514.82, 2527.12, 54.74 }, { 1578.45, 1770.68, 9.84 } },
+    },
+    firefighter = {
+        vehicles = { 407 },
+        levels = 12, pay = 50, completeBonus = 5000, -- as paramedic: level x level x $50, $5000 at 12
+        carModels = { 400, 401, 404, 405, 410, 412, 418, 420, 421, 426, 436, 445, 466, 467, 474, 475, 491, 492,
+                      496, 507, 516, 517, 518, 526, 527, 529, 540, 542, 546, 547, 549, 550, 551, 554, 560, 562, 566 },
+        range = { 250, 800 },      -- ours: how far the fire is
+        msPerMetre = 120, extraMs = 30000, perFireMs = 6000, -- ours: vanilla works the clock out from the route
+        outMs = 10000,
+    },
 }

@@ -100,3 +100,19 @@ Pay is distance / 40, or / 16 if the tip bar is still up (SPEED BONUS!); damage 
 5 fares in a row pays $500, then $1000 and so on. A trashed taxi loses its fare until repaired. 50
 fares in total (saved) earns vanilla's reward: nitro in every taxi you drive. Ours: fares spawn
 60-180 m away and ride 300-1500 m; 10 s to get back in the taxi.
+
+### Paramedic (`AMBULAN`)
+
+In an ambulance (416). Level N has N patients (blue) around you; pick them up (as many as there are
+free seats) and bring them to the nearest of vanilla's hospitals (yellow) before the clock runs out.
+Hard bumps hurt everyone aboard; a patient who dies ends the job. Each level pays level x level x $50;
+finishing level 12 pays $5000 and earns vanilla's reward, maximum health raised (to the top). Ours:
+patients 100-600 m away; the clock gives each 15-45 s by route length, at least a minute.
+
+### Firefighter (`FIRETRU`)
+
+In a fire truck (407). Each level reports burning cars in a zone: one, two past level 4, three past
+level 8, with their occupants on fire from level 3. Put every fire out with the water cannon in time
+(Neon's element fires: the server lights them, your client reports them out). Pays like paramedic;
+level 12 pays $5000 and makes you fireproof (fire damage is cancelled on your client). Ours: the
+burning cars can't blow up, and the clock (distance x 120 ms + 30 s + 6 s per fire).

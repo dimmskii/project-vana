@@ -13,5 +13,9 @@
     <script src="burglary/client.lua" type="client" />
     <script src="dating/server.lua" type="server" />
     <script src="dating/client.lua" type="client" />
+    <script src="jobs/common.lua" type="server" />
     <script src="jobs/taxi.lua" type="server" />
+    <script src="jobs/paramedic.lua" type="server" />
+    <script src="jobs/firefighter.lua" type="server" />
+    <script src="jobs/firefighter_client.lua" type="client" />
 </meta>
