@@ -132,6 +132,12 @@ Gym equipment comes from `models/gta_int.img`:
 python3 tools/seed/seed_gym.py "/path/to/GTA San Andreas" "vana-gym/config"
 ```
 
+Vending machines and food carts come from the map IPLs and both IMGs:
+
+```sh
+python3 tools/seed/seed_vendors.py "/path/to/GTA San Andreas" "vana-shops/config"
+```
+
 Entrances and shop points come from the map IPLs and `models/gta_int.img`:
 
 ```sh

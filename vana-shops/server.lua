@@ -246,6 +246,26 @@ addEventHandler("vana-shops:buy", resourceRoot, function(key)
     triggerClientEvent(client, "vana-shops:result", resourceRoot, true, verb .. ": " .. item.label, key, point.kind == "clothes" or point.kind == "fighting")
 end)
 
+-- Vending machines and food carts (config/vendors.lua, config/vendorkinds.lua).
+local lastVend = {}
+addEvent("vana-shops:vend", true)
+addEventHandler("vana-shops:vend", resourceRoot, function(index)
+    local v = type(index) == "number" and Vendors[index]
+    local kind = v and VendorKinds[v.kind]
+    if not kind or getPedOccupiedVehicle(client) or isPedDead(client) or getElementInterior(client) ~= v.interior then return end
+    local x, y, z = getElementPosition(client)
+    if getDistanceBetweenPoints3D(x, y, z, v.x, v.y, v.z) > VendorReach + 2 then return end
+    local now = getTickCount()
+    if lastVend[client] and now - lastVend[client] < 3000 then return end
+    lastVend[client] = now
+    if getPlayerMoney(client) < kind.price then return outputChatBox("You can't afford that.", client, 255, 120, 120) end
+    takePlayerMoney(client, kind.price)
+    setElementHealth(client, math.min(maxHealth(client), getElementHealth(client) + kind.health))
+    if kind.fat ~= 0 then setPedStat(client, 21, math.min(1000, math.max(0, getPedStat(client, 21) + kind.fat))) end
+    setPedAnimation(client, kind.anim[1], kind.anim[2], 2500, false, false, false, false)
+    savePlayer(client)
+end)
+
 addEvent("vana-shops:close", true)
 addEventHandler("vana-shops:close", resourceRoot, function() open[client] = nil end)
 
@@ -281,7 +301,7 @@ addEventHandler("onResourceStart", resourceRoot, function()
     for shopName, point in pairs(ShopPoints) do placeMarker(shopName, point) end
 end)
 
-addEventHandler("onPlayerQuit", root, function() open[source], closets[source] = nil, nil end)
+addEventHandler("onPlayerQuit", root, function() open[source], closets[source], lastVend[source] = nil, nil, nil end)
 
 -- Admin: put a shop's point where you stand, and print the config line to keep it.
 -- Restricted: needs command.shoppoint in the ACL.
@@ -345,6 +365,15 @@ addCommandHandler("shoptest", function(source)
     outputServerLog(("[shoptest] barber sells %d (e.g. %s $%d), tattoo parlour %d (e.g. %s $%d)"):format(#barber,
         barber[2] and barber[2].label or "?", barber[2] and barber[2].price or 0, #tattoo, tattoo[1] and tattoo[1].label or "?", tattoo[1] and tattoo[1].price or 0))
     ok = ok and #barber > 0 and #tattoo > 0
+    local vendorKinds = {}
+    for _, v in ipairs(Vendors) do
+        if not VendorKinds[v.kind] then ok = false; outputServerLog("[shoptest] FAIL unknown vendor kind " .. v.kind) end
+        vendorKinds[v.kind] = (vendorKinds[v.kind] or 0) + 1
+    end
+    local summary = {}
+    for kind, n in pairs(vendorKinds) do summary[#summary + 1] = kind .. " " .. n end
+    table.sort(summary)
+    outputServerLog(("[shoptest] vendors: %d (%s)"):format(#Vendors, table.concat(summary, ", ")))
     -- Every shopping.dat item should have a vanilla name.
     local missing = {}
     for _, section in ipairs({ "weapons", "food", "clothes", "haircuts", "tattoos" }) do

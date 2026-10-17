@@ -79,7 +79,16 @@ To correct one in game, stand where customers should and use `/shoppoint <NAME>`
 `command.shoppoint`). The marker moves at once, and the server log prints the line to paste into
 `config/points.lua`.
 
-`shoptest` (console) checks that every shop has stock and every weapon maps to a game weapon.
+`shoptest` (console) checks that every shop has stock, every weapon maps to a game weapon and every
+vendor has a known kind.
+
+### Vending machines and food carts
+
+`tools/seed/seed_vendors.py` places them from the map IPLs and both IMGs into
+`vana-shops/config/vendors.lua` (104: soda and candy machines, hot dog, noodle and ice cream carts).
+Walk up to one and press enter/exit (F) to buy. The server checks the distance and money, then takes
+the money, adds health and fat and plays the vanilla `VENDING` animation. Prices and effects are in
+`config/vendorkinds.lua`; they're ours, since vanilla's are inside the compiled vendor scripts.
 
 ## Gym (`vana-gym`)
 
