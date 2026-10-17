@@ -23,4 +23,43 @@ Games = {
         targetsToWin = 3, pointsToWin = 20,  -- vanilla: first to three targets (rounds 1-2), to 20 points (round 3)
         rivalSeconds = { 7, 5, 5.5, 4.5 },   -- ours: how long a rival takes per target, by weapon
     },
+    -- Casino games (vanilla BANDIT, VIDPOK, ROULETE, BLACKJ, WOF), at the seeded spots (config/minigames.lua).
+    -- Table tiers by interior (ours: vanilla varies them per table): 1 low .. 4 high.
+    tiers = { [1] = 4, [10] = 3, [12] = 2 }, defaultTier = 1,
+    slots = {
+        bets = { 10, 20, 50 },   -- vanilla: each machine takes one of these
+        -- Vanilla's three reels (18 stops each) and what three of a kind pays (x the bet).
+        reels = {
+            { "bar2", "69", "bar1", "bell", "cherry", "grape", "cherry", "grape", "bell", "69", "bell", "bar1", "cherry", "grape", "69", "grape", "bell", "cherry" },
+            { "69", "bell", "cherry", "grape", "bar2", "bell", "grape", "cherry", "bell", "bar1", "grape", "69", "cherry", "bar1", "cherry", "69", "bell", "grape" },
+            { "grape", "cherry", "69", "bell", "grape", "bell", "69", "grape", "cherry", "bar1", "bar2", "cherry", "bell", "69", "grape", "bar1", "bell", "cherry" },
+        },
+        pays = { cherry = 25, grape = 100, ["69"] = 250, bell = 500, bar1 = 1000, bar2 = 5000 },
+    },
+    videopoker = {
+        coinValues = { 1, 5, 10, 25, 50, 100, 500, 1000, 5000, 10000 }, maxCoins = 5,
+        -- Jacks or Better: per coin, by coins bet 1..5 (vanilla's royal / straight flush / four of a kind;
+        -- the rest the standard 9/6 table).
+        pays = {
+            royal = { 250, 500, 750, 1000, 4000 }, straightflush = { 50, 100, 150, 200, 250 }, four = { 25, 50, 75, 100, 125 },
+            fullhouse = 9, flush = 6, straight = 4, three = 3, twopair = 2, jacks = 1,
+        },
+    },
+    roulette = { maxBet = { 20, 200, 2000, 20000 }, minBet = { 1, 10, 100, 1000 } },  -- by tier (vanilla's maxima)
+    blackjack = { minBet = { 10, 100, 1000, 10000 }, maxBet = { 100, 1000, 10000, 100000 } },
+    -- Wheel of fortune: what each symbol pays (vanilla: value + 1 times the stake) and how many slots it has
+    -- (ours: the usual 54-slot money wheel).
+    wheel = { maxBet = { 100, 1000, 10000, 100000 }, symbols = { 1, 2, 5, 10, 20, 40 }, slots = { 24, 15, 7, 4, 2, 2 } },
+    reach = 1.8,                 -- how close to a machine or table to play
+    -- Inside Track Betting (vanilla OTB): five horses a race, named from vanilla's list (HORS__1..HORS149).
+    betting = { horses = 5, names = 149, stakes = { 5, 25, 100, 250 }, maxStake = 10000,
+                odds = { 1, 2, 3, 5, 8, 12, 20, 33 } },   -- ours: odds (to 1) a horse can get; longer odds win less often
+    -- Arcade machines and consoles (vanilla ARCADE and the video game missions): which game each model runs.
+    -- Ours: small dx versions of the four games; high scores are kept.
+    arcade = { games = { cj_coin_op = "uranus", cj_coin_op_1 = "duality", cj_coin_op_2 = "monkey", cj_coin_op_3 = "bumble",
+                         swank_console = "uranus", snesish = "bumble", low_console = "duality" },
+               titles = { uranus = "They Crawled From Uranus", duality = "Duality", monkey = "Go Go Space Monkey", bumble = "Let's Get Ready To Bumble" },
+               price = 1 },
+    -- Basketball (vanilla BASKETB): a minute to score as much as you can. Ours: the timing meter.
+    basketball = { timeMs = 60000, points = 2, farPoints = 3, sweet = 0.12 },
 }

@@ -246,3 +246,37 @@ where every part shot off is a point, first to 20. Passing raises the weapon's s
 the first time); all four earn vanilla's fast reload (recorded only: MTA has no control for it).
 Ours: rivals score at a set pace, a target counts as destroyed with 5 of its parts shot off, and the
 rounds are judged on your client.
+
+## Minigames and gambling
+
+`tools/seed/seed_minigames.py` places every object vanilla attaches a minigame brain to (171: slot
+machines, video poker, roulette and blackjack tables, wheels of fortune, betting machines, arcade
+machines and consoles, basketball hoops, pool tables) into `config/minigames.lua`. Walk up and
+press enter/exit (vanilla's prompts where it has them).
+
+### Casino (`BANDIT`, `VIDPOK`, `ROULETE`, `BLACKJ`, `WOF`)
+
+All outcomes and money are decided on the server; the client draws the panels.
+
+- **Slots:** each machine takes $10, $20 or $50 a pull; vanilla's three 18-stop reels; three of a
+  kind pays the bet x 25 (cherries), 100 (grapes), 250 (69), 500 (bells), 1000 (bar), 5000 (two bars).
+- **Video poker:** Jacks or Better, 1-5 coins of $1-$10000; vanilla's royal flush, straight flush and
+  four of a kind columns, the standard 9/6 table for the rest.
+- **Roulette** (0 and 00): numbers 35 to 1, red/black, odd/even, halves 1 to 1, dozens 2 to 1;
+  table maxima $20 / $200 / $2000 / $20000 (vanilla).
+- **Blackjack:** dealer stands on 17, blackjack pays 3 to 2, double down; table limits from $10-$100
+  to $10000-$100000 (vanilla's four tiers).
+- **Wheel of fortune:** stake on 1, 2, 5, 10, 20, 40; a symbol pays its value + 1 times the stake
+  (vanilla); maximum wager by table up to $100000.
+- Ours: which tier a table is (by casino interior), and the wheel's slot counts (the usual 54-slot
+  money wheel).
+
+### Inside Track Betting, arcade, basketball
+
+- **Betting** (the OTB machines): five horses a race with vanilla's names and stake steps; ours: the
+  odds and the race drawn as bars (the winner is drawn by the odds).
+- **Arcade machines and consoles:** small dx versions of They Crawled From Uranus, Duality, Go Go
+  Space Monkey and Let's Get Ready To Bumble ($1 a go on arcade machines); high scores are kept.
+  Ours: the games themselves (vanilla's are full 2D games of their own).
+- **Basketball** (27 hoops): a minute to score as much as you can, shooting when the meter reaches
+  the top; best scores kept; vanilla's jump-shot animations. Ours: the meter.

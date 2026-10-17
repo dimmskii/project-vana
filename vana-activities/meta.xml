@@ -8,6 +8,7 @@
     <script src="config/schools.lua" type="shared" />
     <script src="config/racing.lua" type="shared" />
     <script src="config/games.lua" type="shared" />
+    <script src="config/minigames.lua" type="shared" />
     <script src="config/races.lua" type="server" />
     <script src="core/gxt.lua" type="server" />
     <script src="core/server.lua" type="server" />
@@ -42,4 +43,9 @@
     <script src="stadium/triathlon.lua" type="server" />
     <script src="games/range.lua" type="server" />
     <script src="games/range_client.lua" type="client" />
+    <script src="games/casino.lua" type="server" />
+    <script src="games/casino_client.lua" type="client" />
+    <script src="games/minigames_client.lua" type="client" />
+    <script src="games/side.lua" type="server" />
+    <script src="games/side_client.lua" type="client" />
 </meta>
