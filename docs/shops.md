@@ -66,7 +66,8 @@ price overrides and `fatPerCalorie`.
 
 ### Shopkeepers
 
-`vana-shops/keepers.lua` ports the vanilla shop scripts' staff (`BARB` and `TATTO` in `main.scm`).
+`vana-shops/keepers.lua` ports the vanilla shop scripts' staff (`BARB`, `TATTO`, `AMUNAT`, `JFUD` and
+`CLOTH` in `main.scm`). Shop points for these shops are vanilla's customer spots.
 Each shop type has one layout in interior coordinates (keeper, customer seat, camera) and each shop
 an offset from it, in `config/keepers.lua`; the keeper models are vanilla's.
 
@@ -76,6 +77,14 @@ an offset from it, in `config/keepers.lua`; the keeper models are vanilla's.
 - **Tattoo parlours:** the artist sits at the kit. Choosing a body part has CJ and the artist take
   that part's pose (`TAT_<part>_In/Pose/Out`); leaving gets CJ up. Vanilla also animates the kit
   object, which MTA can't do yet, so the kit stays still.
+- **Ammu-Nation:** the clerk lifts the highlighted weapon (`SHP_1H/2H/Ar_Lift`, as vanilla picks
+  per weapon) and puts it back to show the next.
+- **Fast food:** the server lifts the highlighted meal on its tray; buying it, CJ eats at the counter
+  (`EAT_Burger/Pizza/Chicken`) and gets thanked on the way out.
+- **Clothes:** CJ steps into the changing room (`CLO_In`), poses per apparel category, `CLO_Buy` on
+  a purchase and steps out when done; hats and glasses use vanilla's hat camera. Each chain's
+  changing room door is placed as vanilla does and hidden while CJ passes it (vanilla animates it).
+- What a keeper holds is the ped's `vana:holding` model; `keepers_client.lua` keeps it in the hand.
 - One customer per shop at a time; anyone else is told the shop is busy. A killed keeper comes back
   after a minute. `shoptest` checks that every keeper is in place.
 

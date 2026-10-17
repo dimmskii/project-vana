@@ -259,15 +259,15 @@ addEvent("vana-shops:preview", true)
 addEventHandler("vana-shops:preview", resourceRoot, function(key)
     local shopName = open[client]
     local point = shopName == "CLOSET" and closets[client] or shopName and ShopPoints[shopName]
-    if not point or not outfits[client] then return end
-    restoreClothes(client)
-    if type(key) ~= "string" then return keeperBrowse(client, nil) end
-    for _, entry in ipairs(catalogue(shopName, client)) do
-        if entry.key == key then
-            keeperBrowse(client, entry)
-            return deliver(client, point.kind, key)
-        end
+    if not point then return end
+    local item
+    for _, entry in ipairs(type(key) == "string" and catalogue(shopName, client) or {}) do
+        if entry.key == key then item = entry break end
     end
+    keeperBrowse(client, item)
+    if not outfits[client] then return end
+    restoreClothes(client)
+    if item then deliver(client, point.kind, key) end
 end)
 
 addEventHandler("onPlayerUseEntrance", root, function(name, _, toInterior, atHub)

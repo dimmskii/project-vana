@@ -1,7 +1,8 @@
 -- Shopkeepers (config/keepers.lua): the vanilla shop scripts' staff, standing where vanilla puts them
--- and playing its animations while a customer is served. One customer per shop at a time.
+-- and playing its animations while a customer is served. One customer per shop at a time. What a keeper
+-- holds (a weapon, a meal) is the ped's "vana:holding" model; keepers_client.lua puts it in the hand.
 local staff = {}    -- shopName -> ped
-local props = {}    -- shopName -> object
+local props = {}    -- shopName -> object (tattoo kit, changing room door)
 local serving = {}  -- shopName -> player
 local customers = {} -- player -> { shop, layout, part, token }
 
@@ -12,6 +13,24 @@ end
 
 local function play(ped, lib, name, loop)
     if isElement(ped) then setPedAnimation(ped, lib, name, -1, loop or false, false, false, true) end
+end
+
+local function stand(ped)
+    if isElement(ped) then setPedAnimation(ped) end
+end
+
+local function hold(ped, model)
+    if isElement(ped) then setElementData(ped, "vana:holding", model or false) end
+end
+
+local function camera(player, shopName, cam)
+    local o = Keepers[shopName].offset
+    triggerClientEvent(player, "vana-shops:camera", resourceRoot, { cam[1] + o[1], cam[2] + o[2], cam[3] + o[3], cam[4] + o[1], cam[5] + o[2], cam[6] + o[3] })
+end
+
+-- Fires fn after ms unless the shop has a new customer by then (their service owns the keeper).
+local function afterLeaving(shopName, ms, fn)
+    setTimer(function() if not serving[shopName] then fn() end end, ms, 1)
 end
 
 -- Runs fn after ms unless the customer's visit moved on since (a newer step or leaving).
@@ -48,6 +67,7 @@ Flows.hair = {
         later(player, 830 + 1700 + 1330, function() Flows.hair.idle(ped) end)
     end,
     buy = function(player, ped, entry)
+        step(player)
         local mirror = KeeperLayouts.hair.beards[entry.key] and "BRB_Beard_01" or (math.random(2) == 1 and "BRB_Hair_01" or "BRB_Hair_02")
         play(ped, "HAIRCUTS", "BRB_Buy")
         play(player, "HAIRCUTS", mirror)
@@ -117,10 +137,148 @@ Flows.tattoo = {
     end,
 }
 
+-- Ammu-Nation: the clerk lifts the highlighted weapon (SHP_<group>_Lift) and puts it back to show another.
+local function weaponModel(entry)
+    local layout = KeeperLayouts.weapons
+    if not entry then return nil end
+    if entry.key == "armour" then return layout.models.armour end
+    return layout.models[ShopConfig.weapons[entry.key] or -1]
+end
+
+local function liftGroup(model)
+    return KeeperLayouts.weapons.lifts[model] or "1H"
+end
+
+Flows.weapons = {
+    idle = function(ped) play(ped, "WEAPONS", "SHP_Tray_Pose", true) end,
+    sit = function() end,
+    browse = function(player, ped, entry)
+        local c = step(player)
+        local model = weaponModel(entry)
+        if model == c.holding then return end
+        local delay = 0
+        if c.holding then
+            local old = liftGroup(c.holding)
+            play(ped, "WEAPONS", "SHP_" .. old .. "_Ret_S")
+            later(player, 330, function() play(ped, "WEAPONS", "SHP_" .. old .. "_Ret") end)
+            later(player, 1330, function() hold(ped, nil) end)
+            delay = 1330
+        end
+        c.holding = model
+        if not model then
+            later(player, delay, function() play(ped, "WEAPONS", "SHP_G_Lift_Out") end)
+            later(player, delay + 670, function() Flows.weapons.idle(ped) end)
+            return
+        end
+        local group = liftGroup(model)
+        later(player, delay, function() play(ped, "WEAPONS", "SHP_G_Lift_In") end)
+        later(player, delay + 670, function()
+            hold(ped, model)
+            play(ped, "WEAPONS", "SHP_" .. group .. "_Lift")
+        end)
+        later(player, delay + 1670, function() play(ped, "WEAPONS", "SHP_" .. group .. "_Lift_End") end)
+    end,
+    buy = function() end,
+    leave = function(player, ped, done, c, shopName)
+        done()
+        if not c.holding then return end
+        local group = liftGroup(c.holding)
+        play(ped, "WEAPONS", "SHP_" .. group .. "_Ret_S")
+        afterLeaving(shopName, 330, function() play(ped, "WEAPONS", "SHP_" .. group .. "_Ret") end)
+        afterLeaving(shopName, 1330, function() hold(ped, nil); play(ped, "WEAPONS", "SHP_G_Lift_Out") end)
+        afterLeaving(shopName, 2000, function() Flows.weapons.idle(ped) end)
+    end,
+}
+
+-- Fast food: the server lifts the highlighted meal on its tray; buying it, CJ eats at the counter.
+Flows.food = {
+    idle = function(ped) stand(ped) end,
+    sit = function(player, ped)
+        play(ped, "FOOD", "SHP_Tray_In")
+        later(player, 670, function() play(ped, "FOOD", "SHP_Tray_Pose", true) end)
+    end,
+    browse = function(player, ped, entry)
+        local c = step(player)
+        local model = entry and KeeperLayouts.food.models[entry.key]
+        if model == c.holding then return end
+        local delay = 0
+        if c.holding then
+            play(ped, "FOOD", "SHP_Tray_Return")
+            later(player, 1330, function() hold(ped, nil) end)
+            delay = 1330
+        end
+        c.holding = model
+        if not model then
+            later(player, delay, function() play(ped, "FOOD", "SHP_Tray_Pose", true) end)
+            return
+        end
+        later(player, delay, function() play(ped, "FOOD", "SHP_Tray_Lift_In") end)
+        later(player, delay + 500, function()
+            hold(ped, model)
+            play(ped, "FOOD", "SHP_Tray_Lift")
+        end)
+        later(player, delay + 2170, function() play(ped, "FOOD", "SHP_Tray_Lift_Loop", true) end)
+    end,
+    buy = function(player, ped, entry, c)
+        setPedAnimation(player, "FOOD", Keepers[c.shop].eat, -1, false, false, false, false)
+    end,
+    leave = function(player, ped, done, c, shopName)
+        done()
+        local delay = 0
+        if c.holding then
+            play(ped, "FOOD", "SHP_Tray_Return")
+            afterLeaving(shopName, 1330, function() hold(ped, nil); play(ped, "FOOD", "SHP_Tray_Lift_Out") end)
+            delay = 1830
+        end
+        afterLeaving(shopName, delay, function() play(ped, "FOOD", "SHP_Thank") end)
+        afterLeaving(shopName, delay + 1170, function() Flows.food.idle(ped) end)
+    end,
+}
+
+-- Clothes: CJ steps into the changing room, poses in what's highlighted (per apparel category) and
+-- steps out when done. The clerk stays at the counter.
+local function door(shopName, visible)
+    if isElement(props[shopName]) then setElementAlpha(props[shopName], visible and 255 or 0) end
+end
+
+Flows.clothes = {
+    idle = function(ped) stand(ped) end,
+    sit = function(player, ped, c)
+        door(c.shop, false)
+        play(player, "CLOTHES", "CLO_In")
+        later(player, 4000, function() door(c.shop, true) end)
+    end,
+    browse = function(player, ped, entry)
+        local c = step(player)
+        local layout = KeeperLayouts.clothes
+        local category = entry and tonumber(entry.category)
+        local hat = category and layout.hatCategories[category] or false
+        if hat ~= (c.hat or false) then
+            c.hat = hat
+            camera(player, c.shop, hat and layout.hatCamera or layout.camera)
+        end
+        if not category or category == c.part then return end
+        c.part = category
+        play(player, "CLOTHES", "CLO_Pose_" .. (layout.poses[category] or "Torso"))
+        later(player, 3330, function() play(player, "CLOTHES", "CLO_Pose_Loop", true) end)
+    end,
+    buy = function(player)
+        step(player)
+        play(player, "CLOTHES", "CLO_Buy")
+        later(player, 2070, function() play(player, "CLOTHES", "CLO_Pose_Loop", true) end)
+    end,
+    leave = function(player, ped, done, c, shopName)
+        door(shopName, false)
+        play(player, "CLOTHES", "CLO_Out")
+        setTimer(function() door(shopName, true); done() end, 2670, 1)
+    end,
+}
+
 local function spawnKeeper(shopName)
     local k, point = Keepers[shopName], ShopPoints[shopName]
     local layout = KeeperLayouts[k.layout]
-    local x, y, z, heading = spot(shopName, layout.keeper)
+    local x, y, z, heading
+    if k.keeper then x, y, z, heading = unpack(k.keeper) else x, y, z, heading = spot(shopName, layout.keeper) end
     local ped = createPed(k.model, x, y, z + 1, heading)
     if not ped then return end
     setElementInterior(ped, point.interior)
@@ -132,6 +290,12 @@ local function spawnKeeper(shopName)
         local kit = createObject(layout.kit.model, x, y, z + layout.kit.z, 0, 0, heading)
         setElementInterior(kit, point.interior)
         props[shopName] = kit
+    end
+    if layout.door and k.door and not props[shopName] then
+        local dx, dy, dz, dh = spot(shopName, layout.door)
+        local d = createObject(k.door, dx, dy, dz, 0, 0, dh)
+        setElementInterior(d, point.interior)
+        props[shopName] = d
     end
 end
 
@@ -148,10 +312,8 @@ function keeperSeat(player, shopName)
     setElementFrozen(player, true)
     setElementPosition(player, x, y, z + 1)
     setElementRotation(player, 0, 0, heading, "default", true)
-    Flows[k.layout].sit(player, ped)
-    local cam = KeeperLayouts[k.layout].camera
-    local o = k.offset
-    triggerClientEvent(player, "vana-shops:camera", resourceRoot, { cam[1] + o[1], cam[2] + o[2], cam[3] + o[3], cam[4] + o[1], cam[5] + o[2], cam[6] + o[3] })
+    Flows[k.layout].sit(player, ped, customers[player])
+    camera(player, shopName, KeeperLayouts[k.layout].camera)
     return true
 end
 
@@ -162,7 +324,7 @@ end
 
 function keeperBought(player, entry)
     local c = customers[player]
-    if c then step(player); Flows[c.layout].buy(player, staff[c.shop], entry) end
+    if c then Flows[c.layout].buy(player, staff[c.shop], entry, c) end
 end
 
 -- Gets the customer up; `instant` skips the animation (death, quit, resource stop).
@@ -179,10 +341,11 @@ function keeperLeave(player, instant)
         setElementFrozen(player, false)
     end
     if instant or not isElement(player) or isPedDead(player) then
-        if isElement(ped) and not isPedDead(ped) then Flows[c.layout].idle(ped) end
+        if isElement(ped) and not isPedDead(ped) then hold(ped, nil); Flows[c.layout].idle(ped) end
+        door(c.shop, true)
         if isElement(player) and not isPedDead(player) then done() end
     else
-        Flows[c.layout].leave(player, ped, done)
+        Flows[c.layout].leave(player, ped, done, c, c.shop)
     end
 end
 

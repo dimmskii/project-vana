@@ -1,13 +1,13 @@
 -- The shop menu, in the vanilla style: a box top-left, arrow keys to choose, Enter to buy,
 -- Backspace to go back or leave. Clothes are grouped by apparel category; owned clothes say OWNED.
--- Purchases are only requests; the server decides. Wearables are tried on as you move through them.
+-- Purchases are only requests; the server decides. The highlighted item is reported as you move through
+-- the menu: wearables are tried on, and staff show it (vana-shops/keepers.lua).
 local TITLES = { weapons = "Ammu-Nation", food = "Order", clothes = "Clothes", misc = "24/7", closet = "Closet", fighting = "Fighting style", hair = "Barber", tattoo = "Tattoos" }
-local menu       -- { title, items, list, selected, category, categories, message, messageAt, tryOn, previewed }
-local PREVIEW = { clothes = true, closet = true, hair = true, tattoo = true }
+local menu       -- { title, items, list, selected, category, categories, message, messageAt, previewed }
 
--- Asks the server to put the highlighted item on (nil: back to what the player came in wearing).
+-- Tells the server what's highlighted (nil: nothing, e.g. back at the categories).
 local function preview()
-    if not menu or not menu.tryOn then return end
+    if not menu then return end
     local entry = menu.list[menu.selected]
     local key = entry and entry.key
     if key ~= menu.previewed then
@@ -46,7 +46,7 @@ end
 addEvent("vana-shops:open", true)
 addEventHandler("vana-shops:open", resourceRoot, function(shopName, kind, items, categories)
     local grouped = kind == "clothes" or kind == "closet" or kind == "tattoo"
-    menu = { title = TITLES[kind] or shopName, items = items, selected = 1, categories = grouped and categories or nil, tryOn = PREVIEW[kind] }
+    menu = { title = TITLES[kind] or shopName, items = items, selected = 1, categories = grouped and categories or nil }
     rebuild()
     preview()
     toggleAllControls(false, true, false)

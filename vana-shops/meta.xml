@@ -11,4 +11,5 @@
     <script src="keepers.lua" type="server" />
     <script src="client.lua" type="client" />
     <script src="vendors_client.lua" type="client" />
+    <script src="keepers_client.lua" type="client" />
 </meta>

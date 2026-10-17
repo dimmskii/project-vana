@@ -1,21 +1,22 @@
 -- Seeded by tools/seed/seed_interiors.py. Edit freely: this file is ours now.
--- Where a customer stands to shop, per shop interior (enex name). Found from a counter object where the
--- interior has one, else a few metres inside the door. Refine in game with /shoppoint <name>.
+-- Where a customer stands to shop, per shop interior (enex name). Staffed shops use the vanilla shop
+-- scripts' customer spot (see config/keepers.lua); the 24/7s start a few metres inside the door.
+-- Refine in game with /shoppoint <name>.
 ShopPoints = {
-    AMMUN1     = { kind = "weapons", interior = 1, x = 286.15, y = -36.64, z = 1000.57 }, -- 4 m inside the door (no counter found)
-    AMMUN2     = { kind = "weapons", interior = 4, x = 292.04, y = -82.32, z = 1000.54 }, -- counter gun_counter09
-    AMMUN3     = { kind = "weapons", interior = 6, x = 290.70, y = -104.03, z = 1000.57 }, -- counter mpgun_counter06
-    AMMUN4     = { kind = "weapons", interior = 7, x = 315.82, y = -138.43, z = 998.66 }, -- 4 m inside the door (no counter found)
-    AMMUN5     = { kind = "weapons", interior = 6, x = 316.52, y = -164.71, z = 998.66 }, -- 4 m inside the door (no counter found)
-    FDCHICK    = { kind = "food", interior = 9, x = 367.84, y = -6.29, z = 1000.87 }, -- counter cj_ff_till
-    FDPIZA     = { kind = "food", interior = 5, x = 372.93, y = -119.27, z = 1000.45 }, -- counter cj_ff_till
-    FDBURG     = { kind = "food", interior = 10, x = 373.67, y = -66.68, z = 1000.55 }, -- counter cj_ff_till
-    CSCHP      = { kind = "clothes", interior = 15, x = 207.74, y = -105.02, z = 1004.27 }, -- 4 m inside the door (no counter found)
-    CSSPRT     = { kind = "clothes", interior = 3, x = 207.06, y = -134.81, z = 1002.52 }, -- 4 m inside the door (no counter found)
-    LACS1      = { kind = "clothes", interior = 1, x = 203.80, y = -43.88, z = 1000.80 }, -- counter cj_urb_counter
-    CLOTHGP    = { kind = "clothes", interior = 18, x = 161.36, y = -81.82, z = 1000.81 }, -- counter gap_counter
-    CSDESGN    = { kind = "clothes", interior = 5, x = 206.93, y = -9.03, z = 1001.26 }, -- counter shop_counter_1
-    CSEXL      = { kind = "clothes", interior = 14, x = 203.43, y = -159.90, z = 999.58 }, -- counter shop_counter_1
+    AMMUN1     = { kind = "weapons", interior = 1, x = 296.51, y = -38.17, z = 1000.55 }, -- vanilla: at the counter
+    AMMUN2     = { kind = "weapons", interior = 4, x = 295.74, y = -80.48, z = 1000.53 }, -- vanilla: at the counter
+    AMMUN3     = { kind = "weapons", interior = 6, x = 290.24, y = -109.51, z = 1000.55 }, -- vanilla: at the counter
+    AMMUN4     = { kind = "weapons", interior = 7, x = 308.15, y = -141.10, z = 998.62 }, -- vanilla: at the counter
+    AMMUN5     = { kind = "weapons", interior = 6, x = 312.79, y = -165.95, z = 998.62 }, -- vanilla: at the counter
+    FDCHICK    = { kind = "food", interior = 9, x = 368.79, y = -6.86, z = 1000.84 }, -- vanilla: at the till
+    FDPIZA     = { kind = "food", interior = 5, x = 374.00, y = -119.64, z = 1000.54 }, -- vanilla: at the till
+    FDBURG     = { kind = "food", interior = 10, x = 375.57, y = -68.22, z = 1000.55 }, -- vanilla: at the till
+    CSCHP      = { kind = "clothes", interior = 15, x = 217.47, y = -98.19, z = 1004.29 }, -- vanilla: the changing room
+    CSSPRT     = { kind = "clothes", interior = 3, x = 201.97, y = -131.41, z = 1002.51 }, -- vanilla: the changing room
+    LACS1      = { kind = "clothes", interior = 1, x = 214.62, y = -40.65, z = 1001.03 }, -- vanilla: the changing room
+    CLOTHGP    = { kind = "clothes", interior = 18, x = 181.42, y = -86.90, z = 1001.03 }, -- vanilla: the changing room
+    CSDESGN    = { kind = "clothes", interior = 5, x = 208.82, y = -3.92, z = 1000.22 }, -- vanilla: the changing room
+    CSEXL      = { kind = "clothes", interior = 14, x = 215.82, y = -155.18, z = 999.52 }, -- vanilla: the changing room
     X7_11B     = { kind = "misc", interior = 18, x = -30.95, y = -85.61, z = 1002.55 }, -- 4 m inside the door (no counter found)
     X7_11C     = { kind = "misc", interior = 16, x = -25.13, y = -135.07, z = 1002.55 }, -- 4 m inside the door (no counter found)
     X7_11D     = { kind = "misc", interior = 17, x = -25.88, y = -181.87, z = 1002.55 }, -- 4 m inside the door (no counter found)
