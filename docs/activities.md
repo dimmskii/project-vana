@@ -125,3 +125,18 @@ while they're slow or wrecked (their AI runs on your client). Kill them all in t
 distance / 6 m/s, at least 40 s, and carries over. Levels pay level x level x $50. Vanilla's level 12
 reward is 150% maximum armour; MTA caps armour at 100, so ours is full armour on every spawn.
 Criminals are fair game: killing them is no crime (`vana:fairGame`). Ours: their weapons by level.
+
+### Pimping (`PIMP`)
+
+In a Broadway (575). Pick up a girl (blue), drive her to a customer (yellow), collect her when she's
+done. The clock starts at 3 minutes and gains one per job; the session pays $300 per job when it
+ends. Ten jobs in a session earns vanilla's reward (`perk.pimp`, "prostitutes pay you": no
+prostitute system yet). Ours: places are street spots named by zone (vanilla has a fixed list of
+named areas), and her busy time. Not yet: vanilla's trouble events (rough customers, hospital).
+
+### Freight train (`FREIGHT`)
+
+Driving the freight train (537, 538). Stop at the five stations in turn (Unity, Market, Cranberry,
+Yellow Bell, Linden), in whichever direction the train runs, each within vanilla's leg time (+15 s
+per leg at level 1, +10 s at level 2). Each station pays the leg's time / 100 x level; all five pass
+the level: $10000, then $50000 at level 2 (saved).

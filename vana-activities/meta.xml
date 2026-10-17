@@ -20,4 +20,6 @@
     <script src="jobs/firefighter_client.lua" type="client" />
     <script src="jobs/vigilante.lua" type="server" />
     <script src="jobs/vigilante_client.lua" type="client" />
+    <script src="jobs/pimping.lua" type="server" />
+    <script src="jobs/freight.lua" type="server" />
 </meta>

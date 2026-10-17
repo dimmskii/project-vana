@@ -58,4 +58,28 @@ Jobs = {
         bailRadius = 25,           -- ours: criminals ditch the car and fight when you're this close and they're slow
         outMs = 10000,
     },
+    pimping = {
+        vehicles = { 575 },        -- the Broadway
+        startMs = 180000, perJobMs = 60000, -- vanilla: 3 minutes, +1 per delivery
+        payPerJob = 300,           -- vanilla: paid when the session ends, per job done
+        rewardJobs = 10,           -- vanilla: 10 jobs in a session -> prostitutes pay you
+        girls = { 63, 64, 75, 152, 178, 207, 237, 238, 243, 244, 245, 246, 256, 257 },
+        girlRange = { 100, 400 }, trickRange = { 400, 1200 }, -- ours
+        serviceMs = { 20000, 40000 }, -- ours: how long she's busy
+        radius = 7, outMs = 15000,
+    },
+    freight = {
+        vehicles = { 537, 538 },
+        -- Stations in line order, with vanilla's time to reach each going one way (forward) or the other.
+        stations = {
+            { 1698.83, -1953.75, 12.55, forward = 150000, back = 60000 },  -- Unity Station, LS
+            { 789.50, -1343.80, -2.58, forward = 60000, back = 140000 },   -- Market Station, LS
+            { -1943.24, 159.59, 24.72, forward = 140000, back = 150000 },  -- Cranberry Station, SF
+            { 1463.36, 2632.25, 9.82, forward = 150000, back = 105000 },   -- Yellow Bell Station, LV
+            { 2864.62, 1248.27, 9.82, forward = 105000, back = 150000 },   -- Linden Station, LV
+        },
+        extraMs = { 15000, 10000 }, -- per leg, by level
+        levelBonus = { 10000, 50000 },
+        radius = 10, outMs = 10000,
+    },
 }
