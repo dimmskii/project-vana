@@ -154,7 +154,20 @@ gyms and Madd Dogg's home gym. Vanilla's gym scripts (`GYMBIKE`, `GYMBENC`, `GYM
 
 ## Not yet
 
-- **Dumbbells:** vanilla's `gymdumb.scm` free weights aren't placed objects in the map data.
-- **Vanilla shop behaviour:** item preview (trying clothes on, weapon close-ups).
-
+- **Gym reps:** the bar only fills on taps; vanilla scrubs the lift animation (`*_up_smooth`) by the
+  power bar, so the lift height follows how fast you tap.
+- **Object animations:** vanilla animates the tattoo kit (`TAT_*_O`) and the changing room doors
+  (`CLO_Pose_In_O`/`Out_O`); MTA can't play animations on objects, so the kit stays still and the
+  doors are hidden while CJ passes them.
+- **Clothes shop sequence:** the order of CJ's changing room animations (`CLO_In`, the per-category
+  poses, `CLO_Buy`, `CLO_Out`) is partly guessed; vanilla also goes in and out of the room between
+  items.
+- **Placement to check in game:** keepers and seated customers stand at the script's ground z + 1
+  (vanilla's convention); held items sit exactly on the hand bone with no offset. The food tray
+  preview is rotated 90 degrees for at least the Well Stacked Pizza meals.
+- **24/7 stores:** no vanilla shop script, so no keeper yet.
+- **Wardrobe:** vanilla's safehouse wardrobe script (`WARROBE`) isn't ported; our closet is the
+  menu in the shared changing room.
+- **Hostile keepers:** keepers can be killed (back after a minute) but don't react; vanilla's react
+  when attacked (the Ammu-Nation clerk fights back).
 - **Other shops:** car mod shops (TransFender, Loco Low Co., Wheel Arch Angels).
