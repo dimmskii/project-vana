@@ -4,6 +4,7 @@
     <script src="config/burglary.lua" type="shared" />
     <script src="config/burglary_houses.lua" type="shared" />
     <script src="config/dating.lua" type="shared" />
+    <script src="config/jobs.lua" type="shared" />
     <script src="core/gxt.lua" type="server" />
     <script src="core/server.lua" type="server" />
     <script src="core/test.lua" type="server" />
@@ -12,4 +13,5 @@
     <script src="burglary/client.lua" type="client" />
     <script src="dating/server.lua" type="server" />
     <script src="dating/client.lua" type="client" />
+    <script src="jobs/taxi.lua" type="server" />
 </meta>

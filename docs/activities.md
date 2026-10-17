@@ -85,3 +85,18 @@ Vanilla `GF_MEETING`, `GFAGNT`, `GF_DATE` and `GF_SEX`, per player (`config/dati
   hospital free with your weapons (`vana-player`).
 - **Not yet:** phone calls asking for dates (and missed-date penalties), two-timing, Michelle driving,
   Denise's drive-bys, the dance minigame proper, her walking to the car (she may warp in).
+
+## Vehicle side jobs
+
+Started from the vehicle with the sub-mission key, as vanilla's R3 launcher does; pressing it again
+ends the job. Fares, patients and so on are placed on the retail path network (`vana-paths`), on the
+same road network as you (`Activity.streetSpot`). Tuning in `config/jobs.lua`.
+
+### Taxi driver (`TAXIODD`)
+
+In a taxi (420, 438). Pick up the fare (blue blip), then drive to the destination (yellow) before the
+clock runs out. Each fare adds distance x 100 ms to the clock, falling to 60 ms as the streak grows.
+Pay is distance / 40, or / 16 if the tip bar is still up (SPEED BONUS!); damage eats the tip. Every
+5 fares in a row pays $500, then $1000 and so on. A trashed taxi loses its fare until repaired. 50
+fares in total (saved) earns vanilla's reward: nitro in every taxi you drive. Ours: fares spawn
+60-180 m away and ride 300-1500 m; 10 s to get back in the taxi.

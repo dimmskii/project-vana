@@ -11,8 +11,9 @@ local function call(resource, fn, ...)
     local res = getResourceFromName(resource)
     if not res or getResourceState(res) ~= "running" then return nil end
     local args = { ... }
-    local ok, result = pcall(function() return exports[resource][fn](exports[resource], unpack(args)) end)
-    return ok and result or nil
+    local results = { pcall(function() return exports[resource][fn](exports[resource], unpack(args)) end) }
+    if not results[1] then return nil end
+    return unpack(results, 2)
 end
 Activity.call = call
 
@@ -279,3 +280,30 @@ end)
 addEventHandler("onResourceStop", resourceRoot, function()
     for _, session in pairs(sessions) do session:stop("stopped") end
 end)
+
+-- Street spots from the retail path network (vana-paths): a node of `kind` ("vehicle" or "ped") near a
+-- random point minD..maxD from (x, y), on the same connected road network (flood fill) as `from`'s
+-- nearest car node when given. Returns x, y, z or nil.
+function Activity.streetSpot(x, y, z, minD, maxD, kind, sameNetworkAs)
+    local flood
+    if sameNetworkAs then
+        local fa, fi = call("vana-paths", "findNearestNode", sameNetworkAs[1], sameNetworkAs[2], sameNetworkAs[3], "vehicle", 80)
+        local node = fa and call("vana-paths", "getNode", fa, fi)
+        flood = node and node.floodFill
+    end
+    for _ = 1, 16 do
+        local a, d = math.random() * math.pi * 2, minD + math.random() * (maxD - minD)
+        local px, py = x + math.cos(a) * d, y + math.sin(a) * d
+        local area, id = call("vana-paths", "findNearestNode", px, py, z, kind or "vehicle", 120)
+        if not area then
+            area, id = call("vana-paths", "findNearestNode", px, py, 0, kind or "vehicle", 200)
+        end
+        local node = area and call("vana-paths", "getNode", area, id)
+        if node then
+            local ok = true
+            if flood and kind ~= "ped" then ok = node.floodFill == flood end
+            local nd = getDistanceBetweenPoints2D(x, y, node.x, node.y)
+            if ok and nd >= minD * 0.7 and nd <= maxD * 1.3 then return node.x, node.y, node.z end
+        end
+    end
+end
