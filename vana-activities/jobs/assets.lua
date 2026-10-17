@@ -37,3 +37,46 @@ setTimer(function()
         end
     end
 end, 1000, 0)
+
+-- Reward vehicles (vanilla car generators switched on by an achievement): parked at their spot for each
+-- player who earned them (progress "car.<key>"), only they can drive them, gone when they're far away.
+OwnedCars = {}
+local carDefs, spawned = {}, {} -- key -> def; player -> { key -> vehicle }
+
+function OwnedCars.define(key, def) -- def: { model, x, y, z, rz, plate }
+    carDefs[key] = def
+end
+
+function OwnedCars.grant(player, key)
+    if Activity.progress(player, "car." .. key) then return false end
+    Activity.setProgress(player, "car." .. key, true)
+    return true
+end
+
+setTimer(function()
+    for _, player in ipairs(getElementsByType("player")) do
+        spawned[player] = spawned[player] or {}
+        local x, y = getElementPosition(player)
+        for key, def in pairs(carDefs) do
+            local car = spawned[player][key]
+            local d = getDistanceBetweenPoints2D(x, y, def.x, def.y)
+            if Activity.progress(player, "car." .. key) then
+                if (not car or not isElement(car) or isVehicleBlown(car)) and d < 200 then
+                    car = createVehicle(def.model, def.x, def.y, def.z + 0.5, 0, 0, def.rz or 0, def.plate)
+                    setElementData(car, "vana:owner", player, false)
+                    spawned[player][key] = car
+                elseif car and isElement(car) and d > 400 and not getVehicleOccupant(car) then
+                    destroyElement(car)
+                    spawned[player][key] = nil
+                end
+            end
+        end
+    end
+end, 2000, 0)
+
+addEventHandler("onPlayerQuit", root, function()
+    for _, car in pairs(spawned[source] or {}) do
+        if isElement(car) and not getVehicleOccupant(car) then destroyElement(car) end
+    end
+    spawned[source] = nil
+end)

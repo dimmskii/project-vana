@@ -170,3 +170,27 @@ point) into the pick-up marker. Hold look left or right and press fire to throw 
 the drop-off coronas; get the quota delivered in time, then ride back for your cut: time left / 100
 x level, plus $100 per item to spare. Four levels per city (vanilla's items and time limits). The
 throwing is client-side physics, which reports hits. Ours: the quota per level.
+
+## Schools
+
+Vanilla `DSKOOL`, `BSKOOL`, `BOAT` and `DESERT5` (`config/schools.lua`, `schools/`). Walk into the
+school's marker (the driving school's noticeboard inside the school, the bike school's board at the
+stadium, the boat school's office, the Verdant Meadows pilot) to pick a test; tests unlock in order
+(70% or better opens the next). Each test runs in your private dimension with vanilla's vehicle,
+start and props (cones, buoys, ramps, parked cars, target trucks), and is judged by your client
+(heading, position, wheels on the ground, roll and pitch, damage, knocked cones, rings, time), which
+reports a score; the server keeps best scores and medals (vanilla 70 / 85 / 100%), skill gains, and
+vanilla's reward vehicles for every test at bronze, silver and gold, parked at the school for you.
+
+| School | Tests | Rewards (bronze / silver / gold) |
+| --- | --- | --- |
+| Driving | The 360, The 180, Whip and Terminate, Pop and Control, Burn and Lap, Cone Coil, The '90', Wheelie Weave, Spin and Go, P.I.T. Maneuver, Alley Oop, City Slicking | Super GT, Bullet, Hotknife "__GOLD__" |
+| Bike | The 360, The 180, The Wheelie, The Stoppie, Jump & Stop, Jump & Stoppie | Freeway, FCR-900, NRG-500 |
+| Boat | Basic Seamanship, Plot a Course, Fresh Slalom, Flying Fish, Land Sea and Air | Marquis, Squalo, Jetmax |
+| Flight | Takeoff, Land Plane, Circle Airstrip, Circle and Land, Helicopter Takeoff, Land Helicopter, Destroy Targets, Loop-the-loop, Barrel Roll, Parachute onto Target | Rustler, Stuntplane, Hunter |
+
+Vanilla: starts, vehicles, cone circles and test offsets, the boat medal times and Flying Fish
+distances, the Land Sea and Air gates, the flight rings, runway, helipad, trucks and parachute drop.
+Ours: how position, heading, damage and time combine into a score (`SchoolRules`), the boat courses
+built by vanilla's loops (Plot a Course, Fresh Slalom) and the flight circuits, the ramps' placement,
+and that scores are client-judged.

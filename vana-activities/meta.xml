@@ -5,6 +5,7 @@
     <script src="config/burglary_houses.lua" type="shared" />
     <script src="config/dating.lua" type="shared" />
     <script src="config/jobs.lua" type="shared" />
+    <script src="config/schools.lua" type="shared" />
     <script src="core/gxt.lua" type="server" />
     <script src="core/server.lua" type="server" />
     <script src="core/test.lua" type="server" />
@@ -28,4 +29,6 @@
     <script src="jobs/quarry_client.lua" type="client" />
     <script src="jobs/courier.lua" type="server" />
     <script src="jobs/courier_client.lua" type="client" />
+    <script src="schools/server.lua" type="server" />
+    <script src="schools/client.lua" type="client" />
 </meta>
