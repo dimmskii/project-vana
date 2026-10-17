@@ -37,14 +37,13 @@ Activity.register("trucking", {
         session:big(session:text("TRUCK"), 3000, "title")
         session:help(session:text(d.load.help))
         session:counter("cash", session:text("TRK_CSH"), d.cash, "money")
-        if d.load.timed then
-            d.deadline = getTickCount() + distance * T.msPerMetre
-            session:counter("time", session:text("TRK_DLN"), d.deadline - getTickCount(), "timer")
-        end
+        d.distance = distance
         if d.load.fragile then session:counter("damage", session:text("TRK_DMG"), 0, "bar") end
-        d.blip = session:blip(dest, 0, 255, 255, 0)
-        d.marker = session:marker("cylinder", dest[1], dest[2], dest[3], 6, 255, 255, 0, 90)
-        session:blip(d.trailer, 0, 80, 120, 255, 1)
+        -- First the rig: the truck and its trailer (blue); the drop-off shows once they're hitched.
+        d.truckBlip = session:blip(d.truck, 0, 80, 120, 255, 2)
+        d.trailerBlip = session:blip(d.trailer, 0, 80, 120, 255, 2)
+        d.truckHealth, d.trailerHealth = getElementHealth(d.truck), getElementHealth(d.trailer)
+        session:say("~s~Get in the ~b~truck~s~ and hook up the ~b~trailer~s~.", 8000) -- ours: vanilla starts you in the cab
         session:every(500, function(s)
             local dd = s.data
             if not isElement(dd.truck) or isVehicleBlown(dd.truck) or not isElement(dd.trailer) or isVehicleBlown(dd.trailer) then
@@ -52,11 +51,30 @@ Activity.register("trucking", {
             end
             local now = getTickCount()
             local inCab = getPedOccupiedVehicle(s.player) == dd.truck
-            local hooked = getVehicleTowedByVehicle(dd.truck) == dd.trailer
+            local hooked = dd.hitched or getVehicleTowedByVehicle(dd.truck) == dd.trailer
+            -- Damage to the load (fragile loads): whichever of truck and trailer took more since the start.
+            if dd.load.fragile then
+                local lost = math.max(dd.truckHealth - getElementHealth(dd.truck), dd.trailerHealth - getElementHealth(dd.trailer), 0)
+                local damage = math.min(100, lost / (dd.load.veryFragile and 3 or 5))
+                dd.cash = math.floor(dd.full * (1 - damage / 100))
+                s:counter("damage", s:text("TRK_DMG"), damage, "bar")
+                s:counter("cash", s:text("TRK_CSH"), dd.cash, "money")
+                if dd.cash <= 0 then return s:fail("TRK_F1") end
+            end
             if not dd.started then
                 if inCab and hooked then
                     dd.started = true
+                    destroyElement(s:disown(dd.truckBlip))
+                    destroyElement(s:disown(dd.trailerBlip))
+                    local dx = dd.dest
+                    dd.blip = s:blip(dx, 0, 255, 255, 0, 3)
+                    dd.marker = s:marker("checkpoint", dx[1], dx[2], dx[3], 6, 255, 255, 0, 160)
+                    s:say(("~s~Deliver the load to the ~y~drop-off~s~ in %s."):format(getZoneName(dx[1], dx[2], dx[3])), 8000) -- ours
                     if dd.load.stars then Activity.call("vana-services", "setMinimumWanted", s.player, dd.load.stars) end
+                    if dd.load.timed then -- the clock starts with the rig hitched
+                        dd.deadline = now + dd.distance * T.msPerMetre
+                        s:counter("time", s:text("TRK_DLN"), dd.deadline - now, "timer")
+                    end
                 end
                 return
             end
@@ -76,15 +94,6 @@ Activity.register("trucking", {
                 if inCab then s:say(s:text(left == 1 and "TRK_H4B" or "TRK_H4", left), 1000) end
             else
                 dd.offSince = nil
-            end
-            -- Fragile: damage to the load costs the cash.
-            if dd.load.fragile then
-                local health = (getElementHealth(dd.truck) + getElementHealth(dd.trailer)) / 2
-                local damage = math.max(0, math.min(100, (1000 - health) / (dd.load.veryFragile and 3 or 6)))
-                dd.cash = math.floor(dd.full * (1 - damage / 100))
-                s:counter("damage", s:text("TRK_DMG"), damage, "bar")
-                s:counter("cash", s:text("TRK_CSH"), dd.cash, "money")
-                if dd.cash <= 0 then return s:fail("TRK_F1") end
             end
             -- Timed: late halves the pay, very late halves it again, then it's over.
             if dd.load.timed then
@@ -127,4 +136,20 @@ addEventHandler("onResourceStart", resourceRoot, function() startMarker() end)
 
 Activity.test("trucking", function()
     return #T.destinations >= 39 and Gxt.raw("TRK_H6", "TRUCK") ~= nil, ("%d drop-offs"):format(#T.destinations)
+end)
+
+-- Hitching reported by the game (more reliable than polling the tow link alone).
+addEventHandler("onTrailerAttach", root, function(truck)
+    for _, player in ipairs(getElementsByType("player")) do
+        local session = Activity.of(player)
+        if session and session.name == "trucking" and session.data.trailer == source and session.data.truck == truck then
+            session.data.hitched = true
+        end
+    end
+end)
+addEventHandler("onTrailerDetach", root, function()
+    for _, player in ipairs(getElementsByType("player")) do
+        local session = Activity.of(player)
+        if session and session.name == "trucking" and session.data.trailer == source then session.data.hitched = false end
+    end
 end)

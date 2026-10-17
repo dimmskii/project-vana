@@ -44,6 +44,27 @@ end
 
 local function sx(v) return v * (select(2, guiGetScreenSize()) / 720) end
 
+-- Where the counters may start: just below the lowest vanilla HUD piece on the right of the screen
+-- (Neon reports their positions and sizes); a safe fraction of the screen if it can't tell.
+local HUD_PIECES = { "money", "wanted", "weapon", "ammo", "health", "armour", "breath", "clock" }
+local hudTop, hudCheckedAt = nil, 0
+function Hud.counterTop()
+    local now = getTickCount()
+    if hudTop and now - hudCheckedAt < 2000 then return hudTop end
+    hudCheckedAt = now
+    local w, h = guiGetScreenSize()
+    local bottom = 0
+    for _, piece in ipairs(HUD_PIECES) do
+        local ok, px, py = pcall(getPlayerHudComponentProperty, piece, "position")
+        local ok2, sw, sh = pcall(getPlayerHudComponentProperty, piece, "size")
+        if ok and ok2 and type(px) == "number" and type(py) == "number" and type(sh) == "number" and px > w / 2 then
+            bottom = math.max(bottom, py + sh)
+        end
+    end
+    hudTop = (bottom > 0 and bottom < h * 0.6) and (bottom + sx(12)) or h * 0.34
+    return hudTop
+end
+
 addEvent("vana-activities:session", true)
 addEventHandler("vana-activities:session", resourceRoot, function(name)
     current = name
@@ -116,8 +137,8 @@ addEventHandler("onClientRender", root, function()
         dxDrawRectangle(x, y, bw, bh, tocolor(0, 0, 0, 190))
         dxDrawText(help.text, x + sx(10), y + sx(10), x + bw - sx(10), y + bh, tocolor(255, 255, 255), sx(1.05), "default-bold", "left", "top", false, true, false, true)
     end
-    -- Counters, top right under the money, as vanilla stacks them.
-    local y = sx(150)
+    -- Counters on the right, below the vanilla HUD (money, wanted stars, weapon), as vanilla stacks them.
+    local y = Hud.counterTop()
     for _, id in ipairs(order) do
         local c = counters[id]
         local value = c.value
