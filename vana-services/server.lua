@@ -104,6 +104,14 @@ function reportCrime(player, crime, x, y, z)
     return true
 end
 
+-- Raises the wanted level to at least this many stars (vanilla alter_wanted_level_no_drop); for
+-- activities, e.g. a burglar who stays too long after being seen.
+function setMinimumWanted(player, stars)
+    if not isElement(player) or getElementType(player) ~= "player" or not Wanted.thresholds[stars] then return false end
+    addChaos(player, 0, stars)
+    return true
+end
+
 -- Peds (players and cops) knocked down or getting up, as reported by the clients simulating them.
 local down = {}
 

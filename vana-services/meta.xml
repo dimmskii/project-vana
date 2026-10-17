@@ -6,4 +6,5 @@
     <script src="server.lua" type="server" />
     <script src="client.lua" type="client" />
     <export function="reportCrime" type="server" />
+    <export function="setMinimumWanted" type="server" />
 </meta>

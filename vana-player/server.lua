@@ -98,6 +98,22 @@ function getOwned(player, kind)
     return list
 end
 
+-- Activity progress by key (e.g. "taxi.fares", "perk.fireproof"): numbers, strings or booleans,
+-- saved with the player. vana-activities keeps levels, records and earned perks here.
+function getProgress(player, key)
+    local d = data[player]
+    return d and d.progress and d.progress[key]
+end
+
+function setProgress(player, key, value)
+    local d = data[player]
+    if not d then return false end
+    d.progress = d.progress or {}
+    d.progress[key] = value
+    savePlayer(player)
+    return true
+end
+
 local function maxHealth(player)
     return 100 + (getPedStat(player, 24) - 569) * 76 / 431
 end

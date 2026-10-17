@@ -20,6 +20,7 @@ Start here:
 | [docs/player.md](docs/player.md) | Player persistence (by serial), spawning, wasted and busted |
 | [docs/services.md](docs/services.md) | Wanted levels and police, ambulances, parked car generators |
 | [docs/shops.md](docs/shops.md) | Entrances into interiors, the shops and the gym |
+| [docs/activities.md](docs/activities.md) | Per-player activities ported from main.scm: the framework, burglary and the rest |
 | [docs/traffic.md](docs/traffic.md) | Traffic, pedestrians and the AI actor architecture: Lua decides, the engine executes |
 
 ## Resources
@@ -36,5 +37,6 @@ Start here:
 | `vana-interiors` | Vanilla entry/exit markers into interiors |
 | `vana-shops` | Ammu-Nation, fast food, clothes shops, 24/7 counters, gym fighting styles |
 | `vana-gym` | Gym equipment workouts: stamina, muscle, fat |
+| `vana-activities` | Per-player activities: burglary, dating, side jobs, schools, races, minigames |
 | `vana-traffic` | Road traffic: server-planned routes and light stops, driven by native drive-to tasks |
 | `vana-peds` | Ambient pedestrians: server-planned walks and road crossings, native follow-route tasks and event reactions |

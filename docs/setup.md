@@ -35,6 +35,7 @@ Copy them from your own retail GTA:SA install (PC v1.0):
 | --- | --- | --- |
 | `data/Paths/NODES0.DAT` … `NODES63.DAT` (64 files) | `[vana]/vana-paths/data/` | Path graph: ped and traffic routing, traffic lights |
 | `data/shopping.dat`, `text/american.gxt` | `[vana]/vana-shops/data/` | Shop prices and stock; vanilla item names |
+| `text/american.gxt` | `[vana]/vana-activities/data/` | Activity text (mission tables: titles, objectives, help) |
 | `data/popcycle.dat`, `pedgrp.dat`, `cargrp.dat`, `peds.ide`, `vehicles.ide`, `pedstats.dat`, `ped.dat`, `info.zon`, `map.zon` | `[vana]/vana-population/data/` | Who spawns where (see population.md) |
 
 Example on Linux:

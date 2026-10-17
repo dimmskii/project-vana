@@ -16,4 +16,6 @@
     <export function="isOwned" type="server" />
     <export function="grantOwned" type="server" />
     <export function="getOwned" type="server" />
+    <export function="getProgress" type="server" />
+    <export function="setProgress" type="server" />
 </meta>

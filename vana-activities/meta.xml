@@ -1,0 +1,7 @@
+<meta>
+    <script src="config/activities.lua" type="shared" />
+    <script src="core/gxt.lua" type="server" />
+    <script src="core/server.lua" type="server" />
+    <script src="core/test.lua" type="server" />
+    <script src="core/client.lua" type="client" />
+</meta>
