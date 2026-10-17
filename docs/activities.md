@@ -140,3 +140,33 @@ Driving the freight train (537, 538). Stop at the five stations in turn (Unity, 
 Yellow Bell, Linden), in whichever direction the train runs, each within vanilla's leg time (+15 s
 per leg at level 1, +10 s at level 2). Each station pays the leg's time / 100 x level; all five pass
 the level: $10000, then $50000 at level 2 (saved).
+
+### Trucking (`TRUCK`)
+
+Walk into the marker at RS Haul (Flint County). A truck and trailer wait at the depot: hook up and
+take the load to one of vanilla's 39 drop-offs. The first loads follow vanilla's order of load
+types: fragile (damage costs cash), timed (late halves the pay, very late halves it again), hot
+(1-2 stars), fragile and fast, extremely fragile. You have 30 s to get back in the cab or re-hook the
+trailer. Eight deliveries buy the depot (vanilla: "Asset acquired"), which then earns up to $2000 a
+game day at the cash pickup by the office (`jobs/assets.lua`). Ours: cash = distance x 1.4, and the
+timed deadline (distance x 140 ms).
+
+### Quarry (`QUARRY`)
+
+Walk into the marker at the Hunter Quarry site office. Seven missions in turn, paying $500, $1000,
+$2000, $3000, $5000, $7500 and $10000: the cop's body (pushed to the crane's pick-up area, then
+dumped in the lake), seven rocks over the edge, four bombs to safe areas (each on its own clock,
+then it blows), the bombers' bodies burned on the quarry floor, explosives driven gently to the
+desert airstrip and back, the spill cleared off the tracks before the train, and the thieves' dumper
+wrecked. Pushed rocks and barrels only move on your client, which reports when they arrive. All
+seven earn vanilla's reward: a dumper and a bulldozer at the quarry whenever you're around. Best
+times are kept per mission. Ours: the crane (MTA has no crane controls, so the load goes aboard once
+both are in the pick-up area), and the time limits.
+
+### Courier (`BCOUR`)
+
+Ride the city's courier bike (BMX in LS, Freeway in SF, Faggio in LV; one waits at each pick-up
+point) into the pick-up marker. Hold look left or right and press fire to throw an item through
+the drop-off coronas; get the quota delivered in time, then ride back for your cut: time left / 100
+x level, plus $100 per item to spare. Four levels per city (vanilla's items and time limits). The
+throwing is client-side physics, which reports hits. Ours: the quota per level.

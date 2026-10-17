@@ -22,4 +22,10 @@
     <script src="jobs/vigilante_client.lua" type="client" />
     <script src="jobs/pimping.lua" type="server" />
     <script src="jobs/freight.lua" type="server" />
+    <script src="jobs/assets.lua" type="server" />
+    <script src="jobs/trucking.lua" type="server" />
+    <script src="jobs/quarry.lua" type="server" />
+    <script src="jobs/quarry_client.lua" type="client" />
+    <script src="jobs/courier.lua" type="server" />
+    <script src="jobs/courier_client.lua" type="client" />
 </meta>
