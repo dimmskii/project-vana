@@ -678,6 +678,8 @@ end
 
 addEventHandler("onPedWasted", root, function(_, killer, weapon)
     local ped = source
+    -- Activity targets (vigilante criminals and the like) are fair game.
+    if getElementData(ped, "vana:fairGame") then return end
     local x, y, z = getElementPosition(ped)
 
     local player = isElement(killer) and (getElementType(killer) == "vehicle" and getVehicleController(killer) or killer)

@@ -44,4 +44,18 @@ Jobs = {
         msPerMetre = 120, extraMs = 30000, perFireMs = 6000, -- ours: vanilla works the clock out from the route
         outMs = 10000,
     },
+    vigilante = {
+        -- Police vehicles (and the Hunter: vanilla's "Brown Thunder").
+        vehicles = { 596, 597, 598, 599, 523, 427, 490, 528, 601, 425 },
+        levels = 12, pay = 50,     -- level x level x $50
+        criminalCars = { 521, 522, 461, 462, 463, 468, 581, 586, 411, 415, 429, 451, 477, 480, 506, 541, 603,
+                         400, 401, 402, 410, 412, 413, 419 },
+        criminals = { 28, 29, 30, 47, 48, 101, 102, 103, 104, 105, 106, 107, 108, 109, 110, 114, 115, 116 },
+        perCar = 4,                -- vanilla: four criminals to a car, a new car every 4 levels
+        minimumMs = 40000, speed = 6, -- vanilla: the clock is distance / (4 + bonus) m/s, at least 40 s
+        range = { 200, 700 },      -- ours
+        weapons = { 22, 28, 32, 30 }, -- ours: pistols at first, SMGs and an AK as levels climb
+        bailRadius = 25,           -- ours: criminals ditch the car and fight when you're this close and they're slow
+        outMs = 10000,
+    },
 }

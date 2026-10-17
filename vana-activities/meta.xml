@@ -18,4 +18,6 @@
     <script src="jobs/paramedic.lua" type="server" />
     <script src="jobs/firefighter.lua" type="server" />
     <script src="jobs/firefighter_client.lua" type="client" />
+    <script src="jobs/vigilante.lua" type="server" />
+    <script src="jobs/vigilante_client.lua" type="client" />
 </meta>

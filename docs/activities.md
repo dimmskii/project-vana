@@ -116,3 +116,12 @@ level 8, with their occupants on fire from level 3. Put every fire out with the 
 (Neon's element fires: the server lights them, your client reports them out). Pays like paramedic;
 level 12 pays $5000 and makes you fireproof (fire damage is cancelled on your client). Ours: the
 burning cars can't blow up, and the clock (distance x 120 ms + 30 s + 6 s per fire).
+
+### Vigilante (`COPCAR`)
+
+In a police vehicle (or the Hunter: "Brown Thunder"). Level N sends you after N criminals, four to a
+car, from vanilla's list of getaway cars; they drive off, and bail out and fight when you close in
+while they're slow or wrecked (their AI runs on your client). Kill them all in time: the clock is
+distance / 6 m/s, at least 40 s, and carries over. Levels pay level x level x $50. Vanilla's level 12
+reward is 150% maximum armour; MTA caps armour at 100, so ours is full armour on every spawn.
+Criminals are fair game: killing them is no crime (`vana:fairGame`). Ours: their weapons by level.
