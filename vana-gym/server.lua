@@ -27,17 +27,26 @@ local function stop(player)
     end, 1500, 1)
 end
 
+-- Where the player stands to get on (Gym.placement, turned by the machine's heading); the marker sits here too.
+local function standPoint(machine)
+    local p = Gym.placement[machine.kind]
+    local h = math.rad(machine.heading)
+    local x = machine.x + p[1] * math.cos(h) - p[2] * math.sin(h)
+    local y = machine.y + p[1] * math.sin(h) + p[2] * math.cos(h)
+    return x, y, machine.z + p[3], machine.heading + p[4]
+end
+
 local function start(player, machine)
     if sessions[player] or inUse[machine] then return end
     local m = Gym.machines[machine.kind]
-    local p = Gym.placement[machine.kind]
     local x, y, z = getElementPosition(player)
     local _, _, rz = getElementRotation(player)
     sessions[player] = { machine = machine, kind = machine.kind, from = { x, y, z, rz }, lastRep = 0 }
     inUse[machine] = player
     setElementFrozen(player, true)
-    setElementPosition(player, machine.x + p[1], machine.y + p[2], machine.z + p[3])
-    setElementRotation(player, 0, 0, machine.heading + p[4], "default", true)
+    local sx, sy, sz, heading = standPoint(machine)
+    setElementPosition(player, sx, sy, sz)
+    setElementRotation(player, 0, 0, heading, "default", true)
     setPedAnimation(player, m.lib, m.geton, -1, false, false, false, true)
     setTimer(function()
         if sessions[player] and sessions[player].machine == machine then
@@ -89,7 +98,8 @@ end
 addEventHandler("onResourceStart", resourceRoot, function()
     for _, machine in ipairs(GymEquipment) do
         if Gym.machines[machine.kind] then
-            local marker = createMarker(machine.x, machine.y, machine.z - 0.1, "cylinder", 1.0, 255, 120, 0, 90)
+            local x, y = standPoint(machine)
+            local marker = createMarker(x, y, machine.z - 0.1, "cylinder", 1.0, 255, 120, 0, 90)
             setElementInterior(marker, machine.interior)
             markers[marker] = machine
             addEventHandler("onMarkerHit", marker, onMarkerHit)

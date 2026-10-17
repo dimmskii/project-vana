@@ -9,8 +9,9 @@ Gym = {
         bench = { lib = "benchpress", geton = "gym_bp_geton", loop = "gym_bp_up_smooth", fast = "gym_bp_up_A",
                   getoff = "gym_bp_getoff", stat = 23, gain = 3, fat = -1, name = "Bench press" },
     },
-    -- Where the player goes relative to the machine's position, and their heading relative to it.
-    placement = { bike = { 0, 0, 1, 0 }, treadmill = { 0, 0, 1, 0 }, bench = { 0, 0, 1, 0 } },
+    -- Where the player stands to get on, relative to the machine (right, forward, up, heading). The get-on
+    -- animation carries the root by its inverse onto the machine (measured from GYMNASIUM/benchpress.ifp).
+    placement = { bike = { -0.5, 0.034, 1, 0 }, treadmill = { 0.006, -1.575, 1, 0 }, bench = { -0.012, -0.765, 1, 0 } },
     tapsPerRep = 8,          -- sprint-key taps to fill the bar for one rep
     minRepMs = 900,          -- a rep can't be quicker than this (checked on the server)
     maxGainPerHour = 60,     -- stat points one player can gain per real hour (vanilla caps a day's workout)
