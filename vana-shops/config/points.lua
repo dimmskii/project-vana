@@ -22,4 +22,8 @@ ShopPoints = {
     X7_11S     = { kind = "misc", interior = 6, x = -26.69, y = -51.71, z = 1002.55 }, -- 4 m inside the door (no counter found)
     X711S2     = { kind = "misc", interior = 4, x = -27.31, y = -25.28, z = 1002.55 }, -- 4 m inside the door (no counter found)
     X711S3     = { kind = "misc", interior = 10, x = 6.09, y = -25.27, z = 1002.55 }, -- 4 m inside the door (no counter found)
+    -- Gym mats (from vana-gym's equipment): each teaches one fighting style.
+    GYM1       = { kind = "fighting", style = 5, interior = 5, x = 772.99, y = 5.38, z = 999.73 }, -- Ganton: boxing
+    GYM2       = { kind = "fighting", style = 6, interior = 6, x = 756.41, y = -47.92, z = 999.73 }, -- Cobra (SF): kung fu
+    GYM3       = { kind = "fighting", style = 7, interior = 7, x = 759.18, y = -60.06, z = 999.73 }, -- Below the Belt (LV): kickboxing
 }

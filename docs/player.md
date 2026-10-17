@@ -11,6 +11,7 @@ and applied on the server; clients never report their own values.
 | Fat, stamina, muscle, max health | ped stats 21, 22, 23 and 24 (max health 569-1000 = 100-176 HP) |
 | Clothes | every clothes slot (0-17): texture and model |
 | Weapons | per slot: weapon, total ammo, ammo in the clip, and which weapon is in hand |
+| Fighting style | `getPedFightingStyle` (learned at the gyms) |
 | Position | where the player left, if `spawnAtLastPosition` is on |
 | Owned items | by kind, e.g. every clothing item ever bought (`isOwned`, `grantOwned`, `getOwned` exports) |
 

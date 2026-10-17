@@ -62,6 +62,7 @@ Inside `<config>`, replace the stock `<resource>` lines with:
 <resource src="vana-services" startup="1" protected="0" />
 <resource src="vana-interiors" startup="1" protected="0" />
 <resource src="vana-shops" startup="1" protected="0" />
+<resource src="vana-gym" startup="1" protected="0" />
 <resource src="vana-player" startup="1" protected="0" />
 <resource src="vana-core" startup="1" protected="0" />
 ```
@@ -116,6 +117,7 @@ tools/srv.sh cmd "wantedtest"      # wanted level thresholds
 tools/srv.sh cmd "playertest"      # player database round trip, restart points
 tools/srv.sh cmd "interiortest"    # entrances pair up
 tools/srv.sh cmd "shoptest"        # shop stock and prices
+tools/srv.sh cmd "gymtest"         # gym equipment and the hourly cap
 tools/srv.sh log 50
 tools/srv.sh stop
 ```
@@ -123,6 +125,12 @@ tools/srv.sh stop
 Console self-test commands only run from the server console.
 
 ## Re-seeding config (optional)
+
+Gym equipment comes from `models/gta_int.img`:
+
+```sh
+python3 tools/seed/seed_gym.py "/path/to/GTA San Andreas" "vana-gym/config"
+```
 
 Entrances and shop points come from the map IPLs and `models/gta_int.img`:
 

@@ -59,6 +59,7 @@ local function snapshot(player)
             end
         end
         d.slot = getPedWeaponSlot(player)
+        d.fightingStyle = getPedFightingStyle(player)
         local x, y, z = getElementPosition(player)
         local _, _, rz = getElementRotation(player)
         d.position = { x = x, y = y, z = z, heading = rz, interior = getElementInterior(player), dimension = getElementDimension(player) }
@@ -113,6 +114,7 @@ local function apply(player, d)
         setWeaponAmmo(player, w.id, w.total, w.clip)
     end
     setPedWeaponSlot(player, d.slot or 0)
+    if d.fightingStyle then setPedFightingStyle(player, d.fightingStyle) end
 end
 
 local function spawnAt(player, place, interior, dimension)

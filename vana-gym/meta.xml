@@ -1,0 +1,7 @@
+<meta>
+    <info author="ProjectVana" name="Vana gym" description="Gym equipment workouts: stamina, muscle, fat" version="0.1.0" type="script" />
+    <script src="config/gym.lua" type="server" />
+    <script src="config/equipment.lua" type="server" />
+    <script src="server.lua" type="server" />
+    <script src="client.lua" type="client" />
+</meta>

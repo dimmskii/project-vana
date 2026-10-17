@@ -72,10 +72,38 @@ To correct one in game, stand where customers should and use `/shoppoint <NAME>`
 
 `shoptest` (console) checks that every shop has stock and every weapon maps to a game weapon.
 
+## Gym (`vana-gym`)
+
+The equipment is seeded from `gta_int.img` by `tools/seed/seed_gym.py` into
+`vana-gym/config/equipment.lua`: 4 bikes, 4 treadmills, 5 benches and 4 mats in the three public
+gyms and Madd Dogg's home gym. Vanilla's gym scripts (`gym*.scm`) are script brains on those
+objects.
+
+- **Working out:** walk into a machine's marker to get on (vanilla `GYMNASIUM` and `benchpress`
+  animations). Tap the sprint key to fill the bar; a full bar is one rep. F or Backspace gets off.
+- **Gains per rep** (`vana-gym/config/gym.lua`):
+
+  | Machine | Trains | Fat |
+  | --- | --- | --- |
+  | Exercise bike, treadmill | stamina +2 | -1 |
+  | Bench press | muscle +3 | -1 |
+
+  The server checks the pace (a rep takes at least 0.9 s) and caps gains at 60 points per stat per
+  real hour (vanilla caps a day's workout). `vana-player` saves the stats.
+- **Placement:** the player is put at the machine's position and heading, with per-machine offsets
+  in `placement` for fine-tuning in game.
+- **Fighting styles:** the mats are `fighting` shop points (`GYM1`-`3` in
+  `vana-shops/config/points.lua`). Ganton teaches boxing, Cobra in San Fierro kung fu, Below the
+  Belt in Las Venturas kickboxing.
+  - Learning a style needs 35% muscle (`fightingMinMuscle`).
+  - Learned styles are owned for good, and any mat lets you switch between them or back to the
+    default. The current style is saved with the player.
+
+`gymtest` (console) checks the equipment data and the hourly cap.
+
 ## Not yet
 
-- **Gym:** equipment works through script brains on `GYM_BIKE`, `GYM_BENCH1`, `GYM_TREADMILL` and
-  `GYM_MAT1` objects (positions from the interior IPLs), with a minigame.
+- **Dumbbells:** vanilla's `gymdumb.scm` free weights aren't placed objects in the map data.
 - **Vanilla shop behaviour:** item preview (trying clothes on, weapon close-ups).
 - **Closet:** safehouse wardrobes offering every owned clothing item, all chains combined, by the
   same categories (`getOwned(player, "clothes")` in `vana-player` already lists them).

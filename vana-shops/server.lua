@@ -55,6 +55,18 @@ end
 local function catalogue(shopName, player)
     local point = ShopPoints[shopName]
     local items = {}
+    if point.kind == "fighting" then
+        -- This gym's style, any other style the player has learned, and the default.
+        local learned = {}
+        for _, name in ipairs(player and playerCall("getOwned", player, "styles") or {}) do learned[name] = true end
+        for _, style in ipairs(ShopConfig.fightingStyles) do
+            if style.style == point.style or learned[tostring(style.style)] or style.default then
+                local owned = style.default or learned[tostring(style.style)] or false
+                items[#items + 1] = { key = "style" .. style.style, label = style.name, price = 0, owned = owned }
+            end
+        end
+        return items
+    end
     if point.kind == "misc" then
         for i, item in ipairs(ShopConfig.misc) do items[#items + 1] = { key = "misc" .. i, label = item.name, price = item.price } end
         return items
@@ -122,6 +134,17 @@ local function deliver(player, kind, key)
         if stat == "calories" then
             setPedStat(player, 21, math.min(1000, getPedStat(player, 21) + value * ShopConfig.fatPerCalorie))
         end
+    elseif kind == "fighting" then
+        local id = tonumber(key:match("^style(%d+)$"))
+        local style
+        for _, s in ipairs(ShopConfig.fightingStyles) do if s.style == id then style = s end end
+        if not style then return false, "Not taught here." end
+        local learned = style.default or playerCall("isOwned", player, "styles", tostring(id))
+        if not learned and getPedStat(player, 23) < ShopConfig.fightingMinMuscle then
+            return false, ("You need more muscle (%d%%) to learn this."):format(ShopConfig.fightingMinMuscle / 10)
+        end
+        setPedFightingStyle(player, id)
+        if not learned then playerCall("grantOwned", player, "styles", tostring(id)) end
     elseif kind == "clothes" then
         if getElementModel(player) ~= 0 then return false, "Clothes only fit CJ." end
         local takeOff = tonumber(key:match("^takeoff:(%d+)$"))
@@ -160,8 +183,8 @@ addEventHandler("vana-shops:buy", resourceRoot, function(key)
     if price > 0 then takePlayerMoney(client, price) end
     if point.kind == "clothes" and not item.owned then playerCall("grantOwned", client, "clothes", key) end
     savePlayer(client)
-    local verb = item.takeOff and "Took off" or item.owned and "Wearing" or "Bought"
-    triggerClientEvent(client, "vana-shops:result", resourceRoot, true, verb .. ": " .. item.label, key, point.kind == "clothes")
+    local verb = point.kind == "fighting" and (item.owned and "Fighting style" or "Learned") or item.takeOff and "Took off" or item.owned and "Wearing" or "Bought"
+    triggerClientEvent(client, "vana-shops:result", resourceRoot, true, verb .. ": " .. item.label, key, point.kind == "clothes" or point.kind == "fighting")
 end)
 
 addEvent("vana-shops:close", true)
@@ -222,7 +245,7 @@ addCommandHandler("shoptest", function(source)
     for shopName, point in pairs(ShopPoints) do
         local items = catalogue(shopName)
         total = total + #items
-        if #items == 0 then ok = false; outputServerLog("[shoptest] FAIL no stock for " .. shopName) end
+        if #items == 0 and point.kind ~= "fighting" then ok = false; outputServerLog("[shoptest] FAIL no stock for " .. shopName) end
         for _, item in ipairs(items) do
             if point.kind == "weapons" and item.key ~= "armour" and not ShopConfig.weapons[item.key] then
                 ok = false; outputServerLog("[shoptest] FAIL unknown weapon " .. item.key)

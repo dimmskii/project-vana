@@ -35,6 +35,13 @@ ShopConfig = {
         { type = 16, name = "Hats" }, { type = 15, name = "Glasses" }, { type = 13, name = "Necklaces" },
         { type = 14, name = "Watches" },
     },
+    -- Fighting styles taught at the gym mats (setPedFightingStyle IDs). Each gym's mat point says which
+    -- style it teaches; learned styles are owned for good and can be picked at any mat.
+    fightingStyles = {
+        { style = 4, name = "Default", default = true },
+        { style = 5, name = "Boxing" }, { style = 6, name = "Kung Fu" }, { style = 7, name = "Kickboxing" },
+    },
+    fightingMinMuscle = 350, -- muscle stat (0-1000) needed to learn a style
     -- How close to a shop point you need to be.
     radius = 1.5,
 }

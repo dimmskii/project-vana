@@ -19,7 +19,7 @@ Start here:
 | [docs/population.md](docs/population.md) | Who spawns where: vanilla popcycle, zones, gangs and weapons, from retail data and seeded config |
 | [docs/player.md](docs/player.md) | Player persistence (by serial), spawning, wasted and busted |
 | [docs/services.md](docs/services.md) | Wanted levels and police, ambulances, parked car generators |
-| [docs/shops.md](docs/shops.md) | Entrances into interiors, and the shops |
+| [docs/shops.md](docs/shops.md) | Entrances into interiors, the shops and the gym |
 | [docs/traffic.md](docs/traffic.md) | Traffic, pedestrians and the AI actor architecture: Lua decides, the engine executes |
 
 ## Resources
@@ -34,6 +34,7 @@ Start here:
 | `vana-parked` | Parked cars from vanilla car generators (map IPLs and `main.scm`) |
 | `vana-services` | Wanted levels, police pursuit, ambulances and medics |
 | `vana-interiors` | Vanilla entry/exit markers into interiors |
-| `vana-shops` | Ammu-Nation, fast food, clothes shops, 24/7 counters |
+| `vana-shops` | Ammu-Nation, fast food, clothes shops, 24/7 counters, gym fighting styles |
+| `vana-gym` | Gym equipment workouts: stamina, muscle, fat |
 | `vana-traffic` | Road traffic: server-planned routes and light stops, driven by native drive-to tasks |
 | `vana-peds` | Ambient pedestrians: server-planned walks and road crossings, native follow-route tasks and event reactions |
