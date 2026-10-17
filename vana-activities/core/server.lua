@@ -316,3 +316,22 @@ function Activity.streetSpot(x, y, z, minD, maxD, kind, sameNetworkAs)
         end
     end
 end
+
+-- Pick lists (core/client.lua): Activity.menu(player, title, items, onChoose(player, index), hint).
+local menus = {} -- player -> { id, onChoose }
+local menuId = 0
+function Activity.menu(player, title, items, onChoose, hint)
+    menuId = menuId + 1
+    menus[player] = { id = menuId, onChoose = onChoose, count = #items }
+    triggerClientEvent(player, "vana-activities:menu", resourceRoot, menuId, title, items, hint)
+end
+
+addEvent("vana-activities:menuChoice", true)
+addEventHandler("vana-activities:menuChoice", resourceRoot, function(id, index)
+    local m = menus[client]
+    if not m or m.id ~= id or type(index) ~= "number" or index < 1 or index > m.count then return end
+    menus[client] = nil
+    m.onChoose(client, index)
+end)
+
+addEventHandler("onPlayerQuit", root, function() menus[source] = nil end)

@@ -6,6 +6,8 @@
     <script src="config/dating.lua" type="shared" />
     <script src="config/jobs.lua" type="shared" />
     <script src="config/schools.lua" type="shared" />
+    <script src="config/racing.lua" type="shared" />
+    <script src="config/races.lua" type="server" />
     <script src="core/gxt.lua" type="server" />
     <script src="core/server.lua" type="server" />
     <script src="core/test.lua" type="server" />
@@ -31,4 +33,8 @@
     <script src="jobs/courier_client.lua" type="client" />
     <script src="schools/server.lua" type="server" />
     <script src="schools/client.lua" type="client" />
+    <script src="races/server.lua" type="server" />
+    <script src="races/client.lua" type="client" />
+    <script src="stadium/server.lua" type="server" />
+    <script src="stadium/client.lua" type="client" />
 </meta>

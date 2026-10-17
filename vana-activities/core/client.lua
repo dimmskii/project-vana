@@ -163,3 +163,52 @@ addEventHandler("vana-activities:perks", resourceRoot, function(held) Hud.perks 
 addEventHandler("onClientPlayerDamage", localPlayer, function(_, weapon)
     if Hud.perks.fireproof and weapon == 37 then cancelEvent() end
 end)
+
+-- A vanilla-style pick list (top left): the server opens it with "vana-activities:menu" (id, title,
+-- items = { { label, right, enabled } }, hint); choosing sends "vana-activities:menuChoice" (id, index).
+local pick -- { id, title, items, selected, hint }
+
+addEvent("vana-activities:menu", true)
+addEventHandler("vana-activities:menu", resourceRoot, function(id, title, items, hint)
+    pick = id and { id = id, title = Hud.format(title), items = items, selected = 1, hint = hint } or nil
+    toggleAllControls(not pick, true, false)
+end)
+
+addEventHandler("onClientKey", root, function(key, pressed)
+    if not pick or not pressed then return end
+    if key == "arrow_u" then pick.selected = (pick.selected - 2) % #pick.items + 1
+    elseif key == "arrow_d" then pick.selected = pick.selected % #pick.items + 1
+    elseif key == "enter" or key == "num_enter" then
+        local item = pick.items[pick.selected]
+        if item and item.enabled ~= false then
+            triggerServerEvent("vana-activities:menuChoice", resourceRoot, pick.id, pick.selected)
+            pick = nil
+            toggleAllControls(true, true, false)
+        end
+    elseif key == "backspace" or key == "escape" then
+        pick = nil
+        toggleAllControls(true, true, false)
+    else return end
+    cancelEvent()
+end)
+
+addEventHandler("onClientRender", root, function()
+    if not pick then return end
+    local _, sh = guiGetScreenSize()
+    local s = sh / 720
+    local x, y, w, row = 40 * s, 120 * s, 440 * s, 26 * s
+    local visible = math.min(#pick.items, 14)
+    local first = math.max(1, math.min(pick.selected - 7, #pick.items - visible + 1))
+    dxDrawRectangle(x, y, w, row * (visible + 2.6), tocolor(0, 0, 0, 190))
+    dxDrawText(pick.title, x + 12 * s, y + 6 * s, x + w, y + row, tocolor(172, 203, 241), 1.4 * s, "bankgothic", "left", "top", false, false, false, true)
+    for i = first, first + visible - 1 do
+        local item = pick.items[i]
+        local ry = y + row * (i - first + 1.4)
+        if i == pick.selected then dxDrawRectangle(x + 4 * s, ry, w - 8 * s, row, tocolor(172, 203, 241, 60)) end
+        local colour = item.enabled == false and tocolor(90, 90, 90) or (i == pick.selected and tocolor(255, 255, 255) or tocolor(180, 180, 180))
+        dxDrawText(Hud.format(item.label), x + 12 * s, ry, x + w, ry + row, colour, 1.1 * s, "default-bold", "left", "center", false, false, false, true)
+        if item.right then dxDrawText(item.right, x, ry, x + w - 12 * s, ry + row, colour, 1.1 * s, "default-bold", "right", "center") end
+    end
+    local by = y + row * (visible + 1.5)
+    dxDrawText(pick.hint or "Enter: choose   Backspace: leave", x + 12 * s, by, x + w, by + row, tocolor(200, 200, 200), 1 * s, "default", "left", "center")
+end)

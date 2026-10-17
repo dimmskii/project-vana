@@ -194,3 +194,26 @@ distances, the Land Sea and Air gates, the flight rings, runway, helipad, trucks
 Ours: how position, heading, damage and time combine into a score (`SchoolRules`), the boat courses
 built by vanilla's loops (Plot a Course, Fresh Slalom) and the flight circuits, the ramps' placement,
 and that scores are client-judged.
+
+## Races and challenges
+
+### Race tournament (`CPRACE`)
+
+All 27 of vanilla's races, seeded from main.scm by `tools/seed/seed_races.py` into
+`config/races.lua` (checkpoints, line-ups, laps, stadium grids). Walk into an entry marker and pick
+a race: Los Santos (races 0-8), San Fierro (9-14), Las Venturas (15-18), the LV airport's air races
+(19-24, against the clock), the LS stadium's 8-Track (12 laps) and the LV stadium's Dirt Track (6
+laps; the same marker offers Kickstart). Races run in your private dimension, with vanilla's
+countdown and disqualification for 10 s out of the vehicle or wrecking it. Opponents are driven by
+your client with the engine's racing drive-to, checkpoint after checkpoint; the server tracks
+checkpoints and positions. A first win pays $10000 (vanilla's exceptions: Lowrider Race $1000,
+Badlands A $5000, Dirt Track $25000; the 8-Track also parks vanilla's Monster and Hotring at the LS
+stadium); winning every race pays $1000000. Best results and times are saved.
+
+### Stadium events (`KICKSTA`, `BLOOD`)
+
+- **Kickstart** (LV stadium, from the Dirt Track marker): collect vanilla's 33 coronas on a Sanchez
+  in four minutes (green 1, amber 2, red 3 points); paid score x $100; beat your best score.
+- **Blood Ring** (SF stadium): in a Bloodring Banger, drive through checkpoints (+15 s each) to keep
+  your clock above zero while eleven bangers ram you; get it above the target time (1 minute, plus a
+  minute after each win) for $10000. Ours: checkpoints at random in vanilla's arena box.
