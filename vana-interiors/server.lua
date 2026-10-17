@@ -69,7 +69,9 @@ local function transition(player, from, to)
         fadeCamera(player, true, CONFIG.fadeMs / 1000)
         setElementFrozen(player, false)
         busy[player] = getTickCount()
-        triggerEvent("onPlayerUseEntrance", player, to.name, from.interior, to.interior)
+        -- Other resources react to arrivals (e.g. the closet opens on reaching the changing room).
+        -- Arguments: entrance name, from interior, to interior, arrived at a hub (not a door).
+        triggerEvent("onPlayerUseEntrance", player, to.name, from.interior, to.interior, not isDoor(to))
     end, CONFIG.fadeMs + 100, 1)
 end
 

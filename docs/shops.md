@@ -59,6 +59,13 @@ price overrides and `fatPerCalorie`.
 - **Purchases:** every purchase is checked on the server (still at the counter, item really sold
   there, enough money). The server applies it, takes the money and saves the player.
 
+### Closet
+
+Every safehouse closet door leads into one shared changing room (the `CHANGER` hub, see
+Entrances). Arriving there opens the closet: every clothing item the player owns, from all chains,
+by the same categories, free to put on, plus "Take off" per category. `vana-interiors` reports
+arrivals with the `onPlayerUseEntrance` event (name, from interior, to interior, arrived at a hub).
+
 ### Shop points
 
 `tools/seed/seed_interiors.py` finds the customer point from a counter object in the interior
@@ -105,7 +112,6 @@ objects.
 
 - **Dumbbells:** vanilla's `gymdumb.scm` free weights aren't placed objects in the map data.
 - **Vanilla shop behaviour:** item preview (trying clothes on, weapon close-ups).
-- **Closet:** safehouse wardrobes offering every owned clothing item, all chains combined, by the
-  same categories (`getOwned(player, "clothes")` in `vana-player` already lists them).
+
 - **Other shops:** barbers, tattoos, car mod shops, vending machines and food carts (script
   brains on objects).

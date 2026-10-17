@@ -52,9 +52,27 @@ end
 -- The menu for one shop and player: { key, label, price, category, owned } per item. Clothes carry
 -- their apparel category (shopping.dat's clothes type) and whether the player already owns them,
 -- plus a "take off" entry per category.
+local closetPoint = { kind = "closet" }
+
 local function catalogue(shopName, player)
-    local point = ShopPoints[shopName]
+    local point = shopName == "CLOSET" and closetPoint or ShopPoints[shopName]
     local items = {}
+    if point.kind == "closet" then
+        -- Every clothing item the player owns, all chains combined, by category.
+        for _, name in ipairs(player and playerCall("getOwned", player, "clothes") or {}) do
+            local f = prices.clothes[name]
+            if f then
+                items[#items + 1] = { key = name, label = Gxt.get(f[2]) or prettify(name), price = 0, category = tonumber(f[4]), owned = true }
+            end
+        end
+        table.sort(items, function(a, b) return a.label < b.label end)
+        local categories = {}
+        for _, item in ipairs(items) do categories[item.category] = true end
+        for _, c in ipairs(ShopConfig.clothesCategories) do
+            items[#items + 1] = { key = "takeoff:" .. c.type, label = "Take off", price = 0, category = c.type, owned = true, takeOff = true }
+        end
+        return items
+    end
     if point.kind == "fighting" then
         -- This gym's style, any other style the player has learned, and the default.
         local learned = {}
@@ -145,8 +163,11 @@ local function deliver(player, kind, key)
         end
         setPedFightingStyle(player, id)
         if not learned then playerCall("grantOwned", player, "styles", tostring(id)) end
-    elseif kind == "clothes" then
+    elseif kind == "clothes" or kind == "closet" then
         if getElementModel(player) ~= 0 then return false, "Clothes only fit CJ." end
+        if kind == "closet" and not key:match("^takeoff:") and not playerCall("isOwned", player, "clothes", key) then
+            return false, "You don't own that."
+        end
         local takeOff = tonumber(key:match("^takeoff:(%d+)$"))
         if takeOff then
             removePedClothes(player, takeOff)
@@ -163,10 +184,22 @@ local function savePlayer(player)
     if res and getResourceState(res) == "running" then pcall(function() exports["vana-player"]:savePlayer(player) end) end
 end
 
+-- Closets: the changing room safehouse closet doors lead into. Arriving there opens the closet.
+local closets = {} -- player -> point where they arrived
+
+addEventHandler("onPlayerUseEntrance", root, function(name, _, toInterior, atHub)
+    if name ~= ShopConfig.closetEntrance or not atHub then return end
+    local player = source
+    local x, y, z = getElementPosition(player)
+    closets[player] = { kind = "closet", interior = toInterior, x = x, y = y, z = z - 1 }
+    open[player] = "CLOSET"
+    triggerClientEvent(player, "vana-shops:open", resourceRoot, "CLOSET", "closet", catalogue("CLOSET", player), ShopConfig.clothesCategories)
+end)
+
 addEvent("vana-shops:buy", true)
 addEventHandler("vana-shops:buy", resourceRoot, function(key)
     local shopName = open[client]
-    local point = shopName and ShopPoints[shopName]
+    local point = shopName == "CLOSET" and closets[client] or shopName and ShopPoints[shopName]
     if not point or type(key) ~= "string" or not nearPoint(client, point) then return end
     local item
     for _, entry in ipairs(catalogue(shopName, client)) do
@@ -221,7 +254,7 @@ addEventHandler("onResourceStart", resourceRoot, function()
     for shopName, point in pairs(ShopPoints) do placeMarker(shopName, point) end
 end)
 
-addEventHandler("onPlayerQuit", root, function() open[source] = nil end)
+addEventHandler("onPlayerQuit", root, function() open[source], closets[source] = nil, nil end)
 
 -- Admin: put a shop's point where you stand, and print the config line to keep it.
 -- Restricted: needs command.shoppoint in the ACL.

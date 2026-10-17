@@ -42,6 +42,9 @@ ShopConfig = {
         { style = 5, name = "Boxing" }, { style = 6, name = "Kung Fu" }, { style = 7, name = "Kickboxing" },
     },
     fightingMinMuscle = 350, -- muscle stat (0-1000) needed to learn a style
+    -- The closet: arriving through this entrance's hub (the changing room every safehouse closet door
+    -- leads into) opens a menu of every clothing item the player owns.
+    closetEntrance = "CHANGER",
     -- How close to a shop point you need to be.
     radius = 1.5,
 }
