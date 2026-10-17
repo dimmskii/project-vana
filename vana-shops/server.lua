@@ -41,8 +41,18 @@ local function prettify(name)
     return (name:gsub("_", " "):gsub("(%a)([%w]*)", function(a, b) return a:upper() .. b end))
 end
 
--- The menu for one shop: { key, label, price } per item.
-local function catalogue(shopName)
+local function playerCall(fn, ...)
+    local res = getResourceFromName("vana-player")
+    if not res or getResourceState(res) ~= "running" then return nil end
+    local args = { ... }
+    local ok, result = pcall(function() return exports["vana-player"][fn](exports["vana-player"], unpack(args)) end)
+    return ok and result or nil
+end
+
+-- The menu for one shop and player: { key, label, price, category, owned } per item. Clothes carry
+-- their apparel category (shopping.dat's clothes type) and whether the player already owns them,
+-- plus a "take off" entry per category.
+local function catalogue(shopName, player)
     local point = ShopPoints[shopName]
     local items = {}
     if point.kind == "misc" then
@@ -61,7 +71,19 @@ local function catalogue(shopName)
             local label = Gxt.get(f[2])
             if not label and point.kind == "weapons" then label = getWeaponNameFromID(ShopConfig.weapons[name] or 0) end
             label = label or ShopConfig.foodNames[name] or prettify(name)
-            items[#items + 1] = { key = name, label = label, price = ShopConfig.prices[name] or tonumber(f[#f]) or 0 }
+            local item = { key = name, label = label, price = ShopConfig.prices[name] or tonumber(f[#f]) or 0 }
+            if point.kind == "clothes" then
+                item.category = tonumber(f[4])
+                item.owned = player and playerCall("isOwned", player, "clothes", name) or false
+            end
+            items[#items + 1] = item
+        end
+    end
+    if point.kind == "clothes" then
+        local categories = {}
+        for _, item in ipairs(items) do categories[item.category] = true end
+        for category in pairs(categories) do
+            items[#items + 1] = { key = "takeoff:" .. category, label = "Take off", price = 0, category = category, owned = true, takeOff = true }
         end
     end
     return items
@@ -102,8 +124,13 @@ local function deliver(player, kind, key)
         end
     elseif kind == "clothes" then
         if getElementModel(player) ~= 0 then return false, "Clothes only fit CJ." end
-        local f = prices.clothes[key]
-        addPedClothes(player, f[1], f[3], tonumber(f[4]))
+        local takeOff = tonumber(key:match("^takeoff:(%d+)$"))
+        if takeOff then
+            removePedClothes(player, takeOff)
+        else
+            local f = prices.clothes[key]
+            addPedClothes(player, f[1], f[3], tonumber(f[4]))
+        end
     end
     return true
 end
@@ -119,18 +146,22 @@ addEventHandler("vana-shops:buy", resourceRoot, function(key)
     local point = shopName and ShopPoints[shopName]
     if not point or type(key) ~= "string" or not nearPoint(client, point) then return end
     local item
-    for _, entry in ipairs(catalogue(shopName)) do
+    for _, entry in ipairs(catalogue(shopName, client)) do
         if entry.key == key then item = entry break end
     end
     if not item then return end
-    if getPlayerMoney(client) < item.price then
+    -- Owned clothes (and taking things off) are free: you're just putting them on.
+    local price = item.owned and 0 or item.price
+    if getPlayerMoney(client) < price then
         return triggerClientEvent(client, "vana-shops:result", resourceRoot, false, "Not enough money.")
     end
     local ok, reason = deliver(client, point.kind, key)
     if not ok then return triggerClientEvent(client, "vana-shops:result", resourceRoot, false, reason) end
-    takePlayerMoney(client, item.price)
+    if price > 0 then takePlayerMoney(client, price) end
+    if point.kind == "clothes" and not item.owned then playerCall("grantOwned", client, "clothes", key) end
     savePlayer(client)
-    triggerClientEvent(client, "vana-shops:result", resourceRoot, true, item.label)
+    local verb = item.takeOff and "Took off" or item.owned and "Wearing" or "Bought"
+    triggerClientEvent(client, "vana-shops:result", resourceRoot, true, verb .. ": " .. item.label, key, point.kind == "clothes")
 end)
 
 addEvent("vana-shops:close", true)
@@ -142,7 +173,7 @@ local function onMarkerHit(player, matching)
     local point = ShopPoints[shopName]
     if not point or getElementInterior(player) ~= point.interior then return end
     open[player] = shopName
-    triggerClientEvent(player, "vana-shops:open", resourceRoot, shopName, point.kind, catalogue(shopName))
+    triggerClientEvent(player, "vana-shops:open", resourceRoot, shopName, point.kind, catalogue(shopName, player), ShopConfig.clothesCategories)
 end
 
 local pointMarkers = {}
@@ -205,6 +236,28 @@ addCommandHandler("shoptest", function(source)
     outputServerLog(("[shoptest] GXT names: Binco sells %d, e.g. %s, %s, %s"):format(#binco, binco[1] and binco[1].label or "?",
         binco[5] and binco[5].label or "?", binco[14] and binco[14].label or "?"))
     ok = ok and Gxt.get("VESTA") == "Black Tank"
+    -- Each clothes chain sells its own range, every item in a known apparel category.
+    local known = {}
+    for _, c in ipairs(ShopConfig.clothesCategories) do known[c.type] = true end
+    local chains, sellers = {}, {}
+    for shopName, point in pairs(ShopPoints) do
+        if point.kind == "clothes" then
+            local count = 0
+            for _, item in ipairs(catalogue(shopName)) do
+                if not item.takeOff then
+                    count = count + 1
+                    sellers[item.key] = (sellers[item.key] or 0) + 1
+                    if not known[item.category] then ok = false; outputServerLog("[shoptest] FAIL unknown clothes category " .. tostring(item.category) .. " for " .. item.key) end
+                end
+            end
+            chains[#chains + 1] = shopName .. " " .. count
+        end
+    end
+    local exclusive = 0
+    for _, n in pairs(sellers) do if n == 1 then exclusive = exclusive + 1 end end
+    table.sort(chains)
+    outputServerLog(("[shoptest] clothes chains: %s; %d items sold by only one chain"):format(table.concat(chains, ", "), exclusive))
+
     -- Every shopping.dat item should have a vanilla name.
     local missing = {}
     for _, section in ipairs({ "weapons", "food", "clothes" }) do

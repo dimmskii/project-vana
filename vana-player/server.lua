@@ -73,6 +73,30 @@ function savePlayer(player)
     return true
 end
 
+-- Things a player owns for good, by kind (e.g. "clothes" -> "texture/model"): bought once, kept
+-- across sessions. The closet (still to come) will offer every owned item.
+function isOwned(player, kind, key)
+    local d = data[player]
+    return d and d.owned and d.owned[kind] and d.owned[kind][key] == true or false
+end
+
+function grantOwned(player, kind, key)
+    local d = data[player]
+    if not d then return false end
+    d.owned = d.owned or {}
+    d.owned[kind] = d.owned[kind] or {}
+    d.owned[kind][key] = true
+    savePlayer(player)
+    return true
+end
+
+function getOwned(player, kind)
+    local d = data[player]
+    local list = {}
+    for key in pairs(d and d.owned and d.owned[kind] or {}) do list[#list + 1] = key end
+    return list
+end
+
 local function maxHealth(player)
     return 100 + (getPedStat(player, 24) - 569) * 76 / 431
 end

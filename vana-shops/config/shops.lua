@@ -29,6 +29,12 @@ ShopConfig = {
     -- first column of shopping.dat's price sections (clothes: the texture name).
     prices = {
     },
+    -- Clothes menus are grouped by apparel category (shopping.dat's clothes type), in this order.
+    clothesCategories = {
+        { type = 0, name = "Torso" }, { type = 2, name = "Legs" }, { type = 3, name = "Shoes" },
+        { type = 16, name = "Hats" }, { type = 15, name = "Glasses" }, { type = 13, name = "Necklaces" },
+        { type = 14, name = "Watches" },
+    },
     -- How close to a shop point you need to be.
     radius = 1.5,
 }

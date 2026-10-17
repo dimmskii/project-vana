@@ -48,8 +48,14 @@ its orange marker to open the menu.
 The 24/7 stock is not vanilla; edit it in `config/shops.lua`, along with the weapon ID mapping,
 price overrides and `fatPerCalorie`.
 
-- **The menu:** vanilla-style, top-left. Arrow keys choose, Enter buys, Backspace leaves; game
-  controls are off while it's open.
+- **The menu:** vanilla-style, top-left. Arrow keys choose, Enter buys, Backspace goes back or
+  leaves; game controls are off while it's open.
+- **Clothes shops:** each chain sells exactly its own `shopping.dat` range (246 items are sold by
+  only one chain).
+  - The menu opens on apparel categories (`clothesCategories` in `config/shops.lua`: torso, legs,
+    shoes, hats, glasses, necklaces, watches); each category lists its items, plus "Take off".
+  - Clothes are bought once and owned for good (saved with the player by `vana-player`). Owned
+    items show OWNED instead of a price, and choosing one just puts it on.
 - **Purchases:** every purchase is checked on the server (still at the counter, item really sold
   there, enough money). The server applies it, takes the money and saves the player.
 
@@ -70,7 +76,8 @@ To correct one in game, stand where customers should and use `/shoppoint <NAME>`
 
 - **Gym:** equipment works through script brains on `GYM_BIKE`, `GYM_BENCH1`, `GYM_TREADMILL` and
   `GYM_MAT1` objects (positions from the interior IPLs), with a minigame.
-- **Vanilla shop behaviour:** item preview (trying clothes on, weapon close-ups), wardrobes at
-  safehouses.
+- **Vanilla shop behaviour:** item preview (trying clothes on, weapon close-ups).
+- **Closet:** safehouse wardrobes offering every owned clothing item, all chains combined, by the
+  same categories (`getOwned(player, "clothes")` in `vana-player` already lists them).
 - **Other shops:** barbers, tattoos, car mod shops, vending machines and food carts (script
   brains on objects).

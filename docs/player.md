@@ -12,6 +12,7 @@ and applied on the server; clients never report their own values.
 | Clothes | every clothes slot (0-17): texture and model |
 | Weapons | per slot: weapon, total ammo, ammo in the clip, and which weapon is in hand |
 | Position | where the player left, if `spawnAtLastPosition` is on |
+| Owned items | by kind, e.g. every clothing item ever bought (`isOwned`, `grantOwned`, `getOwned` exports) |
 
 Records live in `vana-player/players.db` (SQLite, one JSON record per serial, gitignored). They
 are saved every 60 s, when the player leaves, when the resource stops, and on request from other
