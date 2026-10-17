@@ -59,4 +59,27 @@ with open(os.path.join(OUT, "races.lua"), "w") as f:
             f.write("            { %.2f, %.2f, %.2f },\n" % c)
         f.write("        } },\n")
     f.write("}\n")
-print("races: %d, %d checkpoints" % (len(races), sum(len(r["checkpoints"]) for r in races.values())))
+# The Chiliad Challenge (MTBIKER): three downhill routes, checkpoints x/y/z in 103@/223@/343@ onwards.
+start = next(i for i, l in enumerate(lines) if l.strip() == "script_name 'MTBIKER'")
+end = next(i for i in range(start + 1, len(lines)) if lines[i].startswith("//-------------"))
+routes, current = [], {}
+for l in lines[start:end]:
+    m = re.match(r"\s*(\d+)@ = (-?\d+(?:\.\d+)?)$", l)
+    if m and 103 <= int(m.group(1)) < 463:
+        current[int(m.group(1))] = float(m.group(2))
+    if re.match(r"\s*(goto|return)", l) and current:
+        xs = sorted(k for k in current if 103 <= k < 223)
+        if len(xs) > 5:
+            routes.append([(current[k], current[k + 120], current[k + 240]) for k in xs if k + 240 in current])
+        current = {}
+with open(os.path.join(OUT, "races.lua"), "a") as f:
+    f.write("\n-- The Chiliad Challenge (MTBIKER): its three routes, down from the summit.\n")
+    f.write("ChiliadRoutes = {\n")
+    for route in routes[:3]:
+        f.write("    {\n")
+        for c in route:
+            f.write("        { %.2f, %.2f, %.2f },\n" % c)
+        f.write("    },\n")
+    f.write("}\n")
+print("races: %d, %d checkpoints; chiliad routes: %s" % (len(races), sum(len(r["checkpoints"]) for r in races.values()),
+      ", ".join(str(len(r)) for r in routes[:3])))

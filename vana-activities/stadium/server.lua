@@ -29,7 +29,7 @@ Activity.register("kickstart", {
         setElementInterior(bike, K.interior)
         setElementDimension(bike, dim)
         warpPedIntoVehicle(player, bike)
-        d.bike, d.score, d.left = bike, 0, #K.coronas
+        d.bike, d.score, d.left, d.coronas = bike, 0, #K.coronas, K.coronas
         d.best = Activity.progress(player, "kickstart.best") or 0
         session:say(session:text("KICK_10"), 7000)
         session:big(session:text("KICK_21", d.best), 3000, "small")
@@ -60,6 +60,12 @@ Activity.register("kickstart", {
             end
         end)
     end,
+    onCorona = function(session, c)
+        local d = session.data
+        d.score, d.left = d.score + c[4], d.left - 1
+        session:say(session:text(({ "KICK_14", "KICK_15", "KICK_16" })[c[4]]), 2000)
+        session:counter("score", "SCORE", d.score, "number")
+    end,
     stop = function(session)
         if isElement(session.player) then
             triggerClientEvent(session.player, "vana-stadium:coronas", resourceRoot, nil)
@@ -68,19 +74,19 @@ Activity.register("kickstart", {
     end,
 })
 
+-- Coronas collected on the client (Kickstart, the stunt courses): the activity's onCorona decides.
 addEvent("vana-stadium:corona", true)
 addEventHandler("vana-stadium:corona", resourceRoot, function(i)
     local session = Activity.of(client)
-    local d = session and session.name == "kickstart" and session.data
-    local c = d and type(i) == "number" and K.coronas[i]
-    if not c or d.got and d.got[i] then return end
+    local d = session and session.data
+    local list = d and d.coronas
+    local c = list and type(i) == "number" and list[i]
+    if not c or (d.got and d.got[i]) or not session.def.onCorona then return end
     local x, y, z = getElementPosition(client)
     if getDistanceBetweenPoints3D(x, y, z, c[1], c[2], c[3]) > 8 then return end
     d.got = d.got or {}
     d.got[i] = true
-    d.score, d.left = d.score + c[4], d.left - 1
-    session:say(session:text(({ "KICK_14", "KICK_15", "KICK_16" })[c[4]]), 2000)
-    session:counter("score", "SCORE", d.score, "number")
+    session.def.onCorona(session, c)
 end)
 
 -- Blood Ring --------------------------------------------------------------------------------------------

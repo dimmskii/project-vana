@@ -51,7 +51,7 @@ local function finishRace(session)
     local player = session.player
     local me = d.me
     local elapsed = getTickCount() - d.go
-    local key = "race." .. d.index
+    local key = d.def and d.def.key or ("race." .. d.index)
     local bestPos = Activity.progress(player, key .. ".best")
     local bestTime = Activity.progress(player, key .. ".time")
     local lines = {}
@@ -66,16 +66,17 @@ local function finishRace(session)
     local won = me.position == 1
     session:big((won and Activity.text("RACES18", "RACETOR") or Activity.text("RACES_8", "RACETOR")) .. "~n~~w~" .. ordinal(me.position) .. "  " .. clock(elapsed), 5000, won and "passed" or "failed")
     if #lines > 0 then session:say(table.concat(lines, "~n~"), 5000) end
+    if won and d.def and d.def.onWin then d.def.onWin(session) end
     if won and not Activity.progress(player, key .. ".won") then
         Activity.setProgress(player, key .. ".won", true)
-        local prize = C.prizes[d.index] or C.prize
+        local prize = d.def and d.def.prize or C.prizes[d.index] or C.prize
         givePlayerMoney(player, prize)
         session:after(2500, function(s) s:big(Activity.text("REWARD", nil, prize), 3000, "small") end)
         if d.index == 25 then
             for i in ipairs(C.stadiumCars) do OwnedCars.grant(player, "stadium" .. i) end
         end
-        local all = true
-        for index in pairs(RaceTable) do
+        local all = not d.def
+        for index in pairs(d.def and {} or RaceTable) do
             if not Activity.progress(player, "race." .. index .. ".won") then all = false break end
         end
         if all and not Activity.progress(player, "race.all") then
@@ -90,12 +91,12 @@ end
 Activity.register("race", {
     title = "Race",
     gxt = "RACETOR",
-    start = function(session, index, entry)
-        local r = RaceTable[index]
+    start = function(session, index, entry, def)
+        local r = def or RaceTable[index]
         local d = session.data
         local player = session.player
-        d.index, d.course, d.entry = index, course(r), entry
-        local air = index >= 19 and index <= 24
+        d.index, d.course, d.entry, d.def = index, course(r), entry, def
+        local air = not def and index >= 19 and index <= 24
         d.radius = air and C.airRadius or C.radius
         local dim = Activity.dimension(player)
         local interior = C.interiors[index] or 0
@@ -134,7 +135,7 @@ Activity.register("race", {
             end
             d.racers[#d.racers + 1] = racer
         end
-        session:big(raceName(index), 3000, "title")
+        session:big(def and def.name or raceName(index), 3000, "title")
         for i, n in ipairs({ "RACES_4", "RACES_5", "RACES_6" }) do
             session:after(1000 + i * 1000, function(s) s:big(Activity.text(n, "RACETOR"), 900, "title") end)
         end
@@ -175,7 +176,7 @@ Activity.register("race", {
                 end
             end
             standings(s)
-            local laps = RaceTable[dd.index].laps
+            local laps = (dd.def or RaceTable[dd.index]).laps
             s:counter("position", Activity.text("RACES30", "RACETOR"), ("%d/%d"):format(dd.me.position or 1, #dd.racers), "number")
             if laps > 1 then
                 local per = #dd.course / laps
@@ -219,7 +220,38 @@ local function openMenu(player, entry)
     end)
 end
 
+-- The Chiliad Challenge: the race engine with a route of vanilla's three, on mountain bikes.
+local function chiliadRace(player, route)
+    local M = C.chiliad
+    local cars = {}
+    for i = 1, M.racers do cars[i] = M.bike end
+    return { racers = M.racers, laps = 1, cars = cars, checkpoints = ChiliadRoutes[route],
+             name = Activity.text(M.names[route], "RACETOR"), key = "chiliad." .. route, prize = M.prizes[route],
+             onWin = function(session) session:after(3000, function(s) s:help(Activity.text(M.wins[route], "RACETOR")) end) end }
+end
+
+local function openChiliad(player)
+    local M = C.chiliad
+    local items, open = {}, true
+    for route = 1, #ChiliadRoutes do
+        local best = Activity.progress(player, "chiliad." .. route .. ".best")
+        items[route] = { label = Activity.text(M.names[route], "RACETOR"), right = best and ordinal(best) or (open and "" or "locked"), enabled = open }
+        open = Activity.progress(player, "chiliad." .. route .. ".won") == true
+    end
+    Activity.menu(player, Activity.text("MTBIKER", "RACETOR"), items, function(p, route)
+        if Activity.of(p) then return end
+        Activity.start(p, "race", 100 + route, M.entry, chiliadRace(p, route))
+    end)
+end
+
 addEventHandler("onResourceStart", resourceRoot, function()
+    local e = C.chiliad.entry
+    local cm = createMarker(e.x, e.y, e.z - 0.5, "cylinder", 4, 255, 200, 0, 110)
+    createBlip(e.x, e.y, e.z, 33, 2, 255, 255, 255, 255, 0, 600)
+    addEventHandler("onMarkerHit", cm, function(player, matching)
+        local v = matching and getElementType(player) == "player" and getPedOccupiedVehicle(player)
+        if v and getElementModel(v) == C.chiliad.bike and not Activity.of(player) then openChiliad(player) end
+    end)
     for i, car in ipairs(C.stadiumCars) do OwnedCars.define("stadium" .. i, car) end
     for _, entry in ipairs(C.entries) do
         local m = createMarker(entry.x, entry.y, entry.z - 0.1, "cylinder", 1.5, 255, 200, 0, 120)

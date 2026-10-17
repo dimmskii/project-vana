@@ -217,3 +217,32 @@ stadium); winning every race pays $1000000. Best results and times are saved.
 - **Blood Ring** (SF stadium): in a Bloodring Banger, drive through checkpoints (+15 s each) to keep
   your clock above zero while eleven bangers ram you; get it above the target time (1 minute, plus a
   minute after each win) for $10000. Ours: checkpoints at random in vanilla's arena box.
+
+### The Chiliad Challenge (`MTBIKER`)
+
+Ride a mountain bike into the marker on the summit of Mount Chiliad and pick a route: Scotch Bonnet
+Yellow Route, Birdseye Winder, Cobra Run (seeded from main.scm). Each opens when you win the one
+before; wins pay $500, $1000, $2000. Five rival riders, on the race engine.
+
+### BMX and NRG-500 stunt courses (`STUNT`)
+
+Ride the BMX into the Glen Park skatepark marker, or the NRG-500 into the one at the San Fierro
+docks, then collect every corona (vanilla's 19 and 18) before the clock runs out: 11 s to start,
++10 s per corona. First completion pays $1000; best times are kept.
+
+### Beat the Cock! (`TRIA`)
+
+Walk into the start on Santa Maria Beach or at Fleischberg: run into the sea, swim the course, take
+the bicycle waiting at the shore, ride, then leave it and run to the finish (vanilla's checkpoints
+and legs; 10 s to get on or off the bike when the leg changes). Winning pays $10000 / $20000.
+Ours: you race the clock (each leg's length at a set pace) instead of vanilla's twelve athletes.
+
+### Ammu-Nation shooting range (`SHRANGE`)
+
+At the four Ammu-Nations with a range, walk into the range marker and take the next weapon
+challenge: pistol, micro SMG, shotgun, AK47. Three rounds against two rivals in the side lanes:
+first to destroy three targets, then the same with targets advancing, then one target at a time
+where every part shot off is a point, first to 20. Passing raises the weapon's skill (+50, +100 more
+the first time); all four earn vanilla's fast reload (recorded only: MTA has no control for it).
+Ours: rivals score at a set pace, a target counts as destroyed with 5 of its parts shot off, and the
+rounds are judged on your client.
