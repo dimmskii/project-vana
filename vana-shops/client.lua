@@ -138,3 +138,9 @@ addEventHandler("onClientRender", root, function()
 end)
 
 addEventHandler("onClientPlayerWasted", localPlayer, close)
+
+-- Shops with staff frame the service with vanilla's camera; nil hands it back.
+addEvent("vana-shops:camera", true)
+addEventHandler("vana-shops:camera", resourceRoot, function(cam)
+    if cam then setCameraMatrix(unpack(cam)) else setCameraTarget(localPlayer) end
+end)

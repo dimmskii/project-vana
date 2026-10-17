@@ -6,7 +6,9 @@
     <script src="config/vendorkinds.lua" type="shared" />
     <script src="config/vendors.lua" type="shared" />
     <script src="gxt.lua" type="server" />
+    <script src="config/keepers.lua" type="server" />
     <script src="server.lua" type="server" />
+    <script src="keepers.lua" type="server" />
     <script src="client.lua" type="client" />
     <script src="vendors_client.lua" type="client" />
 </meta>

@@ -64,6 +64,21 @@ price overrides and `fatPerCalorie`.
 - **Purchases:** every purchase is checked on the server (still at the counter, item really sold
   there, enough money). The server applies it, takes the money and saves the player.
 
+### Shopkeepers
+
+`vana-shops/keepers.lua` ports the vanilla shop scripts' staff (`BARB` and `TATTO` in `main.scm`).
+Each shop type has one layout in interior coordinates (keeper, customer seat, camera) and each shop
+an offset from it, in `config/keepers.lua`; the keeper models are vanilla's.
+
+- **Barbers:** the barber idles beside the chair. The marker is the chair: sitting down
+  (`BRB_Sit_In`) opens the menu under vanilla's camera; browsing has the barber cut, buying has CJ
+  check the result in the mirror (a beard animation for beard styles), leaving gets CJ up.
+- **Tattoo parlours:** the artist sits at the kit. Choosing a body part has CJ and the artist take
+  that part's pose (`TAT_<part>_In/Pose/Out`); leaving gets CJ up. Vanilla also animates the kit
+  object, which MTA can't do yet, so the kit stays still.
+- One customer per shop at a time; anyone else is told the shop is busy. A killed keeper comes back
+  after a minute. `shoptest` checks that every keeper is in place.
+
 ### Closet
 
 Every safehouse closet door leads into one shared changing room (the `CHANGER` hub, see

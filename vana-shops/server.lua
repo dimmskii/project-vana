@@ -242,14 +242,17 @@ local function restoreClothes(player)
 end
 
 local function openMenu(player, shopName, kind, categories)
+    local seated, why = keeperSeat(player, shopName)
+    if not seated then return outputChatBox(why, player, 255, 200, 120) end
     open[player] = shopName
     if WEARABLE[kind] and getElementModel(player) == 0 then snapshotClothes(player) else outfits[player] = nil end
     triggerClientEvent(player, "vana-shops:open", resourceRoot, shopName, kind, catalogue(shopName, player), categories)
 end
 
-local function closeMenu(player)
+local function closeMenu(player, instant)
     restoreClothes(player)
     open[player], outfits[player] = nil, nil
+    keeperLeave(player, instant)
 end
 
 addEvent("vana-shops:preview", true)
@@ -258,9 +261,12 @@ addEventHandler("vana-shops:preview", resourceRoot, function(key)
     local point = shopName == "CLOSET" and closets[client] or shopName and ShopPoints[shopName]
     if not point or not outfits[client] then return end
     restoreClothes(client)
-    if type(key) ~= "string" then return end
+    if type(key) ~= "string" then return keeperBrowse(client, nil) end
     for _, entry in ipairs(catalogue(shopName, client)) do
-        if entry.key == key then return deliver(client, point.kind, key) end
+        if entry.key == key then
+            keeperBrowse(client, entry)
+            return deliver(client, point.kind, key)
+        end
     end
 end)
 
@@ -292,6 +298,7 @@ addEventHandler("vana-shops:buy", resourceRoot, function(key)
     if price > 0 then takePlayerMoney(client, price) end
     if point.kind == "clothes" and not item.owned then playerCall("grantOwned", client, "clothes", key) end
     if outfits[client] then snapshotClothes(client) end
+    keeperBought(client, item)
     savePlayer(client)
     local verb = item.takeOff and point.kind == "tattoo" and "Removed" or point.kind == "fighting" and (item.owned and "Fighting style" or "Learned") or item.takeOff and "Took off" or item.owned and "Wearing" or "Bought"
     triggerClientEvent(client, "vana-shops:result", resourceRoot, true, verb .. ": " .. item.label, key, point.kind == "clothes" or point.kind == "fighting")
@@ -351,8 +358,11 @@ addEventHandler("onResourceStart", resourceRoot, function()
     for shopName, point in pairs(ShopPoints) do placeMarker(shopName, point) end
 end)
 
-addEventHandler("onPlayerQuit", root, function() open[source], closets[source], lastVend[source], outfits[source] = nil, nil, nil, nil end)
-addEventHandler("onPlayerWasted", root, function() if open[source] then closeMenu(source) end end)
+addEventHandler("onPlayerQuit", root, function()
+    keeperLeave(source, true)
+    open[source], closets[source], lastVend[source], outfits[source] = nil, nil, nil, nil
+end)
+addEventHandler("onPlayerWasted", root, function() if open[source] then closeMenu(source, true) end end)
 
 -- Admin: put a shop's point where you stand, and print the config line to keep it.
 -- Restricted: needs command.shoppoint in the ACL.
@@ -425,6 +435,9 @@ addCommandHandler("shoptest", function(source)
     for kind, n in pairs(vendorKinds) do summary[#summary + 1] = kind .. " " .. n end
     table.sort(summary)
     outputServerLog(("[shoptest] vendors: %d (%s)"):format(#Vendors, table.concat(summary, ", ")))
+    local alive, staffed = keeperStatus()
+    if alive ~= staffed then ok = false end
+    outputServerLog(("[shoptest] keepers: %d of %d in place"):format(alive, staffed))
     -- Every shopping.dat item should have a vanilla name.
     local missing = {}
     for _, section in ipairs({ "weapons", "food", "clothes", "haircuts", "tattoos" }) do

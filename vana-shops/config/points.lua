@@ -26,11 +26,11 @@ ShopPoints = {
     GYM1       = { kind = "fighting", style = 5, interior = 5, x = 767.14, y = 12.51, z = 999.70 }, -- Ganton: boxing (vanilla trainer spot)
     GYM2       = { kind = "fighting", style = 6, interior = 6, x = 769.79, y = -42.11, z = 999.69 }, -- Cobra (SF): kung fu (vanilla trainer spot)
     GYM3       = { kind = "fighting", style = 7, interior = 7, x = 763.36, y = -76.76, z = 999.66 }, -- Below the Belt (LV): kickboxing (vanilla trainer spot)
-    -- Barbers and tattoo parlours: 4 m inside the door (no counter object found); refine with /shoppoint.
-    BARBERS    = { kind = "hair", interior = 2, x = 411.63, y = -17.43, z = 1000.80 },
-    BARBER2    = { kind = "hair", interior = 3, x = 418.65, y = -78.64, z = 1000.96 },
-    BARBER3    = { kind = "hair", interior = 12, x = 412.02, y = -48.65, z = 1000.96 },
-    TATTOO     = { kind = "tattoo", interior = 16, x = -204.44, y = -22.45, z = 1001.30 },
-    TATTO2     = { kind = "tattoo", interior = 17, x = -204.44, y = -4.47, z = 1001.30 },
-    TATTO3     = { kind = "tattoo", interior = 3, x = -204.44, y = -39.65, z = 1001.30 },
+    -- Barbers and tattoo parlours: the customer's chair (vanilla BARB / TATTO, see config/keepers.lua).
+    BARBERS    = { kind = "hair", interior = 2, x = 414.30, y = -19.90, z = 1000.81 },
+    BARBER2    = { kind = "hair", interior = 3, x = 421.29, y = -81.30, z = 1000.81 },
+    BARBER3    = { kind = "hair", interior = 12, x = 414.67, y = -51.32, z = 1000.81 },
+    TATTOO     = { kind = "tattoo", interior = 16, x = -203.32, y = -25.33, z = 1001.28 },
+    TATTO2     = { kind = "tattoo", interior = 17, x = -203.32, y = -7.06, z = 1001.28 },
+    TATTO3     = { kind = "tattoo", interior = 3, x = -203.32, y = -42.38, z = 1001.28 },
 }
