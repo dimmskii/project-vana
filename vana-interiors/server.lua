@@ -98,7 +98,8 @@ addEventHandler("onResourceStart", resourceRoot, function()
         end
     end
     for _, e in ipairs(Entrances) do
-        if e.enabled and #byName[e.name] > 1 then
+        -- Burglary-access doors (flag 0x1000) open only during a burglary; vana-activities owns them.
+        if e.enabled and #byName[e.name] > 1 and bitAnd(e.flags or 0, 0x1000) == 0 then
             local w, d = math.max(CONFIG.minTrigger, e.size[1]), math.max(CONFIG.minTrigger, e.size[2])
             local col = createColCuboid(e.x - w / 2, e.y - d / 2, e.z, w, d, 3)
             setElementInterior(col, e.interior)
