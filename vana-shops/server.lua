@@ -65,6 +65,10 @@ local function catalogue(shopName, player)
                 items[#items + 1] = { key = name, label = Gxt.get(f[2]) or prettify(name), price = 0, category = tonumber(f[4]), owned = true }
             end
         end
+        for _, name in ipairs(player and playerCall("getOwned", player, "special") or {}) do
+            local s = ShopConfig.specialClothes[name]
+            if s then items[#items + 1] = { key = "special:" .. name, label = s.name, price = 0, category = 17, owned = true } end
+        end
         table.sort(items, function(a, b) return a.label < b.label end)
         local categories = {}
         for _, item in ipairs(items) do categories[item.category] = true end
@@ -191,6 +195,13 @@ local function deliver(player, kind, key)
         if not learned then playerCall("grantOwned", player, "styles", tostring(id)) end
     elseif kind == "clothes" or kind == "closet" then
         if getElementModel(player) ~= 0 then return false, "Clothes only fit CJ." end
+        local special = key:match("^special:(.+)$")
+        if special then
+            local s = ShopConfig.specialClothes[special]
+            if kind ~= "closet" or not s or not playerCall("isOwned", player, "special", special) then return false, "You don't own that." end
+            addPedClothes(player, s.texture, s.model, 17)
+            return true
+        end
         if kind == "closet" and not key:match("^takeoff:") and not playerCall("isOwned", player, "clothes", key) then
             return false, "You don't own that."
         end
@@ -203,6 +214,35 @@ local function deliver(player, kind, key)
         end
     end
     return true
+end
+
+-- Sex appeal (0-1000) from what the player wears: shopping.dat's "sexy" value of each worn item
+-- (clothes, haircut, tattoos), times sexAppealPerPoint. Vanilla keeps a stat fed by its shops; MTA
+-- doesn't, so we work it out. Used by dating.
+local function sexyOf(words)
+    for i, w in ipairs(words or {}) do
+        if w == "sexy" then return tonumber(words[i + 1]) or 0 end
+    end
+    return 0
+end
+
+function getSexAppeal(player)
+    if not isElement(player) or getElementModel(player) ~= 0 then return 0 end
+    local points = 0
+    for slot = 0, 17 do
+        local texture = getPedClothes(player, slot)
+        if texture then
+            texture = texture:lower()
+            local f = prices.clothes and prices.clothes[texture]
+            if slot == 1 then
+                for _, h in pairs(prices.haircuts or {}) do if h[1]:lower() == texture then f = h break end end
+            elseif slot >= 4 and slot <= 12 then
+                f = prices.tattoos and prices.tattoos[texture] or f
+            end
+            points = points + sexyOf(f)
+        end
+    end
+    return math.min(1000, points * ShopConfig.sexAppealPerPoint)
 end
 
 local function savePlayer(player)

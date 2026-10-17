@@ -33,7 +33,22 @@ ShopConfig = {
     clothesCategories = {
         { type = 0, name = "Torso" }, { type = 2, name = "Legs" }, { type = 3, name = "Shoes" },
         { type = 16, name = "Hats" }, { type = 15, name = "Glasses" }, { type = 13, name = "Necklaces" },
-        { type = 14, name = "Watches" },
+        { type = 14, name = "Watches" }, { type = 17, name = "Special" },
+    },
+    -- Sex appeal (0-1000) per shopping.dat "sexy" point worn. Ours: a good outfit (~120 points) reaches
+    -- vanilla's girlfriend thresholds (45-70%).
+    sexAppealPerPoint = 5,
+    -- Special costumes (clothes slot 17) that aren't sold: rewards such as girlfriends' gifts, owned as
+    -- "special" items and worn from the closet. Names are ours.
+    specialClothes = {
+        pimp = { texture = "pimptr", model = "pimptr", name = "Pimp Suit" },
+        mechanic = { texture = "garageleg", model = "garagetr", name = "Mechanic Overalls" },
+        country = { texture = "countrytr", model = "countrytr", name = "Rural Clothes" },
+        police = { texture = "policetr", model = "policetr", name = "Police Uniform" },
+        medic = { texture = "medictr", model = "medictr", name = "Medic Uniform" },
+        gimp = { texture = "gimpleg", model = "gimpleg", name = "Gimp Suit" },
+        valet = { texture = "valet", model = "valet", name = "Valet Uniform" },
+        croupier = { texture = "croupier", model = "valet", name = "Croupier Uniform" },
     },
     -- Fighting styles taught at the gym mats (setPedFightingStyle IDs). Each gym's mat point says which
     -- style it teaches; learned styles are owned for good and can be picked at any mat.

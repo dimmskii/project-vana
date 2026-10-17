@@ -10,6 +10,7 @@
     <script src="server.lua" type="server" />
     <script src="keepers.lua" type="server" />
     <script src="client.lua" type="client" />
+    <export function="getSexAppeal" type="server" />
     <script src="vendors_client.lua" type="client" />
     <script src="keepers_client.lua" type="client" />
 </meta>

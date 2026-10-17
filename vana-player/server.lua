@@ -225,8 +225,13 @@ local function restart(player, kind)
     local d = data[player]
     if not d then return end
     snapshot(player)
-    d.money = math.max(0, d.money - rules.fee)
-    if rules.loseWeapons then d.weapons, d.slot = {}, 0 end
+    -- Earned perks (vanilla girlfriends: Barbara gets you out of jail, Katie out of hospital, for free
+    -- and with your weapons): progress "perk.free_busted" / "perk.free_wasted".
+    local free = d.progress and d.progress["perk.free_" .. kind] == true
+    if not free then
+        d.money = math.max(0, d.money - rules.fee)
+        if rules.loseWeapons then d.weapons, d.slot = {}, 0 end
+    end
     triggerClientEvent(player, "vana-player:restartText", resourceRoot, kind)
     setTimer(function()
         if not isElement(player) then return end

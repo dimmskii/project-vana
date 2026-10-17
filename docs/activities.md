@@ -64,3 +64,24 @@ Vanilla `BURGJB` (the mission) and `BURG_BRAINS` (residents).
 - **Perks MTA already gives or can't hold:** MTA makes every player never tire, so "infinite
   sprint" rewards change nothing yet; armour is capped at 100, so "+50% armour" rewards are
   recorded but can't take effect.
+
+## Dating
+
+Vanilla `GF_MEETING`, `GFAGNT`, `GF_DATE` and `GF_SEX`, per player (`config/dating.lua`).
+
+- **Meeting:** each girl waits at her vanilla meeting spot; Denise and Millie, met through the story
+  in vanilla, wait at home. Walk up and answer yes or no. Vanilla's appraisal decides: sex appeal / 10
+  (worked out by `vana-shops` from the "sexy" values of what CJ wears, x5; ours), her outfit, and fat
+  and muscle against her taste.
+- **Dates:** stop a car with a free seat at her house when she isn't busy. She picks food, a
+  cruise or dancing as vanilla does. Food: stop at a diner, bar, restaurant or fast food place; she
+  judges the kind. Cruise: vanilla's fun meter (areas, speed, jumps, crashes, her radio station,
+  parking at night), per second. Dancing: a club and a timing minigame (ours until DANCE is ported).
+- **After:** take her home for +5 liking; past 50 she asks you in for coffee (censored, as the
+  release). Bad dates cost 4, abandoning or hurting her 10; at -15 she dumps you.
+- **Rewards:** car keys at 50 (her car with its vanilla plate at her house, only yours), the gift
+  outfit at 100 (worn from the closet: Special), and perks: Michelle repairs your car at her place,
+  Helena's stash (ours: chainsaw, molotovs, flamethrower), Barbara and Katie get you out of jail and
+  hospital free with your weapons (`vana-player`).
+- **Not yet:** phone calls asking for dates (and missed-date penalties), two-timing, Michelle driving,
+  Denise's drive-bys, the dance minigame proper, her walking to the car (she may warp in).
