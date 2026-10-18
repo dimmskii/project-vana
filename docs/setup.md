@@ -90,6 +90,9 @@ on every start (`adminRights` in `vana-player/config/player.lua`; the `Console` 
 <right name="command.peds" access="true"></right>
 <right name="command.wanted" access="true"></right>
 <right name="command.shoppoint" access="true"></right>
+<right name="command.setmoney" access="true"></right>
+<right name="command.addmoney" access="true"></right>
+<right name="command.setstat" access="true"></right>
 ```
 
 After editing `acl.xml` on a running server, run `reloadacl` in the console.

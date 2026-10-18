@@ -37,6 +37,17 @@ runs get lost.
 The Admin group has MTA's authorized-serial protection, which matches here since the account is
 the serial. If a login is refused, the server log says so.
 
+## Admin commands
+
+Restricted to the `Admin` ACL (`adminRights` in `config/player.lua`). Without a player name they
+act on you; from the console a name is required. Changes are saved at once.
+
+- `/setmoney <amount> [player]`
+- `/addmoney <amount> [player]`: a negative amount takes money.
+- `/setstat <fat|stamina|muscle|maxhealth|stat ID> <0-1000> [player]`: setting max health also fills
+  health to the new maximum. Any stat ID can be set, but only fat, stamina, muscle and max health
+  are saved; others (weapon skills, driving) last until you leave.
+
 ## Wasted and busted
 
 As in vanilla, both cost the player's weapons and $100. The player comes back at the nearest

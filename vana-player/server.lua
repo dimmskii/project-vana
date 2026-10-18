@@ -293,6 +293,51 @@ setTimer(function()
     end
 end, PlayerConfig.saveIntervalMs, 0)
 
+-- Admin: money and body stats. Restricted: command.setmoney / addmoney / setstat in the ACL.
+-- The target is you, or a named player (from the console, a name is required).
+local STAT_NAMES = { fat = 21, stamina = 22, muscle = 23, maxhealth = 24 }
+
+local function adminCommand(name, usage, fn)
+    addCommandHandler(name, function(source, _, ...)
+        local args = { ... }
+        local reply = function(msg)
+            if getElementType(source) == "console" then outputServerLog("[" .. name .. "] " .. msg) else outputChatBox(msg, source, 200, 200, 255) end
+        end
+        local playerName = args[usage.playerArg]
+        local target = playerName and getPlayerFromName(playerName) or (not playerName and getElementType(source) == "player" and source)
+        if not target then return reply(playerName and ("No player called " .. playerName .. ".") or ("Usage: /" .. name .. " " .. usage.text)) end
+        local msg = fn(target, unpack(args))
+        reply(msg or ("Usage: /" .. name .. " " .. usage.text))
+        if msg then savePlayer(target) end
+    end, true)
+end
+
+adminCommand("setmoney", { text = "<amount> [player]", playerArg = 2 }, function(target, amount)
+    amount = tonumber(amount)
+    if not amount then return end
+    setPlayerMoney(target, math.floor(amount))
+    return ("%s now has $%d."):format(getPlayerName(target), getPlayerMoney(target))
+end)
+
+adminCommand("addmoney", { text = "<amount> [player] (negative takes money)", playerArg = 2 }, function(target, amount)
+    amount = tonumber(amount)
+    if not amount then return end
+    givePlayerMoney(target, math.floor(amount))
+    return ("%s now has $%d."):format(getPlayerName(target), getPlayerMoney(target))
+end)
+
+adminCommand("setstat", { text = "<fat|stamina|muscle|maxhealth|stat ID> <0-1000> [player]", playerArg = 3 }, function(target, stat, value)
+    local id = stat and (STAT_NAMES[stat:lower()] or tonumber(stat))
+    value = tonumber(value)
+    if not id or not value or value < 0 or value > 1000 then return end
+    if not setPedStat(target, id, value) then return ("Stat %s can't be set."):format(stat) end
+    if id == 24 then setElementHealth(target, maxHealth(target)) end
+    local saved = false
+    for _, s in ipairs(STATS) do saved = saved or s == id end
+    return ("%s's stat %s is now %d%s."):format(getPlayerName(target), stat, getPedStat(target, id),
+        saved and "" or " (not saved: only fat, stamina, muscle and max health persist)")
+end)
+
 -- Console-only: round-trips a record through the database and checks the restart data.
 addCommandHandler("playertest", function(source)
     if getElementType(source) ~= "console" then return end

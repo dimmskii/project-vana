@@ -18,7 +18,8 @@ PlayerConfig = {
     saveIntervalMs = 60000,
 
     -- Rights our admin commands need, granted to the Admin ACL on start (restricted commands).
-    adminRights = { "command.traffic", "command.peds", "command.wanted", "command.shoppoint" },
+    adminRights = { "command.traffic", "command.peds", "command.wanted", "command.shoppoint",
+                    "command.setmoney", "command.addmoney", "command.setstat" },
 
     -- ACL groups players belong to, by MTA serial (their auto-login account is named after it). Applied
     -- to the ACL whenever vana-player starts, so it survives the server rewriting acl.xml.
