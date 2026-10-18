@@ -54,9 +54,11 @@ Keep the file names in upper case; the Linux server is case-sensitive. Check the
 Inside `<config>`, replace the stock `<resource>` lines with:
 
 ```xml
+<resource src="vana-map" startup="1" protected="0" />
 <resource src="vana-paths" startup="1" protected="0" />
 <resource src="vana-lights" startup="1" protected="0" />
 <resource src="vana-population" startup="1" protected="0" />
+<resource src="vana-vehicles" startup="1" protected="0" />
 <resource src="vana-traffic" startup="1" protected="0" />
 <resource src="vana-peds" startup="1" protected="0" />
 <resource src="vana-parked" startup="1" protected="0" />
@@ -64,6 +66,7 @@ Inside `<config>`, replace the stock `<resource>` lines with:
 <resource src="vana-interiors" startup="1" protected="0" />
 <resource src="vana-shops" startup="1" protected="0" />
 <resource src="vana-gym" startup="1" protected="0" />
+<resource src="vana-activities" startup="1" protected="0" />
 <resource src="vana-player" startup="1" protected="0" />
 <resource src="vana-core" startup="1" protected="0" />
 ```
@@ -119,11 +122,19 @@ tools/srv.sh cmd "playertest"      # player database round trip, restart points
 tools/srv.sh cmd "interiortest"    # entrances pair up
 tools/srv.sh cmd "shoptest"        # shop stock and prices
 tools/srv.sh cmd "gymtest"         # gym equipment and the hourly cap
+tools/srv.sh cmd "vehicletest"     # kept cars: snapshots, lists, persistence, fuel, radio
 tools/srv.sh log 50
 tools/srv.sh stop
 ```
 
 Console self-test commands only run from the server console.
+
+## Linting
+
+`tools/lint.sh [resource ...]` checks every script with `luac5.1` and `luacheck` (Ubuntu:
+`sudo apt install lua5.1 lua-check`). It knows MTA's client and server functions
+(`tools/luacheck/mta-*.txt`: the pinned Neon API stubs plus the functions Neon's luadefs register)
+and each resource's own globals, so it reports typos, stray globals and dead code.
 
 ## Re-seeding config (optional)
 
