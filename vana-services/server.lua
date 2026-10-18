@@ -244,7 +244,8 @@ local function destroyResponder(r)
     for _, ped in ipairs(r.crew) do
         if isElement(ped) then destroyElement(ped) end
     end
-    if isElement(r.vehicle) then destroyElement(r.vehicle) end
+    -- A car a player has been in is remembered by vana-vehicles: it stays.
+    if isElement(r.vehicle) and not getElementData(r.vehicle, "vana:kept") then destroyElement(r.vehicle) end
 end
 
 -- A road node out of sight of every player, between dispatchMin and dispatchMax from (x, y).
@@ -506,7 +507,7 @@ end
 local function clearRoadblock(i)
     local rb = table.remove(roadblocks, i)
     for _, e in ipairs(rb.elements) do
-        if isElement(e) then destroyElement(e) end
+        if isElement(e) and not getElementData(e, "vana:kept") then destroyElement(e) end
     end
 end
 

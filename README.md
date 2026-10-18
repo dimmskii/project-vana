@@ -23,6 +23,7 @@ Start here:
 | [docs/map.md](docs/map.md) | The shared map: publishing points, categories, blips |
 | [docs/activities.md](docs/activities.md) | Per-player activities ported from main.scm: the framework, burglary and the rest |
 | [docs/traffic.md](docs/traffic.md) | Traffic, pedestrians and the AI actor architecture: Lua decides, the engine executes |
+| [docs/vehicles.md](docs/vehicles.md) | Kept cars (registry and persistence), fuel, live radio |
 
 ## Resources
 
@@ -40,5 +41,6 @@ Start here:
 | `vana-gym` | Gym equipment workouts: stamina, muscle, fat |
 | `vana-activities` | Per-player activities: burglary, dating, side jobs, schools, races, minigames |
 | `vana-map` | Map points and radar blips for every resource (categories, icons, ranges) |
+| `vana-vehicles` | Vehicle registry and exact persistence, fuel, live car radio |
 | `vana-traffic` | Road traffic: server-planned routes and light stops, driven by native drive-to tasks |
 | `vana-peds` | Ambient pedestrians: server-planned walks and road crossings, native follow-route tasks and event reactions |

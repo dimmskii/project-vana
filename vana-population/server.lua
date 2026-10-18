@@ -31,6 +31,12 @@ function getPersonality(model)
     return Population.personality(model)
 end
 
+-- A driver's favourite stations (MTA radio channels), as CPed::SetRadioStation picks from.
+function getPedRadio(model)
+    local ped = PopData.peds[model]
+    return ped and ped.radio[1], ped and ped.radio[2]
+end
+
 function getPersonalityRules()
     return Personalities
 end

@@ -98,8 +98,11 @@ function Session:disown(element)
     return element
 end
 
+-- Mission vehicles go with the session: vana-vehicles doesn't remember them ("vana:managed").
 function Session:vehicle(model, x, y, z, rz)
-    return self:own(createVehicle(model, x, y, z, 0, 0, rz or 0))
+    local vehicle = createVehicle(model, x, y, z, 0, 0, rz or 0)
+    if vehicle then setElementData(vehicle, "vana:managed", true, false) end
+    return self:own(vehicle)
 end
 
 function Session:ped(model, x, y, z, rz)

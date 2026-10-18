@@ -306,6 +306,7 @@ setTimer(function()
         local car = rewardCars[i]
         if wanted and (not car or not isElement(car) or isVehicleBlown(car)) then
             rewardCars[i] = createVehicle(r[1], r[2], r[3], r[4] + 1, 0, 0, r[5])
+            if rewardCars[i] then setElementData(rewardCars[i], "vana:managed", true, false) end
         elseif not wanted and car and isElement(car) and not getVehicleOccupant(car) then
             destroyElement(car)
             rewardCars[i] = nil

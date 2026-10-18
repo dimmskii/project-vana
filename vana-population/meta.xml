@@ -15,6 +15,7 @@
     <export function="pickCar" type="server" />
     <export function="getPersonality" type="server" />
     <export function="getPersonalityRules" type="server" />
+    <export function="getPedRadio" type="server" />
     <export function="getDropRules" type="server" />
     <export function="pickParkedCar" type="server" />
     <export function="pickCompanion" type="server" />

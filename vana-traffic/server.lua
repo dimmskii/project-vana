@@ -80,6 +80,11 @@ local function releasePed(ped, spec, encounter)
     released[ped] = { kind = spec.kind, gang = spec.gang, personality = spec.personality, encounter = encounter }
 end
 
+-- A car a player has been in is remembered by vana-vehicles and must never be cleaned up here.
+local function kept(vehicle)
+    return getElementData(vehicle, "vana:kept") ~= false and getElementData(vehicle, "vana:kept") ~= nil
+end
+
 -- keepElements: leave vehicle and occupants in the world (occupants still inside are told to get out).
 local function removeUnit(unit, keepElements, encounter)
     units[unit.vehicle] = nil
@@ -105,7 +110,13 @@ local function removeUnit(unit, keepElements, encounter)
         for _, o in ipairs(occupants(unit)) do
             if isElement(o.ped) then destroyElement(o.ped) end
         end
-        if isElement(unit.vehicle) then destroyElement(unit.vehicle) end
+        if isElement(unit.vehicle) and kept(unit.vehicle) then
+            -- Remembered: it stays where it is, driverless, out of everyone's sight.
+            setElementSyncer(unit.vehicle, true)
+            setVehicleEngineState(unit.vehicle, false)
+        elseif isElement(unit.vehicle) then
+            destroyElement(unit.vehicle)
+        end
     end
 end
 
@@ -154,6 +165,11 @@ local function startUnit(vehicle, ped, driverSpec, passengers, kind, gang, route
     }
     -- Server-created vehicles start with the engine off, and a native driver can't move them then.
     setVehicleEngineState(vehicle, true)
+    -- The driver's favourite station, as vanilla (vana-vehicles).
+    local res = getResourceFromName("vana-vehicles")
+    if res and getResourceState(res) == "running" and isElement(ped) then
+        pcall(function() exports["vana-vehicles"]:assignRadio(vehicle, getElementModel(ped)) end)
+    end
     setElementData(vehicle, "vana:trafficCar", true)
     units[vehicle] = unit
     setOwner(unit, owner)
@@ -310,7 +326,7 @@ setTimer(function()
         else
             local x, y, z = getElementPosition(element)
             local occupied = getElementType(element) == "vehicle" and next(getVehicleOccupants(element) or {})
-            if not occupied and not nearestPlayer(x, y, z, players, CONFIG.despawn) then
+            if not occupied and not nearestPlayer(x, y, z, players, CONFIG.despawn) and not (getElementType(element) == "vehicle" and kept(element)) then
                 released[element] = nil
                 destroyElement(element)
             end

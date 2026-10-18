@@ -62,6 +62,10 @@ built, so ambient traffic and scripted actors behave alike.
   fight, jack, honk), and occupants joining the pedestrian population on foot.
 - **Release:** jacked, wrecked or killed units are released to the world. Released elements are
   destroyed once no player is near.
+- **Kept cars:** a car a player has been in is remembered by `vana-vehicles` (see
+  [vehicles.md](vehicles.md)) and never destroyed here. A kept unit that despawns leaves its car
+  where it is, driverless, with the engine off.
+- **Radio:** a spawned car tunes to one of its driver's favourite stations (`peds.ide`).
 
 ## Pedestrians (`vana-peds`)
 

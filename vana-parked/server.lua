@@ -136,7 +136,8 @@ setTimer(function()
         end
     end
     for vehicle, since in pairs(abandoned) do
-        if not isElement(vehicle) then
+        if not isElement(vehicle) or getElementData(vehicle, "vana:kept") then
+            -- Gone, or remembered by vana-vehicles (which keeps it from now on).
             abandoned[vehicle] = nil
         elseif next(getVehicleOccupants(vehicle) or {}) then
             abandoned[vehicle] = now

@@ -1,0 +1,50 @@
+-- Radio data. Stations are MTA radio channels (1 Playback FM .. 11 WCTR, 0 off).
+
+-- Each station's stream archive (audio/streams), as indexed by playSFX("radio", stream, track).
+RadioStreams = { [1] = 4, [2] = 5, [3] = 6, [4] = 8, [5] = 9, [6] = 10, [7] = 11, [8] = 12, [9] = 13, [10] = 14, [11] = 15 }
+
+-- Tracks per stream archive, in TrakLkup.dat order (AA, ADVERTS, AMBIENCE, BEATS, CH, CO, CR, CUTSCENE,
+-- DS, HC, MH, MR, NJ, RE, RG, TK). The native radio's track IDs count through them in this order.
+RadioStreamTracks = { 66, 69, 40, 10, 130, 155, 156, 141, 179, 115, 152, 147, 130, 161, 170, 101 }
+
+-- Per model, from the engine's vehicle audio settings (gta-reversed, AEVehicleAudioEntity.VehicleAudioSettings.h):
+-- the radio type ("civilian" plays stations, "emergency" the police scanner, "special"/"disabled" none)
+-- and the station a car without a driver to pick one starts on.
+VehicleRadio = {
+    [400] = { "civilian", 8 }, [401] = { "civilian", 5 }, [402] = { "civilian", 7 }, [403] = { "civilian", 2 }, [404] = { "civilian", 9 }, [405] = { "civilian", 4 },
+    [406] = { "civilian", 2 }, [407] = { "emergency", 0 }, [408] = { "civilian", 3 }, [409] = { "civilian", 10 }, [410] = { "civilian", 4 }, [411] = { "civilian", 6 },
+    [412] = { "civilian", 6 }, [413] = { "civilian", 1 }, [414] = { "civilian", 2 }, [415] = { "civilian", 5 }, [416] = { "emergency", 0 }, [417] = { "civilian", 3 },
+    [418] = { "civilian", 11 }, [419] = { "civilian", 10 }, [420] = { "civilian", 8 }, [421] = { "civilian", 11 }, [422] = { "civilian", 7 }, [423] = { "civilian", 0 },
+    [424] = { "civilian", 6 }, [425] = { "civilian", 3 }, [426] = { "civilian", 8 }, [427] = { "emergency", 0 }, [428] = { "civilian", 4 }, [429] = { "civilian", 7 },
+    [430] = { "civilian", 7 }, [431] = { "civilian", 10 }, [432] = { "disabled", 0 }, [433] = { "disabled", 0 }, [434] = { "civilian", 1 }, [435] = { "special", 0 },
+    [436] = { "civilian", 8 }, [437] = { "civilian", 11 }, [438] = { "civilian", 4 }, [439] = { "civilian", 3 }, [440] = { "civilian", 1 }, [441] = { "special", 0 },
+    [442] = { "civilian", 0 }, [443] = { "civilian", 3 }, [444] = { "civilian", 7 }, [445] = { "civilian", 8 }, [446] = { "civilian", 3 }, [447] = { "civilian", 3 },
+    [448] = { "civilian", 9 }, [449] = { "disabled", 0 }, [450] = { "special", 0 }, [451] = { "civilian", 5 }, [452] = { "civilian", 3 }, [453] = { "civilian", 3 },
+    [454] = { "civilian", 9 }, [455] = { "civilian", 3 }, [456] = { "civilian", 2 }, [457] = { "civilian", 2 }, [458] = { "civilian", 11 }, [459] = { "civilian", 1 },
+    [460] = { "civilian", 8 }, [461] = { "civilian", 7 }, [462] = { "civilian", 10 }, [463] = { "civilian", 3 }, [464] = { "special", 0 }, [465] = { "special", 0 },
+    [466] = { "civilian", 6 }, [467] = { "civilian", 4 }, [468] = { "civilian", 2 }, [469] = { "civilian", 3 }, [470] = { "civilian", 3 }, [471] = { "civilian", 2 },
+    [472] = { "emergency", 0 }, [473] = { "civilian", 8 }, [474] = { "civilian", 6 }, [475] = { "civilian", 10 }, [476] = { "civilian", 3 }, [477] = { "civilian", 5 },
+    [478] = { "civilian", 2 }, [479] = { "civilian", 9 }, [480] = { "civilian", 8 }, [481] = { "special", 0 }, [482] = { "civilian", 6 }, [483] = { "civilian", 9 },
+    [484] = { "civilian", 3 }, [485] = { "civilian", 9 }, [486] = { "disabled", 0 }, [487] = { "civilian", 3 }, [488] = { "civilian", 3 }, [489] = { "civilian", 3 },
+    [490] = { "emergency", 0 }, [491] = { "civilian", 4 }, [492] = { "civilian", 6 }, [493] = { "civilian", 3 }, [494] = { "civilian", 7 }, [495] = { "civilian", 3 },
+    [496] = { "civilian", 5 }, [497] = { "emergency", 0 }, [498] = { "civilian", 6 }, [499] = { "civilian", 2 }, [500] = { "civilian", 11 }, [501] = { "special", 0 },
+    [502] = { "civilian", 3 }, [503] = { "civilian", 7 }, [504] = { "civilian", 2 }, [505] = { "civilian", 3 }, [506] = { "civilian", 8 }, [507] = { "civilian", 11 },
+    [508] = { "civilian", 9 }, [509] = { "special", 0 }, [510] = { "special", 0 }, [511] = { "civilian", 3 }, [512] = { "civilian", 3 }, [513] = { "civilian", 3 },
+    [514] = { "civilian", 3 }, [515] = { "civilian", 2 }, [516] = { "civilian", 10 }, [517] = { "civilian", 4 }, [518] = { "civilian", 1 }, [519] = { "civilian", 3 },
+    [520] = { "civilian", 3 }, [521] = { "civilian", 7 }, [522] = { "civilian", 5 }, [523] = { "emergency", 0 }, [524] = { "civilian", 3 }, [525] = { "civilian", 3 },
+    [526] = { "civilian", 8 }, [527] = { "civilian", 4 }, [528] = { "emergency", 0 }, [529] = { "civilian", 1 }, [530] = { "special", 0 }, [531] = { "disabled", 0 },
+    [532] = { "civilian", 2 }, [533] = { "civilian", 6 }, [534] = { "civilian", 6 }, [535] = { "civilian", 1 }, [536] = { "civilian", 6 }, [537] = { "disabled", 0 },
+    [538] = { "disabled", 0 }, [539] = { "civilian", 7 }, [540] = { "civilian", 1 }, [541] = { "civilian", 5 }, [542] = { "civilian", 9 }, [543] = { "civilian", 7 },
+    [544] = { "emergency", 0 }, [545] = { "civilian", 3 }, [546] = { "civilian", 8 }, [547] = { "civilian", 4 }, [548] = { "civilian", 3 }, [549] = { "civilian", 9 },
+    [550] = { "civilian", 8 }, [551] = { "civilian", 11 }, [552] = { "civilian", 2 }, [553] = { "civilian", 3 }, [554] = { "civilian", 3 }, [555] = { "civilian", 10 },
+    [556] = { "civilian", 3 }, [557] = { "civilian", 7 }, [558] = { "civilian", 3 }, [559] = { "civilian", 8 }, [560] = { "civilian", 6 }, [561] = { "civilian", 4 },
+    [562] = { "civilian", 8 }, [563] = { "civilian", 3 }, [564] = { "special", 0 }, [565] = { "civilian", 5 }, [566] = { "civilian", 1 }, [567] = { "civilian", 6 },
+    [568] = { "disabled", 0 }, [569] = { "disabled", 0 }, [570] = { "disabled", 0 }, [571] = { "civilian", 7 }, [572] = { "civilian", 2 }, [573] = { "civilian", 9 },
+    [574] = { "civilian", 1 }, [575] = { "civilian", 10 }, [576] = { "civilian", 6 }, [577] = { "civilian", 3 }, [578] = { "civilian", 1 }, [579] = { "civilian", 11 },
+    [580] = { "civilian", 11 }, [581] = { "civilian", 1 }, [582] = { "civilian", 11 }, [583] = { "civilian", 3 }, [584] = { "special", 0 }, [585] = { "civilian", 8 },
+    [586] = { "civilian", 2 }, [587] = { "civilian", 9 }, [588] = { "civilian", 3 }, [589] = { "civilian", 5 }, [590] = { "disabled", 0 }, [591] = { "special", 0 },
+    [592] = { "civilian", 3 }, [593] = { "civilian", 3 }, [594] = { "disabled", 0 }, [595] = { "emergency", 0 }, [596] = { "emergency", 0 }, [597] = { "emergency", 0 },
+    [598] = { "emergency", 0 }, [599] = { "emergency", 0 }, [600] = { "civilian", 6 }, [601] = { "emergency", 0 }, [602] = { "civilian", 6 }, [603] = { "civilian", 1 },
+    [604] = { "civilian", 1 }, [605] = { "civilian", 3 }, [606] = { "disabled", 0 }, [607] = { "disabled", 0 }, [608] = { "disabled", 0 }, [609] = { "civilian", 6 },
+    [610] = { "disabled", 0 }, [611] = { "disabled", 0 },
+}

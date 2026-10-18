@@ -128,6 +128,7 @@ addEventHandler("onResourceStart", resourceRoot, function()
             if not car or not isElement(car) or isVehicleBlown(car) or getDistanceBetweenPoints2D(city.base[1], city.base[2], getElementPosition(car)) > 50 and not getVehicleOccupant(car) then
                 if car and isElement(car) and not getVehicleOccupant(car) then destroyElement(car) end
                 parked[i] = createVehicle(city.bike, city.base[1] + 3, city.base[2] + 3, city.base[3] + 1)
+                if parked[i] then setElementData(parked[i], "vana:managed", true, false) end
             end
         end
     end, 10000, 0)

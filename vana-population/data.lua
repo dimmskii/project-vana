@@ -74,7 +74,9 @@ function PopData.load()
     local pedFields, pedIds, pedCount = parseIde(readFile("data/peds.ide"), "peds")
     PopData.peds, PopData.pedIds, PopData.pedCount = {}, pedIds, pedCount
     for id, f in pairs(pedFields) do
-        PopData.peds[id] = { name = f[2], pedType = f[4], stat = f[5], race = raceOf(f[2]) }
+        -- radio1 / radio2: the favourite stations, 0-based (Playback FM = 0); MTA channels are one higher.
+        PopData.peds[id] = { name = f[2], pedType = f[4], stat = f[5], race = raceOf(f[2]),
+                             radio = { (tonumber(f[10]) or -1) + 1, (tonumber(f[11]) or -1) + 1 } }
     end
     local vehFields, vehIds, vehCount = parseIde(readFile("data/vehicles.ide"), "cars")
     PopData.vehicles, PopData.vehicleIds, PopData.vehicleCount = {}, vehIds, vehCount
