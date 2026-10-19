@@ -554,11 +554,16 @@ local function attacked(walker, attacker, weapon)
 end
 
 -- A ped we simulate was hurt (reported by its owner) by a player or another ped.
--- The owner's client gave up on a walk order (it never took, several times): a fresh route.
+-- The owner's client gave up on an order (it never took, several times): a fight is called off, a
+-- walk gets a fresh route.
 addEvent("vana-peds:stuck", true)
 addEventHandler("vana-peds:stuck", resourceRoot, function(ped)
     local walker = walkers[ped]
-    if not walker or walker.owner ~= client or walker.encounter then return end
+    if not walker or walker.owner ~= client then return end
+    if walker.encounter then
+        debugLog(("ped %s: its %s never took on %s's client: called off"):format(tostring(ped):sub(-8), walker.encounter.mode, getPlayerName(client)))
+        return endEncounter(walker)
+    end
     debugLog(("ped %s: its walk never took on %s's client: a new route"):format(tostring(ped):sub(-8), getPlayerName(client)))
     walker.target = nil
     walker.route = routeFromHere(ped) or walker.route

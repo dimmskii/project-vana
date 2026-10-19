@@ -139,11 +139,17 @@ end
 
 setTimer(function()
     for ped, cmd in pairs(commands) do
-        if (cmd.mode == "fight" or cmd.mode == "arrest") and ((cmd.reissued or 0) < 5 or cmd.approaching) and isElement(ped) and isElementStreamedIn(ped)
+        if (cmd.mode == "fight" or cmd.mode == "arrest") and isElement(ped) and isElementStreamedIn(ped)
             and isElementSyncer(ped) and not isPedDead(ped) and not isBusy(ped) then
-            -- Running towards a target not streamed in yet doesn't use up the tries.
-            if not cmd.approaching then cmd.reissued = (cmd.reissued or 0) + 1 end
-            apply(ped)
+            if (cmd.reissued or 0) < 5 or cmd.approaching then
+                -- Running towards a target not streamed in yet doesn't use up the tries.
+                if not cmd.approaching then cmd.reissued = (cmd.reissued or 0) + 1 end
+                apply(ped)
+            elseif not getPedTask(ped, "primary", 3) and not cmd.reported then
+                -- Still idle after every try: the server calls the fight off and the ped walks on.
+                cmd.reported = true
+                triggerServerEvent("vana-peds:stuck", resourceRoot, ped)
+            end
         end
     end
 end, 3000, 0)

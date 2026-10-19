@@ -113,7 +113,8 @@ Road crossings use the intersection flags on the links:
   just standing at its end), or busy with a reaction (falling, getting up, reacting, fleeing).
   Otherwise, after 0.8 s it gives the order again; after 6 tries in vain (a ped that's blocked: GTA
   ends a walk short when it can't get through) it asks the server for a fresh route. A fight against
-  a target the owner hasn't streamed in runs to where the target is until it can attack. vana-services' clients watch
+  a target the owner hasn't streamed in runs to where the target is until it can attack; one still
+  idle after its 5 re-issues is called off and the ped walks on. vana-services' clients watch
   their crews' walk, get-in and get-out orders the same way (5 tries in 25 s), clearing an old walk
   the same way.
 - **The target can't be reached:** not moving 1.5 m in 8 s, the server sends the target again, and
