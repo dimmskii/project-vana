@@ -197,3 +197,10 @@ The radio's track data (`vana-radio/config/radio_data.lua`: track IDs, durations
 ```sh
 python3 tools/seed/seed_radio.py "/path/to/GTA San Andreas" "vana-radio/config"
 ```
+
+The mod garages' part IDs and colour palette (`vana-shops/config/carmods_data.lua`; see
+[shops.md](shops.md)) come from `veh_mods.ide` and `carcols.dat`:
+
+```sh
+python3 tools/seed/seed_carmods.py "/path/to/GTA San Andreas" "vana-shops/config"
+```

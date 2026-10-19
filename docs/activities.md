@@ -311,8 +311,8 @@ All outcomes and money are decided on the server; the client draws the panels.
     PERFECT. The rating (`DNC_002`-`DNC_004`) is revised every 4 judged beats: four perfects raise it
     to GOOD, then PERFECT; more good than bad keeps or makes it GOOD; otherwise it drops a step.
   - The feedback lines are the game's (`DNC_005`-`DNC_025`, three sets in turn), sent by the server.
-- **Lowrider contest** (`LOWR`, by the Unity Station car park): drive in with a lowrider with
-  hydraulics, wager $50-$1000 (vanilla), and play the routine against the opposition: its points per
+- **Lowrider contest** (`LOWR`, by the Unity Station car park): drive in with any car with
+  hydraulics (ours: vanilla wants a lowrider; the mod garages fit hydraulics to anything), wager $50-$1000 (vanilla), and play the routine against the opposition: its points per
   beat are a roll by its skill (1 to 5, `LOWGAME`'s table), which rises with every contest by 4 x
   wager / $1000 and stays (kept per player). Outscore it for double. Vanilla alternates beat tracks
   13 and 0; so does the contest's station. Ours: no opposition car on the spot.

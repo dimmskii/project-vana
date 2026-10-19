@@ -31,6 +31,10 @@ PlayerConfig = {
         -- Inside only: vanilla's missions open these houses' front doors.
         sweet = "sweets.in", ryder = "ryders.in", ogloc = "oglocs.in",
         binco = "clothgp", ammu = "ammun1", gym = "gym1",
+        -- The mod garages' doorways (vana-shops' config/garages.lua): stop there in a vehicle to go in.
+        transfender = { 1042.01, -1019.93, 31.13 }, ["transfender.sf"] = { -1935.53, 247.03, 33.56 },
+        ["transfender.lv"] = { 2387.08, 1050.51, 9.81 }, locolow = { 2645.11, -2045.75, 12.61 },
+        waa = { -2723.85, 217.8, 3.59 },
     },
 
     -- ACL groups players belong to, by MTA serial (their auto-login account is named after it). Applied

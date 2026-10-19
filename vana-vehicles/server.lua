@@ -57,6 +57,13 @@ local function snapshot(vehicle)
     end
     local trailer = getVehicleTowedByVehicle(vehicle)
     s.trailer = trailer and vids[trailer] or nil
+    -- In a mod garage (vana-shops): kept as it will leave, in the doorway with what was bought, not
+    -- in the garage's own dimension wearing whatever is being tried on.
+    local garage = getElementData(vehicle, "vana:garage")
+    if type(garage) == "table" then
+        s.pos, s.rot, s.interior, s.dimension, s.frozen = garage.pos, { 0, 0, garage.heading }, 0, 0, false
+        s.upgrades, s.paintjob, s.colors, s.locked = garage.upgrades, garage.paintjob, garage.colors, garage.locked
+    end
     return s
 end
 

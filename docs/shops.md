@@ -136,6 +136,43 @@ Walk up to one and press enter/exit (F) to buy. The server checks the distance a
 the money, adds health and fat and plays the vanilla `VENDING` animation. Prices and effects are in
 `config/vendorkinds.lua`; they're ours, since vanilla's are inside the compiled vendor scripts.
 
+### Mod garages
+
+Vanilla's `CARMOD` (`garages.lua`, `config/garages.lua`): the three Transfenders (LS, SF, LV), Loco
+Low Co. (LS) and Wheel Arch Angels (SF), all open.
+
+- **Getting in:** stop in a garage's doorway (4 m) driving a vehicle. It's taken into the garage
+  (vanilla's interior and spot for that garage), alone: each customer gets their own dimension.
+  With `exclusive` on (it is), one customer per doorway at a time; anyone else is told "Somebody is
+  already in the garage." Backspace at the top of the menu drives out, back in the doorway facing
+  out (vanilla's headings). Quitting, dying or the car being destroyed ends it at once.
+- **What gets in (ours):** any car, monster truck or quad, at any garage, emergency and big vehicles
+  included. Vanilla refuses those, and sends lowriders only to Loco Low Co. and street racers only to
+  Wheel Arch Angels. Bikes, boats, aircraft and trains get "You cannot mod this vehicle." (`MODNO2`).
+- **Stock:** each garage's `shopping.dat` list (`carmod1` normal cars, `carmod2` lowriders,
+  `carmod3` street racers), priced from its `CarMods` section, named by the game's text (each item's
+  name tag). Ours, at every garage: all 17 wheels, nitro (2x, 5x, 10x), hydraulics, the stereo, and
+  the 20 spoilers MTA fits to any car. Categories are MTA's upgrade slots. Parts this vehicle can't
+  take (`getVehicleCompatibleUpgrades`) are shown greyed out, `N/A`.
+- **Trying on:** the highlighted part, colour or paintjob is put on the car (server-side, so the car
+  really changes); leaving takes off whatever wasn't bought. The camera frames the category's part
+  of the car (front, rear, side, roof).
+- **Colours and paintjobs:** $150 each (vanilla). Colour 1 and 2 from the 127-colour palette
+  (`carcols.dat`, seeded) in a grid; paintjobs for the 13 models that have them (vana-vehicles'
+  `paintjobs`).
+- **Messages:** the game's: "You don't have enough money to buy this item." (`SHOPNO`), "Your
+  vehicle is already this color." (`COLORNO`), "You have already bought this item!" (`CLTHNO2`).
+- **Kept:** bought parts, colours and paintjobs stay on the car, and `vana-vehicles` persists them
+  with the rest of it. A car saved while in a garage is saved as it will leave: in the doorway, with
+  what was bought (element data `vana:garage`), not in the garage's dimension with a part on trial.
+- **Data:** `config/carmods_data.lua` (part IDs from `veh_mods.ide`, the palette from `carcols.dat`)
+  is seeded by `tools/seed/seed_carmods.py`; stock and prices are read from `data/shopping.dat`.
+- `garagetest` (console): the stock resolves, a Blade's menu builds, a police car takes the
+  universal parts. Warp names for the doorways: `transfender`, `transfender.sf`, `transfender.lv`,
+  `locolow`, `waa`.
+- **Not done:** vanilla's garage door and per-part camera moves, the bonnet ornaments 1111/1112
+  (MTA refuses them on every model).
+
 ## Gym (`vana-gym`)
 
 The equipment is seeded from `gta_int.img` by `tools/seed/seed_gym.py` into
