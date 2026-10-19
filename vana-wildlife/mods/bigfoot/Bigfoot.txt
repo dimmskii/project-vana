@@ -1,0 +1,486 @@
+// This file was decompiled using SASCM.ini published by GTAG (http://gtag.gtagaming.com/opcode-database) on 6.14.2013
+{$CLEO .cs}
+
+//-------------MAIN---------------
+0@ = -1 
+16@ = 0 
+
+:NONAME_14
+wait 250 
+if 
+   Player.Defined($PLAYER_CHAR)
+else_jump @NONAME_14 
+if and
+  0@ == -1 
+  $ONMISSION == 0 
+00A3:   actor $PLAYER_ACTOR sphere 0 in_rectangle_cornerA -2815.2 -2911.9 cornerB 7.9 -748.38 
+else_jump @NONAME_14 
+0A8D: 6@ = read_memory 13112092 size 4 virtual_protect 0 
+0A8D: 7@ = read_memory 13112096 size 4 virtual_protect 0 
+if or
+  6@ == 9 
+  7@ == 9 
+else_jump @NONAME_163 
+0209: 5@ = random_int_in_ranges 11 38 
+NONAME_262() 
+jump @NONAME_179 
+
+:NONAME_163
+0209: 5@ = random_int_in_ranges 1 10 
+NONAME_262() 
+
+:NONAME_179
+if 
+80FE:   not actor $PLAYER_ACTOR sphere 0 in_sphere 8@ 9@ 10@ radius 160.0 160.0 160.0 
+else_jump @NONAME_14 
+
+:NONAME_221
+wait 0 
+if 
+823D:   not special_actor 1 loaded 
+else_jump @NONAME_2928 
+023C: load_special_actor 'BIGFOOT' as 1 // models 290-299 
+038B: load_requested_models 
+jump @NONAME_221 
+
+:NONAME_262
+if 
+  5@ == 1 
+else_jump @NONAME_310 
+8@ = -451.9473 
+9@ = -2676.257 
+10@ = 155.9322 
+
+:NONAME_310
+if 
+  5@ == 2 
+else_jump @NONAME_358 
+8@ = -684.2419 
+9@ = -2166.613 
+10@ = 23.1425 
+
+:NONAME_358
+if 
+  5@ == 3 
+else_jump @NONAME_406 
+8@ = -946.9445 
+9@ = -2476.911 
+10@ = 100.3482 
+
+:NONAME_406
+if 
+  5@ == 4 
+else_jump @NONAME_454 
+8@ = -469.4297 
+9@ = -2473.622 
+10@ = 114.7853 
+
+:NONAME_454
+if 
+  5@ == 5 
+else_jump @NONAME_502 
+8@ = -523.6559 
+9@ = -1997.208 
+10@ = 48.2473 
+
+:NONAME_502
+if 
+  5@ == 6 
+else_jump @NONAME_550 
+8@ = -1658.582 
+9@ = -2037.045 
+10@ = 64.1887 
+
+:NONAME_550
+if 
+  5@ == 7 
+else_jump @NONAME_598 
+8@ = -1732.982 
+9@ = -2458.473 
+10@ = 26.5202 
+
+:NONAME_598
+if 
+  5@ == 8 
+else_jump @NONAME_646 
+8@ = -1467.332 
+9@ = -2374.314 
+10@ = 17.2276 
+
+:NONAME_646
+if 
+  5@ == 9 
+else_jump @NONAME_694 
+8@ = -1841.224 
+9@ = -2003.086 
+10@ = 81.8208 
+
+:NONAME_694
+if 
+  5@ == 10 
+else_jump @NONAME_742 
+8@ = -1793.087 
+9@ = -2163.001 
+10@ = 70.2564 
+
+:NONAME_742
+if 
+  5@ == 11 
+else_jump @NONAME_820 
+8@ = -462.252 
+9@ = -2469.112 
+10@ = 115.4621 
+21@ = -304.5569 
+22@ = -2476.047 
+23@ = 88.3139 
+
+:NONAME_820
+if 
+  5@ == 12 
+else_jump @NONAME_898 
+8@ = -489.009 
+9@ = -2397.145 
+10@ = 107.8487 
+21@ = -520.8712 
+22@ = -2542.476 
+23@ = 99.5229 
+
+:NONAME_898
+if 
+  5@ == 13 
+else_jump @NONAME_976 
+8@ = -477.294 
+9@ = -2657.041 
+10@ = 157.0848 
+21@ = -459.3889 
+22@ = -2534.601 
+23@ = 115.7531 
+
+:NONAME_976
+if 
+  5@ == 14 
+else_jump @NONAME_1054 
+8@ = -514.2096 
+9@ = -2742.506 
+10@ = 144.2368 
+21@ = -584.1004 
+22@ = -2598.541 
+23@ = 135.7093 
+
+:NONAME_1054
+if 
+  5@ == 15 
+else_jump @NONAME_1132 
+8@ = -663.3182 
+9@ = -2679.168 
+10@ = 103.8967 
+21@ = -638.2563 
+22@ = -2544.334 
+23@ = 60.3017 
+
+:NONAME_1132
+if 
+  5@ == 16 
+else_jump @NONAME_1210 
+8@ = -639.6272 
+9@ = -2545.208 
+10@ = 60.2541 
+21@ = -564.6138 
+22@ = -2485.32 
+23@ = 66.1581 
+
+:NONAME_1210
+if 
+  5@ == 17 
+else_jump @NONAME_1288 
+8@ = -547.9156 
+9@ = -2517.778 
+10@ = 80.66 
+21@ = -610.3633 
+22@ = -2457.7 
+23@ = 47.3567 
+
+:NONAME_1288
+if 
+  5@ == 18 
+else_jump @NONAME_1366 
+8@ = -317.2962 
+9@ = -2440.651 
+10@ = 86.3692 
+21@ = -409.4287 
+22@ = -2287.78 
+23@ = 62.6925 
+
+:NONAME_1366
+if 
+  5@ == 19 
+else_jump @NONAME_1444 
+8@ = -679.631 
+9@ = -2159.351 
+10@ = 23.617 
+21@ = -574.1 
+22@ = -2057.83 
+23@ = 50.7582 
+
+:NONAME_1444
+if 
+  5@ == 20 
+else_jump @NONAME_1522 
+8@ = -546.8349 
+9@ = -2072.523 
+10@ = 57.1128 
+21@ = -401.4994 
+22@ = -1974.099 
+23@ = 25.7561 
+
+:NONAME_1522
+if 
+  5@ == 21 
+else_jump @NONAME_1600 
+8@ = -513.267 
+9@ = -1964.866 
+10@ = 41.362 
+21@ = -643.5073 
+22@ = -1940.753 
+23@ = 21.4161 
+
+:NONAME_1600
+if 
+  5@ == 22 
+else_jump @NONAME_1678 
+8@ = -644.1823 
+9@ = -1927.875 
+10@ = 17.6081 
+21@ = -553.3032 
+22@ = -2006.096 
+23@ = 49.376 
+
+:NONAME_1678
+if 
+  5@ == 23 
+else_jump @NONAME_1756 
+8@ = -974.3627 
+9@ = -2192.965 
+10@ = 42.1524 
+21@ = -797.7552 
+22@ = -2199.637 
+23@ = 22.8401 
+
+:NONAME_1756
+if 
+  5@ == 24 
+else_jump @NONAME_1834 
+8@ = -1038.679 
+9@ = -2527.546 
+10@ = 72.6997 
+21@ = -1075.666 
+22@ = -2394.082 
+23@ = 49.3458 
+
+:NONAME_1834
+if 
+  5@ == 25 
+else_jump @NONAME_1912 
+8@ = -589.759 
+9@ = -2463.889 
+10@ = 55.147 
+21@ = -494.0003 
+22@ = -2342.486 
+23@ = 60.6649 
+
+:NONAME_1912
+if 
+  5@ == 26 
+else_jump @NONAME_1990 
+8@ = -446.0378 
+9@ = -2382.964 
+10@ = 78.3557 
+21@ = -362.6156 
+22@ = -2358.778 
+23@ = 86.0646 
+
+:NONAME_1990
+if 
+  5@ == 27 
+else_jump @NONAME_2068 
+8@ = -918.6938 
+9@ = -2720.578 
+10@ = 118.53 
+21@ = -787.1591 
+22@ = -2625.113 
+23@ = 84.9529 
+
+:NONAME_2068
+if 
+  5@ == 28 
+else_jump @NONAME_2146 
+8@ = -641.6958 
+9@ = -1939.308 
+10@ = 21.5011 
+21@ = -532.6124 
+22@ = -2009.065 
+23@ = 50.1552 
+
+:NONAME_2146
+if 
+  5@ == 29 
+else_jump @NONAME_2224 
+8@ = -572.2703 
+9@ = -2242.155 
+10@ = 26.8519 
+21@ = -640.0417 
+22@ = -2426.291 
+23@ = 31.4694 
+
+:NONAME_2224
+if 
+  5@ == 30 
+else_jump @NONAME_2302 
+8@ = -105.5834 
+9@ = -2599.696 
+10@ = 70.0079 
+21@ = -128.5498 
+22@ = -2749.838 
+23@ = 64.4832 
+
+:NONAME_2302
+if 
+  5@ == 31 
+else_jump @NONAME_2380 
+8@ = -87.2885 
+9@ = -2738.594 
+10@ = 70.5429 
+21@ = -134.132 
+22@ = -2575.268 
+23@ = 57.9698 
+
+:NONAME_2380
+if 
+  5@ == 32 
+else_jump @NONAME_2458 
+8@ = -1457.527 
+9@ = -2533.345 
+10@ = 60.1635 
+21@ = -1375.687 
+22@ = -2379.16 
+23@ = 33.8783 
+
+:NONAME_2458
+if 
+  5@ == 33 
+else_jump @NONAME_2536 
+8@ = -1522.314 
+9@ = -2088.602 
+10@ = 29.8223 
+21@ = -1638.745 
+22@ = -2098.836 
+23@ = 39.9588 
+
+:NONAME_2536
+if 
+  5@ == 34 
+else_jump @NONAME_2614 
+8@ = -1795.83 
+9@ = -2227.445 
+10@ = 71.8805 
+21@ = -1705.797 
+22@ = -2230.374 
+23@ = 44.7832 
+
+:NONAME_2614
+if 
+  5@ == 35 
+else_jump @NONAME_2692 
+8@ = -1889.474 
+9@ = -2009.915 
+10@ = 80.042 
+21@ = -1738.436 
+22@ = -2026.09 
+23@ = 69.1133 
+
+:NONAME_2692
+if 
+  5@ == 36 
+else_jump @NONAME_2770 
+8@ = -1602.242 
+9@ = -2211.599 
+10@ = 23.5317 
+21@ = -1570.16 
+22@ = -2370.899 
+23@ = 34.3084 
+
+:NONAME_2770
+if 
+  5@ == 37 
+else_jump @NONAME_2848 
+8@ = -1329.914 
+9@ = -2233.906 
+10@ = 29.6537 
+21@ = -1359.687 
+22@ = -2357.69 
+23@ = 36.135 
+
+:NONAME_2848
+if 
+  5@ == 38 
+else_jump @NONAME_2926 
+8@ = -1365.292 
+9@ = -2074.084 
+10@ = 19.0865 
+21@ = -1282.466 
+22@ = -2022.393 
+23@ = 18.0593 
+
+:NONAME_2926
+return 
+
+:NONAME_2928
+02CE: 10@ = ground_z_at 8@ 9@ 2000.0 
+0@ = Actor.Create(Player4, #SPECIAL01, 8@, 9@, 10@)
+05D3: AS_actor 0@ goto_point 21@ 22@ 23@ mode 4 time 999999 ms // versionA 
+0208: 17@ = random_float_in_ranges 0.0 360.0 
+Actor.Angle(0@) = 17@
+0446: set_actor 0@ dismemberment_possible 0 
+Actor.Health(0@) = 1000
+07BC: set_actor 0@ decision_maker_to 32 // AS_pack_version 
+04D8: set_actor 0@ drowns_in_water 0 
+0946: set_actor 0@ actions_uninterupted_by_weapon_fire 1 
+07FE: set_actor 0@ fighting_style_to 5 moves 0 
+03FE: set_actor 0@ money 0 
+Actor.SetWalkStyle(0@, "OLDMAN")
+
+:NONAME_3072
+wait 0 
+if 
+   Player.Defined($PLAYER_CHAR)
+else_jump @NONAME_3072 
+if 
+   Actor.Dead(0@)
+else_jump @NONAME_3138 
+Actor.RemoveReferences(0@)
+0296: unload_special_actor 1 
+0@ = -1 
+16@ = 0 
+jump @NONAME_3276 
+
+:NONAME_3138
+if or
+80FE:   not actor 0@ sphere 0 in_sphere 8@ 9@ 10@ radius 400.0 400.0 400.0 
+8104:   not actor $PLAYER_ACTOR near_actor 0@ radius 350.0 350.0 350.0 sphere 0 
+else_jump @NONAME_3228 
+Actor.DestroyWithFade(0@)
+0296: unload_special_actor 1 
+0@ = -1 
+16@ = 0 
+
+:NONAME_3228
+if and
+051A:   actor 0@ damaged_by_actor $PLAYER_ACTOR 
+  16@ == 0 
+else_jump @NONAME_3072 
+05E2: AS_actor 0@ kill_actor $PLAYER_ACTOR 
+16@ = 1 
+jump @NONAME_3072 
+
+:NONAME_3276
+jump @NONAME_14 

@@ -22,3 +22,6 @@
 *.db
 *.gxt
 *.GXT
+
+# Mod assets we use (not Rockstar's): committed, credited in docs/credits.md
+!vana-*/mods/**

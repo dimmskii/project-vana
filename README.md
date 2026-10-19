@@ -24,6 +24,7 @@ Start here:
 | [docs/activities.md](docs/activities.md) | Per-player activities ported from main.scm: the framework, burglary and the rest |
 | [docs/traffic.md](docs/traffic.md) | Traffic, pedestrians and the AI actor architecture: Lua decides, the engine executes |
 | [docs/vehicles.md](docs/vehicles.md) | Kept cars (registry and persistence), fuel, live radio |
+| [docs/credits.md](docs/credits.md) | Third-party mods we use (authors, sources, terms) and how mod content is handled |
 
 ## Resources
 
@@ -42,5 +43,6 @@ Start here:
 | `vana-activities` | Per-player activities: burglary, dating, side jobs, schools, races, minigames |
 | `vana-map` | Map points and radar blips for every resource (categories, icons, ranges) |
 | `vana-vehicles` | Vehicle registry and exact persistence, fuel, live car radio |
+| `vana-wildlife` | Creatures from community mods (Bigfoot); not started yet |
 | `vana-traffic` | Road traffic: server-planned routes and light stops, driven by native drive-to tasks |
 | `vana-peds` | Ambient pedestrians: server-planned walks and road crossings, native follow-route tasks and event reactions |
