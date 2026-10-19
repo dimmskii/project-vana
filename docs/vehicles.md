@@ -79,6 +79,34 @@ gauge above the radar stands in.
   with the car.
 - **Playing it, switching and the outside radio** are `vana-radio`'s: see [radio.md](radio.md).
 
+## Performance parts (`performance.lua`)
+
+Ours, sold at the mod garages after the vanilla parts (any car the garages take). A car's tune is
+element data `vana:tune` (category -> level, synced), kept with it like its colours (snapshot
+`tune`, also for a car saved mid-visit to a garage). Its handling is always worked out from the
+model's original handling (`getOriginalHandling`) with the levels' multipliers on top, so levels
+never compound and a rebalanced config reaches every car.
+
+| Category | Levels (price) | Scales the car's own |
+| --- | --- | --- |
+| Engine | stage 1 ($2500), 2 ($6000), 3 ($12000) | torque x1.10 / 1.20 / 1.32, top speed x1.04 / 1.08 / 1.12, rev inertia x0.95 / 0.90 / 0.85 |
+| Turbo | one ($20000), on top of any stage | torque x1.25, top speed x1.06; a whine |
+| Brakes | sport ($2000), race with ABS ($5000) | braking x1.2 / x1.4 |
+| Suspension | sport ($3000), race ($7000) | stiffness, damping, anti-dive; race also steering lock x1.05 |
+| Tyres | sport ($2500), race ($6000) | grip x1.08 / 1.16, sliding grip x1.04 / 1.08 |
+| Armour | armour ($8000), heavy ($18000) | damage taken x0.7 / 0.45, weight x1.05 / 1.12 |
+| Lightweight | kit ($7000) | weight x0.88, turn mass x0.9, drag x0.95 |
+| Drivetrain | AWD conversion ($9000) | all-wheel drive |
+
+- **The turbo's whine** (`turbo_client.lua`): every client plays a looped game sound on running
+  turbo cars within 60 m: GENRL bank 131 (the vehicle generic bank, global 138), sound 10 (the
+  Hydra's front jet; 29 is a generic whine), pitched from 0.75 to 1.6 with speed against the car's
+  own top speed, louder on the throttle. `/turbosound <bank> <sound>` auditions another, `off`
+  silences it (per player). The game's own engine sound is untouched.
+- **Traffic:** tuned street racers also roll performance parts (engine 1-2, a turbo now and then,
+  tyres, brakes).
+- `performancetest` (console): a car tuned fully and back gets exactly its model's handling again.
+
 ## Cleaning up (`/cleanvehicles`)
 
 Admin (`command.cleanvehicles`, granted to `Admin` by vana-player):

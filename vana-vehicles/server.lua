@@ -41,7 +41,7 @@ local function snapshot(vehicle)
         taxiLight = isVehicleTaxiLightOn(vehicle), landingGear = getVehicleLandingGearDown(vehicle),
         damageProof = isVehicleDamageProof(vehicle), frozen = isElementFrozen(vehicle), alpha = getElementAlpha(vehicle),
         fuel = getElementData(vehicle, "vana:fuel"), radio = getElementData(vehicle, "vana:radio"),
-        dashboard = getElementData(vehicle, "vana:dashboard"),
+        dashboard = getElementData(vehicle, "vana:dashboard"), tune = getElementData(vehicle, "vana:tune"),
         handling = {},
     }
     for i = 0, 6 do s.panels[i + 1] = getVehiclePanelState(vehicle, i) end
@@ -63,6 +63,7 @@ local function snapshot(vehicle)
     if type(garage) == "table" then
         s.pos, s.rot, s.interior, s.dimension, s.frozen = garage.pos, { 0, 0, garage.heading }, 0, 0, false
         s.upgrades, s.paintjob, s.colors, s.locked = garage.upgrades, garage.paintjob, garage.colors, garage.locked
+        s.tune = garage.tune
     end
     return s
 end
@@ -78,6 +79,8 @@ local function build(s)
     for _, upgrade in ipairs(s.upgrades or {}) do addVehicleUpgrade(vehicle, upgrade) end
     setVehicleHeadLightColor(vehicle, unpack(s.headlights))
     for key, value in pairs(s.handling or {}) do setVehicleHandling(vehicle, key, value) end
+    -- Performance parts: worked out again from the model (performance.lua), over the saved handling.
+    if s.tune then setTuneTable(vehicle, s.tune) end
     setElementHealth(vehicle, s.health)
     for i, state in ipairs(s.panels) do setVehiclePanelState(vehicle, i - 1, state) end
     for i, state in ipairs(s.doors) do setVehicleDoorState(vehicle, i - 1, state) end
@@ -504,6 +507,18 @@ addCommandHandler("vehicletest", function(source, _, mode)
     check(math.abs(s.health - t.health) < 0.5, "health round trip")
     check(toJSON(s.colors) == toJSON(t.colors) and toJSON(s.upgrades) == toJSON(t.upgrades), "colours and upgrades round trip")
     check(t.fuel == 12345 and t.radio == 4, "fuel and radio round trip")
+    -- Performance parts survive the round trip, and the handling comes back with them.
+    do
+        local c = createVehicle(411, 2495, -1690, -50)
+        setTuneTable(c, { engine = 2, turbo = 1 })
+        local sc = snapshot(c)
+        local rc = build(fromJSON(toJSON(sc)))
+        local same = rc and getTune(rc).engine == 2 and getTune(rc).turbo == 1
+            and math.abs(getVehicleHandling(rc).engineAcceleration - getVehicleHandling(c).engineAcceleration) < 0.01
+        check(same, "performance parts round trip")
+        destroyElement(c)
+        if rc then destroyElement(rc) end
+    end
     destroyElement(b)
 
     -- Lists: 12 cars through one (fake) serial keep the last C.registrySize, most recent first.

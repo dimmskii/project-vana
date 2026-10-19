@@ -48,6 +48,12 @@ function tuneRandomly(vehicle)
                 randomParts(vehicle, math.random(group.slots[1], group.slots[2]), group.wheelsOnly)
                 local paintjobs = VehicleConfig.paintjobs[model]
                 if paintjobs and group.paintjob and math.random() < group.paintjob then setVehiclePaintjob(vehicle, math.random(0, paintjobs - 1)) end
+                -- Performance parts (performance.lua): each category by its chance, a level from its range.
+                local tune = {}
+                for cat, roll in pairs(group.performance or {}) do
+                    if math.random() < roll[1] then tune[cat] = math.random(roll[2], roll[3]) end
+                end
+                if next(tune) then setTuneTable(vehicle, tune) end
             end
             break
         end
@@ -66,7 +72,7 @@ addCommandHandler("tuningtest", function(source)
     if getElementType(source) ~= "console" then return end
     local n, rates = 400, {}
     for _, model in ipairs({ 412, 420, 562, 445 }) do
-        local hyd, nitro, parts, pj = 0, 0, 0, 0
+        local hyd, nitro, parts, pj, turbo = 0, 0, 0, 0, 0
         for i = 1, n do
             local v = createVehicle(model, i * 4, 0, -100)
             tuneRandomly(v)
@@ -74,9 +80,11 @@ addCommandHandler("tuningtest", function(source)
                 if id == 1087 then hyd = hyd + 1 elseif id == 1008 or id == 1009 or id == 1010 then nitro = nitro + 1 else parts = parts + 1 end
             end
             if getVehiclePaintjob(v) ~= 3 then pj = pj + 1 end
+            if getTune(v).turbo then turbo = turbo + 1 end
             destroyElement(v)
         end
-        rates[#rates + 1] = ("%d: hydraulics %d%%, nitro %d%%, %.2f parts/car, paintjob %d%%"):format(model, 100 * hyd / n, 100 * nitro / n, parts / n, 100 * pj / n)
+        rates[#rates + 1] = ("%d: hydraulics %d%%, nitro %d%%, %.2f parts/car, paintjob %d%%, turbo %d%%"):format(model, 100 * hyd / n,
+            100 * nitro / n, parts / n, 100 * pj / n, 100 * turbo / n)
     end
     outputServerLog("[tuningtest] " .. table.concat(rates, "; "))
 end)

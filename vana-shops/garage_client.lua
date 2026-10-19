@@ -12,6 +12,7 @@ local VIEW_OF = {
     Hood = "front", Vent = "front", ["Front Bullbars"] = "front", Headlights = "front", ["Front Bumper"] = "front",
     Spoiler = "rear", ["Rear Bullbars"] = "rear", Exhaust = "rear", ["Rear Bumper"] = "rear", Nitro = "rear",
     Sideskirt = "side", Wheels = "side", Hydraulics = "side", Roof = "top",
+    Engine = "front", Turbo = "front", Brakes = "side", Suspension = "side", Tyres = "side", Drivetrain = "side",
 }
 local GRID_COLUMNS = 16
 
@@ -43,7 +44,7 @@ local function preview()
     local kind, value
     if menu.level == "items" or menu.level == "paintjobs" then
         local r = rows()[menu.selected]
-        if r and r.key and r.fits then kind, value = "part", r.key
+        if r and r.kind and r.fits then kind, value = r.kind, r.value
         elseif r and r.paintjob then kind, value = "paintjob", r.paintjob end
     elseif menu.level == "grid" then
         kind, value = "colour", { menu.slot, menu.selected - 1 }
@@ -138,11 +139,11 @@ addEventHandler("onClientKey", root, function(key, pressed)
             end
         elseif r.paintjob then
             triggerServerEvent("vana-garage:buy", resourceRoot, "paintjob", r.paintjob)
-        elseif r.key then
+        elseif r.kind then
             if not r.fits then
                 menu.message, menu.messageOk, menu.messageAt = "This part doesn't fit this vehicle.", false, getTickCount()
             else
-                triggerServerEvent("vana-garage:buy", resourceRoot, "part", r.key)
+                triggerServerEvent("vana-garage:buy", resourceRoot, r.kind, r.value)
             end
         end
     elseif key == "backspace" or key == "escape" then

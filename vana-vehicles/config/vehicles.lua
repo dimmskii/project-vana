@@ -42,12 +42,61 @@ VehicleConfig = {
         -- and the chance of a random paintjob where the model has them.
         tuned = {
             { models = { [558] = true, [559] = true, [560] = true, [561] = true, [562] = true, [565] = true }, -- street racers
-              chance = 0.35, slots = { 2, 6 }, paintjob = 0.4 },
+              chance = 0.35, slots = { 2, 6 }, paintjob = 0.4,
+              -- and performance parts: the chance of each category, and the levels it's drawn from
+              performance = { engine = { 0.6, 1, 2 }, turbo = { 0.12, 1, 1 }, tyres = { 0.3, 1, 2 }, brakes = { 0.2, 1, 1 } } },
             { models = { [412] = true, [534] = true, [535] = true, [536] = true, [566] = true, [567] = true,
                          [575] = true, [576] = true }, -- lowriders
               chance = 0.3, slots = { 1, 4 }, paintjob = 0.4 },
             { chance = 0.03, slots = { 1, 1 }, wheelsOnly = true }, -- anything else: now and then, other wheels
         },
+    },
+
+    -- Performance parts (ours; performance.lua): sold at the mod garages next to vanilla's parts, kept
+    -- with the car (`vana:tune`: category -> level). A level's `mul` scales the model's own handling
+    -- (getOriginalHandling), so every car stays itself, only better; `set` replaces a value. Levels in
+    -- a category replace each other; categories stack (mass from armour and the lightweight kit
+    -- multiply).
+    performance = {
+        order = { "engine", "turbo", "brakes", "suspension", "tyres", "armour", "lightweight", "drivetrain" },
+        categories = {
+            engine = { name = "Engine", levels = {
+                { name = "Engine stage 1", price = 2500, mul = { engineAcceleration = 1.10, maxVelocity = 1.04, engineInertia = 0.95 } },
+                { name = "Engine stage 2", price = 6000, mul = { engineAcceleration = 1.20, maxVelocity = 1.08, engineInertia = 0.90 } },
+                { name = "Engine stage 3", price = 12000, mul = { engineAcceleration = 1.32, maxVelocity = 1.12, engineInertia = 0.85 } },
+            } },
+            turbo = { name = "Turbo", levels = {
+                { name = "Turbo", price = 20000, mul = { engineAcceleration = 1.25, maxVelocity = 1.06 } },
+            } },
+            brakes = { name = "Brakes", levels = {
+                { name = "Sport brakes", price = 2000, mul = { brakeDeceleration = 1.20 } },
+                { name = "Race brakes (ABS)", price = 5000, mul = { brakeDeceleration = 1.40 }, set = { ABS = true } },
+            } },
+            suspension = { name = "Suspension", levels = {
+                { name = "Sport suspension", price = 3000, mul = { suspensionForceLevel = 1.15, suspensionDamping = 1.25,
+                  suspensionHighSpeedDamping = 1.2, suspensionAntiDiveMultiplier = 0.8 } },
+                { name = "Race suspension", price = 7000, mul = { suspensionForceLevel = 1.3, suspensionDamping = 1.5,
+                  suspensionHighSpeedDamping = 1.4, suspensionAntiDiveMultiplier = 0.6, steeringLock = 1.05 } },
+            } },
+            tyres = { name = "Tyres", levels = {
+                { name = "Sport tyres", price = 2500, mul = { tractionMultiplier = 1.08, tractionLoss = 1.04 } },
+                { name = "Race tyres", price = 6000, mul = { tractionMultiplier = 1.16, tractionLoss = 1.08 } },
+            } },
+            armour = { name = "Armour", levels = {
+                { name = "Armour", price = 8000, mul = { collisionDamageMultiplier = 0.7, mass = 1.05 } },
+                { name = "Heavy armour", price = 18000, mul = { collisionDamageMultiplier = 0.45, mass = 1.12, turnMass = 1.1 } },
+            } },
+            lightweight = { name = "Lightweight", levels = {
+                { name = "Lightweight kit", price = 7000, mul = { mass = 0.88, turnMass = 0.9, dragCoeff = 0.95 } },
+            } },
+            drivetrain = { name = "Drivetrain", levels = {
+                { name = "AWD conversion", price = 9000, set = { driveType = "awd" } },
+            } },
+        },
+        -- The turbo's whine (turbo_client.lua): a looped game sound on top of the engine, pitched with
+        -- speed and throttle. GENRL bank 131 is the vehicle generic bank (global 138); sound 10 is the
+        -- Hydra's (Harrier's) front jet, 29 a generic whine. /turbosound auditions others.
+        whine = { bank = 131, sound = 10, volume = 0.4, range = 60, pitch = { 0.75, 1.6 } },
     },
 
     -- Paintjobs by model (the ones with paintjob textures): how many (setVehiclePaintjob 0..n-1).

@@ -159,6 +159,9 @@ Low Co. (LS) and Wheel Arch Angels (SF), all open.
 - **Trying on:** the highlighted part, colour or paintjob is put on the car (server-side, so the car
   really changes); leaving takes off whatever wasn't bought. The camera frames the category's part
   of the car (front, rear, side, roof).
+- **Performance parts (ours):** after the vanilla categories, Engine, Turbo, Brakes, Suspension,
+  Tyres, Armour, Lightweight and Drivetrain, from vana-vehicles ([vehicles.md](vehicles.md)); tried
+  on like the rest.
 - **Colours and paintjobs:** $150 each (vanilla). Colour 1 and 2 from the 127-colour palette
   (`carcols.dat`, seeded) in a grid; paintjobs for the 13 models that have them (vana-vehicles'
   `paintjobs`).

@@ -29,6 +29,21 @@ local function loadStock()
     end
 end
 
+-- vana-vehicles' performance parts (engine, turbo, brakes...): its exports, or nothing without it.
+local function vehicles(fn, ...)
+    local res = getResourceFromName("vana-vehicles")
+    if not res or getResourceState(res) ~= "running" then return nil end
+    local args = { ... }
+    local ok, result = pcall(function() return exports["vana-vehicles"][fn](exports["vana-vehicles"], unpack(args)) end)
+    return ok and result or nil
+end
+
+local function sameTune(a, b)
+    for k, v in pairs(a) do if b[k] ~= v then return false end end
+    for k, v in pairs(b) do if a[k] ~= v then return false end end
+    return true
+end
+
 local function paintjobsOf(model)
     local res = getResourceFromName("vana-vehicles")
     if not res or getResourceState(res) ~= "running" then return 0 end
@@ -41,7 +56,7 @@ local function markKept(s)
     local g, base, list = s.garage, s.base, {}
     for id in pairs(base.upgrades) do list[#list + 1] = id end
     setElementData(s.vehicle, "vana:garage", { pos = { g.x, g.y, g.z + 0.5 }, heading = g.exit, upgrades = list,
-        paintjob = base.paintjob, colors = base.colours, locked = s.lock }, false)
+        paintjob = base.paintjob, colors = base.colours, locked = s.lock, tune = base.tune }, false)
 end
 
 local function say(player, text, ok)
@@ -52,7 +67,8 @@ end
 local function stateOf(vehicle)
     local upgrades = {}
     for _, id in ipairs(getVehicleUpgrades(vehicle)) do upgrades[id] = true end
-    return { upgrades = upgrades, paintjob = getVehiclePaintjob(vehicle), colours = { getVehicleColor(vehicle, true) } }
+    return { upgrades = upgrades, paintjob = getVehiclePaintjob(vehicle), colours = { getVehicleColor(vehicle, true) },
+             tune = vehicles("getTune", vehicle) or {} }
 end
 
 -- Back to the state it had (before the item tried on).
@@ -63,6 +79,7 @@ local function restore(vehicle, base)
     for id in pairs(base.upgrades) do addVehicleUpgrade(vehicle, id) end
     if getVehiclePaintjob(vehicle) ~= base.paintjob then setVehiclePaintjob(vehicle, base.paintjob) end
     setVehicleColor(vehicle, unpack(base.colours))
+    if not sameTune(vehicles("getTune", vehicle) or {}, base.tune) then vehicles("setTuneTable", vehicle, base.tune) end
 end
 
 -- The garage's menu for this vehicle: categories (upgrade slots, in slot order) of items, each
@@ -79,8 +96,8 @@ local function menuFor(s)
             seen[id] = true
             local slot = getVehicleUpgradeSlotName(id)
             bySlot[slot] = bySlot[slot] or {}
-            table.insert(bySlot[slot], { key = id, label = Gxt.get(price[1]) or name, price = price[2], fits = fits[id] == true,
-                                         owned = s.base.upgrades[id] == true })
+            table.insert(bySlot[slot], { key = id, kind = "part", value = id, label = Gxt.get(price[1]) or name, price = price[2],
+                                         fits = fits[id] == true, owned = s.base.upgrades[id] == true })
         end
     end
     local categories = {}
@@ -90,6 +107,15 @@ local function menuFor(s)
             table.sort(bySlot[name], function(a, b) return a.price < b.price end)
             categories[#categories + 1] = { name = name, items = bySlot[name] }
         end
+    end
+    -- Ours: performance parts, a category each; a level replaces the one before it.
+    for _, cat in ipairs(vehicles("getTuneOptions") or {}) do
+        local items = {}
+        for level, l in ipairs(cat.levels) do
+            items[level] = { key = cat.key .. ":" .. level, kind = "tune", value = { cat.key, level }, label = l.name, price = l.price,
+                             fits = true, owned = s.base.tune[cat.key] == level }
+        end
+        categories[#categories + 1] = { name = cat.name, items = items, performance = true }
     end
     return { title = s.garage.name, categories = categories, palette = CarPalette, paintPrice = G.paintPrice,
              paintjobs = paintjobsOf(getElementModel(s.vehicle)), paintjob = s.base.paintjob,
@@ -196,6 +222,11 @@ addEventHandler("vana-garage:preview", resourceRoot, function(kind, value)
         end
     elseif kind == "paintjob" and type(value) == "number" then
         setVehiclePaintjob(s.vehicle, value)
+    elseif kind == "tune" and type(value) == "table" then
+        local tune = {}
+        for k, v in pairs(s.base.tune) do tune[k] = v end
+        tune[tostring(value[1])] = tonumber(value[2])
+        vehicles("setTuneTable", s.vehicle, tune)
     end
 end)
 
@@ -216,6 +247,13 @@ addEventHandler("vana-garage:buy", resourceRoot, function(kind, value)
         price = p[2]
     elseif kind == "colour" or kind == "paintjob" then
         price = G.paintPrice
+    elseif kind == "tune" and type(value) == "table" then
+        local cat, level = tostring(value[1]), tonumber(value[2])
+        for _, c in ipairs(vehicles("getTuneOptions") or {}) do
+            if c.key == cat and c.levels[level] then price = c.levels[level].price end
+        end
+        if not price then return end
+        if base.tune[cat] == level then return say(client, Gxt.get("CLTHNO2") or "You have already bought this item!") end
     else
         return
     end
@@ -235,6 +273,9 @@ addEventHandler("vana-garage:buy", resourceRoot, function(kind, value)
         end
         base.colours[i], base.colours[i + 1], base.colours[i + 2] = c[1], c[2], c[3]
         setVehicleColor(v, unpack(base.colours))
+    elseif kind == "tune" then
+        base.tune[tostring(value[1])] = tonumber(value[2])
+        vehicles("setTuneTable", v, base.tune)
     else
         local n = paintjobsOf(getElementModel(v))
         if type(value) ~= "number" or value < 0 or value >= n then return end
