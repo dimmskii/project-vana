@@ -41,6 +41,7 @@ local function snapshot(vehicle)
         taxiLight = isVehicleTaxiLightOn(vehicle), landingGear = getVehicleLandingGearDown(vehicle),
         damageProof = isVehicleDamageProof(vehicle), frozen = isElementFrozen(vehicle), alpha = getElementAlpha(vehicle),
         fuel = getElementData(vehicle, "vana:fuel"), radio = getElementData(vehicle, "vana:radio"),
+        dashboard = getElementData(vehicle, "vana:dashboard"),
         handling = {},
     }
     for i = 0, 6 do s.panels[i + 1] = getVehiclePanelState(vehicle, i) end
@@ -87,6 +88,7 @@ local function build(s)
     setElementAlpha(vehicle, s.alpha)
     if s.fuel then setElementData(vehicle, "vana:fuel", s.fuel) end
     if s.radio then setElementData(vehicle, "vana:radio", s.radio) end
+    if s.dashboard then setElementData(vehicle, "vana:dashboard", s.dashboard) end
     if s.blown then blowVehicle(vehicle, false) end
     return vehicle
 end

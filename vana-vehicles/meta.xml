@@ -2,10 +2,15 @@
     <info author="ProjectVana" name="Vana vehicles" description="Vehicle registry and persistence, fuel, live car radio" version="0.1.0" type="script" />
     <script src="config/vehicles.lua" type="shared" />
     <script src="config/radio.lua" type="shared" />
+    <script src="config/dashboards.lua" type="shared" />
     <script src="server.lua" type="server" />
     <script src="fuel.lua" type="server" />
     <script src="radio.lua" type="server" />
     <script src="client.lua" type="client" />
+    <script src="sa_reader.lua" type="client" />
+    <script src="sa_txd.lua" type="client" />
+    <script src="dashboard_client.lua" type="client" />
+    <file src="mods/gasoline/gasoline.txd" />
     <export function="isKept" type="server" />
     <export function="assignRadio" type="server" />
     <export function="getVehicleFuel" type="server" />

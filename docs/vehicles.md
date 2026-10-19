@@ -55,6 +55,21 @@ After the `gasoline.cs` CLEO mod (bytecode read with `SASCM.INI`):
 - Bicycles, boats, aircraft and trains don't use fuel. Ped drivers don't burn fuel.
 - The gauge sits above the radar.
 
+## Dashboards
+
+Each vehicle has a dashboard skin (`vana:dashboard`), picked by the server the first time a player
+gets in: by model (`models` in `config/dashboards.lua`), else `default`; bicycles and trains have none.
+Kept cars keep theirs. A skin names a TXD and lays out its parts (images, needles, a lamp, text) in
+vanilla's 640 x 448 HUD space, anchored to the bottom right and scaled with the screen height; the
+client reads the TXD once with `sa_txd.lua`. Without a skin (or if it fails to load) the plain fuel
+gauge above the radar stands in.
+
+- **`gasoline`** (the default), from the gasoline mod's `gasoline.txd`: the speedometer (0-260 km/h),
+  the fuel dial built into it, the fuel lamp (red below 5000), the lock icon when locked, and the
+  nitro dial when nitro is fitted. Positions are the mod's own. Its needles' angles (`zero`, `per`)
+  were measured on the textures, as the mod's formulas don't fit this dial; checked by rendering the
+  dial offline at 0, 60, 140 and 260 km/h, but still to confirm in game.
+
 ## Radio
 
 - **Station per car** (`vana:radio`, an MTA channel: 1 Playback FM .. 11 WCTR, 0 off), first picked

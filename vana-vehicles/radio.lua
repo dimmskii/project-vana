@@ -29,6 +29,13 @@ function assignRadio(vehicle, driverModel)
     return station
 end
 
+-- A player getting into a vehicle: its dashboard skin, chosen once (config/dashboards.lua).
+addEventHandler("onVehicleEnter", root, function(player)
+    if getElementType(player) ~= "player" or getElementData(source, "vana:dashboard") then return end
+    local model = getElementModel(source)
+    if not Dashboards.none[model] then setElementData(source, "vana:dashboard", Dashboards.models[model] or Dashboards.default) end
+end)
+
 -- A player getting into a car with no station yet takes its driver's favourite, as in vanilla.
 addEventHandler("onVehicleEnter", root, function(player)
     if getElementType(player) ~= "player" then return end

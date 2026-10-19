@@ -26,6 +26,7 @@ Start here:
 | [docs/vehicles.md](docs/vehicles.md) | Kept cars (registry and persistence), fuel, live radio |
 | [docs/editor.md](docs/editor.md) | Placement data in MTA map resources (`[data]/vana-data-*`) and editing it in the Map Editor |
 | [docs/wildlife.md](docs/wildlife.md) | Creatures from community mods (Bigfoot) |
+| [docs/libraries.md](docs/libraries.md) | Shared code in `tools/lib`: game-file readers (GXT, IDE, DAT, TXD) and the map-data helpers |
 | [docs/credits.md](docs/credits.md) | Third-party mods we use (authors, sources, terms) and how mod content is handled |
 
 ## Resources
