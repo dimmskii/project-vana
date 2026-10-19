@@ -32,12 +32,13 @@ local function routesAvailable()
     return true
 end
 
--- GTA refuses a new walk while the last one is still the ped's task: walking it, or arrived and
--- standing still at its end (where it stays). Those are plain go-tos, safe to end; a flee sequence
+-- GTA refuses a new walk while the last one is still the ped's task: walking it (or walking into a
+-- wall on the way), or arrived and standing still at its end (where it stays). Those are plain go-tos, safe to end; a flee sequence
 -- (route tasks) never is.
 local function inWalk(ped)
     local step = getPedSimplestTask(ped)
-    return isPedDoingTask(ped, "TASK_COMPLEX_USE_SEQUENCE") and (step == "TASK_SIMPLE_GO_TO_POINT" or step == "TASK_SIMPLE_STAND_STILL")
+    return isPedDoingTask(ped, "TASK_COMPLEX_USE_SEQUENCE") and (step == "TASK_SIMPLE_GO_TO_POINT" or step == "TASK_SIMPLE_STAND_STILL"
+        or step == "TASK_SIMPLE_HIT_WALL")
 end
 
 local function standingInWalk(ped)

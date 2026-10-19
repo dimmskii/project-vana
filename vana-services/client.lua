@@ -97,7 +97,8 @@ addEventHandler("vana-services:walk", resourceRoot, function(ped, x, y, z, run)
         -- An earlier walk, still walking or standing at its end (GTA keeps it), is cleared first: GTA
         -- refuses a new one over it, or drops it. Only plain go-tos: a flee sequence is never ended by hand.
         local step = getPedSimplestTask(ped)
-        if isPedDoingTask(ped, "TASK_COMPLEX_USE_SEQUENCE") and (step == "TASK_SIMPLE_GO_TO_POINT" or step == "TASK_SIMPLE_STAND_STILL") then
+        if isPedDoingTask(ped, "TASK_COMPLEX_USE_SEQUENCE") and (step == "TASK_SIMPLE_GO_TO_POINT" or step == "TASK_SIMPLE_STAND_STILL"
+            or step == "TASK_SIMPLE_HIT_WALL") then
             killPedTask(ped, "primary", 3, false)
         end
         return setPedTaskSequence(ped, { { task = "go_to", x = x, y = y, z = z, movement = run and "run" or "walk", radius = 1.0, slowdownRadius = 1.5 } })
