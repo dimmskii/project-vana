@@ -79,6 +79,19 @@ gauge above the radar stands in.
   with the car.
 - **Playing it, switching and the outside radio** are `vana-radio`'s: see [radio.md](radio.md).
 
+## Ambient cars' parts (`tuning.lua`)
+
+Traffic, parked cars and random-event cars get parts as they're made (`tuneRandomly`, config
+`tuning`); emergency responders don't.
+
+- **Vanilla** (`CAutomobile`'s constructor): models whose handling has `HYDRAULIC_GEOM` (0x10000:
+  the lowriders) get hydraulics one time in four.
+- **Ours:** 15% of taxis have nitro (after vanilla's "all taxis have nitro" cheat); 35% of street
+  racers and 30% of lowriders are tuned (random parts they fit in 2-6 / 1-4 slots, and a random
+  paintjob 40% of the time where the model has them); 3% of anything else has other wheels.
+- `tuningtest` (console): builds 400 each of a Voodoo, a taxi, an Elegy and an Admiral and logs the
+  rates (Voodoo hydraulics ~25%, taxi nitro ~15%).
+
 ## Testing
 
 - `vehicletest` (console): snapshot/rebuild round trip, list rules (size, most recent first,

@@ -230,6 +230,7 @@ function Kinds.chase(player)
     if not x then return end
     local car = createVehicle(randomFrom(E.chase.cars), x, y, z + 1, 0, 0, math.random(0, 359))
     if not car then return end
+    call("vana-vehicles", "tuneRandomly", car)
     local driver = scenePed(x, y, z, "criminal", nil, randomFrom(E.chase.weapons))
     if not driver or not warpPedIntoVehicle(driver, car, 0) then
         if driver then destroyElement(driver) end

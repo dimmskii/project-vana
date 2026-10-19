@@ -239,6 +239,9 @@ local function trySpawnNear(player, players, counts)
 
     local vehicle = createVehicle(spec.model, x, y, node.z + 1, 0, 0, math.deg(math.atan2(dy, dx)) - 90)
     if not vehicle then return false end
+    -- Its parts, as vanilla's and ours make ambient cars (vana-vehicles).
+    local vres = getResourceFromName("vana-vehicles")
+    if vres and getResourceState(vres) == "running" then pcall(function() exports["vana-vehicles"]:tuneRandomly(vehicle) end) end
     local ped = spawnOccupant(spec.driver, vehicle, 0, x, y, node.z + 2)
     if not ped then destroyElement(vehicle) return false end
     local passengers = {}

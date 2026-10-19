@@ -7,11 +7,14 @@
     <script src="server.lua" type="server" />
     <script src="fuel.lua" type="server" />
     <script src="radio.lua" type="server" />
+    <script src="tuning.lua" type="server" />
     <script src="client.lua" type="client" />
     <script src="dashboard_client.lua" type="client" />
     <file src="mods/gasoline/gasoline.txd" />
     <export function="isKept" type="server" />
     <export function="assignRadio" type="server" />
+    <export function="tuneRandomly" type="server" />
+    <export function="getPaintjobCount" type="server" />
     <export function="getVehicleFuel" type="server" />
     <export function="setVehicleFuel" type="server" />
 </meta>

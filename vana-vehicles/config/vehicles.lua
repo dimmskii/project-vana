@@ -29,4 +29,28 @@ VehicleConfig = {
             { 1382.0, 456.3, 19.91 },
         },
     },
+
+    -- Ambient cars (traffic, parked, random events) as they're made: tuneRandomly (tuning.lua).
+    tuning = {
+        -- Vanilla (CAutomobile's constructor): a model whose handling has HYDRAULIC_GEOM (0x10000:
+        -- the lowriders) gets hydraulics one time in four.
+        hydraulicGeom = 0.25,
+        -- Ours: some taxis have nitro (after vanilla's "all taxis have nitro" cheat).
+        taxis = { models = { [420] = true, [438] = true }, chance = 0.15, nitro = { 1009, 1008, 1010 } },
+        -- Ours: tuned cars, by model group: the chance one is tuned, how many of its slots get a random
+        -- part it fits (wheels, spoilers, skirts, bumpers... never nitro, hydraulics or the stereo),
+        -- and the chance of a random paintjob where the model has them.
+        tuned = {
+            { models = { [558] = true, [559] = true, [560] = true, [561] = true, [562] = true, [565] = true }, -- street racers
+              chance = 0.35, slots = { 2, 6 }, paintjob = 0.4 },
+            { models = { [412] = true, [534] = true, [535] = true, [536] = true, [566] = true, [567] = true,
+                         [575] = true, [576] = true }, -- lowriders
+              chance = 0.3, slots = { 1, 4 }, paintjob = 0.4 },
+            { chance = 0.03, slots = { 1, 1 }, wheelsOnly = true }, -- anything else: now and then, other wheels
+        },
+    },
+
+    -- Paintjobs by model (the ones with paintjob textures): how many (setVehiclePaintjob 0..n-1).
+    paintjobs = { [483] = 1, [534] = 3, [535] = 3, [536] = 3, [558] = 3, [559] = 3, [560] = 3, [561] = 3,
+                  [562] = 3, [565] = 3, [567] = 3, [575] = 2, [576] = 3 },
 }

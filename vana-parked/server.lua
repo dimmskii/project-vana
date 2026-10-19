@@ -92,6 +92,9 @@ local function generate(g)
         setVehicleColor(vehicle, c1 >= 0 and c1 or r1, c2 >= 0 and c2 or r2, r3, r4)
     end
     if g.lock > 0 and math.random(100) <= g.lock then setVehicleLocked(vehicle, true) end
+    -- Its parts, as vanilla's and ours make ambient cars (vana-vehicles).
+    local res = getResourceFromName("vana-vehicles")
+    if res and getResourceState(res) == "running" then pcall(function() exports["vana-vehicles"]:tuneRandomly(vehicle) end) end
     setElementData(vehicle, "vana:parked", true)
     parked[vehicle] = g
     g.vehicle = vehicle
