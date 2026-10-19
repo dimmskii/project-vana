@@ -79,6 +79,19 @@ gauge above the radar stands in.
   with the car.
 - **Playing it, switching and the outside radio** are `vana-radio`'s: see [radio.md](radio.md).
 
+## Cleaning up (`/cleanvehicles`)
+
+Admin (`command.cleanvehicles`, granted to `Admin` by vana-player):
+
+- `/cleanvehicles`: every empty vehicle nobody keeps (abandoned traffic, parked cars, dropped cars).
+- `/cleanvehicles all`: every empty vehicle, kept ones too.
+- `/cleanvehicles <player>`: that player's kept vehicles (a unique part of the name is enough).
+
+Kept cars removed this way come off every player's list and out of the registry first, so they
+aren't rebuilt. Never removed: a vehicle with anyone in any seat (player or ped), a trailer such a
+vehicle tows, mission and reward cars (`vana:managed`, `vana:owner`), trains. Parked cars come back
+from their generators as usual. `vehicletest` checks the occupied and kept cases.
+
 ## Ambient cars' parts (`tuning.lua`)
 
 Traffic, parked cars and random-event cars get parts as they're made (`tuneRandomly`, config

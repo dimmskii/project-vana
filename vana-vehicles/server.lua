@@ -340,6 +340,83 @@ addEventHandler("onResourceStop", resourceRoot, function()
     stopping = true
 end)
 
+-- Admin: /cleanvehicles [all | player]. Restricted: command.cleanvehicles in the ACL.
+--   (nothing)  every empty vehicle nobody keeps: abandoned traffic, parked and dropped cars
+--   all        every empty vehicle, kept ones too (taken off everyone's list)
+--   <player>   the player's kept vehicles (taken off every list they're on)
+-- Never one with anyone in any seat (player or ped), a trailer such a vehicle tows, a vehicle another
+-- resource manages (mission and reward cars), or a train. Parked cars come back from their generators.
+local function occupied(vehicle)
+    if next(getVehicleOccupants(vehicle) or {}) then return true end
+    local tower = getVehicleTowingVehicle(vehicle)
+    return tower and next(getVehicleOccupants(tower) or {}) ~= nil
+end
+
+-- A kept car no longer kept: off every list, out of the registry (so destroying it doesn't rebuild it).
+local function forget(vid)
+    for serial, list in pairs(lists) do
+        local before = #list
+        unlist(serial, vid)
+        if #list ~= before then saveList(serial) end
+    end
+    local rec = records[vid]
+    release(vid)
+    if rec and isElement(rec.vehicle) then dropped[rec.vehicle] = nil end
+end
+
+-- `among`: only these vehicles (the test); default every vehicle.
+local function cleanVehicles(mode, player, among)
+    local only
+    if player then
+        only = {}
+        for _, vid in ipairs(lists[serialOf(player)] or {}) do only[vid] = true end
+    end
+    local removed, kept, skipped = 0, 0, 0
+    for _, vehicle in ipairs(among or getElementsByType("vehicle")) do
+        local vid = isElement(vehicle) and vids[vehicle]
+        local wanted
+        if not isElement(vehicle) then wanted = false
+        elseif only then wanted = vid and only[vid]
+        elseif mode == "all" then wanted = true
+        else wanted = not vid end
+        if wanted and not managed(vehicle) and getVehicleType(vehicle) ~= "Train" then
+            if occupied(vehicle) then
+                skipped = skipped + 1
+            else
+                if vid then forget(vid) kept = kept + 1 end
+                dropped[vehicle] = nil
+                destroyElement(vehicle)
+                removed = removed + 1
+            end
+        end
+    end
+    return removed, kept, skipped
+end
+
+addCommandHandler("cleanvehicles", function(source, _, arg)
+    local function reply(msg)
+        if getElementType(source) == "console" then outputServerLog("[cleanvehicles] " .. msg) else outputChatBox(msg, source, 200, 200, 255) end
+    end
+    local player
+    if arg and arg:lower() ~= "all" then
+        player = getPlayerFromName(arg)
+        if not player then
+            -- A unique start or part of a name.
+            for _, p in ipairs(getElementsByType("player")) do
+                if getPlayerName(p):lower():find(arg:lower(), 1, true) then
+                    if player then return reply("Several players match " .. arg .. ".") end
+                    player = p
+                end
+            end
+        end
+        if not player then return reply("No player called " .. arg .. ". Usage: /cleanvehicles [all | player]") end
+    end
+    local removed, kept, skipped = cleanVehicles(arg and arg:lower() == "all" and "all" or nil, player)
+    reply(("Removed %d vehicles%s%s; %d occupied left alone."):format(removed,
+        player and (" of " .. getPlayerName(player) .. "'s") or "",
+        kept > 0 and not player and (" (" .. kept .. " kept by players)") or "", skipped))
+end, true)
+
 -- Console-only: snapshot -> rebuild round trip, the list rules, and a persisted record.
 -- vehicletest keep / check: one kept car across a restart of this resource (keep, restart, check).
 local function persistenceTest(mode)
@@ -374,6 +451,29 @@ addCommandHandler("vehicletest", function(source, _, mode)
     local ok = true
     local function check(cond, what)
         if not cond then ok = false outputServerLog("[vehicletest] FAILED: " .. what) end
+    end
+    -- Cleanup: empty cars go, occupied ones (any seat, a ped) stay; a kept car goes only with "all"
+    -- or its holder named, and isn't rebuilt.
+    do
+        local empty = createVehicle(411, 2600, -1800, -50)
+        local withPed = createVehicle(405, 2610, -1800, -50) -- a Sentinel: four seats, the ped in a back one
+        local ped = createPed(7, 2610, -1800, -48)
+        warpPedIntoVehicle(ped, withPed, 2)
+        local keptCar = createVehicle(411, 2630, -1800, -50)
+        local vid = register(keptCar)
+        setHolders(vid, { "cleantest-serial" }, "driver")
+        local r1 = cleanVehicles(nil, nil, { empty, withPed, keptCar })
+        check(r1 == 1 and not isElement(empty) and isElement(withPed) and isElement(keptCar), "clean: only the empty unkept car")
+        local r2 = cleanVehicles("all", nil, { withPed, keptCar })
+        check(r2 == 1 and records[vid] == nil, "clean all: the kept car, off the registry")
+        setTimer(function()
+            local rebuilt = false
+            for _, rec in pairs(records) do rebuilt = rebuilt or (rec.holders and rec.holders["cleantest-serial"]) end
+            outputServerLog("[vehicletest] cleanup: kept car " .. (rebuilt and "REBUILT (FAIL)" or "stays gone (ok)"))
+            lists["cleantest-serial"] = nil
+            saveList("cleantest-serial")
+        end, 200, 1)
+        for _, e in ipairs({ withPed, ped }) do if isElement(e) then destroyElement(e) end end
     end
     -- Fuel bands (gasoline.cs at 25 fps) and radio picks (peds.ide favourites, model defaults).
     check(fuelRate(0, false) == 0 and fuelRate(0.5, false) == 0 and fuelRate(20, false) == 25 and fuelRate(60, false) == 50
