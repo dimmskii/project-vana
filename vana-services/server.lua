@@ -191,7 +191,8 @@ addEventHandler("onPlayerQuit", root, function() wanted[source] = nil end)
 -- Taking someone's car.
 addEventHandler("onPlayerVehicleEnter", root, function(vehicle, seat, jacked)
     if seat == 0 and isElement(jacked) and getElementType(jacked) == "ped" then
-        reportCrime(source, "car_steal")
+        local copKind = getElementData(jacked, "vana:service") or getElementData(jacked, "vana:traffic")
+        reportCrime(source, (copKind == "police" or copKind == "cop") and "jack_cop" or "car_steal")
     end
 end)
 
@@ -355,10 +356,25 @@ end
 -- Police units: pursue, get out and arrest (one star) or fight (more), get back in when the
 -- player gets away. Tanks never get out: they keep driving at the player.
 
+-- A player drove off in the unit's car: whoever is on foot fights them; once they're away, the
+-- crew stays behind as walking cops (vana-peds) instead of waiting to get back into a car that's gone.
+local function stolenBy(r)
+    local driver = isElement(r.vehicle) and getVehicleController(r.vehicle)
+    return driver and getElementType(driver) == "player" and driver
+end
+
 local function updatePolice(r, players, now)
+    local thief = stolenBy(r)
+    if thief then
+        if r.target ~= thief or r.state ~= "engaging" then
+            r.target, r.state, r.since, r.mode, r.ordered, r.stolen = thief, "engaging", now, nil, nil, true
+        end
+    elseif r.stolen then
+        return release(r)
+    end
     local target = r.target
     local level = isElement(target) and getPlayerWantedLevel(target) or 0
-    if r.state ~= "leaving" and (level == 0 or isPedDead(target)) then
+    if r.state ~= "leaving" and not r.stolen and (level == 0 or isPedDead(target)) then
         if allInVehicle(r) then return leave(r, players) end
         if r.state ~= "regrouping" then regroup(r) end
     end
@@ -388,9 +404,18 @@ local function updatePolice(r, players, now)
                     end
                 end
             end
-            -- The player got away (in a car, or just far): back in and after them.
+            -- The player got away (in a car, or just far): back in and after them, unless they
+            -- took the car itself.
             local tx, ty, tz = getElementPosition(target)
-            if distanceTo(r.vehicle, tx, ty, tz) > CONFIG.rechaseDistance then regroup(r) end
+            if r.stolen then
+                local away = true
+                for _, ped in ipairs(crewAlive(r)) do
+                    if distanceTo(ped, tx, ty, tz) < CONFIG.rechaseDistance then away = false end
+                end
+                if away then return release(r) end
+            elseif distanceTo(r.vehicle, tx, ty, tz) > CONFIG.rechaseDistance then
+                regroup(r)
+            end
         end
     elseif r.state == "regrouping" then
         if allInVehicle(r) or now - r.since > 20000 then

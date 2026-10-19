@@ -3,6 +3,18 @@
 -- are the only authority.
 local commands = {}  -- vehicle -> { ped, x, y, z, speed, mode, style, prepared }
 local lastCollision = {}
+local riderLeases = {} -- ped -> event profile token, while riding a bike or quad
+
+-- Riders of bikes, bicycles and quads must be knockable off them: GTA does that through an event
+-- the rider handles, and mission actors handle none. So two-wheelers keep their riders as ambient
+-- peds with GTA's ambient event profile while they ride (released when they get off, so
+-- vana-peds can lease it for the walk).
+local OPEN_VEHICLES = { Bike = true, BMX = true, Quad = true }
+
+local function releaseRider(ped)
+    if riderLeases[ped] then releasePedNativeEventProfile(riderLeases[ped]) end
+    riderLeases[ped] = nil
+end
 
 local function ready(cmd, vehicle)
     local ped = cmd.ped
@@ -12,9 +24,20 @@ local function ready(cmd, vehicle)
 end
 
 local function prepare(cmd, vehicle)
-    -- Occupants run as mission actors while seated: no ambient event responses mid-drive.
+    -- Occupants run as mission actors while seated: no ambient event responses mid-drive (except
+    -- riders of open vehicles, see OPEN_VEHICLES).
+    local open = OPEN_VEHICLES[getVehicleType(vehicle)]
     for _, occupant in pairs(getVehicleOccupants(vehicle) or {}) do
-        if getElementType(occupant) == "ped" and getElementData(occupant, "vana:traffic") then setPedMissionActor(occupant, true) end
+        local kind = getElementType(occupant) == "ped" and getElementData(occupant, "vana:traffic")
+        if kind and open then
+            setPedMissionActor(occupant, false)
+            setPedCanBeKnockedOffBike(occupant, true)
+            if not riderLeases[occupant] then
+                riderLeases[occupant] = acquirePedNativeEventProfile(occupant, kind == "cop" and "ambient-cop-safe" or "ambient-wander") or nil
+            end
+        elseif kind then
+            setPedMissionActor(occupant, true)
+        end
     end
     -- Mission-car collision policy: ghost instead of falling when far-away road collision unloads.
     setVehicleLoadCollisionFlag(vehicle, false)
@@ -155,3 +178,6 @@ setTimer(function()
     end
     if #samples > 0 then triggerServerEvent("vana-traffic:telemetry", resourceRoot, samples) end
 end, 2000, 0)
+
+addEventHandler("onClientPedVehicleExit", root, function() releaseRider(source) end)
+addEventHandler("onClientElementDestroy", root, function() if riderLeases[source] then releaseRider(source) end end)

@@ -85,7 +85,30 @@ local function kept(vehicle)
     return getElementData(vehicle, "vana:kept") ~= false and getElementData(vehicle, "vana:kept") ~= nil
 end
 
+-- How an occupant answers a threat, by kind and personality (config/personalities.lua):
+-- "fight", "flee" or "stay". threat: "jacked" (pulled from the car / the car taken), "bail" (shot
+-- at: everyone out), or "fight" (the driver gets out to fight: passengers choose for themselves).
+local function respond(spec, kind, threat)
+    local p = spec.personality or {}
+    local fear, temper = p.fear or 50, p.temper or 50
+    if kind == "cop" then return "fight" end
+    if kind == "gang" then return fear >= 70 and "flee" or "fight" end
+    if threat == "fight" then
+        if temper >= rules.collision.fightTemper then return "fight" end
+        return fear >= rules.collision.fleeFear and "flee" or "stay"
+    end
+    if threat == "jacked" and temper >= rules.collision.fightTemper and fear < rules.collision.fleeFear then return "fight" end
+    return "flee"
+end
+
+local function encounterFor(spec, kind, threat, target, vehicle)
+    local action = respond(spec, kind, threat)
+    if action == "stay" then return nil end
+    return { mode = action, target = target, vehicle = vehicle }
+end
+
 -- keepElements: leave vehicle and occupants in the world (occupants still inside are told to get out).
+-- encounter: one encounter for the crew, or a function(occupant) giving each its own.
 local function removeUnit(unit, keepElements, encounter)
     units[unit.vehicle] = nil
     if isElement(unit.vehicle) then removeElementData(unit.vehicle, "vana:trafficCar") end
@@ -94,10 +117,14 @@ local function removeUnit(unit, keepElements, encounter)
         local stillInside = {}
         for _, o in ipairs(occupants(unit)) do
             if isElement(o.ped) and getPedOccupiedVehicle(o.ped) == unit.vehicle then stillInside[#stillInside + 1] = o.ped end
-            -- The driver (and a gang or cop crew) carries the encounter; other passengers just get out,
-            -- unless everyone is bailing out.
-            local shared = o.ped == unit.ped or unit.kind ~= "civilian" or (encounter and encounter.mode == "flee")
-            releasePed(o.ped, o.spec, shared and encounter or nil)
+            if type(encounter) == "function" then
+                releasePed(o.ped, o.spec, o.encounter or encounter(o))
+            else
+                -- The driver (and a gang or cop crew) carries the encounter; other passengers go by
+                -- their own answer, or just get out, unless everyone is bailing out.
+                local shared = o.ped == unit.ped or unit.kind ~= "civilian" or (encounter and encounter.mode == "flee")
+                releasePed(o.ped, o.spec, o.encounter or (shared and encounter or nil))
+            end
         end
         if isElement(unit.vehicle) then
             setElementSyncer(unit.vehicle, true)
@@ -202,7 +229,9 @@ local function trySpawnNear(player, players, counts)
     -- Start in the right-hand lane when the road carries traffic both ways.
     local x, y = node.x, node.y
     local navi = nxt.link and nxt.link.naviArea and paths:getNaviNode(nxt.link.naviArea, nxt.link.naviIndex)
-    if navi and navi.leftLanes > 0 and navi.rightLanes > 0 then x, y = x + dy * 2.5, y - dx * 2.5 end
+    if navi and navi.leftLanes > 0 and navi.rightLanes > 0 then
+        x, y = x + dy * Planner.LANE_WIDTH / 2, y - dx * Planner.LANE_WIDTH / 2
+    end
 
     -- Vanilla population rules decide what drives here (and who), or that the area is already full.
     local spec = population:pickCar(node.x, node.y, node.z, counts, CONFIG.density)
@@ -260,13 +289,19 @@ local function updateUnit(unit, players, lightState)
     if isVehicleBlown(vehicle) or not isElement(ped) or isPedDead(ped) or getPedOccupiedVehicle(ped) ~= vehicle
         or getVehicleOccupant(vehicle, 0) ~= ped then
         -- Jacked, killed, wrecked or got out: leave it all to the world (on-foot occupants become pedestrians).
+        -- A player who took the car gets an answer from everyone in it: cops and gangs fight, civilians
+        -- by temper and fear.
+        local jacker = getVehicleController(vehicle)
+        if not unit.exiting and jacker and getElementType(jacker) == "player" then
+            return removeUnit(unit, true, function(o) return encounterFor(o.spec, unit.kind, "jacked", jacker) end)
+        end
         return removeUnit(unit, true, unit.exiting)
     end
     -- Passengers who left on their own (or were pulled out) walk on separately.
     for i = #unit.passengers, 1, -1 do
         local p = unit.passengers[i]
         if not isElement(p.ped) or isPedDead(p.ped) or getPedOccupiedVehicle(p.ped) ~= vehicle then
-            releasePed(p.ped, p.spec, unit.kind ~= "civilian" and unit.exiting or nil)
+            releasePed(p.ped, p.spec, p.encounter or (unit.kind ~= "civilian" and unit.exiting or nil))
             table.remove(unit.passengers, i)
         end
     end
@@ -346,6 +381,12 @@ local function decide(unit, player, incident, magnitude)
     local r = rules.collision
     local p = unit.driver.personality or {}
     local fear, temper = p.fear or 50, p.temper or 50
+    -- A gun pointed at the car: crews fight, civilians abandon the car (fear), fight (temper) or speed off.
+    if incident == "aimed" then
+        if unit.kind ~= "civilian" then return "fight", 100 end
+        if fear >= r.bailFear then return "bail", 100 end
+        return temper >= r.jackTemper and "fight" or "panic", 100
+    end
     local severity = incident == "shot" and 100 or incident == "melee" and r.meleeSeverity
         or math.min(100, (magnitude or 0) / r.forcePerSeverity)
     if severity < r.ignoreBelow then return "ignore", severity end
@@ -379,7 +420,7 @@ addEventHandler("vana-traffic:incident", resourceRoot, function(vehicle, player,
     if not unit or unit.exiting or not isElement(player) or getElementType(player) ~= "player" then return end
     -- Reported by the car's owner, or by the player who caused it.
     if client ~= unit.owner and client ~= player then return end
-    if incident ~= "collision" and incident ~= "melee" and incident ~= "shot" then return end
+    if incident ~= "collision" and incident ~= "melee" and incident ~= "shot" and incident ~= "aimed" then return end
     local x, y, z = getElementPosition(vehicle)
     local px, py, pz = getElementPosition(player)
     if getDistanceBetweenPoints3D(x, y, z, px, py, pz) > (incident == "shot" and 120 or 30) then return end
@@ -387,7 +428,7 @@ addEventHandler("vana-traffic:incident", resourceRoot, function(vehicle, player,
     if unit.lastIncident and now - unit.lastIncident < 3000 then return end
 
     local action, severity = decide(unit, player, incident, tonumber(magnitude))
-    if incident ~= "collision" or severity >= rules.collision.ignoreBelow then
+    if incident ~= "aimed" and (incident ~= "collision" or severity >= rules.collision.ignoreBelow) then
         reportCrime(player, unit.kind == "cop" and "damage_cop_car" or incident == "collision" and "hit_car" or "damage_car", x, y, z)
     end
     if debugging then
@@ -404,11 +445,17 @@ addEventHandler("vana-traffic:incident", resourceRoot, function(vehicle, player,
     else
         local encounter = { mode = action == "bail" and "flee" or "fight", target = player }
         if action == "jack" then encounter = { mode = "jack", target = player, vehicle = getPedOccupiedVehicle(player) } end
-        -- Gang and cop crews pile out with the driver; when bailing, everyone gets out.
+        -- Gang and cop crews pile out with the driver; when bailing, everyone gets out. Civilian
+        -- passengers of a driver picking a fight join in, run, or stay put, each by personality.
         unit.exiting, unit.exitingAt = encounter, now
         local peds = { unit.ped }
-        if unit.kind ~= "civilian" or action == "bail" then
-            for _, o in ipairs(unit.passengers) do peds[#peds + 1] = o.ped end
+        for _, o in ipairs(unit.passengers) do
+            if unit.kind ~= "civilian" or action == "bail" then
+                peds[#peds + 1] = o.ped
+            elseif action == "fight" then
+                o.encounter = encounterFor(o.spec, unit.kind, "fight", player)
+                if o.encounter then peds[#peds + 1] = o.ped end
+            end
         end
         triggerClientEvent(unit.owner, "vana-traffic:exit", resourceRoot, vehicle, peds)
     end

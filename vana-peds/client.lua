@@ -41,7 +41,8 @@ local function walk(ped, cmd)
 end
 
 local function engage(ped, cmd)
-    if cmd.mode == "react" then return true end -- GTA's own event response is already running
+    -- GTA's own event response is already running; a holdup's hands-up animation is the server's.
+    if cmd.mode == "react" or cmd.mode == "holdup" then return true end
     if not routesAvailable() then return false end -- retried by the watchdog once there's room
     -- An arrest is a fight with the nightstick in hand (the server picked the weapon).
     if cmd.mode == "fight" or cmd.mode == "arrest" then
@@ -127,11 +128,13 @@ addEventHandler("vana-peds:release", resourceRoot, function(ped)
     end
 end)
 
--- Report players hurting a ped we simulate; the server decides how it responds.
+-- Report players and peds hurting a ped we simulate; the server decides how it responds.
 addEventHandler("onClientPedDamage", root, function(attacker, weapon)
     if not getElementData(source, "vana:ambient") or not isElementSyncer(source) or not isElement(attacker) then return end
     if getElementType(attacker) == "vehicle" then attacker = getVehicleController(attacker) end
-    if not attacker or getElementType(attacker) ~= "player" then return end
+    if not attacker or attacker == source then return end
+    local kind = getElementType(attacker)
+    if kind ~= "player" and kind ~= "ped" then return end
     local now = getTickCount()
     if lastReport[source] and now - lastReport[source] < 1000 then return end
     lastReport[source] = now
@@ -148,3 +151,28 @@ addEventHandler("onClientElementDestroy", root, function()
     if leases[source] then releasePedNativeEventProfile(leases[source]) end
     leases[source], commands[source], lastReport[source] = nil, nil, nil
 end)
+
+-- A ped hurting us: our gang's members nearby come to help (the server decides who).
+local lastHurt = 0
+addEventHandler("onClientPlayerDamage", localPlayer, function(attacker)
+    if isElement(attacker) and getElementType(attacker) == "vehicle" then attacker = getVehicleController(attacker) end
+    if not isElement(attacker) or getElementType(attacker) ~= "ped" or getTickCount() - lastHurt < 1000 then return end
+    lastHurt = getTickCount()
+    triggerServerEvent("vana-peds:playerAttacked", resourceRoot, attacker)
+end)
+
+-- Aiming a gun at someone: walkers hold up, run or fight (vana-peds); drivers bail out, speed off or
+-- fight (vana-traffic). Reported twice a second while the aim lasts.
+setTimer(function()
+    local slot = getPedWeaponSlot(localPlayer)
+    if slot < 2 or slot > 7 or not getPedControlState(localPlayer, "aim_weapon") or getPedOccupiedVehicle(localPlayer) then return end
+    local target = getPedTarget(localPlayer)
+    if not isElement(target) or getElementType(target) ~= "ped" or isPedDead(target) then return end
+    local car = getPedOccupiedVehicle(target)
+    local traffic = getResourceFromName("vana-traffic")
+    if car and getElementData(car, "vana:trafficCar") and traffic and getResourceState(traffic) == "running" then
+        triggerServerEvent("vana-traffic:incident", getResourceRootElement(traffic), car, localPlayer, "aimed", 0)
+    elseif getElementData(target, "vana:ambient") then
+        triggerServerEvent("vana-peds:aimed", resourceRoot, target)
+    end
+end, 500, 0)

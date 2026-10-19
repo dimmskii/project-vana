@@ -5,9 +5,11 @@ Wanted = {
         damaged_ped = 5, damaged_cop = 45, stab_ped = 35, stab_cop = 100,
         damage_car = 30, hit_car = 2, damage_cop_car = 80, destroy_vehicle = 70,
         car_steal = 15, kill_ped_with_car = 18, kill_cop_with_car = 80, kill_cop = 100,
+        jack_cop = 45, -- ours: dragging a cop out of their car
+        holdup = 30, threaten_cop = 45, -- ours: robbing someone at gunpoint, aiming at a cop
     },
     -- Crimes against the police raise the wanted level to at least this many stars at once.
-    minStars = { damaged_cop = 1, stab_cop = 2, damage_cop_car = 2, kill_cop = 2, kill_cop_with_car = 2 },
+    minStars = { threaten_cop = 1, jack_cop = 1, damaged_cop = 1, stab_cop = 2, damage_cop_car = 2, kill_cop = 2, kill_cop_with_car = 2 },
     -- Chaos needed for 1-6 stars (CWanted::UpdateWantedLevel), and the pursuit each level sends.
     thresholds = { 50, 180, 550, 1200, 2400, 4600 },
     pursuit = {

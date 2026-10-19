@@ -44,6 +44,12 @@ built, so ambient traffic and scripted actors behave alike.
     reports each model's front length (bounding box) once.
 - **Spawning:** the server turns the engine on (server-created vehicles start with it off, and a
   native driver can't move them), and the owner gives the car a rolling start along its heading.
+- **Lanes:** path nodes and navi points sit on the middle of the road, so every target (cruising
+  and stop points alike) is moved into the unit's lane: 5.4 m lanes (the engine's width), right of
+  the centre line on two-way roads, spread across a one-way road. A unit keeps the lane it's in.
+  `traffictest` fails if any light stop lands on the centre line of a two-way road.
+- **Bikes, bicycles and quads:** their riders stay ambient peds with GTA's ambient event profile while
+  riding (not mission actors), so collisions knock them off as in vanilla.
 - **Light rules (vanilla):**
   - Red: stop, unless the line can't be made even braking hard (7 m/s²).
   - Amber: stop if it can be done comfortably (5 m/s²) at the stop point; otherwise commit and
@@ -115,6 +121,10 @@ routes under the vanilla light cycle, with realistic acceleration and braking. I
 - no stalled units
 
 ## Not yet verified in game
+
+- Lane-offset targets: how cars hold their lane through turns and at lights.
+- Riders knocked off bikes (ambient event profile while riding).
+- Jacked crews, passengers' answers and holdups of drivers (see population.md).
 
 The server-side logic is tested; the client side needs a real client:
 

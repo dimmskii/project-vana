@@ -11,6 +11,7 @@ Planner.STOP_BACK = 3       -- the front bumper stops this far behind the navi p
 Planner.AMBER_DECEL = 5     -- m/s^2; on amber, stop only if this deceleration still makes the stop point
 Planner.HARD_DECEL = 7      -- m/s^2; on red, go through only if even this can't stop before the line
 Planner.ROUTE_AHEAD = 12    -- nodes kept planned ahead of the unit
+Planner.LANE_WIDTH = 5.4    -- the engine's lane width (CCarPathLink::OneWayLaneOffset)
 Planner.random = math.random
 
 local paths = exports["vana-paths"]
@@ -38,9 +39,14 @@ end
 -- Lanes carrying traffic along this link (from its node toward link.area/link.id). Checked against
 -- the retail roads: leftLanes run toward the navi node's target, rightLanes away from it (with the
 -- opposite reading, 93% of divided roads would have their opposite carriageway on the right).
+local function naviOf(link)
+    if link.navi == nil then link.navi = link.naviArea and paths:getNaviNode(link.naviArea, link.naviIndex) or false end
+    return link.navi
+end
+
 function Planner.lanes(link)
     if link.lanes == nil then
-        local navi = link.naviArea and paths:getNaviNode(link.naviArea, link.naviIndex)
+        local navi = naviOf(link)
         if not navi then
             link.lanes = 1
         else
@@ -49,6 +55,59 @@ function Planner.lanes(link)
         end
     end
     return link.lanes
+end
+
+-- Lane centres for traffic along this link, in metres to the right of the path line (which runs
+-- down the middle of the road): on a two-way road our lanes sit right of the centre line; on a
+-- one-way road they are spread across it.
+function Planner.laneCenters(link)
+    if link.centers == nil then
+        local navi = naviOf(link)
+        local mine, other = 1, 0
+        if navi then
+            local toward = navi.targetArea == link.area and navi.targetId == link.id
+            mine = math.max(1, toward and navi.leftLanes or navi.rightLanes)
+            other = toward and navi.rightLanes or navi.leftLanes
+        end
+        local centers = {}
+        for i = 1, mine do
+            centers[i] = (other > 0 and (i - 0.5) or (i - (mine + 1) / 2)) * Planner.LANE_WIDTH
+        end
+        link.centers = centers
+    end
+    return link.centers
+end
+
+-- The lane a unit at (x, y) drives in now (index into the current link's centres), tracked on the
+-- route so targets ahead keep it.
+local function currentLane(route, x, y)
+    local prev, cur = route[route.idx - 1], route[route.idx]
+    if not prev or not cur or not cur.link then return route.lane or 1 end
+    local dx, dy = cur.x - prev.x, cur.y - prev.y
+    local len = sqrt(dx * dx + dy * dy)
+    if len < 0.1 then return route.lane or 1 end
+    local lateral = ((x - prev.x) * dy - (y - prev.y) * dx) / len
+    local best, bestDist = 1, math.huge
+    for i, c in ipairs(Planner.laneCenters(cur.link)) do
+        if math.abs(c - lateral) < bestDist then best, bestDist = i, math.abs(c - lateral) end
+    end
+    route.lane = best
+    return best
+end
+
+-- (x, y) moved into lane `lane` of `link`, for travel along (dirX, dirY).
+local function inLane(x, y, dirX, dirY, link, lane)
+    if not link then return x, y end
+    local centers = Planner.laneCenters(link)
+    local offset = centers[math.min(lane, #centers)]
+    return x + dirY * offset, y - dirX * offset
+end
+
+local function direction(a, b)
+    local dx, dy = b.x - a.x, b.y - a.y
+    local len = sqrt(dx * dx + dy * dy)
+    if len < 0.1 then return 0, 0 end
+    return dx / len, dy / len
 end
 
 function Planner.isUsable(node, flood)
@@ -140,6 +199,7 @@ end
 -- reach), mode ("normal" or "accurate"), hold (stopping for a light), light, index.
 function Planner.chooseTarget(route, x, y, speed, lightState, front)
     front = front or 0
+    local lane = currentLane(route, x, y)
     local lookahead = math.max(Planner.LOOKAHEAD, speed * speed / (2 * Planner.AMBER_DECEL) + 15)
     local px, py, dist = x, y, 0
     for j = route.idx, #route do
@@ -167,8 +227,8 @@ function Planner.chooseTarget(route, x, y, speed, lightState, front)
                     if stop then
                         route.decisions[light] = "hold"
                         local back = Planner.STOP_BACK + front
-                        return { x = light.x - light.dirX * back, y = light.y - light.dirY * back,
-                                 z = e.z, mode = "accurate", hold = true, light = light, index = j }
+                        local sx, sy = inLane(light.x - light.dirX * back, light.y - light.dirY * back, light.dirX, light.dirY, e.link, lane)
+                        return { x = sx, y = sy, z = e.z, mode = "accurate", hold = true, light = light, index = j }
                     end
                     route.decisions[light] = "go-" .. colour
                 end
@@ -177,11 +237,15 @@ function Planner.chooseTarget(route, x, y, speed, lightState, front)
         dist = dist + sqrt((e.x - px) ^ 2 + (e.y - py) ^ 2)
         px, py = e.x, e.y
         if dist >= lookahead then
-            return { x = e.x, y = e.y, z = e.z, mode = "normal", hold = false, index = j }
+            local dirX, dirY = direction(route[j - 1] or e, e)
+            local tx, ty = inLane(e.x, e.y, dirX, dirY, e.link, lane)
+            return { x = tx, y = ty, z = e.z, mode = "normal", hold = false, index = j }
         end
     end
     local last = route[#route]
-    return { x = last.x, y = last.y, z = last.z, mode = "normal", hold = false, index = #route }
+    local dirX, dirY = direction(route[#route - 1] or last, last)
+    local tx, ty = inLane(last.x, last.y, dirX, dirY, last.link, lane)
+    return { x = tx, y = ty, z = last.z, mode = "normal", hold = false, index = #route }
 end
 
 -- Whether the unit's native task needs a new target. Restarting the task re-plans GTA's road route,

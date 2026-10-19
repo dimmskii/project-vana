@@ -24,11 +24,12 @@ local function randomRoute()
     end
 end
 
-addCommandHandler("traffictest", function(source, _, seed)
-    if getElementType(source) ~= "console" then return end
+-- Runs as a coroutine resumed every frame, one unit at a time: a cold start (every node fetched
+-- through vana-paths' exports) would otherwise exceed the script time limit.
+local function run(seed)
     math.randomseed(tonumber(seed) or 1234)
     local t0 = getTickCount()
-    local stats = { redRuns = 0, wrongWay = 0, committedRed = 0, amberRuns = 0, uturns = 0, deadEndTurns = 0, badNodes = 0, stalled = 0, lightStops = 0, lightPasses = 0 }
+    local stats = { redRuns = 0, wrongWay = 0, committedRed = 0, amberRuns = 0, uturns = 0, deadEndTurns = 0, badNodes = 0, stalled = 0, lightStops = 0, lightPasses = 0, centreStops = 0 }
     local totalDist, retargets = 0, 0
 
     for _ = 1, CARS do
@@ -68,7 +69,13 @@ addCommandHandler("traffictest", function(source, _, seed)
                 want = math.min(CRUISE, math.sqrt(2 * DECEL * 0.6 * math.max(0, toStop)))
             end
             if want > v then v = math.min(want, v + ACCEL * DT) else v = math.max(want, v - DECEL * DT) end
-            if target.hold and v < 0.5 and not holding then stats.lightStops = stats.lightStops + 1 end
+            if target.hold and v < 0.5 and not holding then
+                stats.lightStops = stats.lightStops + 1
+                -- Stop points sit in a lane, right of the centre line on two-way roads (never on it).
+                local link = route[target.index].link
+                local lateral = (target.x - target.light.x) * target.light.dirY - (target.y - target.light.y) * target.light.dirX
+                if link and Planner.laneCenters(link)[1] > 0 and lateral < 2 then stats.centreStops = stats.centreStops + 1 end
+            end
             holding = target.hold and v < 0.5
 
             -- Move along the route polyline, watching the light governing each stop line we cross.
@@ -104,14 +111,27 @@ addCommandHandler("traffictest", function(source, _, seed)
         end
         totalDist = totalDist + travelled
         if travelled < 500 then stats.stalled = stats.stalled + 1 end
+        coroutine.yield()
     end
 
-    local ok = stats.redRuns == 0 and stats.wrongWay == 0 and stats.uturns == 0 and stats.badNodes == 0 and stats.stalled == 0 and stats.lightStops > 0
-    outputServerLog(("[traffictest] %d units x %ds simulated in %d ms, avg %.1f km each"):format(CARS, DURATION, getTickCount() - t0, totalDist / CARS / 1000))
+    local ok = stats.centreStops == 0 and stats.redRuns == 0 and stats.wrongWay == 0 and stats.uturns == 0 and stats.badNodes == 0 and stats.stalled == 0 and stats.lightStops > 0
+    outputServerLog(("[traffictest] %d units x %ds simulated in %d ms (across frames), avg %.1f km each"):format(CARS, DURATION, getTickCount() - t0, totalDist / CARS / 1000))
     outputServerLog(("[traffictest] light stops %d, green passes %d, amber passes %d, amber-committed red clears %d, red runs %d")
         :format(stats.lightStops, stats.lightPasses, stats.amberRuns, stats.committedRed, stats.redRuns))
     outputServerLog(("[traffictest] native retargets %.1f per unit-minute"):format(retargets / CARS / (DURATION / 60)))
     outputServerLog(("[traffictest] u-turns %d (dead ends %d), bad nodes %d, wrong-way links %d, stalled units %d")
         :format(stats.uturns, stats.deadEndTurns, stats.badNodes, stats.wrongWay, stats.stalled))
+    outputServerLog(("[traffictest] stops on the centre line of a two-way road: %d"):format(stats.centreStops))
     outputServerLog("[traffictest] " .. (ok and "PASS" or "FAIL"))
+end
+
+addCommandHandler("traffictest", function(source, _, seed)
+    if getElementType(source) ~= "console" then return end
+    local co = coroutine.create(run)
+    local function step()
+        local ok, err = coroutine.resume(co, seed)
+        if not ok then outputServerLog("[traffictest] error: " .. tostring(err)) return end
+        if coroutine.status(co) ~= "dead" then setTimer(step, 0, 1) end
+    end
+    step()
 end)

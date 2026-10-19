@@ -19,6 +19,8 @@ local CONFIG = {
 
 local walkers = {}    -- ped -> walker
 local released = {}
+local Holdup = {}     -- aiming a gun at someone (filled in below)
+local challengePlayers -- rival gangs picking fights (below)
 local enabled = true
 
 local function eligiblePlayers()
@@ -177,7 +179,10 @@ end
 -- A fresh walking route from wherever the ped is now.
 local function routeFromHere(ped)
     local x, y, z = getElementPosition(ped)
+    -- Nearby first; a ped dropped far from any sidewalk (dragged out of a car on a highway) still
+    -- gets somewhere to walk to rather than standing still.
     local area, id = paths:findNearestNode(x, y, z, "ped", 60)
+    if not area then area, id = paths:findNearestNode(x, y, z, "ped", 250) end
     local route = area and PedPlanner.newRoute(area, id)
     if route then route.idx = 1 end -- head for the nearest sidewalk node first
     return route
@@ -205,6 +210,7 @@ local function startEncounter(walker, mode, target, vehicle)
 end
 
 local function endEncounter(walker)
+    if walker.encounter and walker.encounter.mode == "holdup" and isElement(walker.ped) then setPedAnimation(walker.ped) end
     walker.encounter, walker.target = nil, nil
     walker.route = routeFromHere(walker.ped) or walker.route
 end
@@ -262,6 +268,28 @@ local function updateWalker(walker, players, signal, walkMsLeft)
             or getDistanceBetweenPoints3D(x, y, z, tx, ty, tz) > rules.encounter.giveUpDistance
             -- An arrest is off once the player isn't wanted any more.
             or (e.mode == "arrest" and getElementType(target) == "player" and getPlayerWantedLevel(target) == 0)
+        -- A jack that can't happen any more (the car drove off, or the ped got thrown aside): cops
+        -- and gang members go for whoever has the car; others give up.
+        if not over and e.mode == "jack" and isElement(e.vehicle) then
+            local vx, vy, vz = getElementVelocity(e.vehicle)
+            local ex, ey, ez = getElementPosition(e.vehicle)
+            if (vx * vx + vy * vy + vz * vz) * 2500 > 36 or getDistanceBetweenPoints3D(x, y, z, ex, ey, ez) > 12 then
+                local driver = getVehicleController(e.vehicle)
+                if (walker.kind == "cop" or walker.kind == "gang") and driver then
+                    startEncounter(walker, "fight", driver)
+                    return
+                end
+                over = true
+            end
+        end
+        if not over and e.mode == "holdup" then
+            over = Holdup.update(walker)
+            if over == "flee" then
+                endEncounter(walker)
+                startEncounter(walker, "flee", target)
+                return
+            end
+        end
         if not over then
             walker.lastX, walker.lastY, walker.lastMoved = x, y, getTickCount()
             return
@@ -295,6 +323,11 @@ local function updateWalker(walker, players, signal, walkMsLeft)
     end
 
     local route = walker.route
+    if not route then
+        walker.route = routeFromHere(ped)
+        if not walker.route then return removeWalker(walker, true) end
+        route = walker.route
+    end
     PedPlanner.advance(route, x, y)
     if not PedPlanner.extend(route) and route.idx >= #route then return removeWalker(walker) end
 
@@ -323,6 +356,7 @@ setTimer(function()
     local _, _, walkMsLeft = exports["vana-lights"]:getPhase()
     if signal ~= "walk" then walkMsLeft = 0 end
     for _, walker in pairs(walkers) do updateWalker(walker, players, signal, walkMsLeft or 0) end
+    challengePlayers(players)
 
     for ped in pairs(released) do
         if not isElement(ped) then
@@ -396,29 +430,44 @@ function engagePed(ped, mode, target)
     return true
 end
 
--- A player attacked one of our peds (reported by its owner): kind and personality decide.
-addEvent("vana-peds:attacked", true)
-addEventHandler("vana-peds:attacked", resourceRoot, function(ped, attacker, weapon)
-    local walker = walkers[ped]
-    if not walker or walker.owner ~= client or not isElement(attacker) or getElementType(attacker) ~= "player" then return end
+local function rivals(a, b)
+    return a and b and rules.rivals[a] and rules.rivals[a][b] or false
+end
+
+-- Members of `gang` near (x, y, z) join a fight against `attacker` (not hitting each other).
+local function backup(gang, x, y, z, attacker, except)
+    if not gang or not isElement(attacker) then return end
+    for other, w in pairs(walkers) do
+        if w ~= except and w.gang == gang and other ~= attacker and not (w.encounter and w.encounter.mode == "fight") then
+            local ox, oy, oz = getElementPosition(other)
+            if getDistanceBetweenPoints3D(x, y, z, ox, oy, oz) < rules.gangBackupRadius then startEncounter(w, "fight", attacker) end
+        end
+    end
+end
+
+-- Someone attacked one of our peds: kind and personality decide. attacker: a player or a ped.
+local function attacked(walker, attacker, weapon)
+    local ped = walker.ped
     local x, y, z = getElementPosition(ped)
-    local ax, ay, az = getElementPosition(attacker)
-    if getDistanceBetweenPoints3D(x, y, z, ax, ay, az) > 60 then return end
-    local stab = weapon == 4
-    if walker.kind == "cop" then
-        reportCrime(attacker, stab and "stab_cop" or "damaged_cop", x, y, z)
-    else
-        reportCrime(attacker, stab and "stab_ped" or "damaged_ped", x, y, z)
+    local byPlayer = getElementType(attacker) == "player"
+    if byPlayer then
+        local stab = weapon == 4
+        if walker.kind == "cop" then
+            reportCrime(attacker, stab and "stab_cop" or "damaged_cop", x, y, z)
+        else
+            reportCrime(attacker, stab and "stab_ped" or "damaged_ped", x, y, z)
+        end
     end
     local current = walker.encounter
-    if current and current.target == attacker and current.mode ~= "react" then return end
+    if current and current.target == attacker and current.mode ~= "react" and current.mode ~= "holdup" then return end
+    if current and current.mode == "holdup" then endEncounter(walker) end
 
     local p = walker.personality or {}
     local mode
     if walker.kind == "cop" then
         -- Hitting a cop makes the player wanted (vana-services). Under two stars with nothing in hand
         -- cops arrest (nightstick); otherwise they shoot.
-        mode = (getPlayerWantedLevel(attacker) <= 1 and (getPedWeapon(attacker) or 0) == 0) and "arrest" or "fight"
+        mode = (byPlayer and getPlayerWantedLevel(attacker) <= 1 and (getPedWeapon(attacker) or 0) == 0) and "arrest" or "fight"
     elseif walker.kind == "gang" then
         mode = (p.fear or 0) >= 70 and "flee" or "fight"
     elseif (p.fear or 50) >= rules.collision.fleeFear then
@@ -430,16 +479,68 @@ addEventHandler("vana-peds:attacked", resourceRoot, function(ped, attacker, weap
     end
     startEncounter(walker, mode, attacker)
 
-    -- Gang members come to each other's aid.
+    -- Gang members come to each other's aid; the player's own gang also helps against its rivals.
     if walker.kind == "gang" then
-        for other, w in pairs(walkers) do
-            if w ~= walker and w.gang == walker.gang and not (w.encounter and w.encounter.mode == "fight") then
-                local ox, oy, oz = getElementPosition(other)
-                if getDistanceBetweenPoints3D(x, y, z, ox, oy, oz) < rules.gangBackupRadius then startEncounter(w, "fight", attacker) end
+        local attackerGang = byPlayer and rules.playerGang or (walkers[attacker] and walkers[attacker].gang)
+        if attackerGang ~= walker.gang then backup(walker.gang, x, y, z, attacker, walker) end
+        if byPlayer and rivals(rules.playerGang, walker.gang) then backup(rules.playerGang, x, y, z, ped) end
+    end
+end
+
+-- A ped we simulate was hurt (reported by its owner) by a player or another ped.
+addEvent("vana-peds:attacked", true)
+addEventHandler("vana-peds:attacked", resourceRoot, function(ped, attacker, weapon)
+    local walker = walkers[ped]
+    if not walker or walker.owner ~= client or not isElement(attacker) or attacker == ped then return end
+    local kind = getElementType(attacker)
+    if kind ~= "player" and kind ~= "ped" then return end
+    local x, y, z = getElementPosition(ped)
+    local ax, ay, az = getElementPosition(attacker)
+    if getDistanceBetweenPoints3D(x, y, z, ax, ay, az) > 60 then return end
+    attacked(walker, attacker, weapon)
+end)
+
+-- A player was hurt by a ped (reported by that player): their gang's members nearby defend them.
+addEvent("vana-peds:playerAttacked", true)
+addEventHandler("vana-peds:playerAttacked", resourceRoot, function(attacker)
+    if not isElement(attacker) or getElementType(attacker) ~= "ped" or isPedDead(client) then return end
+    local w = walkers[attacker]
+    if w and w.gang == rules.playerGang then return end -- a homie hitting back stays between the two
+    local x, y, z = getElementPosition(client)
+    local ax, ay, az = getElementPosition(attacker)
+    if getDistanceBetweenPoints3D(x, y, z, ax, ay, az) > 60 then return end
+    backup(rules.playerGang, x, y, z, attacker)
+end)
+
+-- Rival gang members start fights with players close by (on foot, or crawling along in a car).
+local lastChallenge = {} -- walker -> { [player] = tick }
+function challengePlayers(players)
+    local now = getTickCount()
+    for _, player in ipairs(players) do
+        local car = getPedOccupiedVehicle(player)
+        local slow = true
+        if car then
+            local vx, vy, vz = getElementVelocity(car)
+            slow = (vx * vx + vy * vy + vz * vz) * 2500 < rules.initiateMaxCarSpeed ^ 2
+        end
+        if slow and not isPedDead(player) then
+            local px, py, pz = getElementPosition(player)
+            for ped, w in pairs(walkers) do
+                if not w.encounter and not w.leader and rivals(rules.playerGang, w.gang) then
+                    local x, y, z = getElementPosition(ped)
+                    local seen = lastChallenge[w] and lastChallenge[w][player]
+                    if getDistanceBetweenPoints3D(x, y, z, px, py, pz) < rules.initiateRadius
+                        and (not seen or now - seen > rules.initiateCooldown * 1000)
+                        and math.random() < rules.initiateChance * CONFIG.tick / 1000 then
+                        lastChallenge[w] = lastChallenge[w] or {}
+                        lastChallenge[w][player] = now
+                        startEncounter(w, "fight", player)
+                    end
+                end
             end
         end
     end
-end)
+end
 
 -- Dead ambient peds and traffic occupants drop their weapons and sometimes cash (config/drops.lua).
 local drops = population:getDropRules()
@@ -472,4 +573,73 @@ addEventHandler("onPedWasted", root, function()
         local amount = math.random(money.min, money.max)
         temporaryPickup(createPickup(x, y, z - 0.5, 3, 1212, 3600000), function(player) givePlayerMoney(player, amount) end)
     end
+end)
+
+---------------------------------------------------------------------------------------------------
+-- Holdups: a player aiming a gun at one of our peds (reported by that player's client while aiming).
+
+local H = rules.holdup
+local aims = {} -- ped -> { player, first, last, cash }
+
+local function armed(ped)
+    for slot = 2, 7 do
+        if (getPedWeapon(ped, slot) or 0) > 0 then return true end
+    end
+    return false
+end
+
+-- Keeps a holdup going; returns "flee" once the player stops aiming (or someone else took over).
+function Holdup.update(walker)
+    local ped, e = walker.ped, walker.encounter
+    local a = aims[ped]
+    local now = getTickCount()
+    if not a or a.player ~= e.target or not isElement(a.player) or now - a.last > H.releaseMs then return "flee" end
+    if not a.cash and now - a.first >= H.cashSeconds * 1000 then
+        a.cash = true
+        local x, y, z = getElementPosition(ped)
+        reportCrime(a.player, "holdup", x, y, z)
+        local range = H.cash[walker.kind] or H.cash.civilian
+        if range[2] > 0 then
+            local amount = math.random(range[1], range[2])
+            temporaryPickup(createPickup(x + 0.6, y, z - 0.5, 3, 1212, 3600000), function(player) givePlayerMoney(player, amount) end)
+        end
+    end
+    return false
+end
+
+addEvent("vana-peds:aimed", true)
+addEventHandler("vana-peds:aimed", resourceRoot, function(ped)
+    local walker = walkers[ped]
+    if not walker or isPedDead(client) or not isElement(ped) or isPedDead(ped) then return end
+    local x, y, z = getElementPosition(ped)
+    local px, py, pz = getElementPosition(client)
+    if getDistanceBetweenPoints3D(x, y, z, px, py, pz) > H.maxDistance then return end
+    local now = getTickCount()
+    local a = aims[ped]
+    if a and a.player == client and now - a.last < H.releaseMs then a.last = now return end
+    aims[ped] = { player = client, first = now, last = now }
+    local e = walker.encounter
+    if e and e.target == client and e.mode ~= "react" then return end
+
+    local p = walker.personality or {}
+    if walker.kind == "cop" then
+        reportCrime(client, "threaten_cop", x, y, z)
+        startEncounter(walker, "fight", client)
+    elseif walker.kind == "gang" then
+        if walker.gang == rules.playerGang then return end -- a homie lets it go
+        startEncounter(walker, (p.fear or 0) >= 70 and "flee" or "fight", client)
+        backup(walker.gang, x, y, z, client, walker)
+    elseif (p.temper or 50) >= H.fightTemper and armed(ped) then
+        startEncounter(walker, "fight", client)
+    elseif (p.fear or 50) >= H.handsUpFear then
+        startEncounter(walker, "holdup", client)
+        walker.encounter.untilTick = now + H.maxSeconds * 1000
+        setPedAnimation(ped, "ped", "handsup", -1, false, false, false, true)
+    else
+        startEncounter(walker, "flee", client)
+    end
+end)
+
+addEventHandler("onElementDestroy", root, function()
+    if getElementType(source) == "ped" then aims[source] = nil end
 end)

@@ -92,11 +92,37 @@ the nearest sidewalk node.
   - very bad-tempered driver: by chance, drags the player out of their car and drives off in it
     (the car becomes a traffic unit)
   - anyone else: honks
-- **A player attacks a pedestrian:**
+  Civilian passengers of a driver who gets out to fight decide for themselves: bad-tempered ones
+  join in, fearful ones get out and run, the rest stay put.
+- **A player takes a traffic car** (drags the driver out, or gets in once the driver has gone):
+  everyone in it answers. Cops and gang members fight; civilians fight if bad-tempered and not
+  fearful, otherwise get out and run. Dragging a cop out is a crime (`jack_cop`, at least one star),
+  and a police unit whose car is taken fights the thief, then stays behind as walking cops.
+- **A player aims a gun at a car:** cop and gang crews get out and fight; civilian drivers abandon
+  the car and run (fear `bailFear` or more), fight (temper `jackTemper` or more) or speed off.
+- **A player or a ped attacks a pedestrian:**
   - cops fight back, drawing their holstered pistol
-  - gang members fight (or flee if fearful), and same-gang members within 25 m join in
+  - gang members fight (or flee if fearful), and same-gang members within `gangBackupRadius` join in
   - civilians flee if fearful, fight if bad-tempered, or otherwise keep GTA's own event response
     ("react")
+- **A ped jacking a player's car** that drives off or gets away from them: cops and gang members go
+  for whoever has the car; civilians give up and walk on.
+- **Holdups: a player aims a gun at a pedestrian** (`holdup` in `config/personalities.lua`):
+  - cops fight back, and it's a crime (`threaten_cop`, at least one star)
+  - gang members fight (fearful ones run) and their gang joins in; the player's own gang ignores it
+  - civilians fight if bad-tempered and armed, put their hands up if fearful enough, or run
+  - hold the aim on a hands-up victim for `cashSeconds` and they drop cash (a `holdup` crime,
+    reported like any other); stop aiming and they run
+
+## Gangs and players
+
+Every player counts as a member of `playerGang` (vanilla CJ: Grove Street), with gang rivalries in
+`rivals`:
+
+- Rival gang members within `initiateRadius` of a player on foot (or barely moving in a car) start
+  fights, by chance (`initiateChance` per second), at most once per `initiateCooldown` per player.
+- Members of the player's gang nearby defend a player a ped attacks, and join a player's fight
+  against a rival gang member. A homie hit by the player fights back, but nobody else joins in.
 
 ## Weapons and drops
 

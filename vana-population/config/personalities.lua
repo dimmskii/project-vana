@@ -28,4 +28,31 @@ Personalities = {
 
     -- Gang members come to each other's aid within this distance.
     gangBackupRadius = 25,
+
+    -- Every player counts as a member of this gang (vanilla CJ: Grove Street). Its members defend
+    -- players attacked near them and help in fights with rival gangs; rivals start fights.
+    playerGang = "grove",
+    -- Who is hostile to whom (vanilla: Grove against Ballas and Vagos, Vagos against the Aztecas,
+    -- the San Fierro Triads against the Da Nang Boys; the Rifa side with no one).
+    rivals = {
+        grove = { ballas = true, vagos = true },
+        ballas = { grove = true, vagos = true },
+        vagos = { grove = true, ballas = true, aztecas = true },
+        aztecas = { vagos = true },
+        triad = { da_nang = true },
+        da_nang = { triad = true },
+    },
+    -- Rival gang members within initiateRadius of a player on foot (or barely moving in a car) start
+    -- a fight with this chance per second, then leave that player alone for initiateCooldown seconds.
+    initiateRadius = 14, initiateChance = 0.08, initiateCooldown = 60, initiateMaxCarSpeed = 4,
+
+    -- Aiming a gun at someone (ours, after vanilla's aimed-at responses): cops and gangs fight back
+    -- (fellow gang members ignore it), civilians put their hands up (fear at or above handsUpFear),
+    -- fight (temper at or above fightTemper, armed), or run. Hold the aim on a hands-up victim for
+    -- cashSeconds and they drop cash; stop aiming for releaseMs and they run.
+    holdup = {
+        handsUpFear = 35, fightTemper = 75, cashSeconds = 2.5, releaseMs = 2500, maxSeconds = 30,
+        cash = { civilian = { 10, 150 }, gang = { 20, 200 }, cop = { 0, 0 } },
+        maxDistance = 30,
+    },
 }
