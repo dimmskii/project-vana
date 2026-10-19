@@ -20,7 +20,7 @@ end)
 addEventHandler("onClientRender", root, function()
     local vehicle = getPedOccupiedVehicle(localPlayer)
     local fuel = vehicle and getElementData(vehicle, "vana:fuel")
-    if not fuel or not F.enabled or isPlayerMapVisible() or DashboardShown then return end
+    if not fuel or not F.enabled or not radarShown() or DashboardShown then return end
     local W, H = guiGetScreenSize()
     -- The radar sits at (40, 344) in vanilla's 640x448 HUD space, 94 x 76.
     local x, w = W * 40 / 640, W * 94 / 640

@@ -27,11 +27,18 @@ local function values(vehicle)
     }
 end
 
+-- Shown with the radar: vana-map's (GTA's own is hidden), else GTA's.
+function radarShown()
+    local map = getResourceFromName("vana-map")
+    if map and getResourceState(map) == "running" then return exports["vana-map"]:isRadarShown() end
+    return isPlayerHudComponentVisible("radar") and not isPlayerMapVisible()
+end
+
 addEventHandler("onClientRender", root, function()
     DashboardShown = false
     local vehicle = getPedOccupiedVehicle(localPlayer)
     local name = vehicle and getElementData(vehicle, "vana:dashboard")
-    if not name or isPlayerMapVisible() or not isPlayerHudComponentVisible("radar") then return end
+    if not name or not radarShown() then return end
     local textures = skin(name)
     if not textures then return end
     DashboardShown = true

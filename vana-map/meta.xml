@@ -5,8 +5,10 @@
     <script src="config/blipsprites.lua" type="client" />
     <script src="server.lua" type="server" />
     <script src="client.lua" type="client" />
+    <script src="draw_client.lua" type="client" />
     <script src="mapview_client.lua" type="client" />
-    <file src="texreplace.fx" />
+    <script src="radar_client.lua" type="client" />
+    <file src="mask.fx" />
     <!-- Rockstar's, copied at setup (tools/seed/extract_radar.py; docs/setup.md): the blip sprites and the 144 radar tiles -->
     <file src="data/hud.txd" />
     <file src="data/radar/radar00.txd" />
@@ -155,6 +157,8 @@
     <file src="data/radar/radar143.txd" />
     <export function="setPoint" type="server" />
     <export function="removePoint" type="server" />
+    <export function="isRadarShown" type="client" />
+    <export function="setRadarHidden" type="client" />
     <script src="help.lua" type="server" />
     <export function="getHelpPages" type="server" />
 </meta>

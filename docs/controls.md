@@ -118,9 +118,9 @@ hears about changes from `onClientPreferenceChange` (key, value) on the root ele
 | Key | Setting | Read by |
 | --- | --- | --- |
 | `map.blipSize` | HUD > Map > Blip size (60%-175%) | the map (F11) |
-| `minimap.rotation` | HUD > Minimap > Rotation: turns with the camera (vanilla), or north up | the radar of ours, to come |
-| `minimap.blipSize` | HUD > Minimap > Blip size | the radar of ours |
-| `minimap.blipRange` | HUD > Minimap > Nearby icons' range (x0.5-x3 of the short range) | the radar of ours |
+| `minimap.rotation` | HUD > Minimap > Rotation: turns with the camera (vanilla), or north up | the radar |
+| `minimap.blipSize` | HUD > Minimap > Blip size | the radar |
+| `minimap.blipRange` | HUD > Minimap > Nearby icons' range (x0.5-x3 of the short range) | the radar |
 
 ## Menus
 

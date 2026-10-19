@@ -31,9 +31,9 @@ vanilla's shop icons do) or map-wide.
 
 ## Client
 
-`vana-map/client.lua` draws each point as a local blip (so each player can see a different set) in
-its interior only. `Map.setHidden(category, true)` hides a category for this player: the hook for a
-legend / filter screen.
+`vana-map/client.lua` keeps the points; the map and the radar (both ours) draw them, each in its own
+interior only. `Map.setHidden(category, true)` hides a category for this player: the hook for a legend
+/ filter screen.
 
 ## The map (F11, `mapview_client.lua`)
 
@@ -59,16 +59,29 @@ player binds to them (F11, the numpad) opens and drives ours. `radar_opacity_*` 
   marks the end, on the radar too; it goes when you're within 30 m, or when you right-click the
   destination again. `routetest` (console) routes across the map.
 
-## Our icons on the radar
+## The radar (`radar_client.lua`)
 
-MTA blips only take vanilla's 64 icons. A category with an `image` of ours borrows an icon the game
-never shows (the story's contacts: 18 is Emmet's gun) and each client replaces that sprite with the
-image (`texreplace.fx`, a shader on the sprite's texture), so the radar shows ours; the map draws the
-image itself. Gas stations (`gasstation`, from vana-vehicles' pumps) are the first:
-`vana-vehicles/icons/radar_gasstn.png`.
+Ours too: GTA's is hidden (`setPlayerHudComponentVisible("radar", false)`), and ours sits exactly where
+GTA's would (Neon's radar layout, `getPlayerHudComponentProperty("radar", "position" / "size")`: pixels,
+with MTA's and Neon's radar settings applied), drawn with the map's code (`draw_client.lua`).
+
+- **The disc:** the radar tiles around you in a render target, turned by the camera (vanilla) or north
+  up (`minimap.rotation`), on the stock radar's water (#738AAF), drawn through a circle (`mask.fx`) with
+  vanilla's ring (`radardisc`, a quarter, four times) round it. Indoors: no map, a dark disc with blips.
+- **Range:** 150 m from the middle to the rim on foot, out to 300 m driving fast, 480 m flying high.
+- **Icons:** every point and blip at `minimap.blipSize`. Nearby icons (short range: the categories
+  marked `short`, MTA blips with a visible distance) show within their range times `minimap.blipRange`;
+  the rest stay on the rim when off the disc. Squares (icon 0/1) turn into triangles pointing up or down
+  for anything more than 4 m above or below you. North on the rim, you in the middle.
+- **The GPS route** is drawn on the disc too.
+- vana-vehicles' dashboards and fuel gauge show with it (`exports["vana-map"]:isRadarShown()`); another
+  script can hide it with `setRadarHidden(true)`.
+
+vana-map's own points have no MTA blips at all (`client.lua` keeps them as data): the map and the radar
+draw each with its category's icon, a vanilla sprite or an image of ours, so the gas stations show
+`vana-vehicles/icons/radar_gasstn.png` directly.
 
 ## Not yet
 
-Filters from the legend (and saving them per player), a radar of our own drawn the same way (smaller
-blips, the route on it), Neon's extended world (radar tiles past the vanilla square: the map covers
+Filters from the legend (and saving them per player), Neon's extended world (radar tiles past the vanilla square: the map covers
 only the vanilla 6000 m), and places whose features don't exist yet (safehouses and properties).

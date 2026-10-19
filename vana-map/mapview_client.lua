@@ -10,7 +10,7 @@
 --   mouse                           moving it takes the cursor off the middle; left drag pans
 --   right click / Space             GPS to the road nearest the cursor (again on the destination: off)
 MapView = {}
-local WORLD, TILES, TILE = 6000, 12, 500 -- the map's 6000 m, as 12 x 12 radar tiles of 500 m
+local WORLD, TILES, TILE = MapDraw.WORLD, MapDraw.TILES, MapDraw.TILE -- 6000 m: 12 x 12 radar tiles of 500 m
 local ZOOM_STEP, MAX_PPM = 1.25, 1.2     -- per wheel notch or key repeat; the most pixels per metre
 local PAN_PX = 900                        -- pixels a second the move keys pan at
 -- back: around the tiles, the stock radar's water (#738AAF).
@@ -19,25 +19,12 @@ local COLOURS = { back = tocolor(0x73, 0x8A, 0xAF), panel = tocolor(12, 12, 14),
 local COMMANDS = { "radar", "radar_zoom_in", "radar_zoom_out", "radar_move_north", "radar_move_south",
                    "radar_move_east", "radar_move_west", "radar_attach", "radar_help" }
 
-local open, tiles, sprites
+local open
 local view = { x = 0, y = 0, ppm = 0.1 } -- world centre, pixels per metre
 local cursor = { free = false, x = 0, y = 0 }
 local drag, following, showHelp = nil, false, true
 local route, destination, destinationBlip
 local lastTick
-local blipScale = 1 -- the player's "map.blipSize" (vana-controls' preferences)
-
-local function readPreferences()
-    local res = getResourceFromName("vana-controls")
-    if res and getResourceState(res) == "running" then
-        blipScale = tonumber(exports["vana-controls"]:getPreference("map.blipSize")) or 1
-    end
-end
-addEvent("onClientPreferenceChange", false)
-addEventHandler("onClientPreferenceChange", root, function(key) if key == "map.blipSize" then readPreferences() end end)
-addEventHandler("onClientResourceStart", root, function(res)
-    if res == resource or getResourceName(res) == "vana-controls" then readPreferences() end
-end)
 
 local function screen() return guiGetScreenSize() end
 local function sx(v) return v * select(2, guiGetScreenSize()) / 720 end
@@ -88,21 +75,11 @@ local function recentre()
     following = false
 end
 
-local function loadImages()
-    if tiles then return end
-    tiles, sprites = {}, SATxd.load("data/hud.txd") or {}
-    for i = 0, TILES * TILES - 1 do
-        local name = ("radar%02d"):format(i)
-        local t = SATxd.load("data/radar/" .. name .. ".txd")
-        tiles[i] = t and t[name] or false
-    end
-end
-
 local function setOpen(on)
     if on == (open == true) then return end
     open = on
     if on then
-        loadImages()
+        MapDraw.load()
         local px, py = getElementPosition(localPlayer)
         view.x, view.y, view.ppm = px, py, minPpm() * 2
         clampView()
@@ -120,6 +97,9 @@ local function setOpen(on)
     end
 end
 function MapView.isOpen() return open == true end
+-- The GPS route (flat x1, y1, x2, y2 ...) and its waypoint blip, for the radar too.
+function MapView.route() return route end
+function MapView.destinationBlip() return destinationBlip end
 
 -- GPS: the server routes to the road nearest the spot (vana-paths); the destination gets a waypoint
 -- blip of this player's own, so the radar points there too.
@@ -237,10 +217,6 @@ addEventHandler("onClientClick", root, function(button, state, ax, ay)
 end)
 
 -- Drawing ------------------------------------------------------------------------------------------
-local function blipSprite(icon)
-    return Map.images[icon] or (sprites and BlipSprites[icon] and sprites[BlipSprites[icon]])
-end
-
 -- Who is in the legend: the categories with points, and anything else shown with a sprite.
 local function legendEntries()
     local seen, list = {}, {}
@@ -248,7 +224,7 @@ local function legendEntries()
         local c = MapCategories[p.category]
         if c and not seen[c.name] then
             seen[c.name] = true
-            list[#list + 1] = { icon = c.icon, name = c.name }
+            list[#list + 1] = { category = p.category, name = c.name }
         end
     end
     table.sort(list, function(a, b) return a.name < b.name end)
@@ -257,43 +233,23 @@ local function legendEntries()
     return list
 end
 
-local function drawBlips(icon, dim, int)
-    local all = {}
-    for _, blip in ipairs(getElementsByType("blip")) do
-        if getElementDimension(blip) == dim and getElementInterior(blip) == int then all[#all + 1] = blip end
-    end
-    table.sort(all, function(a, b) return getBlipOrdering(a) < getBlipOrdering(b) end)
+-- Every point and blip (draw_client.lua), all of them whatever their range; the one under the cursor.
+local function drawItems(icon, dim, int)
     local w, h = screen()
-    local hover
     local cx, cy = cursorPos()
-    for _, blip in ipairs(all) do
-        local bx, by = getElementPosition(blip)
-        local px, py = toScreen(bx, by)
+    local hover
+    for _, item in ipairs(MapDraw.items(dim, int)) do
+        local px, py = toScreen(item.x, item.y)
         if px > -icon and px < w + icon and py > -icon and py < h + icon then
-            local id = getBlipIcon(blip)
-            local sprite = id > 1 and id ~= 3 and blipSprite(id)
-            if sprite then
-                dxDrawImage(px - icon / 2, py - icon / 2, icon, icon, sprite, 0, 0, 0, tocolor(255, 255, 255), true)
+            if item.tex then
+                dxDrawImage(px - icon / 2, py - icon / 2, icon, icon, item.tex, 0, 0, 0, tocolor(255, 255, 255), true)
             else
-                local r, g, b, a = getBlipColor(blip)
-                local size = sx(2 + getBlipSize(blip))
-                dxDrawRectangle(px - size / 2 - 1, py - size / 2 - 1, size + 2, size + 2, tocolor(0, 0, 0, a), true)
-                dxDrawRectangle(px - size / 2, py - size / 2, size, size, tocolor(r, g, b, a), true)
+                MapDraw.square(px, py, sx(2 + item.size), item, nil, true)
             end
-            if (px - cx) ^ 2 + (py - cy) ^ 2 < (icon / 2) ^ 2 then hover = blip end
+            if (px - cx) ^ 2 + (py - cy) ^ 2 < (icon / 2) ^ 2 then hover = item end
         end
     end
     return hover
-end
-
-local function hoverLabel(blip)
-    for id, b in pairs(Map.blips) do
-        if b == blip then
-            local p = Map.points[id]
-            return p and (p.label or (MapCategories[p.category] and MapCategories[p.category].name))
-        end
-    end
-    if blip == destinationBlip then return "Destination" end
 end
 
 addEventHandler("onClientRender", root, function()
@@ -325,7 +281,7 @@ addEventHandler("onClientRender", root, function()
         for col = 0, TILES - 1 do
             local x, y = toScreen(-WORLD / 2 + col * TILE, WORLD / 2 - row * TILE)
             if x + size > 0 and x < w and y + size > 0 and y < h then
-                local tex = tiles[row * TILES + col]
+                local tex = MapDraw.tile(row, col)
                 if tex then dxDrawImage(x, y, size + 1, size + 1, tex, 0, 0, 0, tocolor(255, 255, 255), true) end
             end
         end
@@ -348,18 +304,18 @@ addEventHandler("onClientRender", root, function()
             lx, ly = x, y
         end
     end
-    -- Blips (smaller than MTA's), then you.
-    local icon = sx(11) * blipScale
-    local hover = drawBlips(icon, getElementDimension(localPlayer), getElementInterior(localPlayer))
+    -- Points and blips (smaller than MTA's), then you.
+    local icon = sx(11) * (tonumber(MapDraw.pref("map.blipSize", 1)) or 1)
+    local hover = drawItems(icon, getElementDimension(localPlayer), getElementInterior(localPlayer))
     local mx, my = toScreen(px, py)
     local _, _, rz = getElementRotation(localPlayer)
-    if sprites and sprites.radar_centre then
-        dxDrawImage(mx - icon * 0.7, my - icon * 0.7, icon * 1.4, icon * 1.4, sprites.radar_centre, -rz, 0, 0, tocolor(255, 255, 255), true)
-    end
+    local arrow = MapDraw.sprite("radar_centre")
+    if arrow then dxDrawImage(mx - icon * 0.7, my - icon * 0.7, icon * 1.4, icon * 1.4, arrow, -rz, 0, 0, tocolor(255, 255, 255), true) end
     -- North, top left of the map.
-    if sprites and sprites.radar_north then
+    local north = MapDraw.sprite("radar_north")
+    if north then
         local nx, ny = toScreen(-WORLD / 2, WORLD / 2)
-        dxDrawImage(math.max(sx(16), nx + sx(8)), math.max(sx(16), ny + sx(8)), icon * 1.4, icon * 1.4, sprites.radar_north, 0, 0, 0, tocolor(255, 255, 255), true)
+        dxDrawImage(math.max(sx(16), nx + sx(8)), math.max(sx(16), ny + sx(8)), icon * 1.4, icon * 1.4, north, 0, 0, 0, tocolor(255, 255, 255), true)
     end
 
     -- The legend, on the right.
@@ -373,7 +329,7 @@ addEventHandler("onClientRender", root, function()
     dxDrawText("Legend", lx + sx(10), ly + sx(4), lx + lw, ly + row * 1.3, COLOURS.title, sx(0.9), "bankgothic", "left", "center", false, false, true)
     for i, e in ipairs(entries) do
         local ey = ly + row * (i + 0.5)
-        local tex = e.player and sprites and sprites.radar_centre or (e.icon and blipSprite(e.icon))
+        local tex = e.player and arrow or (e.icon and MapDraw.icon(e.icon)) or (e.category and MapDraw.categoryImage(e.category))
         if tex then dxDrawImage(lx + sx(10), ey + (row - icon) / 2, icon, icon, tex, 0, 0, 0, tocolor(255, 255, 255), true) end
         dxDrawText(e.name, lx + sx(10) + icon + sx(8), ey, lx + lw - sx(6), ey + row, COLOURS.text, sx(0.85), "default-bold", "left", "center", true, false, true)
     end
@@ -383,7 +339,7 @@ addEventHandler("onClientRender", root, function()
     local arm = sx(9)
     dxDrawLine(cx - arm, cy, cx + arm, cy, tocolor(255, 255, 255, 230), sx(1.5), true)
     dxDrawLine(cx, cy - arm, cx, cy + arm, tocolor(255, 255, 255, 230), sx(1.5), true)
-    local label = hover and hoverLabel(hover)
+    local label = hover and (hover.label or (hover.blip and hover.blip == destinationBlip and "Destination"))
     if label then
         dxDrawText(label, cx + sx(13) + 1, cy - sx(18) + 1, cx + sx(400), cy, tocolor(0, 0, 0, 220), sx(0.95), "default-bold", "left", "bottom", false, false, true)
         dxDrawText(label, cx + sx(13), cy - sx(18), cx + sx(400), cy, COLOURS.text, sx(0.95), "default-bold", "left", "bottom", false, false, true)
