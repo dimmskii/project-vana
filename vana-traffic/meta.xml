@@ -3,6 +3,7 @@
     <include resource="vana-paths" />
     <include resource="vana-lights" />
     <include resource="vana-population" />
+    <script src="lib.lua" type="client" />
     <script src="planner.lua" type="server" />
     <script src="server.lua" type="server" />
     <script src="test.lua" type="server" />

@@ -13,4 +13,5 @@
     <file src="lib/text.lua" />
     <file src="lib/prompts.lua" />
     <file src="lib/menu_input.lua" />
+    <file src="lib/debug.lua" />
 </meta>

@@ -165,6 +165,15 @@ local function asElements(t, limit)
     return out, set
 end
 
+-- What a target is, for the vana-controls:targets debug lines.
+local function nameOf(e)
+    if not isElement(e) then return "nothing" end
+    local kind = getElementType(e)
+    if kind == "player" then return "player " .. plainName(e) end
+    if kind == "vehicle" then return "vehicle " .. (getVehicleName(e) or "?") .. (tids[e] and (" #" .. tids[e]) or "") end
+    return kind .. (tids[e] and (" #" .. tids[e]) or "")
+end
+
 local function run(player, name, words, picked, seenList)
     local entry = actions[name]
     if not entry then return end
@@ -175,7 +184,9 @@ local function run(player, name, words, picked, seenList)
     local seenOrder, seen = asElements(seenList, 24)
     if isElement(picked) then seen[picked] = true end
     if def.targets then
+        local trace = Debug.on("targets") and {} or nil
         if target then
+            if trace then Debug.log("targets", ("%s /%s: named %s, %s"):format(plainName(player), def.name, nameOf(target), takes(entry, player, target) and "taken" or "refused")) end
             if not takes(entry, player, target) then return status(player, "You can't do that to " .. (getElementType(target) == "player" and plainName(target) or "that") .. ".") end
         else
             local vehicle = def.inside and getPedOccupiedVehicle(player)
@@ -187,9 +198,16 @@ local function run(player, name, words, picked, seenList)
             for _, e in ipairs(candidates) do
                 if takes(entry, player, e) then
                     local ok, reason = gate(player, def, e, seen)
+                    if trace then trace[#trace + 1] = nameOf(e) .. (ok and " TAKEN" or (": " .. tostring(reason))) end
                     if ok then target = e break end
                     firstWhy = firstWhy or reason
+                elseif trace then
+                    trace[#trace + 1] = nameOf(e) .. ": not one it acts on"
                 end
+            end
+            if trace then
+                Debug.log("targets", ("%s /%s: %d seen, clicked %s, inside %s; %s"):format(plainName(player), def.name, #seenOrder,
+                    nameOf(picked), nameOf(vehicle), #trace > 0 and table.concat(trace, "; ") or "no candidates"))
             end
             if not target then return status(player, firstWhy or "There's nothing here for that.") end
         end

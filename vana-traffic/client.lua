@@ -161,9 +161,10 @@ addEventHandler("onClientElementDestroy", root, function()
     commands[source], lastCollision[source] = nil, nil
 end)
 
--- Debug telemetry (server toggles it with /traffic debug on): real speed and native autopilot state.
+-- Debug telemetry (vana-traffic:telemetry, docs/debug.md; /traffic debug on): real speed and native
+-- autopilot state.
 setTimer(function()
-    if not getElementData(resourceRoot, "debug") then return end
+    if not Debug.on("telemetry") then return end
     local samples = {}
     for vehicle in pairs(commands) do
         if isElement(vehicle) and isElementSyncer(vehicle) then

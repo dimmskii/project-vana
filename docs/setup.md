@@ -117,6 +117,7 @@ on every start (`adminRights` in `vana-player/config/player.lua`; the `Console` 
 <right name="command.warphere" access="true"></right>
 <right name="command.warps" access="true"></right>
 <right name="command.cleanvehicles" access="true"></right>
+<right name="command.vanadebug" access="true"></right>
 ```
 
 After editing `acl.xml` on a running server, run `reloadacl` in the console.

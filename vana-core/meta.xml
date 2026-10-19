@@ -1,5 +1,13 @@
 <meta>
-    <info author="ProjectVana" name="Vana core" description="Server start line; players' script errors and warnings in the server log" version="0.1.0" type="script" />
+    <info author="ProjectVana" name="Vana core" description="Server start line; players' script errors in the server log; debug switches (/vanadebug)" version="0.1.0" type="script" />
+    <settings>
+        <setting name="@debug" value="" friendlyname="Debug switches" desc="Resources with debug checks on: name, or name:topic,topic; space-separated (/vanadebug sets it)" />
+    </settings>
+    <script src="lib.lua" type="shared" />
     <script src="server.lua" type="server" />
     <script src="client.lua" type="client" />
+    <script src="help.lua" type="server" />
+    <export function="setDebug" type="server" />
+    <export function="isDebugOn" type="server" />
+    <export function="getHelpPages" type="server" />
 </meta>

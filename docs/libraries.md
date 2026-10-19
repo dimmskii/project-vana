@@ -33,6 +33,7 @@ it in its own Lua state. It behaves exactly like a local copy: no per-call cost,
 | `prompts` (`Prompts`) | On-foot markers that start something on `/use` ("Press F to ..."), or at once with `walkIn`; offers to vana-controls' /use; the server checks you're still on it | vana-shops, vana-gym, vana-activities |
 | `actions` (`Actions`) | Actions: what a player does to something, as a command (server); the exports vana-controls collects ([controls.md](controls.md)) | vana-controls, vana-vehicles, vana-shops |
 | `menu_input` (`MenuInput`) | One way through every menu: keys, pad, mouse (client) | vana-controls, vana-shops, vana-activities |
+| `debug` (`Debug`) | Debug switches: `Debug.on(topic)`, `Debug.log(topic, text)` to the server log from either side ([debug.md](debug.md)) | vana-controls, vana-core, vana-peds, vana-traffic |
 | `text` (`Gxt`) | The game's text, answered by `vana-text` | vana-shops, vana-activities |
 
 When these replaced each resource's own readers, the old and new readers were run side by side on the

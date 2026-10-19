@@ -29,6 +29,7 @@ Start here:
 | [docs/editor.md](docs/editor.md) | Placement data in MTA map resources (`[data]/vana-data-*`) and editing it in the Map Editor |
 | [docs/wildlife.md](docs/wildlife.md) | Creatures from community mods (Bigfoot) |
 | [docs/libraries.md](docs/libraries.md) | Shared code in `vana-lib` (imported at runtime): game-file readers (GXT, IDE, DAT, TXD), map data; `vana-text` |
+| [docs/debug.md](docs/debug.md) | Debug switches (`/vanadebug`): per-resource checks by topic, the stuck-ped detector, players' errors in the server log |
 | [docs/credits.md](docs/credits.md) | Third-party mods we use (authors, sources, terms) and how mod content is handled |
 
 ## Resources
@@ -38,7 +39,7 @@ Start here:
 | `vana-lib` | Shared code the other resources import: game-file readers, map data (docs/libraries.md) |
 | `vana-text` | The game's text (`american.gxt`) for every resource |
 | `vana-controls` | `/use` and `/interact`, every resource's actions as commands, the status line (the game's help box) |
-| `vana-core` | Placeholder core resource |
+| `vana-core` | Players' script errors in the server log; debug switches (`/vanadebug`) and the stuck-ped detector |
 | `vana-player` | Player persistence, spawning, wasted/busted restarts |
 | `vana-paths` | Reads the retail `NODES*.DAT` path graph; nearest-node, link and navi queries; traffic light stop rule |
 | `vana-lights` | Runs the traffic lights on the vanilla single-player cycle |

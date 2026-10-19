@@ -20,7 +20,11 @@ local CONFIG = {
 local units = {}      -- vehicle -> unit
 local released = {}   -- elements no longer driven by us: peds -> spec (+ encounter), vehicles -> true
 local enabled = true
-local debugging = false
+-- vana-traffic:telemetry (docs/debug.md): vana-core's debug switch, on this resource's root element.
+local function debugging()
+    local v = getElementData(resourceRoot, "vana:debug")
+    return v == "all" or (type(v) == "string" and ("," .. v .. ","):find(",telemetry,", 1, true) ~= nil)
+end
 
 local function eligiblePlayers()
     local list = {}
@@ -442,7 +446,7 @@ addEventHandler("vana-traffic:incident", resourceRoot, function(vehicle, player,
     if incident ~= "aimed" and (incident ~= "collision" or severity >= rules.collision.ignoreBelow) then
         reportCrime(player, unit.kind == "cop" and "damage_cop_car" or incident == "collision" and "hit_car" or "damage_car", x, y, z)
     end
-    if debugging then
+    if debugging() then
         outputServerLog(("[traffic-debug] %s by %s on %s: severity %.0f -> %s"):format(incident, getPlayerName(player),
             getVehicleNameFromModel(getElementModel(vehicle)), severity, action))
     end
@@ -499,9 +503,10 @@ addCommandHandler("traffic", function(source, _, action, value)
         for _, unit in pairs(units) do removeUnit(unit) end
         reply(("Removed %d traffic vehicles."):format(count))
     elseif action == "debug" then
-        debugging = value == "on"
-        setElementData(resourceRoot, "debug", debugging)
-        reply("Traffic debug telemetry " .. (debugging and "on: slow units are logged to the server log." or "off."))
+        local core = getResourceFromName("vana-core")
+        if not core or getResourceState(core) ~= "running" then return reply("Traffic debug needs vana-core (its /vanadebug switches).") end
+        exports["vana-core"]:setDebug("vana-traffic", value == "on" and "telemetry" or nil)
+        reply("Traffic debug telemetry " .. (value == "on" and "on: slow units are logged to the server log." or "off.") .. " (as /vanadebug traffic)")
     elseif action == "density" and tonumber(value) then
         CONFIG.density = math.max(0, math.min(300, tonumber(value))) / 100
         reply(("Traffic density set to %d%% of vanilla."):format(CONFIG.density * 100))
@@ -522,7 +527,7 @@ end)
 -- Debug telemetry from owning clients: { vehicle, speed (m/s), native autopilot fields } per unit.
 addEvent("vana-traffic:telemetry", true)
 addEventHandler("vana-traffic:telemetry", resourceRoot, function(samples)
-    if not debugging or type(samples) ~= "table" then return end
+    if not debugging() or type(samples) ~= "table" then return end
     for _, sample in ipairs(samples) do
         local unit = type(sample) == "table" and units[sample.vehicle]
         if unit and unit.owner == client and unit.target and not unit.target.hold and (tonumber(sample.speed) or 99) < 4 then

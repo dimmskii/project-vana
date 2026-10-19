@@ -826,3 +826,17 @@ Services = {
     spawnResponder = spawnResponder, callout = callout, send = send, driveTo = driveTo, leave = leave,
     release = release, crewAlive = crewAlive, allOnFoot = allOnFoot, distanceTo = distanceTo, bestGunSlot = bestGunSlot,
 }
+
+-- For vana-core's stuck-ped debug (docs/debug.md): which crew a ped is on and what that crew is doing.
+function describePed(ped)
+    for _, r in pairs(responders) do
+        for i, member in ipairs(r.crew) do
+            if member == ped then
+                return ("%s crew %d of %d, %s for %.0fs, last order %s; owner %s"):format(r.kind, i, #r.crew, tostring(r.state),
+                    (getTickCount() - (r.since or getTickCount())) / 1000,
+                    r.lastOrder and ("%.0fs ago"):format((getTickCount() - r.lastOrder) / 1000) or "none",
+                    isElement(r.owner) and (getPlayerName(r.owner):gsub("#%x%x%x%x%x%x", "")) or "none")
+            end
+        end
+    end
+end

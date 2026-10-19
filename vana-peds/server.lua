@@ -656,3 +656,23 @@ end)
 addEventHandler("onElementDestroy", root, function()
     if getElementType(source) == "ped" then aims[source] = nil end
 end)
+
+-- For vana-core's stuck-ped debug (docs/debug.md): what this resource last told a ped.
+function describePed(ped)
+    local w = walkers[ped]
+    if not w then return released[ped] and "released (no orders, automatic sync)" or nil end
+    local now = getTickCount()
+    local function ago(t) return t and ("%.0fs ago"):format((now - t) / 1000) or "never" end
+    local order
+    if w.encounter then
+        local e = w.encounter
+        order = ("encounter %s on %s, %.0fs left"):format(e.mode, isElement(e.target) and getElementType(e.target) or "nothing", (e.untilTick - now) / 1000)
+    elseif w.target then
+        local t = w.target
+        order = ("%s to %.1f, %.1f%s, sent %s"):format(w.leader and "follow" or "walk", t.x, t.y, t.hold and " (hold at kerb)" or "", ago(w.sentAt))
+    else
+        order = "no target"
+    end
+    return ("%s%s, %s; moved %s, re-sent %s; owner %s"):format(w.kind, w.gang and (" " .. w.gang) or "", order, ago(w.lastMoved), ago(w.retried),
+        isElement(w.owner) and (getPlayerName(w.owner):gsub("#%x%x%x%x%x%x", "")) or "none")
+end
