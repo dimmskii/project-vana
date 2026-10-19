@@ -81,17 +81,18 @@ def dec(buf, pos):
 
 durations, beats = [], {}
 handles = {}
-for tid, (pak, offset, length) in enumerate(tracks):
+for tid, (pak, offset, _) in enumerate(tracks):
     name = pak_names[pak]
     f = handles.get(name) or open(os.path.join(GTA, "audio", "streams", name), "rb")
     handles[name] = f
     f.seek(offset)
     header = dec(f.read(8068), offset)
-    data_at, data_end = offset + 8068, offset + length
-    # The duration is the stream's last sample position over its rate. Walk the Ogg pages (decoding only
-    # their headers) within the track's TrakLkup length: the header's own size field is sometimes the
-    # whole entry's, which would run into the next track, and some tracks end in a cut-off page, whose
-    # samples never decode: only whole pages count.
+    # The Ogg data's size is the header's last length entry, as the engine and MTA's playSFX read it
+    # (TrakLkup's length includes the header for some tracks and not for others).
+    size = [l for l, _ in (struct.unpack_from("<II", header, 8000 + 8 * i) for i in range(8)) if l != 0xCDCDCDCD][-1]
+    data_at, data_end = offset + 8068, offset + 8068 + size
+    # The duration is the stream's last sample position over its rate: walk the Ogg pages (decoding
+    # only their headers), counting whole pages only.
     rate, serial, granule, pos = None, None, 0, data_at
     while pos + 27 <= data_end:
         f.seek(pos)
