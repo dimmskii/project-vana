@@ -15,6 +15,9 @@ local CONFIG = {
     pedSpacing = 6,
     tick = 500,
     clearRadius = 18,   -- an unlit crossing is clear when no moving vehicle is this close to it
+    stuckMs = 8000,     -- not moving this long (and not holding at a kerb): the target is sent again
+    resends = 2,        -- after this many sends in vain, a fresh route from where the ped stands
+    maxHoldMs = 60000,  -- the longest a ped waits at a kerb before walking somewhere else
 }
 
 local walkers = {}    -- ped -> walker
@@ -22,6 +25,14 @@ local released = {}
 local Holdup = {}     -- aiming a gun at someone (filled in below)
 local challengePlayers -- rival gangs picking fights (below)
 local enabled = true
+
+-- vana-peds:orders (docs/debug.md): vana-core's debug switch on this resource's root element.
+local function debugOn(topic)
+    local v = getElementData(resourceRoot, "vana:debug")
+    return v == "all" or (type(v) == "string" and ("," .. v .. ","):find("," .. topic .. ",", 1, true) ~= nil)
+end
+
+local function debugLog(text) if debugOn("orders") then outputServerLog("[debug vana-peds:orders] " .. text) end end
 
 local function eligiblePlayers()
     local list = {}
@@ -259,6 +270,14 @@ local function updateWalker(walker, players, signal, walkMsLeft)
     if not owner then return removeWalker(walker) end
     local ownerGone = not isElement(walker.owner) or select(2, nearestPlayer(x, y, z, { walker.owner })) > CONFIG.ownerRadius
     if ownerGone and walker.owner ~= owner then setOwner(walker, owner) end
+    -- Nobody simulating it (it freezes in its pose): hand it back to its owner, with its orders.
+    local now0 = getTickCount()
+    if isElement(walker.owner) and getElementSyncer(ped) ~= walker.owner and now0 - (walker.resynced or 0) > 2000 then
+        walker.resynced = now0
+        debugLog(("ped %s lost its syncer (%s): back to %s"):format(tostring(ped):sub(-8), tostring(getElementSyncer(ped)), getPlayerName(walker.owner)))
+        setElementSyncer(ped, walker.owner, true, true)
+        if walker.encounter then sendEngage(walker) elseif walker.target then sendTarget(walker, walker.target) end
+    end
 
     if e then
         local target = e.target
@@ -318,7 +337,15 @@ local function updateWalker(walker, players, signal, walkMsLeft)
         if not current or current.hold ~= hold or (current.x - sx) ^ 2 + (current.y - sy) ^ 2 > 6 then
             sendTarget(walker, { x = sx, y = sy, z = lz, hold = hold })
         end
-        walker.lastX, walker.lastY, walker.lastMoved = x, y, getTickCount()
+        -- A follower left behind (far from its slot, not moving) gets its slot again.
+        local now = getTickCount()
+        if getDistanceBetweenPoints2D(x, y, walker.lastX, walker.lastY) > 1.5 or (x - sx) ^ 2 + (y - sy) ^ 2 < 16 then
+            walker.lastX, walker.lastY, walker.lastMoved = x, y, now
+        elseif now - walker.lastMoved > CONFIG.stuckMs and now - (walker.retried or 0) > CONFIG.stuckMs then
+            walker.retried = now
+            debugLog(("follower %s stuck %.0f m from its slot: sent again"):format(tostring(ped):sub(-8), math.sqrt((x - sx) ^ 2 + (y - sy) ^ 2)))
+            sendTarget(walker, { x = sx, y = sy, z = lz, hold = hold })
+        end
         return
     end
 
@@ -336,16 +363,33 @@ local function updateWalker(walker, players, signal, walkMsLeft)
         sendTarget(walker, target)
     end
 
-    -- Stuck recovery, as for traffic. Fleeing or fighting peds also land here and get re-tasked.
+    -- Stuck recovery, as for traffic. Fleeing or fighting peds also land here and get re-tasked: the
+    -- target again, then (after CONFIG.resends in vain) a fresh route from here. Holding at a kerb
+    -- isn't stuck, up to CONFIG.maxHoldMs.
     local now = getTickCount()
-    if getDistanceBetweenPoints2D(x, y, walker.lastX, walker.lastY) > 1.5 or target.hold then
-        walker.lastX, walker.lastY, walker.lastMoved = x, y, now
-    elseif now - walker.lastMoved > 20000 then
+    if getDistanceBetweenPoints2D(x, y, walker.lastX, walker.lastY) > 1.5 then
+        walker.lastX, walker.lastY, walker.lastMoved, walker.resends, walker.holdSince = x, y, now, 0, nil
+    elseif target.hold then
+        walker.lastMoved = now
+        walker.holdSince = walker.holdSince or now
+        if now - walker.holdSince > CONFIG.maxHoldMs then
+            debugLog(("ped %s waited %.0fs at a kerb: a new route"):format(tostring(ped):sub(-8), (now - walker.holdSince) / 1000))
+            walker.holdSince, walker.target = nil, nil
+            walker.route = routeFromHere(ped) or walker.route
+        end
+    elseif now - walker.lastMoved > CONFIG.stuckMs then
         local _, ownerDist = nearestPlayer(x, y, z, players)
         if ownerDist > 50 and now - walker.lastMoved > 60000 then return removeWalker(walker) end
-        if not walker.retried or now - walker.retried > 20000 then
+        if now - (walker.retried or 0) > CONFIG.stuckMs then
             walker.retried = now
-            sendTarget(walker, target)
+            walker.resends = (walker.resends or 0) + 1
+            if walker.resends > CONFIG.resends then
+                debugLog(("ped %s stuck %.0fs after %d sends: a new route"):format(tostring(ped):sub(-8), (now - walker.lastMoved) / 1000, walker.resends - 1))
+                walker.resends, walker.target = 0, nil
+                walker.route = routeFromHere(ped) or walker.route
+            else
+                sendTarget(walker, target)
+            end
         end
     end
 end
@@ -501,6 +545,25 @@ local function attacked(walker, attacker, weapon)
 end
 
 -- A ped we simulate was hurt (reported by its owner) by a player or another ped.
+-- The owner's client gave up on a walk order (it never took, several times): a fresh route.
+addEvent("vana-peds:stuck", true)
+addEventHandler("vana-peds:stuck", resourceRoot, function(ped)
+    local walker = walkers[ped]
+    if not walker or walker.owner ~= client or walker.encounter then return end
+    debugLog(("ped %s: its walk never took on %s's client: a new route"):format(tostring(ped):sub(-8), getPlayerName(client)))
+    walker.target = nil
+    walker.route = routeFromHere(ped) or walker.route
+end)
+
+-- The owner's client found the ped hanging in the air with no ground loaded under it, out of view.
+addEvent("vana-peds:lost", true)
+addEventHandler("vana-peds:lost", resourceRoot, function(ped)
+    local walker = walkers[ped]
+    if not walker or walker.owner ~= client then return end
+    debugLog(("ped %s hanging with no ground under it, out of %s's view: removed"):format(tostring(ped):sub(-8), getPlayerName(client)))
+    removeWalker(walker)
+end)
+
 addEvent("vana-peds:attacked", true)
 addEventHandler("vana-peds:attacked", resourceRoot, function(ped, attacker, weapon)
     local walker = walkers[ped]

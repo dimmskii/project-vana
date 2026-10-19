@@ -99,6 +99,25 @@ Road crossings use the intersection flags on the links:
 - **No stopping halfway:** a ped already more than 3 m out on a crossing never stops. Arriving at
   the kerb never counts as being out.
 
+**Keeping them walking.** A ped can stop for three reasons; each has its own recovery:
+
+- **Nobody simulates it** (it freezes in its pose, even in mid-air): every tick the server checks the
+  ped's syncer is still its owner, and if not, pins it back (`setElementSyncer(..., true, true)`) and
+  sends its orders again. vana-services does the same for its crews.
+- **The order didn't take** (it stands idle): GTA can drop an order without saying so (its event
+  queue full), and a reaction of its own that ends leaves the ped idle. Every second the owner's
+  client checks each walk: under way (the sequence running, or moving), arrived, or busy with a
+  reaction (falling, getting up, reacting, fleeing). Otherwise, after 1.5 s it gives the order
+  again; after 4 tries in vain it asks the server for a fresh route. vana-services' clients watch
+  their crews' walk, get-in and get-out orders the same way (5 tries in 25 s).
+- **The target can't be reached:** not moving 1.5 m in 8 s, the server sends the target again, and
+  after two sends a fresh route from where the ped stands. Waiting at a kerb counts for up to 60 s,
+  then the ped walks somewhere else. A follower (couples, gangs) more than 4 m from its slot gets its
+  slot sent again the same way.
+
+A ped hanging in the air is put back on the ground under it; with no ground loaded there and out of
+view, it's removed. With `vana-peds:orders` on (docs/debug.md), every one of these is logged.
+
 Spawns reject routes that start on a crossing or bounce inside tiny isolated path fragments.
 `pedtest [seed]` walks 200 virtual peds for 300 s each and checks that no crossing is started
 without approval, alongside the same route checks as `traffictest`.

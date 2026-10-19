@@ -68,6 +68,7 @@ local function apply(ped)
         return
     end
     lease(ped)
+    cmd.applied = getTickCount()
     local ok
     if cmd.mode then ok = engage(ped, cmd) else ok = walk(ped, cmd) end
     if not ok and Debug.on("orders") then
@@ -116,6 +117,60 @@ setTimer(function()
         end
     end
 end, 3000, 0)
+
+-- Walks that didn't take. GTA can drop an order without saying so (its event queue full, or an event
+-- response of its own replacing it), and a reaction (flinch, flee) that ends leaves the ped idle. So
+-- every second each walk this client runs is checked: still under way (its sequence running, or
+-- moving), or arrived. If not, and the ped isn't busy with a reaction of GTA's, the order is given
+-- again; after MAX_REAPPLIES in vain the server is asked for a fresh route. A ped hanging in the air
+-- goes back onto the ground under it, or, with no ground loaded there and out of view, is given up.
+local REAPPLY_MS, MAX_REAPPLIES, HANG_MS = 1500, 4, 2000
+
+local function debugLog(text) if Debug.on("orders") then Debug.log("orders", text) end end
+
+setTimer(function()
+    local now = getTickCount()
+    for ped, cmd in pairs(commands) do
+        if not cmd.mode and isElement(ped) and isElementStreamedIn(ped) and isElementSyncer(ped) and not isPedDead(ped)
+            and not getPedOccupiedVehicle(ped) then
+            local x, y, z = getElementPosition(ped)
+            local vx, vy, vz = getElementVelocity(ped)
+            if not isPedOnGround(ped) and math.abs(vz) < 0.01 then
+                cmd.hangingSince = cmd.hangingSince or now
+                if now - cmd.hangingSince > HANG_MS then
+                    cmd.hangingSince = nil
+                    local ground = getGroundPosition(x, y, z + 1)
+                    if ground and ground ~= 0 then
+                        debugLog(("ped %s hanging %.1f m up: put back on the ground"):format(tostring(ped):sub(-8), z - ground))
+                        setElementPosition(ped, x, y, ground + 1)
+                    elseif not isElementOnScreen(ped) then
+                        triggerServerEvent("vana-peds:lost", resourceRoot, ped)
+                    end
+                end
+            else
+                cmd.hangingSince = nil
+            end
+            local moving = (vx * vx + vy * vy) * 2500 > 0.09
+            local arrived = getDistanceBetweenPoints2D(x, y, cmd.x, cmd.y) <= (cmd.hold and 1.25 or 2.5)
+            if moving or arrived or getPedTaskSequenceProgress(ped) >= 0 then
+                cmd.misses = 0
+            elseif not isBusy(ped) and now - (cmd.applied or cmd.since) > REAPPLY_MS then
+                cmd.misses = (cmd.misses or 0) + 1
+                if cmd.misses > MAX_REAPPLIES then
+                    cmd.misses = 0
+                    debugLog(("ped %s: walk to %.1f, %.1f never took (task %s): asking for a new route"):format(tostring(ped):sub(-8), cmd.x, cmd.y,
+                        tostring(getPedTask(ped, "primary", 3))))
+                    triggerServerEvent("vana-peds:stuck", resourceRoot, ped)
+                    cmd.applied = now
+                else
+                    debugLog(("ped %s idle (task %s / %s): walk given again (%d)"):format(tostring(ped):sub(-8), tostring(getPedTask(ped, "primary", 3)),
+                        tostring(getPedSimplestTask(ped)), cmd.misses))
+                    apply(ped)
+                end
+            end
+        end
+    end
+end, 1000, 0)
 
 addEvent("vana-peds:walk", true)
 addEventHandler("vana-peds:walk", resourceRoot, function(ped, x, y, z, hold)

@@ -13,6 +13,46 @@ local function owns(element)
     return isElement(element) and isElementStreamedIn(element) and isElementSyncer(element)
 end
 
+-- Orders that were accepted but didn't take (GTA can drop one without saying so, and a medic still
+-- climbing out of the ambulance misses his walk): each is watched every second for VERIFY_FOR_MS and
+-- given again when the ped stands idle for 1.5 s short of done, at most VERIFY_TRIES times. Getting in
+-- or out of a car, falling and an animation (the medics' CPR) aren't idle.
+local VERIFY_MS, VERIFY_FOR_MS, VERIFY_TRIES = 1000, 25000, 5
+local BUSY = { "CAR", "FALL", "GET_UP", "HIT_", "IN_AIR", "LAND", "DIE", "DEAD" }
+local verifying = {} -- ped -> timer
+
+local function busy(ped)
+    if getPedAnimation(ped) then return true end
+    local task = getPedSimplestTask(ped) or ""
+    for _, part in ipairs(BUSY) do
+        if task:find(part, 1, true) then return true end
+    end
+    return false
+end
+
+local function verify(ped, done, again)
+    if isTimer(verifying[ped]) then killTimer(verifying[ped]) end
+    local started, tries, idleSince = getTickCount(), 0, nil
+    verifying[ped] = setTimer(function()
+        if not isElement(ped) or isPedDead(ped) or done() or getTickCount() - started > VERIFY_FOR_MS then
+            if isTimer(verifying[ped]) then killTimer(verifying[ped]) end
+            verifying[ped] = nil
+            return
+        end
+        if not owns(ped) then return end
+        local vx, vy = getElementVelocity(ped)
+        if (vx * vx + vy * vy) * 2500 > 0.09 or getPedTaskSequenceProgress(ped) >= 0 or busy(ped) then
+            idleSince = nil
+            return
+        end
+        idleSince = idleSince or getTickCount()
+        if getTickCount() - idleSince >= 1500 and tries < VERIFY_TRIES then
+            tries, idleSince = tries + 1, nil
+            again()
+        end
+    end, VERIFY_MS, 0)
+end
+
 local prepared = {}
 local forgetHeli
 
@@ -45,15 +85,25 @@ addEventHandler("vana-services:exit", resourceRoot, function(vehicle, crew)
             end
             return true
         end)
+        verify(ped, function() return not getPedOccupiedVehicle(ped) end, function() setPedExitVehicle(ped) end)
     end
 end)
 
 addEvent("vana-services:walk", true)
 addEventHandler("vana-services:walk", resourceRoot, function(ped, x, y, z, run)
+    -- A straight go-to: GTA's route follower draws on small pools that crash the game when full.
+    local function go()
+        return setPedTaskSequence(ped, { { task = "go_to", x = x, y = y, z = z, movement = run and "run" or "walk", radius = 1.0, slowdownRadius = 1.5 } })
+    end
     retry(function()
         if not owns(ped) or getPedOccupiedVehicle(ped) then return false end
-        -- A straight go-to: GTA's route follower draws on small pools that crash the game when full.
-        return setPedTaskSequence(ped, { { task = "go_to", x = x, y = y, z = z, movement = run and "run" or "walk", radius = 1.0, slowdownRadius = 1.5 } })
+        return go()
+    end)
+    verify(ped, function()
+        local px, py = getElementPosition(ped)
+        return getDistanceBetweenPoints2D(px, py, x, y) <= 1.5
+    end, function()
+        if getPedOccupiedVehicle(ped) then setPedExitVehicle(ped) else go() end
     end)
 end)
 
@@ -63,6 +113,9 @@ addEventHandler("vana-services:enter", resourceRoot, function(ped, vehicle, seat
         if not owns(ped) or not isElement(vehicle) or not isElementStreamedIn(vehicle) then return false end
         if getPedOccupiedVehicle(ped) == vehicle then return true end
         return setPedEnterVehicle(ped, vehicle, seat)
+    end)
+    verify(ped, function() return not isElement(vehicle) or getPedOccupiedVehicle(ped) == vehicle end, function()
+        if isElementStreamedIn(vehicle) then setPedEnterVehicle(ped, vehicle, seat) end
     end)
 end)
 
@@ -87,7 +140,11 @@ addEventHandler("vana-services:release", resourceRoot, function(vehicle)
     if forgetHeli then forgetHeli(vehicle) end
 end)
 
-addEventHandler("onClientElementDestroy", root, function() prepared[source] = nil end)
+addEventHandler("onClientElementDestroy", root, function()
+    prepared[source] = nil
+    if isTimer(verifying[source]) then killTimer(verifying[source]) end
+    verifying[source] = nil
+end)
 
 -- Firefighters hose down a wreck with an extinguisher.
 addEvent("vana-services:spray", true)

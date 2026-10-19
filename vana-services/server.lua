@@ -762,6 +762,18 @@ setTimer(function()
                 destroyResponder(r)
             else
                 if not isElement(r.owner) or select(2, nearestPlayer(x, y, z, { r.owner })) > CONFIG.despawn then setOwner(r, owner) end
+                -- A crew member nobody simulates (it freezes in its pose): the crew goes back to its owner.
+                if isElement(r.owner) and now - (r.resynced or 0) > 2000 then
+                    for _, ped in ipairs(r.crew) do
+                        if isElement(ped) and not isPedDead(ped) and getElementSyncer(ped) ~= r.owner then
+                            r.resynced = now
+                            local o = r.owner
+                            r.owner = nil
+                            setOwner(r, o)
+                            break
+                        end
+                    end
+                end
                 if r.state == "leaving" then
                     if ownerDist > 150 or now - r.since > 60000 then destroyResponder(r) end
                 elseif r.update then
