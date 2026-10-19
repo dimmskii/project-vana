@@ -1,4 +1,5 @@
 <meta>
-    <info author="ProjectVana" name="Vana core" version="0.1.0" type="script" />
+    <info author="ProjectVana" name="Vana core" description="Server start line; players' script errors and warnings in the server log" version="0.1.0" type="script" />
     <script src="server.lua" type="server" />
+    <script src="client.lua" type="client" />
 </meta>
