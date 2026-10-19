@@ -4,6 +4,7 @@ function getNaviNode(area, index) return Paths.getNaviNode(area, index) end
 function getAreaAt(x, y) return Paths.getAreaAt(x, y) end
 function getNodePosition(area, id) return Paths.getNodePosition(area, id) end
 function findNearestNode(x, y, z, kind, radius) return Paths.findNearestNode(x, y, z, kind, radius) end
+function findRoute(fromX, fromY, fromZ, toX, toY, toZ) return Route.find(fromX, fromY, fromZ, toX, toY, toZ) end
 function getCarLight(lightType, state) return Lights.getCarLight(lightType, state) end
 function getPedSignal(state) return Lights.getPedSignal(state) end
 function getGoverningLight(naviArea, naviIndex, toArea, toId)
@@ -117,4 +118,24 @@ addCommandHandler("lightstest", function(source)
     check(governed == 1689 and ungoverned == 1689, ("governed %d / ungoverned %d, expected 1689 each"):format(governed, ungoverned))
     outputServerLog(("[lightstest] lit links: %d governed, %d ungoverned"):format(governed, ungoverned))
     outputServerLog("[lightstest] " .. (ok and "PASS" or "FAIL"))
+end)
+
+-- Console-only: GPS routes across the map (route.lua): Grove Street to Doherty, to Las Venturas, and
+-- one from the sea.
+addCommandHandler("routetest", function(source)
+    if getElementType(source) ~= "console" then return end
+    local ok = true
+    for _, t in ipairs({
+        { "Grove Street -> Doherty", 2495, -1687, 13, -2026, 156, 28 },
+        { "Grove Street -> Las Venturas strip", 2495, -1687, 13, 2027, 1343, 10 },
+        { "Santa Maria Beach -> Angel Pine", 380, -1880, 2, -2150, -2400, 30 },
+    }) do
+        local t0 = getTickCount()
+        local route, length, expanded = Route.find(t[2], t[3], t[4], t[5], t[6], t[7])
+        local ms = getTickCount() - t0
+        if not route then ok = false end
+        outputServerLog(("[routetest] %s: %s"):format(t[1], route and ("%d points, %.0f m, %d nodes expanded, %d ms"):format(#route / 2, length, expanded, ms)
+            or ("FAIL " .. tostring(length))))
+    end
+    outputServerLog("[routetest] " .. (ok and "PASS" or "FAIL"))
 end)

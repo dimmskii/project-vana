@@ -3,6 +3,7 @@
     <script src="paths_format.lua" type="server" />
     <script src="paths.lua" type="server" />
     <script src="lights.lua" type="server" />
+    <script src="route.lua" type="server" />
     <script src="server.lua" type="server" />
     <export function="getNode" type="server" />
     <export function="getNodeLinks" type="server" />
@@ -10,6 +11,7 @@
     <export function="getAreaAt" type="server" />
     <export function="getNodePosition" type="server" />
     <export function="findNearestNode" type="server" />
+    <export function="findRoute" type="server" />
     <export function="getCarLight" type="server" />
     <export function="getPedSignal" type="server" />
     <export function="getGoverningLight" type="server" />

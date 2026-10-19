@@ -65,6 +65,8 @@ After the `gasoline.cs` CLEO mod (bytecode read with `SASCM.INI`):
   `config/vehicles.lua`), with our gas station icon standing in it, turned to face you
   (`icons/radar_gasstn.png`, `pumps_client.lua`; vanilla has no fuel icon). The icons' Paint.NET
   sources sit next to them, with `radar_gasair` and `radar_gaswater` for aircraft and boat fuel later.
+- Each pump is on the map and, nearby, the radar: vana-map's gas station category, with our icon
+  ([map.md](map.md), "Our icons on the radar").
 - A car first driven by a player has 10-100% of a tank (the mod: anything from empty).
 - Bicycles, boats, aircraft and trains don't use fuel. Ped drivers don't burn fuel.
 - The gauge sits above the radar.
@@ -161,8 +163,7 @@ Traffic, parked cars and random-event cars get parts as they're made (`tuneRando
 
 ## Not yet done / known gaps
 
-- Pump blips: vana-map draws vanilla's blip icons only; ours (`radar_gasstn`) would need a custom
-  radar icon (Neon's extended radar) before pumps get a vana-map category.
+
 - Not persisted (no server API): dirt level, nitro charge, the police scanner state.
 - Kept wrecks stay until they fall off every list.
 - Peds are not persisted (a kept traffic car loses its driver when it despawns).

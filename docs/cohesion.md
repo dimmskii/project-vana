@@ -64,8 +64,9 @@ Each layer has one home; don't scatter windows.
 | F2 (proposed) | Meta and social | Friends, social features, settings, help, server info. Nothing that affects the game world. |
 | F3 (proposed) | Admin | The admin toolset. The panel only opens for players whose rights the server confirms, and every action is still checked on the server. |
 
-- **Leave MTA and player-expected keys alone:** F8 (console), F9 (help), F11 (map), F12
-  (screenshot), T and Y (chat), Tab (scoreboard).
+- **Leave MTA and player-expected keys alone:** F8 (console), F9 (help), F12 (screenshot), T and Y
+  (chat), Tab (scoreboard). F11 stays the map, but it's ours (vana-map, [map.md](map.md)): MTA's map
+  commands are taken over, so the player's binds for them still work.
 - **One visual style.** Shared colours, fonts and window chrome come from one place. Prefer
   diegetic, vanilla-style presentation (HUD-style text, the phone, in-world markers) over
   generic windows for gameplay. Messages and help use the status text, top middle with no box, in the game's own font (Neon's native text); subtitles the game's own subtitle line.

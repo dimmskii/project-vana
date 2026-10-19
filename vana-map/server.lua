@@ -71,3 +71,20 @@ addCommandHandler("maptest", function(source)
     outputServerLog(("[maptest] %d points: %s"):format(total, table.concat(list, ", ")))
     outputServerLog("[maptest] " .. (total > 0 and "PASS" or "FAIL"))
 end)
+
+-- GPS for the map (mapview_client.lua): a route from the player to the road nearest a spot on the map,
+-- along the vehicle paths (vana-paths' findRoute). One request a second per player.
+local lastRoute = {}
+addEvent("vana-map:route", true)
+addEventHandler("vana-map:route", resourceRoot, function(tx, ty)
+    if type(tx) ~= "number" or type(ty) ~= "number" or math.abs(tx) > 3000 or math.abs(ty) > 3000 then return end
+    local now = getTickCount()
+    if lastRoute[client] and now - lastRoute[client] < 1000 then return end
+    lastRoute[client] = now
+    local paths = getResourceFromName("vana-paths")
+    if not paths or getResourceState(paths) ~= "running" then return triggerClientEvent(client, "vana-map:route", resourceRoot, false) end
+    local x, y, z = getElementPosition(client)
+    local ok, route, length = pcall(function() return exports["vana-paths"]:findRoute(x, y, z, tx, ty) end)
+    triggerClientEvent(client, "vana-map:route", resourceRoot, ok and route or false, ok and route and length or nil)
+end)
+addEventHandler("onPlayerQuit", root, function() lastRoute[source] = nil end)

@@ -1,5 +1,8 @@
 -- Map point categories: the radar icon (vanilla's sprites), its name for legends, and whether it only
--- shows nearby (short range, as vanilla's shop icons do) or anywhere on the map. Hand-written: edit freely.
+-- shows nearby on the radar (short range, as vanilla's shop icons do) or anywhere; the map (F11) shows
+-- every point. A category with an image of ours borrows a vanilla icon the game never shows (the story's
+-- contacts) and has that sprite replaced with the image on every client, on the radar and the map.
+-- Hand-written: edit freely.
 MapCategories = {
     ammunation = { icon = 6, name = "Ammu-Nation", short = true },
     barber = { icon = 7, name = "Barber", short = true },
@@ -24,6 +27,7 @@ MapCategories = {
     lowrider = { icon = 33, name = "Lowrider contest", short = true },
     modgarage = { icon = 27, name = "Mod garage", short = true },
     spray = { icon = 63, name = "Pay 'n' Spray", short = true },
+    gasstation = { icon = 18, image = ":vana-vehicles/icons/radar_gasstn.png", name = "Gas station", short = true }, -- 18: Emmet's gun
 }
 
 -- Entrances (vana-interiors' enex names) and the category their street doors show as. Patterns are Lua

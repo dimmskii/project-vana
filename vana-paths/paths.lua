@@ -123,7 +123,7 @@ local function getBuckets(areaId, kind)
     return b
 end
 
--- kind: "vehicle" or "ped". Returns area, id, distance or false.
+-- kind: "vehicle" or "ped"; z nil: nearest on the map (2D). Returns area, id, distance or false.
 function Paths.findNearestNode(x, y, z, kind, radius)
     radius = radius or 100
     local bestArea, bestId, bestDist = false, false, radius
@@ -139,7 +139,7 @@ function Paths.findNearestNode(x, y, z, kind, radius)
                         local list = b[cy * CELLS + cx]
                         if list then
                             for _, i in ipairs(list) do
-                                local dx, dy, dz = a.x[i] - x, a.y[i] - y, a.z[i] - z
+                                local dx, dy, dz = a.x[i] - x, a.y[i] - y, z and (a.z[i] - z) or 0
                                 local d = sqrt(dx * dx + dy * dy + dz * dz)
                                 if d < bestDist then bestArea, bestId, bestDist = areaId, i, d end
                             end

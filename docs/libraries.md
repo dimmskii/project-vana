@@ -31,7 +31,7 @@ it in its own Lua state. It behaves exactly like a local copy: no per-call cost,
 | `sa_gxt` (`Gxt`) | `american.gxt`: every table (MAIN and the mission tables), lazily; `raw` keeps formatting tokens, `get` strips colour tokens, `format` fills `~1~` | vana-text |
 | `sa_ide` (`SAIde`) | `.ide` sections as rows of fields; id and name indexes | vana-population |
 | `sa_dat` (`SADat`) | Line-based data: plain rows (`pedgrp`/`cargrp`/`pedstats`), `popcycle.dat` sections, `.zon` boxes, `section ... end` nesting (`shopping.dat`) | vana-population, vana-shops |
-| `sa_txd` (`SATxd`) | RenderWare `.txd` (PC, D3D8/D3D9) to DDS data for `dxCreateTexture`: DXT1/3/5 copied, 32/16-bit with their masks, paletted expanded | vana-vehicles (client: dashboards) |
+| `sa_txd` (`SATxd`) | RenderWare `.txd` (PC, D3D8/D3D9) to DDS data for `dxCreateTexture`: DXT1/3/5 copied, 32/16-bit with their masks, paletted expanded | vana-vehicles (client: dashboards), vana-shops (client: marker icons), vana-map (client: radar tiles, blip sprites) |
 | `map_data` (`MapData`) | Placement data in map resources: element schemas, records, `At` / `Spots` | the owners of `[data]/vana-data-*` |
 | `map_points` (`MapPoints`) | Publishing radar points to vana-map | vana-interiors, vana-activities |
 | `prompts` (`Prompts`) | On-foot markers that start something on `/use` ("Press F to ..."), or at once with `walkIn`; offers to vana-controls' /use; the server checks you're still on it | vana-shops, vana-gym, vana-activities |

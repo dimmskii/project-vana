@@ -37,6 +37,7 @@ Copy them from your own retail GTA:SA install (PC v1.0):
 | `data/shopping.dat` | `[vana]/vana-shops/data/` | Shop prices and stock |
 | `models/txd/LD_BEAT.txd` | `[vana]/vana-activities/data/` | The dance and lowrider beat display's arrows (sent to players) |
 | `models/hud.txd` | `[vana]/vana-shops/data/` | The radar icons drawn in the mod garages' and Pay 'n' Sprays' markers (sent to players) |
+| `models/gta3.img` (the 144 radar tiles `radar00`–`radar143.txd`) and `models/hud.txd` | `[vana]/vana-map/data/` (`radar/` for the tiles) | The map (F11): its imagery and blip icons (sent to players). Extracted by `tools/seed/extract_radar.py` |
 | `text/american.gxt` | `[vana]/vana-text/data/` | All game text (item names, mission titles, objectives, help), for every resource |
 | `data/popcycle.dat`, `pedgrp.dat`, `cargrp.dat`, `peds.ide`, `vehicles.ide`, `pedstats.dat`, `ped.dat`, `info.zon`, `map.zon` | `[vana]/vana-population/data/` | Who spawns where (see population.md) |
 
@@ -46,6 +47,7 @@ Example on Linux:
 cp "/path/to/GTA San Andreas/data/Paths/"NODES*.DAT "vana-paths/data/"
 cp "/path/to/GTA San Andreas/models/txd/LD_BEAT.txd" "vana-activities/data/"
 cp "/path/to/GTA San Andreas/models/hud.txd" "vana-shops/data/"
+python3 tools/seed/extract_radar.py "/path/to/GTA San Andreas"   # vana-map/data: radar tiles and hud.txd
 (cd "/path/to/GTA San Andreas/data" && cp popcycle.dat pedgrp.dat cargrp.dat peds.ide vehicles.ide pedstats.dat ped.dat info.zon map.zon \
    "/path/to/server/mods/deathmatch/resources/[vana]/vana-population/data/")
 ```

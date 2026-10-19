@@ -34,6 +34,36 @@ function Map.setHidden(category, hidden)
     for id, p in pairs(Map.points) do if p.category == category then draw(id) end end
 end
 
+-- Our icons on the radar: each category with an image of ours replaces the sprite of the vanilla icon
+-- it borrows (config/categories.lua) with that image, for this client (the map draws the image itself).
+Map.images = {} -- icon -> texture
+local swaps = {}
+
+local function swapIcons()
+    for icon, shader in pairs(swaps) do
+        if isElement(shader) then destroyElement(shader) end
+        swaps[icon] = nil
+    end
+    for _, c in pairs(MapCategories) do
+        local sprite = c.image and BlipSprites[c.icon]
+        if sprite and not swaps[c.icon] then
+            local texture = Map.images[c.icon] or dxCreateTexture(c.image, "argb", true, "clamp")
+            local shader = texture and dxCreateShader("texreplace.fx")
+            if shader then
+                Map.images[c.icon] = texture
+                dxSetShaderValue(shader, "gTexture", texture)
+                engineApplyShaderToWorldTexture(shader, sprite)
+                swaps[c.icon] = shader
+            else
+                outputDebugString(("[vana-map] couldn't put %s in place of %s"):format(c.image, sprite), 2)
+            end
+        end
+    end
+end
+
 addEventHandler("onClientResourceStart", resourceRoot, function()
     triggerServerEvent("vana-map:hello", resourceRoot)
+    swapIcons()
 end)
+-- The images live in their owners (vana-vehicles' gas station icon): try again when one starts.
+addEventHandler("onClientResourceStart", root, function(res) if res ~= resource then swapIcons() end end)
