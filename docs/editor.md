@@ -18,7 +18,7 @@ MTA's Map Editor like any map.
 
 - **Schemas:** each owner's `config/maps.lua` describes its element types (fields, types, defaults,
   descriptions, editor look) and converts between elements and the Lua tables the code uses.
-- **Loading:** `tools/lib/map_data.lua` (`MapData`, copied into each owner) reads the elements when
+- **Loading:** `MapData` (`vana-lib`'s `map_data`, imported by each owner) reads the elements when
   the owner starts. The data resources start first (top of the startup list in `mtaserver.conf`,
   see [setup.md](setup.md)) and keep running when an owner restarts.
 - **Paths:** race checkpoints and Chiliad route points link to the next one with `nextid`, as in

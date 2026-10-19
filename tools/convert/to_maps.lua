@@ -5,7 +5,7 @@
 -- re-seeding: a seed writes the old-style Lua table into a folder, this turns it into the .map
 -- (replacing every element of that dataset, hand edits included).
 -- usage (from the repo root): lua5.1 tools/convert/to_maps.lua --from <folder with the .lua files> [dataset ...]
-dofile("tools/lib/map_data.lua")
+dofile("vana-lib/lib/map_data.lua")
 
 local DATASETS = {
     restarts = { owner = "vana-player", configs = { "vana-player/config/restarts.lua" } },

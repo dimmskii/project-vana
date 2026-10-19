@@ -1,14 +1,15 @@
 <meta>
     <info author="ProjectVana" name="Vana population" description="Vanilla population rules: zones, popcycle, ped/car groups, gangs" version="0.1.0" type="script" />
+    <aclrequest>
+        <right name="function.loadstring" access="true" /> <!-- importing shared code from vana-lib -->
+    </aclrequest>
+    <script src="lib.lua" type="server" />
     <script src="config/zones.lua" type="server" />
     <script src="config/gangs.lua" type="server" />
     <script src="config/groups.lua" type="server" />
     <script src="config/personalities.lua" type="server" />
     <script src="config/drops.lua" type="server" />
     <script src="config/companions.lua" type="server" />
-    <script src="sa_reader.lua" type="server" />
-    <script src="sa_ide.lua" type="server" />
-    <script src="sa_dat.lua" type="server" />
     <script src="data.lua" type="server" />
     <script src="population.lua" type="server" />
     <script src="server.lua" type="server" />

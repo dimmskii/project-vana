@@ -5,8 +5,8 @@ radar blips with vanilla's icons, and is where legends, category filters and GPS
 
 ## Publishing points
 
-- Copy `vana-map/provider.lua` into the resource (keep the copies identical) and load it before the
-  scripts that use it. Then `MapPoints.set(id, point)` and `MapPoints.remove(id)`.
+- Import `map_points` from `vana-lib` (see [libraries.md](libraries.md)). Then
+  `MapPoints.set(id, point)` and `MapPoints.remove(id)`.
 - A point is `{ category = "...", x, y, z, interior = 0, label = "..." }`, or `{ tag = "<enex name>", ... }`
   for doors: `vana-map` decides the category from the tag (`MapEntranceCategories`) and ignores tags
   it has no category for.

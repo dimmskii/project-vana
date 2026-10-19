@@ -1,13 +1,13 @@
 <meta>
     <info author="ProjectVana" name="Vana shops" description="Ammu-Nation, fast food, clothes and 24/7 counters" version="0.1.0" type="script" edf:definition="edf/vana-shops.edf" />
+    <aclrequest>
+        <right name="function.loadstring" access="true" /> <!-- importing shared code from vana-lib -->
+    </aclrequest>
     <include resource="vana-interiors" />
+    <script src="lib.lua" type="shared" />
     <script src="config/shops.lua" type="server" />
-    <script src="map_data.lua" type="shared" />
     <script src="config/maps.lua" type="shared" />
     <script src="config/vendorkinds.lua" type="shared" />
-    <script src="sa_reader.lua" type="server" />
-    <script src="sa_gxt.lua" type="server" />
-    <script src="sa_dat.lua" type="server" />
     <script src="config/keepers.lua" type="server" />
     <script src="server.lua" type="server" />
     <script src="keepers.lua" type="server" />

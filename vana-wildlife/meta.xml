@@ -1,7 +1,10 @@
 <meta>
     <info author="ProjectVana" name="Vana wildlife" description="Creatures from community mods: Bigfoot" version="0.1.0" type="script" edf:definition="edf/vana-wildlife.edf" />
+    <aclrequest>
+        <right name="function.loadstring" access="true" /> <!-- importing shared code from vana-lib -->
+    </aclrequest>
+    <script src="lib.lua" type="server" />
     <script src="config/wildlife.lua" type="shared" />
-    <script src="map_data.lua" type="server" />
     <script src="config/maps.lua" type="server" />
     <script src="server.lua" type="server" />
     <script src="client.lua" type="client" />

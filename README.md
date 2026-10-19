@@ -26,13 +26,15 @@ Start here:
 | [docs/vehicles.md](docs/vehicles.md) | Kept cars (registry and persistence), fuel, live radio |
 | [docs/editor.md](docs/editor.md) | Placement data in MTA map resources (`[data]/vana-data-*`) and editing it in the Map Editor |
 | [docs/wildlife.md](docs/wildlife.md) | Creatures from community mods (Bigfoot) |
-| [docs/libraries.md](docs/libraries.md) | Shared code in `tools/lib`: game-file readers (GXT, IDE, DAT, TXD) and the map-data helpers |
+| [docs/libraries.md](docs/libraries.md) | Shared code in `vana-lib` (imported at runtime): game-file readers (GXT, IDE, DAT, TXD), map data; `vana-text` |
 | [docs/credits.md](docs/credits.md) | Third-party mods we use (authors, sources, terms) and how mod content is handled |
 
 ## Resources
 
 | Resource | Purpose |
 | --- | --- |
+| `vana-lib` | Shared code the other resources import: game-file readers, map data (docs/libraries.md) |
+| `vana-text` | The game's text (`american.gxt`) for every resource |
 | `vana-core` | Placeholder core resource |
 | `vana-player` | Player persistence, spawning, wasted/busted restarts |
 | `vana-paths` | Reads the retail `NODES*.DAT` path graph; nearest-node, link and navi queries; traffic light stop rule |

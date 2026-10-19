@@ -3,7 +3,7 @@
 -- (tools/lib/map_data.lua). Everything that isn't a position stays in the Lua, comments included.
 -- Writes nothing unless the rewritten configs, run against the new spots, equal the originals.
 -- usage (from the repo root): lua5.1 tools/convert/spots.lua [--write]
-dofile("tools/lib/map_data.lua")
+dofile("vana-lib/lib/map_data.lua")
 
 -- What moves: Lua patterns over dotted config paths. list: a list of plain positions becomes
 -- Spots(path) (the map owns the list); point: one position becomes At(path, { rest }).

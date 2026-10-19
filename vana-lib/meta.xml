@@ -1,0 +1,14 @@
+<meta>
+    <info author="ProjectVana" name="Vana lib" description="Shared code the other resources import (game-file readers, map data)" version="1.0.0" type="script" />
+    <script src="import.lua" type="shared" />
+    <export function="import" type="shared" />
+    <!-- Served to clients too, so client scripts can import them. -->
+    <file src="lib/sa_reader.lua" />
+    <file src="lib/sa_gxt.lua" />
+    <file src="lib/sa_ide.lua" />
+    <file src="lib/sa_dat.lua" />
+    <file src="lib/sa_txd.lua" />
+    <file src="lib/map_data.lua" />
+    <file src="lib/map_points.lua" />
+    <file src="lib/text.lua" />
+</meta>

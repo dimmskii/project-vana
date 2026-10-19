@@ -1,7 +1,9 @@
 <meta>
     <info author="ProjectVana" name="Vana interiors" description="Vanilla entry/exit markers into interiors" version="0.1.0" type="script" edf:definition="edf/vana-interiors.edf" />
-    <script src="map_data.lua" type="server" />
+    <aclrequest>
+        <right name="function.loadstring" access="true" /> <!-- importing shared code from vana-lib -->
+    </aclrequest>
+    <script src="lib.lua" type="server" />
     <script src="config/maps.lua" type="server" />
-    <script src="map_points.lua" type="server" />
     <script src="server.lua" type="server" />
 </meta>

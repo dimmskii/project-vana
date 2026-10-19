@@ -17,11 +17,19 @@ for res in "${resources[@]}"; do
     for f in "${files[@]}"; do luac5.1 -p "$f" || status=1; done
     # The resource's own globals: top-level assignments in any of its files.
     own=$(for f in "${files[@]}"; do luac5.1 -p -l "$f" 2>/dev/null | awk '/SETGLOBAL/ {print $NF}'; done | sort -u | tr '\n' ' ')
+    # ...plus what the modules it imports from vana-lib define (its lib.lua names them).
+    for lib in $(find "$res" -name lib.lua); do
+        for m in $(grep "local modules" "$lib" | grep -oE '"[a-z_]+"' | tr -d '"' | sort -u); do
+            own="$own $(luac5.1 -p -l "vana-lib/lib/$m.lua" 2>/dev/null | awk '/SETGLOBAL/ {print $NF}' | sort -u | tr '\n' ' ')"
+        done
+    done
     for f in "${files[@]}"; do
         # Client, server or shared, as the resource's meta.xml loads it (server if it isn't listed).
         type=$(grep -oE "<script[^>]*src=\"${f#$res/}\"[^>]*>" "$res/meta.xml" | grep -oE 'type="[a-z]+"' | head -1 | cut -d'"' -f2)
-        # Map Editor scripts (edf/) aren't in meta.xml: the editor runs them on the client.
-        [[ -z "$type" && "$f" == */edf/* ]] && type=client
+        # Map Editor scripts (edf/, and its source in vana-lib) aren't in meta.xml: the editor runs them on
+        # the client. vana-lib's modules run wherever they're imported: checked as shared.
+        [[ -z "$type" && ( "$f" == */edf/* || "$f" == */edf_lines_client.lua ) ]] && type=client
+        [[ -z "$type" && "$f" == vana-lib/lib/* ]] && type=shared
         case "$type" in
             client) mta=$(tr '\n' ' ' < "$HERE/luacheck/mta-client.txt") ;;
             shared) mta=$(cat "$HERE"/luacheck/mta-*.txt | sort -u | tr '\n' ' ') ;;

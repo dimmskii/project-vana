@@ -20,8 +20,8 @@ jobs, schools, races and challenges, minigames and gambling. Agreed rules:
 - **HUD** (`core/client.lua`): vanilla-style big titles, objectives (subtitles), the help box and
   on-screen counters (numbers, money, bars and timers). GXT formatting is rendered: colours, new
   lines and `~k~~CONTROL~` key names (mapped to MTA controls).
-- **Text** (`core/gxt.lua`): reads `data/american.gxt` (see docs/setup.md), MAIN and the missions'
-  own tables (e.g. `BURGLAR`), with `~1~` numbers filled in.
+- **Text** (`Gxt`, from `vana-text`): the game's text from MAIN and the missions' own tables (e.g.
+  `BURGLAR`), with `~1~` numbers filled in.
 - **Progress and perks:** `vana-player`'s `getProgress` / `setProgress` keep levels, totals and
   earned perks (`perk.<name>`); earned perks are re-applied on every spawn.
 - **Private dimensions:** instanced places (burglary houses) use a dimension per player

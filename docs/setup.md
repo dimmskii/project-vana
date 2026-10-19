@@ -34,8 +34,8 @@ Copy them from your own retail GTA:SA install (PC v1.0):
 | From your GTA:SA folder | To | Used by |
 | --- | --- | --- |
 | `data/Paths/NODES0.DAT` … `NODES63.DAT` (64 files) | `[vana]/vana-paths/data/` | Path graph: ped and traffic routing, traffic lights |
-| `data/shopping.dat`, `text/american.gxt` | `[vana]/vana-shops/data/` | Shop prices and stock; vanilla item names |
-| `text/american.gxt` | `[vana]/vana-activities/data/` | Activity text (mission tables: titles, objectives, help) |
+| `data/shopping.dat` | `[vana]/vana-shops/data/` | Shop prices and stock |
+| `text/american.gxt` | `[vana]/vana-text/data/` | All game text (item names, mission titles, objectives, help), for every resource |
 | `data/popcycle.dat`, `pedgrp.dat`, `cargrp.dat`, `peds.ide`, `vehicles.ide`, `pedstats.dat`, `ped.dat`, `info.zon`, `map.zon` | `[vana]/vana-population/data/` | Who spawns where (see population.md) |
 
 Example on Linux:
@@ -54,6 +54,8 @@ Keep the file names in upper case; the Linux server is case-sensitive. Check the
 Inside `<config>`, replace the stock `<resource>` lines with:
 
 ```xml
+<resource src="vana-lib" startup="1" protected="0" />
+<resource src="vana-text" startup="1" protected="0" />
 <resource src="vana-data-player" startup="1" protected="0" />
 <resource src="vana-data-parked" startup="1" protected="0" />
 <resource src="vana-data-interiors" startup="1" protected="0" />
@@ -107,12 +109,24 @@ on every start (`adminRights` in `vana-player/config/player.lua`; the `Console` 
 
 After editing `acl.xml` on a running server, run `reloadacl` in the console.
 
-`vana-player` creates an account per player (named after their serial) and needs one ACL request
-approved, once, from the console:
+Our resources ask for ACL rights through `<aclrequest>`; approve them once from the console (the
+server saves it). Every resource that imports shared code from `vana-lib` on the server needs
+`loadstring` (see [libraries.md](libraries.md)), and `vana-player` creates an account per player
+(named after their serial):
 
 ```text
+aclrequest allow vana-text all
+aclrequest allow vana-population all
 aclrequest allow vana-player all
+aclrequest allow vana-parked all
+aclrequest allow vana-interiors all
+aclrequest allow vana-shops all
+aclrequest allow vana-gym all
+aclrequest allow vana-activities all
+aclrequest allow vana-wildlife all
 ```
+
+Then restart them (or the server).
 
 Admins are listed by serial in `vana-player/config/player.lua` (`groups.Admin`), not in
 `acl.xml`. Find a player's serial in the server log's CONNECT line.
@@ -148,8 +162,8 @@ Console self-test commands only run from the server console.
 `sudo apt install lua5.1 lua-check`). It knows MTA's client and server functions
 (`tools/luacheck/mta-*.txt`: the pinned Neon API stubs plus the functions Neon's luadefs register)
 and each resource's own globals, so it reports typos, stray globals and dead code.
-It also fails when a shared library copy (`tools/lib/`, copied into resources by
-`tools/sync-libs.sh`) differs from its source.
+It also fails when a copy of the Map Editor line script (copied from `vana-lib` by
+`tools/sync-libs.sh`) differs from its source, and it knows the globals each resource imports.
 
 ## Re-seeding config (optional)
 
