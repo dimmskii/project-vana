@@ -12,6 +12,8 @@
     <script src="commands_client.lua" type="client" />
     <script src="use_client.lua" type="client" />
     <script src="interact_client.lua" type="client" />
+    <script src="config/preferences.lua" type="client" />
+    <script src="prefs_client.lua" type="client" />
     <file src="highlight.fx" />
     <export function="getHelpPages" type="server" />
     <export function="getActions" type="server" />
@@ -24,4 +26,5 @@
     <export function="subtitle" type="client" />
     <export function="offer" type="client" />
     <export function="withdraw" type="client" />
+    <export function="getPreference" type="client" />
 </meta>

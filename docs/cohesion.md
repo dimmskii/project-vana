@@ -60,12 +60,14 @@ Each layer has one home; don't scatter windows.
 | Key | Layer | Contents |
 | --- | --- | --- |
 | F, Enter | `/use` | What the help box offers where you stand; otherwise GTA's enter/exit (cars). |
+| F9 | `/preferences` (`/prefs`) | The player's own settings (HUD: map, minimap), kept on their machine. |
 | F1 | `/interact` | The cursor and the command box: click a car, a ped or a player for what you can do to it, or type a command. Player-facing game functions (stats, progress, properties, the future cell phone) come in through here. |
 | F2 (proposed) | Meta and social | Friends, social features, settings, help, server info. Nothing that affects the game world. |
 | F3 (proposed) | Admin | The admin toolset. The panel only opens for players whose rights the server confirms, and every action is still checked on the server. |
 
-- **Leave MTA and player-expected keys alone:** F8 (console), F9 (help), F12 (screenshot), T and Y
-  (chat), Tab (scoreboard). F11 stays the map, but it's ours (vana-map, [map.md](map.md)): MTA's map
+- **Leave MTA and player-expected keys alone:** F8 (console), F12 (screenshot), T and Y (chat), Tab
+  (scoreboard). F9 is ours: `/preferences` (MTA itself binds nothing there; its F9 help comes from the
+  `helpmanager` resource, which we don't run). F11 stays the map, but it's ours (vana-map, [map.md](map.md)): MTA's map
   commands are taken over, so the player's binds for them still work.
 - **One visual style.** Shared colours, fonts and window chrome come from one place. Prefer
   diegetic, vanilla-style presentation (HUD-style text, the phone, in-world markers) over

@@ -107,6 +107,21 @@ takes the keys, with binds off while it has them; we draw it).
 - Escape closes the menu, then the box; the `/interact` key closes it too. Running anything closes it.
 - Picking needs the mouse; the menus themselves don't.
 
+## Preferences (`/preferences`, `/prefs`, F9)
+
+One panel for each player's own settings, a vana-lib `menu_list`: the sections and settings are
+`vana-controls/config/preferences.lua` (key, label, choices, default), headings the selection passes
+over. Values change at once and are kept in `@prefs.json`, a private file of vana-controls on the
+player's machine. Any client script reads one with `exports["vana-controls"]:getPreference(key)` and
+hears about changes from `onClientPreferenceChange` (key, value) on the root element.
+
+| Key | Setting | Read by |
+| --- | --- | --- |
+| `map.blipSize` | HUD > Map > Blip size (60%-175%) | the map (F11) |
+| `minimap.rotation` | HUD > Minimap > Rotation: turns with the camera (vanilla), or north up | the radar of ours, to come |
+| `minimap.blipSize` | HUD > Minimap > Blip size | the radar of ours |
+| `minimap.blipRange` | HUD > Minimap > Nearby icons' range (x0.5-x3 of the short range) | the radar of ours |
+
 ## Menus
 
 Every menu takes the keyboard, the pad and the mouse (vana-lib's `menu_input`): arrows, D-pad or

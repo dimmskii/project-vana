@@ -21,6 +21,11 @@ Bound to F and Enter; a third or a pad button can be added in Settings > Binds (
   Typing offers matching commands: Enter takes the highlighted one, Tab completes it.
   Escape closes the menu, then the box; F1 again closes it.]],
       see = { "controls", "use" } },
+    { name = "preferences", aliases = { "prefs" }, usage = "/preferences", summary = "Your own settings (F9)",
+      text = [[Opens or closes the preferences panel: Up/Down to choose, Left/Right (or Enter, or a click) to change, Backspace to close. Changes apply at once and stay on your computer.
+  HUD > Map: the blip size on the map (F11).
+  HUD > Minimap: rotation, blip size, how far away nearby icons (shops, gas stations) show. For the radar of ours to come.]],
+      see = { "controls", "map" } },
     { name = "givemoney", aliases = { "pay" }, usage = "/givemoney <amount> [player or #id]", summary = "Give cash to a player beside you",
       text = [[Hands the amount to the player you name, or the one you're looking at. They must be within 4 m and in sight. Both of you are saved at once.]],
       see = { "controls" } },

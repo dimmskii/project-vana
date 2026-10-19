@@ -13,7 +13,8 @@ MapView = {}
 local WORLD, TILES, TILE = 6000, 12, 500 -- the map's 6000 m, as 12 x 12 radar tiles of 500 m
 local ZOOM_STEP, MAX_PPM = 1.25, 1.2     -- per wheel notch or key repeat; the most pixels per metre
 local PAN_PX = 900                        -- pixels a second the move keys pan at
-local COLOURS = { back = tocolor(18, 24, 34), panel = tocolor(12, 12, 14), title = tocolor(172, 203, 241),
+-- back: around the tiles, the stock radar's water (#738AAF).
+local COLOURS = { back = tocolor(0x73, 0x8A, 0xAF), panel = tocolor(12, 12, 14), title = tocolor(172, 203, 241),
                   text = tocolor(225, 225, 225), dim = tocolor(150, 150, 150), route = tocolor(220, 60, 200, 230) }
 local COMMANDS = { "radar", "radar_zoom_in", "radar_zoom_out", "radar_move_north", "radar_move_south",
                    "radar_move_east", "radar_move_west", "radar_attach", "radar_help" }
@@ -24,6 +25,19 @@ local cursor = { free = false, x = 0, y = 0 }
 local drag, following, showHelp = nil, false, true
 local route, destination, destinationBlip
 local lastTick
+local blipScale = 1 -- the player's "map.blipSize" (vana-controls' preferences)
+
+local function readPreferences()
+    local res = getResourceFromName("vana-controls")
+    if res and getResourceState(res) == "running" then
+        blipScale = tonumber(exports["vana-controls"]:getPreference("map.blipSize")) or 1
+    end
+end
+addEvent("onClientPreferenceChange", false)
+addEventHandler("onClientPreferenceChange", root, function(key) if key == "map.blipSize" then readPreferences() end end)
+addEventHandler("onClientResourceStart", root, function(res)
+    if res == resource or getResourceName(res) == "vana-controls" then readPreferences() end
+end)
 
 local function screen() return guiGetScreenSize() end
 local function sx(v) return v * select(2, guiGetScreenSize()) / 720 end
@@ -335,7 +349,7 @@ addEventHandler("onClientRender", root, function()
         end
     end
     -- Blips (smaller than MTA's), then you.
-    local icon = sx(11)
+    local icon = sx(11) * blipScale
     local hover = drawBlips(icon, getElementDimension(localPlayer), getElementInterior(localPlayer))
     local mx, my = toScreen(px, py)
     local _, _, rz = getElementRotation(localPlayer)
