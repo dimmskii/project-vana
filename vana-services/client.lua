@@ -41,7 +41,8 @@ local function verify(ped, done, again)
         end
         if not owns(ped) then return end
         local vx, vy = getElementVelocity(ped)
-        if (vx * vx + vy * vy) * 2500 > 0.09 or getPedTaskSequenceProgress(ped) >= 0 or busy(ped) then
+        local standing = isPedDoingTask(ped, "TASK_COMPLEX_USE_SEQUENCE") and getPedSimplestTask(ped) == "TASK_SIMPLE_STAND_STILL"
+        if (vx * vx + vy * vy) * 2500 > 0.09 or (getPedTaskSequenceProgress(ped) >= 0 and not standing) or busy(ped) then
             idleSince = nil
             return
         end
@@ -93,6 +94,12 @@ addEvent("vana-services:walk", true)
 addEventHandler("vana-services:walk", resourceRoot, function(ped, x, y, z, run)
     -- A straight go-to: GTA's route follower draws on small pools that crash the game when full.
     local function go()
+        -- An earlier walk, still walking or standing at its end (GTA keeps it), is cleared first: GTA
+        -- refuses a new one over it, or drops it. Only plain go-tos: a flee sequence is never ended by hand.
+        local step = getPedSimplestTask(ped)
+        if isPedDoingTask(ped, "TASK_COMPLEX_USE_SEQUENCE") and (step == "TASK_SIMPLE_GO_TO_POINT" or step == "TASK_SIMPLE_STAND_STILL") then
+            killPedTask(ped, "primary", 3, false)
+        end
         return setPedTaskSequence(ped, { { task = "go_to", x = x, y = y, z = z, movement = run and "run" or "walk", radius = 1.0, slowdownRadius = 1.5 } })
     end
     retry(function()

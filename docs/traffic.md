@@ -104,12 +104,18 @@ Road crossings use the intersection flags on the links:
 - **Nobody simulates it** (it freezes in its pose, even in mid-air): every tick the server checks the
   ped's syncer is still its owner, and if not, pins it back (`setElementSyncer(..., true, true)`) and
   sends its orders again. vana-services does the same for its crews.
-- **The order didn't take** (it stands idle): GTA can drop an order without saying so (its event
-  queue full), and a reaction of its own that ends leaves the ped idle. Every second the owner's
-  client checks each walk: under way (the sequence running, or moving), arrived, or busy with a
-  reaction (falling, getting up, reacting, fleeing). Otherwise, after 1.5 s it gives the order
-  again; after 4 tries in vain it asks the server for a fresh route. vana-services' clients watch
-  their crews' walk, get-in and get-out orders the same way (5 tries in 25 s).
+- **The order didn't take** (it stands idle): a walk that arrives stays the ped's task, standing
+  still at its end, and GTA refuses a new walk over it, or over one still walking, or queues the new
+  one and quietly drops it; so nearly every re-target used to fail, and the ped stopped at the old
+  point. Our walks are plain go-tos, so the old one is cleared (`killPedTask`) before each new one;
+  a flee sequence (route tasks) never is. A reaction of GTA's own that ends also leaves the ped idle.
+  Twice a second the owner's client checks each walk: moving, arrived, the sequence running (not
+  just standing at its end), or busy with a reaction (falling, getting up, reacting, fleeing).
+  Otherwise, after 0.8 s it gives the order again; after 6 tries in vain (a ped that's blocked: GTA
+  ends a walk short when it can't get through) it asks the server for a fresh route. A fight against
+  a target the owner hasn't streamed in runs to where the target is until it can attack. vana-services' clients watch
+  their crews' walk, get-in and get-out orders the same way (5 tries in 25 s), clearing an old walk
+  the same way.
 - **The target can't be reached:** not moving 1.5 m in 8 s, the server sends the target again, and
   after two sends a fresh route from where the ped stands. Waiting at a kerb counts for up to 60 s,
   then the ped walks somewhere else. A follower (couples, gangs) more than 4 m from its slot gets its

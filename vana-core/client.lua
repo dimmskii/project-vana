@@ -18,6 +18,16 @@ end)
 -- who simulates them, frozen, ground, task, animation. The server adds what their owner last told them.
 local CHECK_MS, STILL_MS, RANGE = 2000, 6000, 80
 local watched = {} -- ped -> { x, y, z, since, reported }
+-- Standing still on purpose: fighting, shooting, being hit (not reported).
+local MEANT = { "KILL_PED", "GUN", "FIGHT", "HIT", "SHOOT" }
+
+local function meantToStand(ped)
+    local task, simplest = tostring(getPedTask(ped, "primary", 3)), tostring(getPedSimplestTask(ped))
+    for _, part in ipairs(MEANT) do
+        if task:find(part, 1, true) or simplest:find(part, 1, true) then return true end
+    end
+    return false
+end
 
 local function describe(ped)
     local x, y, z = getElementPosition(ped)
@@ -57,7 +67,7 @@ setTimer(function()
                 else
                     local _, _, vz = getElementVelocity(ped)
                     local hanging = not isPedOnGround(ped) and math.abs(vz) < 0.01
-                    if not w.reported and (now - w.since >= STILL_MS or (hanging and now - w.since >= CHECK_MS)) then
+                    if not w.reported and (now - w.since >= STILL_MS or (hanging and now - w.since >= CHECK_MS)) and (hanging or not meantToStand(ped)) then
                         w.reported = true
                         triggerServerEvent("vana-core:stuck", resourceRoot, ped, (hanging and "HANGING, " or "still, ") .. describe(ped))
                     end

@@ -80,6 +80,7 @@ end)
 
 addEvent("vana-traffic:release", true)
 addEventHandler("vana-traffic:release", resourceRoot, function(vehicle, ped)
+    if not vehicle then return end -- destroyed before the event arrived
     local cmd = commands[vehicle]
     commands[vehicle] = nil
     if cmd and isTimer(cmd.retry) then killTimer(cmd.retry) end

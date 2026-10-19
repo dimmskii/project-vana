@@ -32,11 +32,30 @@ local function routesAvailable()
     return true
 end
 
+-- GTA refuses a new walk while the last one is still the ped's task: walking it, or arrived and
+-- standing still at its end (where it stays). Those are plain go-tos, safe to end; a flee sequence
+-- (route tasks) never is.
+local function inWalk(ped)
+    local step = getPedSimplestTask(ped)
+    return isPedDoingTask(ped, "TASK_COMPLEX_USE_SEQUENCE") and (step == "TASK_SIMPLE_GO_TO_POINT" or step == "TASK_SIMPLE_STAND_STILL")
+end
+
+local function standingInWalk(ped)
+    return isPedDoingTask(ped, "TASK_COMPLEX_USE_SEQUENCE") and getPedSimplestTask(ped) == "TASK_SIMPLE_STAND_STILL"
+end
+
+-- A go-to sequence, given over the last one: that one is cleared first, since GTA otherwise refuses
+-- the new order, or queues it and quietly drops it while the old walk runs on to its end.
+local function goTo(ped, sequence)
+    if inWalk(ped) then killPedTask(ped, "primary", 3, false) end
+    return setPedTaskSequence(ped, sequence)
+end
+
 local function walk(ped, cmd)
     -- Holding at a kerb: arrive precisely. Walking: arrive loosely so the ped never slows down
     -- before the next target arrives.
     local radius = cmd.hold and 0.75 or 2.0
-    return setPedTaskSequence(ped, { { task = "go_to", x = cmd.x, y = cmd.y, z = cmd.z, movement = "walk",
+    return goTo(ped, { { task = "go_to", x = cmd.x, y = cmd.y, z = cmd.z, movement = "walk",
         radius = radius, slowdownRadius = cmd.hold and 2.0 or radius } })
 end
 
@@ -48,7 +67,16 @@ local function engage(ped, cmd)
     if cmd.mode == "fight" or cmd.mode == "arrest" then
         -- Already attacking (the weapon in hand decides between beating and shooting): leave it be.
         if isPedDoingTask(ped, "TASK_COMPLEX_KILL_PED_ON_FOOT") then return true end
-        return isElement(cmd.target) and isElementStreamedIn(cmd.target) and setPedKillOnFoot(ped, cmd.target)
+        if not isElement(cmd.target) then return false end
+        -- A target this client hasn't streamed in can't be attacked yet: run to where it is, and the
+        -- re-issue below turns it into the attack once it streams in.
+        if not isElementStreamedIn(cmd.target) then
+            local tx, ty, tz = getElementPosition(cmd.target)
+            cmd.approaching = true
+            return goTo(ped, { { task = "go_to", x = tx, y = ty, z = tz, movement = "run", radius = 3.0, slowdownRadius = 3.0 } })
+        end
+        cmd.approaching = nil
+        return setPedKillOnFoot(ped, cmd.target)
     elseif cmd.mode == "flee" then
         return isElement(cmd.target) and isElementStreamedIn(cmd.target) and
             setPedTaskSequence(ped, { { task = "smart_flee", target = cmd.target, safeDistance = 60, duration = cmd.ms } })
@@ -110,9 +138,10 @@ end
 
 setTimer(function()
     for ped, cmd in pairs(commands) do
-        if (cmd.mode == "fight" or cmd.mode == "arrest") and (cmd.reissued or 0) < 5 and isElement(ped) and isElementStreamedIn(ped)
+        if (cmd.mode == "fight" or cmd.mode == "arrest") and ((cmd.reissued or 0) < 5 or cmd.approaching) and isElement(ped) and isElementStreamedIn(ped)
             and isElementSyncer(ped) and not isPedDead(ped) and not isBusy(ped) then
-            cmd.reissued = (cmd.reissued or 0) + 1
+            -- Running towards a target not streamed in yet doesn't use up the tries.
+            if not cmd.approaching then cmd.reissued = (cmd.reissued or 0) + 1 end
             apply(ped)
         end
     end
@@ -120,11 +149,11 @@ end, 3000, 0)
 
 -- Walks that didn't take. GTA can drop an order without saying so (its event queue full, or an event
 -- response of its own replacing it), and a reaction (flinch, flee) that ends leaves the ped idle. So
--- every second each walk this client runs is checked: still under way (its sequence running, or
+-- twice a second each walk this client runs is checked: still under way (its sequence running, or
 -- moving), or arrived. If not, and the ped isn't busy with a reaction of GTA's, the order is given
 -- again; after MAX_REAPPLIES in vain the server is asked for a fresh route. A ped hanging in the air
 -- goes back onto the ground under it, or, with no ground loaded there and out of view, is given up.
-local REAPPLY_MS, MAX_REAPPLIES, HANG_MS = 1500, 4, 2000
+local CHECK_MS, REAPPLY_MS, MAX_REAPPLIES, HANG_MS = 500, 800, 6, 2000
 
 local function debugLog(text) if Debug.on("orders") then Debug.log("orders", text) end end
 
@@ -152,7 +181,7 @@ setTimer(function()
             end
             local moving = (vx * vx + vy * vy) * 2500 > 0.09
             local arrived = getDistanceBetweenPoints2D(x, y, cmd.x, cmd.y) <= (cmd.hold and 1.25 or 2.5)
-            if moving or arrived or getPedTaskSequenceProgress(ped) >= 0 then
+            if moving or arrived or (getPedTaskSequenceProgress(ped) >= 0 and not standingInWalk(ped)) then
                 cmd.misses = 0
             elseif not isBusy(ped) and now - (cmd.applied or cmd.since) > REAPPLY_MS then
                 cmd.misses = (cmd.misses or 0) + 1
@@ -163,14 +192,15 @@ setTimer(function()
                     triggerServerEvent("vana-peds:stuck", resourceRoot, ped)
                     cmd.applied = now
                 else
-                    debugLog(("ped %s idle (task %s / %s): walk given again (%d)"):format(tostring(ped):sub(-8), tostring(getPedTask(ped, "primary", 3)),
-                        tostring(getPedSimplestTask(ped)), cmd.misses))
+                    debugLog(("ped %s idle (task %s / %s) %.1f m from its target (%.1f m below it%s): walk given again (%d)"):format(tostring(ped):sub(-8),
+                        tostring(getPedTask(ped, "primary", 3)), tostring(getPedSimplestTask(ped)), getDistanceBetweenPoints2D(x, y, cmd.x, cmd.y),
+                        (cmd.z or z) - z, cmd.hold and ", holding" or "", cmd.misses))
                     apply(ped)
                 end
             end
         end
     end
-end, 1000, 0)
+end, CHECK_MS, 0)
 
 addEvent("vana-peds:walk", true)
 addEventHandler("vana-peds:walk", resourceRoot, function(ped, x, y, z, hold)
