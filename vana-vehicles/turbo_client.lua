@@ -42,8 +42,11 @@ setTimer(function()
     end
 end, 300, 0)
 
--- Every frame: pitch with speed (against the car's own top speed), volume with throttle (the local
--- driver's accelerate control; others': speeding up).
+-- Every frame: pitch with speed (against the car's own top speed), volume with throttle. A player
+-- driving: their accelerate control (yours digital or analogue; another's as synced, or the car
+-- speeding up), and off it the whine falls silent at once (W.offThrottle) and comes back within
+-- W.attackMs. A ped driving (traffic's autopilot sets no controls): speeding up, and off it only
+-- quieter (W.pedOffThrottle), so traffic never loses its whine.
 addEventHandler("onClientPreRender", root, function(dt)
     for vehicle, p in pairs(playing) do
         if isElement(vehicle) and isElement(p.sound) then
@@ -52,15 +55,26 @@ addEventHandler("onClientPreRender", root, function(dt)
             local top = (getVehicleHandling(vehicle) or {}).maxVelocity or 160
             local share = math.min(1, speed / math.max(1, top))
             local driver = getVehicleOccupant(vehicle, 0)
-            local throttle
+            local speedingUp = speed > p.speed + 0.02 * dt / 16
+            local throttle, player
             if driver == localPlayer then
-                throttle = getPedControlState(localPlayer, "accelerate")
+                player = true
+                throttle = getPedControlState(localPlayer, "accelerate") or (getPedAnalogControlState(localPlayer, "accelerate") or 0) > 0.1
+            elseif isElement(driver) and getElementType(driver) == "player" then
+                player = true
+                throttle = getPedControlState(driver, "accelerate") or speedingUp
             else
-                throttle = speed > p.speed + 0.02 * dt / 16
+                throttle = speedingUp
             end
             p.speed = speed
-            local target = (0.25 + 0.75 * share) * (throttle and 1 or 0.45) * W.volume
-            p.volume = (p.volume or 0) + (target - (p.volume or 0)) * math.min(1, dt / 200)
+            local off = player and W.offThrottle or W.pedOffThrottle
+            local target = (0.25 + 0.75 * share) * (throttle and 1 or off) * W.volume
+            if player and not throttle then
+                p.volume = target -- off the throttle: at once
+            else
+                local rate = player and (W.attackMs or 60) or 200
+                p.volume = (p.volume or 0) + (target - (p.volume or 0)) * math.min(1, dt / rate)
+            end
             setSoundVolume(p.sound, p.volume)
             setSoundSpeed(p.sound, W.pitch[1] + (W.pitch[2] - W.pitch[1]) * share + (throttle and 0.08 or 0))
         end

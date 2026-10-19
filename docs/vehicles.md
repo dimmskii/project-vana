@@ -117,7 +117,11 @@ never compound and a rebalanced config reaches every car.
 - **The turbo's whine** (`turbo_client.lua`): every client plays a looped game sound on running
   turbo cars within 60 m: GENRL bank 131 (the vehicle generic bank, global 138), sound 10 (the
   Hydra's front jet; 29 is a generic whine), pitched from 0.75 to 1.6 with speed against the car's
-  own top speed, louder on the throttle. `/turbosound <bank> <sound>` auditions another, `off`
+  own top speed, louder on the throttle. Off the throttle (an experiment, `offThrottle`): a car a
+  player drives falls silent at once and comes back within 60 ms when they press on (your
+  accelerate control, digital or analogue; another player's as synced, or their car speeding up). A
+  car a ped drives (traffic's autopilot sets no controls to read) only drops to 45% between
+  speed-ups, so traffic keeps its whine. `/turbosound <bank> <sound>` auditions another, `off`
   silences it (per player). The game's own engine sound is untouched.
 - **Traffic:** tuned street racers also roll performance parts (engine 1-2, a turbo now and then,
   tyres, brakes).

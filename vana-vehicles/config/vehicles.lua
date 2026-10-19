@@ -101,7 +101,10 @@ VehicleConfig = {
         -- The turbo's whine (turbo_client.lua): a looped game sound on top of the engine, pitched with
         -- speed and throttle. GENRL bank 131 is the vehicle generic bank (global 138); sound 10 is the
         -- Hydra's (Harrier's) front jet, 29 a generic whine. /turbosound auditions others.
-        whine = { bank = 131, sound = 10, volume = 0.4, range = 60, pitch = { 0.75, 1.6 } },
+        -- Off the throttle (experiment): a player's car falls silent at once (offThrottle 0) and comes
+        -- back within attackMs; a ped's (traffic: no controls to read) only drops to pedOffThrottle.
+        whine = { bank = 131, sound = 10, volume = 0.4, range = 60, pitch = { 0.75, 1.6 },
+                  offThrottle = 0, pedOffThrottle = 0.45, attackMs = 60 },
     },
 
     -- Paintjobs by model (the ones with paintjob textures): how many (setVehiclePaintjob 0..n-1).
