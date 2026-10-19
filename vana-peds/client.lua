@@ -154,7 +154,7 @@ end, 3000, 0)
 -- moving), or arrived. If not, and the ped isn't busy with a reaction of GTA's, the order is given
 -- again; after MAX_REAPPLIES in vain the server is asked for a fresh route. A ped hanging in the air
 -- goes back onto the ground under it, or, with no ground loaded there and out of view, is given up.
-local CHECK_MS, REAPPLY_MS, MAX_REAPPLIES, HANG_MS = 500, 800, 6, 2000
+local CHECK_MS, REAPPLY_MS, MAX_REAPPLIES, HANG_MS = 500, 800, 6, 1000
 
 local function debugLog(text) if Debug.on("orders") then Debug.log("orders", text) end end
 
@@ -169,20 +169,29 @@ setTimer(function()
                 cmd.hangingSince = cmd.hangingSince or now
                 if now - cmd.hangingSince > HANG_MS then
                     cmd.hangingSince = nil
+                    cmd.putBack = (cmd.putBack or 0) + 1
                     local ground = getGroundPosition(x, y, z + 1)
-                    if ground and ground ~= 0 then
+                    -- GTA can keep a ped pinned where it is (waiting for collision): putting it down
+                    -- again doesn't help, so the third time it's given up, in view or not.
+                    if cmd.putBack >= 3 then
+                        debugLog(("ped %s still hanging after being put down twice: given up"):format(tostring(ped):sub(-8)))
+                        triggerServerEvent("vana-peds:lost", resourceRoot, ped)
+                    elseif ground and ground ~= 0 then
                         debugLog(("ped %s hanging %.1f m up: put back on the ground"):format(tostring(ped):sub(-8), z - ground))
+                        setElementFrozen(ped, false)
                         setElementPosition(ped, x, y, ground + 1)
+                        if cmd.putBack == 2 then setElementVelocity(ped, 0, 0, -0.1) end
                     elseif not isElementOnScreen(ped) then
                         triggerServerEvent("vana-peds:lost", resourceRoot, ped)
                     end
                 end
             else
-                cmd.hangingSince = nil
+                cmd.hangingSince, cmd.putBack = nil, nil
             end
             local moving = (vx * vx + vy * vy) * 2500 > 0.09
             local arrived = getDistanceBetweenPoints2D(x, y, cmd.x, cmd.y) <= (cmd.hold and 1.25 or 2.5)
-            if moving or arrived or (getPedTaskSequenceProgress(ped) >= 0 and not standingInWalk(ped)) then
+            -- Hanging: no walk takes until it's back on the ground (above).
+            if cmd.hangingSince or moving or arrived or (getPedTaskSequenceProgress(ped) >= 0 and not standingInWalk(ped)) then
                 cmd.misses = 0
             elseif not isBusy(ped) and now - (cmd.applied or cmd.since) > REAPPLY_MS then
                 cmd.misses = (cmd.misses or 0) + 1

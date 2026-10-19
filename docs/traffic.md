@@ -121,8 +121,10 @@ Road crossings use the intersection flags on the links:
   then the ped walks somewhere else. A follower (couples, gangs) more than 4 m from its slot gets its
   slot sent again the same way; one 25 m behind leaves the group and walks on alone.
 
-A ped hanging in the air is put back on the ground under it; with no ground loaded there and out of
-view, it's removed. With `vana-peds:orders` on (docs/debug.md), every one of these is logged.
+A ped hanging in the air (not on the ground, not falling, for 1 s) is put back on the ground under it,
+and no walk is given meanwhile. GTA can keep one pinned there (waiting for collision): the second time
+it's also nudged downwards, the third time it's removed even in view. With no ground loaded under it
+and out of view, it's removed at once. With `vana-peds:orders` on (docs/debug.md), every one of these is logged.
 
 Spawns reject routes that start on a crossing or bounce inside tiny isolated path fragments.
 `pedtest [seed]` walks 200 virtual peds for 300 s each and checks that no crossing is started

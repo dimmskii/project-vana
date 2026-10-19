@@ -564,12 +564,13 @@ addEventHandler("vana-peds:stuck", resourceRoot, function(ped)
     walker.route = routeFromHere(ped) or walker.route
 end)
 
--- The owner's client found the ped hanging in the air with no ground loaded under it, out of view.
+-- The owner's client found the ped hanging in the air: no ground loaded under it and out of view, or
+-- still hanging after being put down twice.
 addEvent("vana-peds:lost", true)
 addEventHandler("vana-peds:lost", resourceRoot, function(ped)
     local walker = walkers[ped]
     if not walker or walker.owner ~= client then return end
-    debugLog(("ped %s hanging with no ground under it, out of %s's view: removed"):format(tostring(ped):sub(-8), getPlayerName(client)))
+    debugLog(("ped %s hanging in the air on %s's client: removed"):format(tostring(ped):sub(-8), getPlayerName(client)))
     removeWalker(walker)
 end)
 
