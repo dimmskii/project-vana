@@ -5,4 +5,6 @@
     <script src="client.lua" type="client" />
     <export function="setPoint" type="server" />
     <export function="removePoint" type="server" />
+    <script src="help.lua" type="server" />
+    <export function="getHelpPages" type="server" />
 </meta>

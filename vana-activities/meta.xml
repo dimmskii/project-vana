@@ -55,4 +55,6 @@
     <file src="data/LD_BEAT.txd" /> <!-- the beat display's sprites: copied from your game at setup -->
     <script src="games/dance.lua" type="server" />
     <script src="games/dance_client.lua" type="client" />
+    <script src="help.lua" type="server" />
+    <export function="getHelpPages" type="server" />
 </meta>

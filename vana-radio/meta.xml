@@ -17,4 +17,6 @@
     <export function="getStationSegments" type="server" />
     <export function="getBeats" type="server" />
     <export function="getServerTime" type="client" />
+    <script src="help.lua" type="server" />
+    <export function="getHelpPages" type="server" />
 </meta>

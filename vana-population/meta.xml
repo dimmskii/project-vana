@@ -26,4 +26,6 @@
     <export function="pickCompanion" type="server" />
     <export function="getCompanionRules" type="server" />
     <export function="getServiceUnit" type="server" />
+    <script src="help.lua" type="server" />
+    <export function="getHelpPages" type="server" />
 </meta>

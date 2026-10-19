@@ -10,4 +10,6 @@
     <export function="adoptVehicle" type="server" />
     <export function="handOverUnit" type="server" />
     <export function="panicUnit" type="server" />
+    <script src="help.lua" type="server" />
+    <export function="getHelpPages" type="server" />
 </meta>

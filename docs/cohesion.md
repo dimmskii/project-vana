@@ -27,9 +27,13 @@ Rules that keep the gamemode feeling like one product instead of a pile of scrip
   function. There's never a UI-only or a command-only version of a privileged action.
 - **Consistent naming:** lowercase full names (`/vehicle`, `/weapon`). Short aliases are
   optional and must be registered through the same handler.
-- **One help registry.** Each resource registers its commands (name, aliases, arguments, required
-  right, description) with one shared registry. The help UI and `/help` read from it, so a player
-  only sees the commands they can actually use.
+- **One help registry.** Each resource describes its commands and topics in its `help.lua`
+  (`HelpPages`: name, aliases, usage, required right, summary, page text, see also) and exports
+  `getHelpPages`. `vana-help` collects them from every running resource and shows the manual: `/?`
+  or `/man <name>` in game (MTA's client keeps `/help` for its own console list, so it never reaches
+  scripts), `?`, `man` or `helptest` at the server console. A player only sees the pages they may
+  use (the page's `right` in the ACL); self-tests show at the console only. A new command gets its
+  page in the same change.
 - **Feedback:** one shared helper for success and error messages, so wording and colours match
   everywhere.
 

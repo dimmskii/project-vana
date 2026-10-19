@@ -6,4 +6,6 @@
     <script src="lib.lua" type="server" />
     <script src="config/maps.lua" type="server" />
     <script src="server.lua" type="server" />
+    <script src="help.lua" type="server" />
+    <export function="getHelpPages" type="server" />
 </meta>

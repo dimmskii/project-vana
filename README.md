@@ -49,6 +49,7 @@ Start here:
 | `vana-activities` | Per-player activities: burglary, dating, side jobs, schools, races, minigames |
 | `vana-map` | Map points and radar blips for every resource (categories, icons, ranges) |
 | `vana-vehicles` | Vehicle registry and exact persistence, fuel, each car's radio station |
+| `vana-help` | The manual: `/?` and `/man`, every resource's commands and topics as each player may use them |
 | `vana-radio` | Radio stations on one server clock (vanilla's programme, internet streams), car and outside radios |
 | `[data]/vana-data-*` | Map resources holding placement data (spots, markers, paths); see docs/editor.md |
 | `vana-wildlife` | Creatures from community mods: Bigfoot |

@@ -10,4 +10,6 @@
     <script src="client.lua" type="client" />
     <file src="mods/bigfoot/bigfoot.dff" />
     <file src="mods/bigfoot/bigfoot.txd" />
+    <script src="help.lua" type="server" />
+    <export function="getHelpPages" type="server" />
 </meta>

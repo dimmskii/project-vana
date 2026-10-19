@@ -19,4 +19,6 @@
     <script src="vendors_client.lua" type="client" />
     <script src="keepers_client.lua" type="client" />
     <script src="garage_client.lua" type="client" />
+    <script src="help.lua" type="server" />
+    <export function="getHelpPages" type="server" />
 </meta>

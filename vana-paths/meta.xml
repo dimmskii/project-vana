@@ -14,4 +14,6 @@
     <export function="getPedSignal" type="server" />
     <export function="getGoverningLight" type="server" />
     <export function="shouldCarStop" type="server" />
+    <script src="help.lua" type="server" />
+    <export function="getHelpPages" type="server" />
 </meta>
