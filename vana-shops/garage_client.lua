@@ -156,7 +156,7 @@ end)
 
 addEventHandler("onClientRender", root, function()
     if not menu then return end
-    local sw, sh = guiGetScreenSize()
+    local _, sh = guiGetScreenSize()
     local s = sh / 720
     -- The camera on the part of the car this is about.
     local v = getPedOccupiedVehicle(localPlayer)

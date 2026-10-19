@@ -272,8 +272,12 @@ end)
 
 addEventHandler("onResourceStart", resourceRoot, function()
     loadStock()
+    local m = G.marker
     for i, g in ipairs(G.garages) do
         MapPoints.set("modgarage:" .. i, { category = "modgarage", x = g.x, y = g.y, z = g.z })
+        -- The door stays up, and the spot to stop on is marked.
+        if g.door then setGarageOpen(g.door, true) end
+        createMarker(g.x, g.y, g.z - 0.6, "cylinder", m.size, m.colour[1], m.colour[2], m.colour[3], m.colour[4])
     end
 end)
 

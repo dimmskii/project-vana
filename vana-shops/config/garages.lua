@@ -3,22 +3,24 @@
 -- lowriders, carmod3 street racers; CarMods prices); part IDs and the colour palette are seeded
 -- (config/carmods_data.lua). Hand-written: edit freely.
 GarageConfig = {
-    -- Vanilla's doorways (the locate CARMOD stops you in, 4 m) and their garages: the interior and
-    -- spot the car goes to, and the heading it leaves facing. All open (vanilla unlocks the LS and
-    -- SF ones through the story).
+    -- Vanilla's doorways (the locate CARMOD stops you in, 4 m, just inside the garage door) and their
+    -- garages: the game's garage (`door`: its index, from the map files' grge entries in load order,
+    -- for setGarageOpen), the interior and spot the car goes to, and the heading it leaves facing. All
+    -- open, doors up (vanilla unlocks the LS and SF ones through the story).
     garages = {
-        { name = "Transfender", shop = "carmod1", x = 1042.0129, y = -1019.927, z = 31.127, exit = 0,
+        { name = "Transfender", shop = "carmod1", x = 1042.0129, y = -1019.927, z = 31.127, exit = 0, door = 10,
           interior = 1, inside = { 617.536, -1.99, 999.98, 90 } },          -- Los Santos (Temple)
-        { name = "Transfender", shop = "carmod1", x = -1935.528, y = 247.029, z = 33.561, exit = 0,
+        { name = "Transfender", shop = "carmod1", x = -1935.528, y = 247.029, z = 33.561, exit = 0, door = 18,
           interior = 1, inside = { 617.536, -1.99, 999.98, 90 } },          -- San Fierro (Doherty)
-        { name = "Transfender", shop = "carmod1", x = 2387.075, y = 1050.511, z = 9.812, exit = 0,
+        { name = "Transfender", shop = "carmod1", x = 2387.075, y = 1050.511, z = 9.812, exit = 0, door = 35,
           interior = 1, inside = { 617.536, -1.99, 999.98, 90 } },          -- Las Venturas (Come-A-Lot)
-        { name = "Loco Low Co.", shop = "carmod2", x = 2645.1121, y = -2045.745, z = 12.607, exit = 180,
+        { name = "Loco Low Co.", shop = "carmod2", x = 2645.1121, y = -2045.745, z = 12.607, exit = 180, door = 7,
           interior = 2, inside = { 616.783, -74.815, 997.014, 90 } },       -- Los Santos (Willowfield)
-        { name = "Wheel Arch Angels", shop = "carmod3", x = -2723.845, y = 217.804, z = 3.585, exit = 90,
+        { name = "Wheel Arch Angels", shop = "carmod3", x = -2723.845, y = 217.804, z = 3.585, exit = 90, door = 15,
           interior = 3, inside = { 615.286, -124.239, 996.995, 90 } },      -- San Fierro (Ocean Flats)
     },
     radius = 4,
+    marker = { size = 3, colour = { 172, 203, 241, 90 } }, -- where to stop (vanilla draws a sphere there)
     stoppedSpeed = 0.05, -- m per frame-ish (MTA velocity units): "stopped" in the doorway
 
     -- Ours: every vehicle MTA can upgrade gets in, at any garage (vanilla turns away aircraft, boats,

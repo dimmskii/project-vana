@@ -141,7 +141,8 @@ the money, adds health and fat and plays the vanilla `VENDING` animation. Prices
 Vanilla's `CARMOD` (`garages.lua`, `config/garages.lua`): the three Transfenders (LS, SF, LV), Loco
 Low Co. (LS) and Wheel Arch Angels (SF), all open.
 
-- **Getting in:** stop in a garage's doorway (4 m) driving a vehicle. It's taken into the garage
+- **Getting in:** the garage doors stay up (`setGarageOpen` with each garage's game index, `door`);
+  drive in and stop on the marker just inside (vanilla's spot, 4 m) driving a vehicle. It's taken into the garage
   (vanilla's interior and spot for that garage), alone: each customer gets their own dimension.
   With `exclusive` on (it is), one customer per doorway at a time; anyone else is told "Somebody is
   already in the garage." Backspace at the top of the menu drives out, back in the doorway facing
@@ -170,7 +171,7 @@ Low Co. (LS) and Wheel Arch Angels (SF), all open.
 - `garagetest` (console): the stock resolves, a Blade's menu builds, a police car takes the
   universal parts. Warp names for the doorways: `transfender`, `transfender.sf`, `transfender.lv`,
   `locolow`, `waa`.
-- **Not done:** vanilla's garage door and per-part camera moves, the bonnet ornaments 1111/1112
+- **Not done:** the door closing behind you as vanilla's does, vanilla's per-part camera moves, the bonnet ornaments 1111/1112
   (MTA refuses them on every model).
 
 ## Gym (`vana-gym`)
