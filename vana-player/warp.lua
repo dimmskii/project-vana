@@ -69,7 +69,7 @@ local function build()
             local key = name:lower() .. (interior ~= 0 and ".in" or "")
             seen[key] = (seen[key] or 0) + 1
             add(list, key .. (seen[key] > 1 and ("." .. seen[key]) or ""),
-                { x = ex, y = ey, z = ez + 1, interior = interior, label = "entrance " .. name .. (interior ~= 0 and " (inside)" or "") })
+                { x = ex, y = ey, z = ez, interior = interior, label = "entrance " .. name .. (interior ~= 0 and " (inside)" or "") })
         end
     end
     -- The config's names, last (they may point at the ones above).
@@ -114,8 +114,9 @@ local function findPlayer(name, source)
     return nil, #found > 1 and found or nil
 end
 
--- Moves a player there; a driver takes the car (and its passengers) along.
-local function warp(player, x, y, z, interior, dimension, rot)
+-- Moves a player there; a driver takes the car (and its passengers) along. `onGround`: z is a point
+-- on the ground (places, coordinates), settled once their client has the floor there.
+local function warp(player, x, y, z, interior, dimension, rot, onGround)
     local vehicle = getPedOccupiedVehicle(player)
     if vehicle and getVehicleOccupant(vehicle, 0) ~= player then
         removePedFromVehicle(player)
@@ -129,14 +130,16 @@ local function warp(player, x, y, z, interior, dimension, rot)
             setElementInterior(occupant, interior)
             setElementDimension(occupant, dimension)
         end
-        setElementPosition(vehicle, x, y, z + 0.5)
+        setElementPosition(vehicle, x, y, z + (onGround and 1.5 or 0.5))
         if rot then setElementRotation(vehicle, 0, 0, rot) end
+        if onGround then settle(player, vehicle, x, y, z) end
     else
         setElementInterior(player, interior)
         setElementDimension(player, dimension)
-        setElementPosition(player, x, y, z)
+        setElementPosition(player, x, y, z + (onGround and 1 or 0))
         setElementVelocity(player, 0, 0, 0)
         if rot then setElementRotation(player, 0, 0, rot, "default", true) end
+        if onGround then settle(player, player, x, y, z) end
     end
 end
 
@@ -170,7 +173,7 @@ local function resolve(args, source, subject)
         local side = getPedOccupiedVehicle(player) and 3 or 1.2
         local a = math.rad(rz)
         return px + math.cos(a) * side, py + math.sin(a) * side, pz, getElementInterior(player), getElementDimension(player),
-            rz, getPlayerName(player)
+            rz, getPlayerName(player), true
     end
     -- hospital / police alone: the nearest to whoever is being warped.
     if (what:lower() == "hospital" or what:lower() == "police") then
@@ -226,9 +229,9 @@ addCommandHandler("warp", function(source, _, ...)
         if getElementType(source) == "console" and not args[taken + 1] then reply(source, "From the console, name who to warp.") end
         return
     end
-    local x, y, z, interior, dimension, rot, what = resolve(args, source, subject)
+    local x, y, z, interior, dimension, rot, what, toPlayer = resolve(args, source, subject)
     if not x then return reply(source, y or "Usage: /warp <place|player|x y z [interior]> [player]") end
-    warp(subject, x, y, z, interior, dimension, rot)
+    warp(subject, x, y, z, interior, dimension, rot, not toPlayer)
     reply(source, ("Warped %s to %s."):format(subject == source and "you" or getPlayerName(subject), what))
     if subject ~= source then outputChatBox("An admin warped you to " .. what .. ".", subject, 200, 200, 255) end
 end, true)

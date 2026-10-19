@@ -70,6 +70,16 @@ player name. The places:
 
 `warptest` (console) checks that the list builds and every extra name points at a place.
 
+## Placing on the ground
+
+Places from vanilla's data (restart points, the start spawn, spots, entrances' exits, the mod
+garages' spots) are points on the ground, but MTA positions a ped's or car's centre. So a player
+or car put at one starts a bit above it, and `settle` (exported) asks that player's client for the
+floor below once its collision has loaded, plus the model's centre-to-base height; the server then
+sets the height. Used for wasted/busted restarts, the first spawn, `/warp` to places and
+coordinates, and the mod garages. Positions saved from the game are centres already and aren't
+settled.
+
 ## Wasted and busted
 
 As in vanilla, both cost the player's weapons and $100. The player comes back at the nearest

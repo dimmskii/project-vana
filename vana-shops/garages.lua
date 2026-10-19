@@ -96,6 +96,15 @@ local function menuFor(s)
              colours = s.base.colours }
 end
 
+-- Vanilla's spots are points on the ground (set_car_coordinates puts the wheels there); MTA puts a
+-- car's centre at the position: vana-player settles it on the floor the driver's client measures.
+local function settle(player, vehicle, x, y, z)
+    local res = getResourceFromName("vana-player")
+    if res and getResourceState(res) == "running" then
+        pcall(function() exports["vana-player"]:settle(player, vehicle, x, y, z) end)
+    end
+end
+
 local function freeDimension()
     local used = {}
     for _, s in pairs(sessions) do used[s.dimension] = true end
@@ -113,7 +122,7 @@ local function moveVehicle(vehicle, occupants, interior, dimension, x, y, z, hea
             setElementDimension(occupant, dimension)
         end
     end
-    setElementPosition(vehicle, x, y, z)
+    setElementPosition(vehicle, x, y, z + 1.5) -- above the floor until it's settled
     setElementRotation(vehicle, 0, 0, heading)
     setElementVelocity(vehicle, 0, 0, 0)
     setElementAngularVelocity(vehicle, 0, 0, 0)
@@ -124,7 +133,7 @@ local function enter(player, vehicle, index)
     if not G.vehicleTypes[getVehicleType(vehicle)] then return say(player, Gxt.get("MODNO2") or "You cannot mod this vehicle.") end
     if G.exclusive and busy[index] and busy[index] ~= player then return say(player, G.busyText) end
     local s = { garage = garage, index = index, vehicle = vehicle, dimension = freeDimension(), lock = isVehicleLocked(vehicle),
-                occupants = getVehicleOccupants(vehicle), entering = true }
+                proof = isVehicleDamageProof(vehicle), occupants = getVehicleOccupants(vehicle), entering = true }
     sessions[player], busy[index] = s, player
     fadeCamera(player, false, 1)
     setTimer(function()
@@ -132,6 +141,8 @@ local function enter(player, vehicle, index)
         local i = garage.inside
         moveVehicle(vehicle, s.occupants, garage.interior, s.dimension, i[1], i[2], i[3], i[4])
         setElementFrozen(vehicle, true)
+        setVehicleDamageProof(vehicle, true)
+        settle(player, vehicle, i[1], i[2], i[3])
         setVehicleLocked(vehicle, true)
         s.base, s.entering = stateOf(vehicle), nil
         markKept(s)
@@ -151,9 +162,11 @@ local function leave(player, now)
         if not isElement(v) then return end
         if s.base then restore(v, s.base) end
         removeElementData(v, "vana:garage")
-        moveVehicle(v, s.occupants, 0, 0, g.x, g.y, g.z + 0.5, g.exit)
+        moveVehicle(v, s.occupants, 0, 0, g.x, g.y, g.z, g.exit)
         setElementFrozen(v, false)
+        setVehicleDamageProof(v, s.proof)
         setVehicleLocked(v, s.lock)
+        if isElement(player) then settle(player, v, g.x, g.y, g.z) end
         if isElement(player) then
             triggerClientEvent(player, "vana-garage:close", resourceRoot)
             fadeCamera(player, true, 1)

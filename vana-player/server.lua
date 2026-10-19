@@ -133,11 +133,38 @@ local function apply(player, d)
     if d.fightingStyle then setPedFightingStyle(player, d.fightingStyle) end
 end
 
-local function spawnAt(player, place, interior, dimension)
-    spawnPlayer(player, place.x, place.y, place.z, place.heading or 0, 0, interior or 0, dimension or 0)
+-- Settles an element the player's client can see (themselves, their car) on the ground under a
+-- place given as a point on the ground (vanilla's data), the client measuring the floor and the
+-- model's height there. Positions saved from the game (centres already) don't need it.
+local settling = {} -- player -> { token, element, x, y, z }
+function settle(player, element, x, y, z)
+    if not isElement(player) or not isElement(element) then return false end
+    local token = (settling[player] and settling[player].token or 0) + 1
+    settling[player] = { token = token, element = element, x = x, y = y, z = z }
+    triggerClientEvent(player, "vana-player:measureGround", resourceRoot, token, element, x, y, z)
+    return true
+end
+
+addEvent("vana-player:ground", true)
+addEventHandler("vana-player:ground", resourceRoot, function(token, groundZ, base)
+    local s = settling[client]
+    if not s or s.token ~= token or type(groundZ) ~= "number" or type(base) ~= "number" then return end
+    settling[client] = nil
+    if not isElement(s.element) or math.abs(groundZ - s.z) > 4 or base <= 0 or base > 6 then return end
+    -- Only if it's still where it was put (not driven or walked off meanwhile).
+    local ex, ey = getElementPosition(s.element)
+    if getDistanceBetweenPoints2D(ex, ey, s.x, s.y) > 2 then return end
+    setElementPosition(s.element, s.x, s.y, groundZ + base + 0.05)
+end)
+
+local function spawnAt(player, place, interior, dimension, onGround)
+    -- A point on the ground: the ped's centre is about a metre up until the client measures it.
+    local z = onGround and place.z + 1 or place.z
+    spawnPlayer(player, place.x, place.y, z, place.heading or 0, 0, interior or 0, dimension or 0)
     apply(player, data[player])
     fadeCamera(player, true)
     setCameraTarget(player, player)
+    if onGround then settle(player, player, place.x, place.y, place.z) end
 end
 
 -- Every player is logged in to an account named after their serial (nothing to remember), so ACL
@@ -201,7 +228,7 @@ addEventHandler("onPlayerJoin", root, function()
     if PlayerConfig.spawnAtLastPosition and p then
         spawnAt(source, p, p.interior, p.dimension)
     else
-        spawnAt(source, PlayerConfig.start.spawn)
+        spawnAt(source, PlayerConfig.start.spawn, 0, 0, true)
     end
 end)
 
@@ -242,7 +269,7 @@ local function restart(player, kind)
         setTimer(function()
             if not isElement(player) then return end
             local x, y, z = getElementPosition(player)
-            spawnAt(player, nearest(points, x, y, z))
+            spawnAt(player, nearest(points, x, y, z), 0, 0, true)
             savePlayer(player)
         end, 1000, 1)
     end, rules.delayMs, 1)
