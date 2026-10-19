@@ -10,8 +10,8 @@
     <script src="config/vendorkinds.lua" type="shared" />
     <script src="config/keepers.lua" type="server" />
     <script src="config/carmods_data.lua" type="server" />
-    <script src="config/garages.lua" type="server" />
-    <script src="config/sprays.lua" type="server" />
+    <script src="config/garages.lua" type="shared" />
+    <script src="config/sprays.lua" type="shared" />
     <script src="server.lua" type="server" />
     <script src="keepers.lua" type="server" />
     <script src="garages.lua" type="server" />
@@ -22,6 +22,8 @@
     <script src="keepers_client.lua" type="client" />
     <script src="garage_client.lua" type="client" />
     <script src="sprays_client.lua" type="client" />
+    <script src="icons_client.lua" type="client" />
+    <file src="data/hud.txd" /> <!-- the radar icons drawn in the garage markers: copied from your game at setup -->
     <script src="help.lua" type="server" />
     <export function="getHelpPages" type="server" />
 </meta>

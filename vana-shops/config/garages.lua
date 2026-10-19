@@ -22,7 +22,7 @@ GarageConfig = {
     },
     radius = 4,
     stoppedSpeed = 0.05, -- MTA velocity units: "stopped" in the doorway
-    marker = { size = 4, colour = { 172, 203, 241, 90 } }, -- where to stop (vanilla draws a sphere there)
+    marker = { size = 4, colour = { 200, 40, 40, 90 } }, -- where to stop (vanilla draws a sphere there); red as the radar icon
 
     -- Ours: every vehicle MTA can upgrade gets in, at any garage (vanilla turns away aircraft, boats,
     -- big and emergency vehicles, sends lowriders to Loco Low Co. and street racers to Wheel Arch

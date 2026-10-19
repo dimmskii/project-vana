@@ -192,6 +192,10 @@ aren't served. `spraytest` (console) checks the boxes and the damage test.
 The mod garages repair too: **Repair** at the top of their menu, $100, greyed out when there's
 nothing to fix.
 
+**Markers:** a mod garage's stopping spot is a red marker, a Pay 'n' Spray's middle a grey-green one
+(as their radar icons), each with its radar icon (vanilla's `radar_modGarage` / `radar_spray` from
+`hud.txd`, copied at setup) standing in it, turned to face you (`icons_client.lua`).
+
 ## Gym (`vana-gym`)
 
 The equipment is seeded from `gta_int.img` by `tools/seed/seed_gym.py` into

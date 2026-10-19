@@ -20,6 +20,7 @@ SprayConfig = {
         { door = 43, name = "Fort Carson", corner = { -103.64, 1112.42, 18.70 }, a = { 7.27, 0.00 }, b = { 0.00, 13.37 }, top = 24.55 },
         { door = 49, name = "Dillimore", corner = { 715.81, -462.40, 14.96 }, a = { 8.49, 0.00 }, b = { 0.00, 15.11 }, top = 21.44 },
     },
+    marker = { size = 4, colour = { 130, 170, 130, 90 } }, -- in the middle of each: grey-green as the radar icon
     repairedText = "Repaired: $%d",
     nothingText = "Nothing to fix.",
 }

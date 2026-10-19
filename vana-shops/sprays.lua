@@ -93,6 +93,8 @@ addEventHandler("onResourceStart", resourceRoot, function()
         local cx = g.corner[1] + (g.a[1] + g.b[1]) / 2
         local cy = g.corner[2] + (g.a[2] + g.b[2]) / 2
         MapPoints.set("spray:" .. i, { category = "spray", x = cx, y = cy, z = g.corner[3] })
+        local m = S.marker
+        createMarker(cx, cy, g.corner[3] - 0.1, "cylinder", m.size, m.colour[1], m.colour[2], m.colour[3], m.colour[4])
     end
 end)
 

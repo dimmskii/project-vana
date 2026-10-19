@@ -36,6 +36,7 @@ Copy them from your own retail GTA:SA install (PC v1.0):
 | `data/Paths/NODES0.DAT` … `NODES63.DAT` (64 files) | `[vana]/vana-paths/data/` | Path graph: ped and traffic routing, traffic lights |
 | `data/shopping.dat` | `[vana]/vana-shops/data/` | Shop prices and stock |
 | `models/txd/LD_BEAT.txd` | `[vana]/vana-activities/data/` | The dance and lowrider beat display's arrows (sent to players) |
+| `models/hud.txd` | `[vana]/vana-shops/data/` | The radar icons drawn in the mod garages' and Pay 'n' Sprays' markers (sent to players) |
 | `text/american.gxt` | `[vana]/vana-text/data/` | All game text (item names, mission titles, objectives, help), for every resource |
 | `data/popcycle.dat`, `pedgrp.dat`, `cargrp.dat`, `peds.ide`, `vehicles.ide`, `pedstats.dat`, `ped.dat`, `info.zon`, `map.zon` | `[vana]/vana-population/data/` | Who spawns where (see population.md) |
 
@@ -44,6 +45,7 @@ Example on Linux:
 ```sh
 cp "/path/to/GTA San Andreas/data/Paths/"NODES*.DAT "vana-paths/data/"
 cp "/path/to/GTA San Andreas/models/txd/LD_BEAT.txd" "vana-activities/data/"
+cp "/path/to/GTA San Andreas/models/hud.txd" "vana-shops/data/"
 (cd "/path/to/GTA San Andreas/data" && cp popcycle.dat pedgrp.dat cargrp.dat peds.ide vehicles.ide pedstats.dat ped.dat info.zon map.zon \
    "/path/to/server/mods/deathmatch/resources/[vana]/vana-population/data/")
 ```
