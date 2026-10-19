@@ -19,7 +19,19 @@ PlayerConfig = {
 
     -- Rights our admin commands need, granted to the Admin ACL on start (restricted commands).
     adminRights = { "command.traffic", "command.peds", "command.wanted", "command.shoppoint",
-                    "command.setmoney", "command.addmoney", "command.setstat", "command.event", "command.bigfoot" },
+                    "command.setmoney", "command.addmoney", "command.setstat", "command.event", "command.bigfoot",
+                    "command.warp", "command.warphere", "command.warps" },
+
+    -- Admin warps (/warp, /warphere, /warps; docs/player.md). Places come from the map data (spots by
+    -- id, hospitals and police stations, interior entrances by vanilla's names); these are extra names
+    -- for them: a name -> another place's name, or { x, y, z [, interior] }.
+    warps = {
+        start = "playerconfig.start.spawn", spawn = "playerconfig.start.spawn",
+        cj = "carls", home = "carls", -- CJ's house on Grove Street (vanilla's entrance CARLS)
+        -- Inside only: vanilla's missions open these houses' front doors.
+        sweet = "sweets.in", ryder = "ryders.in", ogloc = "oglocs.in",
+        binco = "clothgp", ammu = "ammun1", gym = "gym1",
+    },
 
     -- ACL groups players belong to, by MTA serial (their auto-login account is named after it). Applied
     -- to the ACL whenever vana-player starts, so it survives the server rewriting acl.xml.

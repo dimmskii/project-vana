@@ -12,6 +12,7 @@
     <script src="config/maps.lua" type="server" />
     <script src="config/player.lua" type="server" />
     <script src="server.lua" type="server" />
+    <script src="warp.lua" type="server" />
     <script src="client.lua" type="client" />
     <export function="savePlayer" type="server" />
     <export function="bustPlayer" type="server" />

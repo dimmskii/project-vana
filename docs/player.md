@@ -48,6 +48,28 @@ act on you; from the console a name is required. Changes are saved at once.
   health to the new maximum. Any stat ID can be set, but only fat, stamina, muscle and max health
   are saved; others (weapon skills, driving) last until you leave.
 
+### Warps (`warp.lua`)
+
+- `/warp <where> [player]`: you (or the player) to a place, a player, or `x y z [interior]`. A
+  driver takes the car and its passengers along; a passenger gets out first. To a player: beside
+  them, in their interior and dimension.
+- `/warphere <player>`: the player to you.
+- `/warps [filter]`: the place names containing the filter (chat shows 30; the console all).
+
+Names are case-insensitive, and a unique start of one is enough (`/warp hospital.jef`). Players
+are matched the same way (or `me`); an exact player name wins over a place, a place over a partial
+player name. The places:
+
+| Names | Where |
+| --- | --- |
+| spot ids, e.g. `playerconfig.start.spawn`, `games.dance.floors.1`, `jobs.trucking.start` | every `spot` in the `vana-data-*` maps (the ids are their config paths) |
+| `hospital.1`-`8`, `police.1`-`7`; by zone, e.g. `hospital.jefferson`, `police.pershingsquare` | the restart points; `hospital` or `police` alone: the nearest one |
+| `ls`, `sf`, `lv` | that city's police station |
+| vanilla's entrance names, e.g. `carls`, `ammun1`, `gym1`; `carls.in` | outside an interior's door, or `.in` inside it (where its marker puts you); `name.2`, `name.3` when there are several |
+| `start`, `spawn`, `cj`, `home`, `sweet`, `ryder`, `ogloc`, `binco`, `ammu`, `gym` | extra names in `config/player.lua` (`warps`): another name, or `{ x, y, z [, interior] }` |
+
+`warptest` (console) checks that the list builds and every extra name points at a place.
+
 ## Wasted and busted
 
 As in vanilla, both cost the player's weapons and $100. The player comes back at the nearest
