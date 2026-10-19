@@ -18,10 +18,11 @@ end)
 -- who simulates them, frozen, ground, task, animation. The server adds what their owner last told them.
 local CHECK_MS, STILL_MS, RANGE = 2000, 6000, 80
 local watched = {} -- ped -> { x, y, z, since, reported }
--- Standing still on purpose: fighting, shooting, being hit (not reported).
+-- Standing still on purpose: playing an animation, fighting, shooting, being hit (not reported).
 local MEANT = { "KILL_PED", "GUN", "FIGHT", "HIT", "SHOOT" }
 
 local function meantToStand(ped)
+    if getPedAnimation(ped) then return true end -- an animation of ours (a medic's CPR, a dance)
     local task, simplest = tostring(getPedTask(ped, "primary", 3)), tostring(getPedSimplestTask(ped))
     for _, part in ipairs(MEANT) do
         if task:find(part, 1, true) or simplest:find(part, 1, true) then return true end

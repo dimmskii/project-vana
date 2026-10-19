@@ -47,9 +47,15 @@ end
 
 -- A go-to sequence, given over the last one: that one is cleared first, since GTA otherwise refuses
 -- the new order, or queues it and quietly drops it while the old walk runs on to its end.
+local capturing, captured -- Neon's own error for a refused order, for vana-peds:orders
+addEventHandler("onClientDebugMessage", root, function(message) if capturing then captured = message end end)
+
 local function goTo(ped, sequence)
     if inWalk(ped) then killPedTask(ped, "primary", 3, false) end
-    return setPedTaskSequence(ped, sequence)
+    capturing, captured = true, nil
+    local ok = setPedTaskSequence(ped, sequence)
+    capturing = false
+    return ok
 end
 
 local function walk(ped, cmd)
@@ -104,8 +110,9 @@ local function apply(ped)
         -- Why the game might have said no (docs/debug.md, vana-peds:orders).
         local points = { engineGetPoolCapacity("point-route"), engineGetPoolUsedCapacity("point-route") }
         local nodes = { engineGetPoolCapacity("node-route"), engineGetPoolUsedCapacity("node-route") }
-        Debug.log("orders", ("%s refused: %s, task %s / %s, mission actor %s, health %d, frozen %s, route pools %s/%s and %s/%s"):format(
-            cmd.mode or "walk", cmd.mode and ("target " .. (isElement(cmd.target) and getElementType(cmd.target) or "gone") ..
+        Debug.log("orders", ("%s refused%s: %s, task %s / %s, mission actor %s, health %d, frozen %s, route pools %s/%s and %s/%s"):format(
+            cmd.mode or "walk", captured and (" (" .. captured .. ")") or "",
+            cmd.mode and ("target " .. (isElement(cmd.target) and getElementType(cmd.target) or "gone") ..
                 (isElement(cmd.target) and (isElementStreamedIn(cmd.target) and " streamed" or " not streamed") or ""))
                 or ("to %.1f, %.1f"):format(cmd.x, cmd.y),
             tostring(getPedTask(ped, "primary", 3)), tostring(getPedSimplestTask(ped)), tostring(isPedMissionActor(ped)),
