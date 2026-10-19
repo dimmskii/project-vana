@@ -14,6 +14,10 @@ local offset
 
 function Radio.now() return offset and getTickCount() + offset end
 
+-- For other resources (export): the server's clock (its getTickCount) here, or false before the
+-- first sync.
+function getServerTime() return Radio.now() or false end
+
 local function ping() triggerServerEvent("vana-radio:ping", resourceRoot, getTickCount()) end
 
 addEvent("vana-radio:pong", true)
@@ -35,8 +39,9 @@ for _, def in ipairs(R.stations) do byId[def.id] = def end
 Radio.byId = byId
 
 addEvent("vana-radio:schedule", true)
-addEventHandler("vana-radio:schedule", resourceRoot, function(all)
+addEventHandler("vana-radio:schedule", resourceRoot, function(all, speakers)
     for id, st in pairs(all) do Radio.stations[id] = { segments = st.segments or {}, url = st.url } end
+    Radio.speakers = speakers or {}
 end)
 
 addEvent("vana-radio:segments", true)
@@ -187,8 +192,14 @@ local function update(e, now)
             e.playing = { seg = seg }
         end
     end
-    -- Keep it in place: a sound drifts (loading, frame hitches).
     local p = e.playing
+    -- A routine fades out over its last `fade` ms.
+    if p and p.sound and isElement(p.sound) and seg and seg.fade then
+        local left = seg.at + seg.length - now
+        local share = left < seg.fade and math.max(0, left / seg.fade) or 1
+        setSoundVolume(p.sound, (e.volume or 1) * Radio.volume * share)
+    end
+    -- Keep it in place: a sound drifts (loading, frame hitches).
     if p and p.sound and isElement(p.sound) and now - p.checked > 2000 then
         p.checked = now
         local want = now - seg.at

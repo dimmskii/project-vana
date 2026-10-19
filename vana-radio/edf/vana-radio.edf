@@ -1,0 +1,10 @@
+<def name="vana-radio">
+    <element name="speaker" friendlyname="Speaker (plays a station)">
+        <data name="position" type="coord3d" default="0,0,0" />
+        <data name="station" type="integer" default="101" required="false" description="the station it plays (an id in vana-radio's config/radio.lua)" />
+        <data name="range" type="number" default="30" required="false" description="heard this far away (m)" />
+        <data name="volume" type="number" default="1" required="false" description="0 to 1" />
+        <data name="note" type="string" default="" required="false" description="free-form note" />
+        <marker type="corona" size="1" color="#FF40C080" />
+    </element>
+</def>

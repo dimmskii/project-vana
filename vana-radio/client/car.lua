@@ -4,7 +4,9 @@
 -- vanilla's does.
 local R = RadioConfig
 local order = {} -- switching order: the stations, then off
-for _, def in ipairs(R.stations) do order[#order + 1] = def.id end
+for _, def in ipairs(R.stations) do
+    if not def.hidden then order[#order + 1] = def.id end
+end
 order[#order + 1] = 0
 
 local inCar           -- the emitter for the car we're in

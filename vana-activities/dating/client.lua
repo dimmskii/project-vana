@@ -75,7 +75,7 @@ addEventHandler("vana-dating:venue", resourceRoot, function(kind)
         fadeCamera(true, 1)
         if kind == "dance" then
             -- The dance date uses the club rhythm game (games/rhythm_client.lua).
-            Rhythm.start({ beats = Dating.dance.beats, beatMs = Dating.dance.beatMs, title = "Dance" }, function(share)
+            Rhythm.start({ count = Dating.dance.beats, beatMs = Dating.dance.beatMs, title = "Dance" }, function(share)
                 triggerServerEvent("vana-dating:danced", resourceRoot, share)
             end)
         end

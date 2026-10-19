@@ -21,19 +21,23 @@ local context = {
     end,
 }
 
--- Plans the station until aheadMs from now; returns the new segments.
+-- Plans the station until aheadMs from now, and at least one segment after the playing one (so
+-- activities can join the next routine); returns the new segments.
 local function extend(st, now)
     local added = {}
     local last = st.segments[#st.segments]
     local t = last and last.at + last.length or now
+    local upcoming = 0
+    for _, seg in ipairs(st.segments) do if seg.at > now then upcoming = upcoming + 1 end end
     local empty = 0
     context.hour = getTime()
-    while t < now + R.aheadMs and empty < 10 do
+    while (t < now + R.aheadMs or upcoming < 1) and empty < 10 do
         local segs = st.plan(context)
         if #segs == 0 then empty = empty + 1 end
         for _, seg in ipairs(segs) do
             if seg.length and seg.length > 0 then
                 seg.at = t
+                if t > now then upcoming = upcoming + 1 end
                 t = t + seg.length
                 st.segments[#st.segments + 1] = seg
                 added[#added + 1] = seg
@@ -85,7 +89,7 @@ addEventHandler("vana-radio:hello", resourceRoot, function()
     ready[client] = true
     local all = {}
     for id, st in pairs(stations) do all[id] = { segments = st.segments, url = st.url } end
-    triggerClientEvent(client, "vana-radio:schedule", resourceRoot, all)
+    triggerClientEvent(client, "vana-radio:schedule", resourceRoot, all, Speakers or {})
 end)
 
 -- Clock sync: the client measures its offset from the round trip.
@@ -105,7 +109,7 @@ end)
 -- station (vana-vehicles gives one only to cars with a radio) can't be tuned.
 addEvent("vana-radio:tune", true)
 addEventHandler("vana-radio:tune", resourceRoot, function(vehicle, id)
-    if type(id) ~= "number" or (id ~= 0 and not stations[id]) then return end
+    if type(id) ~= "number" or (id ~= 0 and (not stations[id] or stations[id].def.hidden)) then return end
     if not isElement(vehicle) or getPedOccupiedVehicle(client) ~= vehicle then return end
     if type(getElementData(vehicle, "vana:radio")) ~= "number" then return end
     local driver = getVehicleOccupant(vehicle, 0)
@@ -126,6 +130,25 @@ function getStationNow(id)
         end
     end
     return false
+end
+
+-- A station's segments from the one playing now on: { track, at (getTickCount: the same clock in
+-- every resource), length, kind, beat }.
+function getStationSegments(id)
+    local st = stations[id]
+    if not st then return false end
+    local now, out = getTickCount(), {}
+    for _, seg in ipairs(st.segments) do
+        if seg.at + seg.length > now then
+            out[#out + 1] = { track = seg.track, at = seg.at, length = seg.length, kind = seg.kind, beat = seg.beat }
+        end
+    end
+    return out
+end
+
+-- A beat track's beats: { { ms, key }, ... } (keys: docs/radio.md), or false.
+function getBeats(track)
+    return RadioData.beats[track] or false
 end
 
 -- Console-only: every station's current and next segments.

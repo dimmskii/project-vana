@@ -65,14 +65,36 @@ Games = {
     -- Pool (vanilla POOL2 / POOL_SCRIPT): 8-ball against the bar's player for a wager (vanilla $50-$1000).
     -- Ours: a top-down table with 2D physics.
     pool = { minBet = 50, maxBet = 1000 },
-    -- Dancing (vanilla DANCE) on club floors, and the lowrider contest (vanilla LOWR): a rhythm game.
+    -- Dancing (vanilla DANCE) on club floors, and the lowrider contest (vanilla LOWR / LOWGAME): the
+    -- rhythm game on the routine playing at that music zone (`station`: vana-radio's zone stations,
+    -- heard from its speakers). A routine already playing is joined if half its beats are still
+    -- ahead (readyMs to get ready), else the next one.
     dance = {
         floors = {
-            At("Games.dance.floors.1", { interior = 17 }),   -- the Alhambra (vanilla's floor)
-            At("Games.dance.floors.2", { interior = 11 }),   -- ours: inside BAR2
-            At("Games.dance.floors.3", { interior = 18 }),  -- ours: inside the Lil' Probe Inn
+            At("Games.dance.floors.1", { interior = 17, station = 101 }),   -- the Alhambra (vanilla's floor)
+            At("Games.dance.floors.2", { interior = 11, station = 102 }),   -- ours: inside BAR2 (Ten Green Bottles)
+            At("Games.dance.floors.3", { interior = 18, station = 103 }),   -- ours: inside the Lil' Probe Inn
         },
-        beats = 40, beatMs = 700, anims = { "dnce_M_a", "dnce_M_b", "dnce_M_c", "dnce_M_d", "dnce_M_e" },
+        readyMs = 3000,
+        -- DANCE's animation block by beat track: 1-2 GFUNK, 3 RUNNINGMAN, 4 WOP. Hits play the next of
+        -- DANCE_G1..G16 in turn, misses DANCE_B1..B16; DANCE_LOOP in between.
+        blocks = { [1] = "GFUNK", [2] = "GFUNK", [3] = "RUNNINGMAN", [4] = "WOP" },
+        idleMs = 1500, -- back to DANCE_LOOP this long after the last move
+        -- Without vana-radio: made-up beats.
+        count = 40, beatMs = 700,
     },
-    lowrider = At("Games.lowrider", { minBet = 50, maxBet = 2000, beats = 30, beatMs = 800, hydraulics = 1087, rival = { 0.55, 0.85 } }),  -- ours: the rival's score share range
+    lowrider = At("Games.lowrider", {
+        station = 110, readyMs = 3000, hydraulics = 1087,
+        minBet = 50, maxBet = 1000, -- vanilla
+        -- The opposition's points per beat by its skill (1-5): a roll of 0-9 picks one (LOWGAME_7669).
+        -- Each contest raises the skill by 4 x wager / maxBet (rounded down), up to 5, and it stays.
+        rival = {
+            { 0, 0, 10, 10, 10, 10, 20, 20, 20, 50 },
+            { 0, 10, 10, 10, 10, 20, 20, 20, 50, 50 },
+            { 0, 10, 10, 10, 20, 20, 20, 50, 50, 50 },
+            { 10, 10, 10, 20, 20, 20, 20, 50, 50, 50 },
+            { 10, 10, 20, 20, 20, 20, 50, 50, 50, 50 },
+        },
+        count = 30, beatMs = 800, -- without vana-radio: made-up beats
+    }),
 }

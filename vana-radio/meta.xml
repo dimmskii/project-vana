@@ -1,11 +1,20 @@
 <meta>
-    <info author="ProjectVana" name="Vana radio" description="Radio stations on one server clock: vanilla's programme, car and outside radios" version="0.1.0" type="script" />
+    <info author="ProjectVana" name="Vana radio" description="Radio stations on one server clock: vanilla's programme, car and outside radios, music zones" version="0.1.0" type="script" edf:definition="edf/vana-radio.edf" />
+    <aclrequest>
+        <right name="function.loadstring" access="true" /> <!-- importing shared code from vana-lib -->
+    </aclrequest>
+    <script src="lib.lua" type="server" />
     <script src="config/radio.lua" type="shared" />
+    <script src="config/maps.lua" type="server" />
     <script src="config/radio_data.lua" type="server" />
     <script src="sources/vanilla.lua" type="server" />
     <script src="sources/sources.lua" type="server" />
     <script src="server.lua" type="server" />
     <script src="client/player.lua" type="client" />
     <script src="client/car.lua" type="client" />
+    <script src="client/zones.lua" type="client" />
     <export function="getStationNow" type="server" />
+    <export function="getStationSegments" type="server" />
+    <export function="getBeats" type="server" />
+    <export function="getServerTime" type="client" />
 </meta>

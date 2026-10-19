@@ -288,16 +288,31 @@ All outcomes and money are decided on the server; the client draws the panels.
   the black last); a win pays double. Ours: a top-down table with 2D physics, the CPU's shot choice
   (the straightest pot, with a little error), and that the game is judged on your client. Walking out
   forfeits the wager.
-- **Dancing** (`DANCE`): on the Alhambra's floor (vanilla's spot) and in two more bars (ours), a
-  rhythm game: press each arrow as it reaches the ring, judged PERFECT / GOOD / BAD with vanilla's
-  lines; best scores are kept. Dance dates use it too.
+- **Music zones:** each dance floor and the lowrider contest has a station in `vana-radio` that plays
+  vanilla's beat tracks as routines, heard from speakers ([radio.md](radio.md)). Everyone there hears
+  the same moment, and the games run on the routine that's playing, timed on the server's clock: a
+  routine already playing is joined if half its beats are still ahead, otherwise the next one (a
+  countdown shows until it starts).
+- **Dancing** (`DANCE`): on the Alhambra's floor (vanilla's spot) and in two more bars (ours). Each
+  routine's own beats (beat tracks 1-4). The dancer's moves are vanilla's, set by the server so
+  everyone sees them: the routine's block (`GFUNK` for tracks 1-2, `RUNNINGMAN` 3, `WOP` 4),
+  `DANCE_LOOP` between beats, each hit the next of `DANCE_G1`-`G16` in turn, each miss
+  `DANCE_B1`-`B16`. Best scores are kept. Dance dates use the rhythm game with made-up beats.
 - **The rhythm game** (`games/rhythm_client.lua`) is drawn as vanilla's beat display (`BDISPLY`):
   `LD_BEAT`'s arrows (`data/LD_BEAT.txd`, copied from your game at setup and sent to players) scroll
   along a track from 4.5 s ahead into the target ring, fading in, and out 0.8 s after it; a hit
-  flashes the ring (`CHIT`), brighter and shorter the better. Timing windows are the DANCE script's
-  (35 / 60 / 110 ms). Ours: the beats are generated at a steady tempo (vanilla's come from each
-  music track's beat data, with the track playing: not ported yet), and only the four straight
-  arrows are used (vanilla also has diagonals).
+  flashes the ring (`CHIT`), brighter and shorter the better. Judged and scored as vanilla's scripts:
+  - Dance (`DANCE`): within 35 ms PERFECT, 60 good, 110 ok, a press further off "bad timing"; arrow
+    keys.
+  - Lowrider (`LOWGAME`): within 35 / 50 / 100 ms, to 200 ms early or late; the eight directions are
+    the hydraulics keys (numpad by default; two at once for a diagonal; arrow keys work too), so the
+    car bounces on its own hydraulics as you press them, which everyone sees.
+  - Points: 50 / 20 / 10 by grade, doubled (dance) or x10 (lowrider) while the overall rating is
+    PERFECT. The rating (`DNC_002`-`DNC_004`) is revised every 4 judged beats: four perfects raise it
+    to GOOD, then PERFECT; more good than bad keeps or makes it GOOD; otherwise it drops a step.
+  - The feedback lines are the game's (`DNC_005`-`DNC_025`, three sets in turn), sent by the server.
 - **Lowrider contest** (`LOWR`, by the Unity Station car park): drive in with a lowrider with
-  hydraulics, choose a wager, and play the rhythm game against a rival; out-bounce them for double.
-  Ours: the rival's score.
+  hydraulics, wager $50-$1000 (vanilla), and play the routine against the opposition: its points per
+  beat are a roll by its skill (1 to 5, `LOWGAME`'s table), which rises with every contest by 4 x
+  wager / $1000 and stays (kept per player). Outscore it for double. Vanilla alternates beat tracks
+  13 and 0; so does the contest's station. Ours: no opposition car on the spot.

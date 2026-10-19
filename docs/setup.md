@@ -65,6 +65,7 @@ Inside `<config>`, replace the stock `<resource>` lines with:
 <resource src="vana-data-gym" startup="1" protected="0" />
 <resource src="vana-data-activities" startup="1" protected="0" />
 <resource src="vana-data-wildlife" startup="1" protected="0" />
+<resource src="vana-data-radio" startup="1" protected="0" />
 <resource src="vana-map" startup="1" protected="0" />
 <resource src="vana-paths" startup="1" protected="0" />
 <resource src="vana-lights" startup="1" protected="0" />
@@ -127,6 +128,7 @@ aclrequest allow vana-shops all
 aclrequest allow vana-gym all
 aclrequest allow vana-activities all
 aclrequest allow vana-wildlife all
+aclrequest allow vana-radio all
 ```
 
 Then restart them (or the server).

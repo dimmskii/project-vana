@@ -14,6 +14,7 @@ local DATASETS = {
     shops = { owner = "vana-shops", configs = { "vana-shops/config/points.lua", "vana-shops/config/vendors.lua" }, notes = true },
     gym = { owner = "vana-gym", configs = { "vana-gym/config/equipment.lua" } },
     wildlife = { owner = "vana-wildlife", configs = { "bigfoot.lua" } },
+    radio = { owner = "vana-radio", configs = {}, hand = true }, -- placed by hand: no seed to convert
     activities = { owner = "vana-activities", configs = { "vana-activities/config/minigames.lua",
         "vana-activities/config/burglary_houses.lua", "vana-activities/config/races.lua" }, notes = true },
 }
@@ -178,7 +179,7 @@ end
 assert(from, "usage: lua5.1 tools/convert/to_maps.lua --from <folder> [dataset ...] | --edf")
 local owners, failed = {}, false
 for name, d in pairs(DATASETS) do
-    if not next(wanted) or wanted[name] then
+    if (not next(wanted) or wanted[name]) and not d.hand then
         dofile(d.owner .. "/config/maps.lua")
         local dataset = MapDatasets[name]
         local original = {}

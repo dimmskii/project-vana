@@ -7,6 +7,11 @@ RadioConfig = {
     --              is vanilla's radio ID (1 Playback FM .. 11 WCTR)
     --   "stream":  an internet radio stream (`url`), played live: it can't be position-synced
     --   "timer":   no audio, just `length` ms segments named `label` (testing, placeholders)
+    --   "beats":   vanilla's beat tracks (the BEATS archive: dancing and the lowrider contest), by
+    --              vanilla's beat-track number (`beats`), each played as a routine up to its end
+    --              marker and faded out; in `order` "sequence" or at random (no repeat in a row)
+    -- `hidden` stations aren't in the car radio's list: they're heard from speakers (music zones,
+    -- [data]/vana-data-radio) and drive the activities there.
     stations = {
         { id = 1, name = "Playback FM", source = "vanilla", radio = 1 },
         { id = 2, name = "K-Rose", source = "vanilla", radio = 2 },
@@ -19,6 +24,11 @@ RadioConfig = {
         { id = 9, name = "K-Jah West", source = "vanilla", radio = 9 },
         { id = 10, name = "Master Sounds 98.3", source = "vanilla", radio = 10 },
         { id = 11, name = "WCTR", source = "vanilla", radio = 11 },
+        -- Music zones. Vanilla's DANCE plays beat tracks 1-4; LOWR alternates 13 and 0.
+        { id = 101, name = "Alhambra", source = "beats", beats = { 1, 2, 3, 4 }, hidden = true },
+        { id = 102, name = "Ten Green Bottles", source = "beats", beats = { 1, 2, 3, 4 }, hidden = true },
+        { id = 103, name = "Lil' Probe Inn", source = "beats", beats = { 1, 2, 3, 4 }, hidden = true },
+        { id = 110, name = "Lowrider contest", source = "beats", beats = { 13, 0 }, order = "sequence", hidden = true },
         -- { id = 20, name = "Some Internet FM", source = "stream", url = "http://example.com/stream.mp3" },
         -- { id = 21, name = "Test Timer", source = "timer", length = 20000, label = "Test segment" },
     },
@@ -34,6 +44,9 @@ RadioConfig = {
                 muffle = { fCenter = 1800, fBandwidth = 36, fGain = -15 } },
     -- Internet streams are a download each: at most this many play at once (the car's included).
     maxStreams = 2,
+    -- Speakers (music zones): the nearest few in range play; a routine fades out over its last fadeMs.
+    speakers = { nearest = 4, minDistance = 4 },
+    fadeMs = 3000,
 
     -- The station name shown on switching and getting in, in vanilla's 640 x 448 HUD space.
     hud = { y = 22, scale = 1.0, font = "beckett", colour = { 228, 172, 52 }, offColour = { 150, 150, 150 },

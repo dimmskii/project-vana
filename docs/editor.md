@@ -14,6 +14,7 @@ MTA's Map Editor like any map.
 | `vana-data-shops` | `shoppoint`, `vendor` | `vana-shops` | `ShopPoints`, `Vendors` |
 | `vana-data-gym` | `gymequipment` | `vana-gym` | `GymEquipment` |
 | `vana-data-wildlife` | `bigfootspawn` | `vana-wildlife` | `BigfootSpawns` |
+| `vana-data-radio` | `speaker` | `vana-radio` | `Speakers` (placed by hand: no seed) |
 | `vana-data-activities` | `minigamespot`, `burglaryhouse`, `burglarydoor`, `race`, `racecheckpoint`, `chiliadroute`, `routepoint`, `spot` | `vana-activities` | `MinigameSpots`, `BurglaryHouses`, `BurglaryDoors`, `RaceTable`, `ChiliadRoutes`; spots for the rule configs |
 
 - **Schemas:** each owner's `config/maps.lua` describes its element types (fields, types, defaults,

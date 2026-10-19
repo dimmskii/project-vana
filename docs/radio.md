@@ -1,8 +1,7 @@
 # Radio
 
-`vana-radio` runs every station on the server's clock: each car, outside radio and (later) speaker
-tuned to a station hears the same moment of it. The game's own radio is switched off for good.
-Music zones (speakers, dancing and the lowrider contest on real beat tracks) come next.
+`vana-radio` runs every station on the server's clock: each car, outside radio and speaker tuned to
+a station hears the same moment of it. The game's own radio is switched off for good.
 
 ## How it works
 
@@ -22,6 +21,20 @@ Music zones (speakers, dancing and the lowrider contest on real beat tracks) com
   - `timer`: silent segments of a set length, for testing or as placeholders.
 - **Station IDs** are what cars store (`vana:radio`, set by `vana-vehicles`). 1 to 11 are vanilla's
   stations, which are also MTA's radio channels, so saved cars keep theirs. 0 is off.
+
+### Music zones
+
+- **Zone stations** (`hidden` in the config: not in the car radio's list) use the `beats` source:
+  vanilla's beat tracks (dance and lowrider music), each played as a routine up to its end marker
+  and faded out over 3 s. The clubs play beat tracks 1-4 at random (no repeat in a row), the lowrider
+  contest alternates 13 and 0 as vanilla's LOWR does.
+- **Speakers** are `speaker` elements in `[data]/vana-data-radio` (edit them in the Map Editor:
+  position, interior, station, range, volume). Each client plays the nearest 4 in range, in its
+  interior, as 3D sounds.
+- **Activities** join the routine playing at their zone (`getStationSegments`, `getBeats`), so the
+  dancers' and lowriders' games run on the music everyone there hears ([activities.md](activities.md)).
+- A station always has its next segment planned (as well as 60 s ahead), so an activity can join the
+  next routine.
 
 ### In the car
 
@@ -47,6 +60,10 @@ Music zones (speakers, dancing and the lowrider contest on real beat tracks) com
 
 - `getStationNow(id)` (server export): the track ID (or label) playing, ms into it, its kind and
   length; or, for a stream station, `false, 0, "stream", 0, url`.
+- `getStationSegments(id)` (server export): the segment playing and those planned after it, `{ track,
+  at, length, kind, beat }` with `at` on the server's `getTickCount` (the same in every resource).
+- `getBeats(track)` (server export): a beat track's `{ ms, key }` list.
+- `getServerTime()` (client export): the server's clock on this client, or false before the first sync.
 - `/radiodebug` (client): the game's own radio state, the clock offset, and each emitter's segment,
   where it's due and where its sound is.
 - `radiostatus` (console): every station's current and upcoming segments, and how many clients
@@ -73,7 +90,8 @@ only (track IDs, durations, beats), no audio: each player's game plays the audio
 - **Beats**: the BEATS stream's track headers (1000 `{ ms, key }` slots each). Keys are LD_BEAT's
   sprites (1 to 4 dancing, 9 to 16 lowrider, 33 the end, always 2 s after the last beat).
   `beatTracks` is vanilla's 14-entry lookup (beat-track number to track ID). Tracks 176, 182, 183 and
-  184 are in it but carry no beats in the retail files.
+  184 are in it but carry no beats in the retail files: only missions play them, as music
+  (beat tracks 9 and 10 in End Of The Line and Intro).
 
 ### Stream format
 
@@ -156,3 +174,6 @@ server planning every station. Not yet heard on a client:
 - clock sync accuracy (two clients side by side should be within a frame or two)
 - the native radio staying silent on entering cars of every kind, and the HUD name's look
 - the outside radio's volume, muffling and range; `/radiovolume`
+- speakers: their volume and range in each club, the routines' fade-outs
+- dancers' moves seen from another client (server-set animations), and lowriders' hydraulics bounces
+  (the driver's own hydraulics keys, synced as their controls) seen from another client

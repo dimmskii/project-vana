@@ -1,0 +1,7 @@
+<map edf:definitions="vana-radio">
+    <!-- Speaker (plays a station) -->
+    <speaker posX="488" posY="-14.08" posZ="1002.68" interior="17" station="101" range="30" volume="1" note="the Alhambra's dance floor" />
+    <speaker posX="501.98" posY="-72.15" posZ="1000.84" interior="11" station="102" range="25" volume="1" note="Ten Green Bottles' dance floor" />
+    <speaker posX="-224.03" posY="1404.23" posZ="29.77" interior="18" station="103" range="25" volume="1" note="the Lil' Probe Inn's dance floor" />
+    <speaker posX="2644.44" posY="-2012.56" posZ="14.55" interior="0" station="110" range="45" volume="1" note="the lowrider contest" />
+</map>
