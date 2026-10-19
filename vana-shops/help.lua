@@ -1,5 +1,11 @@
 -- This resource's pages in /help (vana-help; the fields are explained in vana-help/help.lua).
 HelpPages = {
+    { name = "buyfood", aliases = { "buyweapons", "buyclothes", "buyitems", "haircut", "tattoo", "learnstyle" },
+      usage = "/buyfood, /buyweapons, /buyclothes, /buyitems, /haircut, /tattoo, /learnstyle", summary = "Be served at a shop: walk in, or ask the keeper",
+      text = [[Walking onto a shop's counter marker opens its menu, as in the game; F there opens it again after you leave it. Each shop's command does the same from anywhere in the shop where you can see the keeper (who seats you), or at the counter of a shop without one (24/7, the gym trainers):
+  /buyfood (Cluckin' Bell, Burger Shot, Well Stacked Pizza), /buyweapons (Ammu-Nation), /buyclothes, /buyitems (24/7), /haircut, /tattoo, /learnstyle (gyms).
+In /interact, click the keeper for the same.]],
+      see = { "controls", "use" } },
     { name = "spray", topic = true, summary = "Pay 'n' Spray: drive in and stop to get your vehicle fixed ($100)",
       text = [[Ten Pay 'n' Sprays, where vanilla has them (the spray can on the radar). Drive in and stop: the door comes down, the spray hisses, and your vehicle comes out repaired for $100. It only repairs: same colour, and your wanted level stays as it is. Nothing to fix, no charge. Mod garages repair too (Repair, at the top of their menu).]],
       see = { "garages" } },

@@ -30,7 +30,9 @@ it in its own Lua state. It behaves exactly like a local copy: no per-call cost,
 | `sa_txd` (`SATxd`) | RenderWare `.txd` (PC, D3D8/D3D9) to DDS data for `dxCreateTexture`: DXT1/3/5 copied, 32/16-bit with their masks, paletted expanded | vana-vehicles (client: dashboards) |
 | `map_data` (`MapData`) | Placement data in map resources: element schemas, records, `At` / `Spots` | the owners of `[data]/vana-data-*` |
 | `map_points` (`MapPoints`) | Publishing radar points to vana-map | vana-interiors, vana-activities |
-| `prompts` (`Prompts`) | On-foot markers that start something only on the enter/exit key ("Press F to ..."); the press is swallowed whole; the server checks you're still on it | vana-shops, vana-gym, vana-activities |
+| `prompts` (`Prompts`) | On-foot markers that start something on `/use` ("Press F to ..."), or at once with `walkIn`; offers to vana-controls' /use; the server checks you're still on it | vana-shops, vana-gym, vana-activities |
+| `actions` (`Actions`) | Actions: what a player does to something, as a command (server); the exports vana-controls collects ([controls.md](controls.md)) | vana-controls, vana-vehicles, vana-shops |
+| `menu_input` (`MenuInput`) | One way through every menu: keys, pad, mouse (client) | vana-controls, vana-shops, vana-activities |
 | `text` (`Gxt`) | The game's text, answered by `vana-text` | vana-shops, vana-activities |
 
 When these replaced each resource's own readers, the old and new readers were run side by side on the

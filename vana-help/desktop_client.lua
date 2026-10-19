@@ -1,5 +1,7 @@
--- The manual, in the shop menus' style: the list of pages by area (Up/Down, Enter opens), a page
--- (Up/Down scroll, Enter follows its first "see" link, Backspace back to the list), Escape closes.
+-- The help window, kept for the desktop to come (a "?" icon at the screen's side): the list of pages
+-- by area (Up/Down, Enter opens), a page (Up/Down scroll, Enter follows its first "see" link,
+-- Backspace back to the list), Escape closes. Nothing opens it yet: /help prints to chat (server.lua).
+-- To open it, the server sends vana-help:window with the list, the page and the query.
 local view -- { list, selected, page, scroll, query, history }
 
 local function close()
@@ -8,8 +10,8 @@ local function close()
     toggleAllControls(true, true, false)
 end
 
-addEvent("vana-help:open", true)
-addEventHandler("vana-help:open", resourceRoot, function(list, page, query)
+addEvent("vana-help:window", true)
+addEventHandler("vana-help:window", resourceRoot, function(list, page, query)
     view = { list = list, selected = 1, page = page, scroll = 0, query = query, history = {} }
     toggleAllControls(false, true, false)
 end)

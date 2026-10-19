@@ -1,6 +1,9 @@
 <meta>
     <info author="ProjectVana" name="Vana vehicles" description="Vehicle registry and persistence, fuel, radio stations per car" version="0.1.0" type="script" />
-    <script src="lib.lua" type="client" />
+    <aclrequest>
+        <right name="function.loadstring" access="true" /> <!-- importing shared code from vana-lib -->
+    </aclrequest>
+    <script src="lib.lua" type="shared" />
     <script src="config/vehicles.lua" type="shared" />
     <script src="config/radio.lua" type="shared" />
     <script src="config/dashboards.lua" type="shared" />
@@ -9,6 +12,7 @@
     <script src="radio.lua" type="server" />
     <script src="tuning.lua" type="server" />
     <script src="performance.lua" type="server" />
+    <script src="actions.lua" type="server" />
     <script src="client.lua" type="client" />
     <script src="dashboard_client.lua" type="client" />
     <script src="turbo_client.lua" type="client" />
@@ -25,4 +29,8 @@
     <export function="setVehicleFuel" type="server" />
     <script src="help.lua" type="server" />
     <export function="getHelpPages" type="server" />
+    <export function="getActions" type="server" />
+    <export function="checkActionTarget" type="server" />
+    <export function="getTargetActions" type="server" />
+    <export function="runAction" type="server" />
 </meta>

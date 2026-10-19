@@ -13,6 +13,7 @@ Start here:
 | --- | --- |
 | [docs/mission.md](docs/mission.md) | What we are building and what we deliberately leave out |
 | [docs/cohesion.md](docs/cohesion.md) | Rules every resource follows: commands, permissions, UI layout |
+| [docs/controls.md](docs/controls.md) | `/use` (F), `/interact` (F1) and actions: every thing a player does as a bindable command, one gate, the status line |
 | [docs/setup.md](docs/setup.md) | Getting a server running, including the game files you must copy from your own copy of GTA:SA |
 | [docs/references.md](docs/references.md) | Wikis, reverse-engineering sources and reference material |
 | [docs/paths-and-lights.md](docs/paths-and-lights.md) | Retail path data format and traffic light rules, as verified against the game data |
@@ -36,6 +37,7 @@ Start here:
 | --- | --- |
 | `vana-lib` | Shared code the other resources import: game-file readers, map data (docs/libraries.md) |
 | `vana-text` | The game's text (`american.gxt`) for every resource |
+| `vana-controls` | `/use` and `/interact`, every resource's actions as commands, the status line (the game's help box) |
 | `vana-core` | Placeholder core resource |
 | `vana-player` | Player persistence, spawning, wasted/busted restarts |
 | `vana-paths` | Reads the retail `NODES*.DAT` path graph; nearest-node, link and navi queries; traffic light stop rule |
@@ -49,7 +51,7 @@ Start here:
 | `vana-activities` | Per-player activities: burglary, dating, side jobs, schools, races, minigames |
 | `vana-map` | Map points and radar blips for every resource (categories, icons, ranges) |
 | `vana-vehicles` | Vehicle registry and exact persistence, fuel, each car's radio station |
-| `vana-help` | The manual: `/?` and `/man`, every resource's commands and topics as each player may use them |
+| `vana-help` | The manual in the chat: `/?` and `/man`, every resource's commands and topics as each player may use them |
 | `vana-radio` | Radio stations on one server clock (vanilla's programme, internet streams), car and outside radios |
 | `[data]/vana-data-*` | Map resources holding placement data (spots, markers, paths); see docs/editor.md |
 | `vana-wildlife` | Creatures from community mods: Bigfoot |

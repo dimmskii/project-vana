@@ -1,5 +1,18 @@
 -- This resource's pages in /help (vana-help; the fields are explained in vana-help/help.lua).
 HelpPages = {
+    { name = "engine", usage = "/engine", summary = "Turn your engine on or off (driver)",
+      text = [[From the driver's seat: the engine off, or back on. An empty tank won't start. Getting back in starts it again, as in the game.]],
+      see = { "lights", "controls" } },
+    { name = "lights", usage = "/lights", summary = "Lights on, off or automatic, in turn (driver)",
+      text = [[From the driver's seat, each press moves the lights on: on, off, then back to automatic (the game's own: on at night and in tunnels). The car keeps the setting.]],
+      see = { "engine", "controls" } },
+    { name = "lock", usage = "/lock", summary = "Lock or unlock the doors",
+      text = [[From the driver's seat, or standing beside a car you hold (one you drove last, see the vehicle registry): locks the doors, or unlocks them. Nobody gets into a locked car, and its doors can't be opened from outside.]],
+      see = { "doorfrontleft", "controls" } },
+    { name = "doorfrontleft", aliases = { "doorfl", "doorfrontright", "doorfr", "doorrearleft", "doorrl", "doorrearright", "doorrr", "hood", "bonnet", "trunk", "boot" },
+      usage = "/doorfrontleft, /doorfrontright, /doorrearleft, /doorrearright, /hood, /trunk", summary = "Open or close a door, the hood or the trunk",
+      text = [[Opens that door, or closes it if it's open. Sitting in a car: only that car, and only your own seat's door; the hood and trunk are the driver's. On foot: the car you're beside and looking at, when it isn't locked. Rear doors only on cars with four seats or more; a door that's come off is gone.]],
+      see = { "lock", "controls" } },
     { name = "performance", topic = true, summary = "Performance parts: engine stages, turbo, brakes, suspension...",
       text = [[Sold at every mod garage after the vanilla parts, for any car: Engine stage 1-3, Turbo, Brakes (sport, race with ABS), Suspension (sport, race), Tyres (sport, race), Armour (armour, heavy), Lightweight kit, AWD conversion. Each one scales your car's own stats (torque, top speed, grip, braking, damage taken, weight...), so every car stays itself, only better. Levels in a category replace each other; categories stack.
 
@@ -9,12 +22,12 @@ They stay with the car like its colours and parts. A turbo also whines on top of
       text = [[The turbo's whine is a looped game sound (GENRL bank 131, sound 10: the Hydra's jet). Give another bank and sound to hear it on turbo cars near you, or off to silence the whine for you. Only you hear the change; the default is in vana-vehicles' config.]] },
     { name = "performancetest", console = true, usage = "performancetest", summary = "Self-test: performance parts",
       text = [[Tunes a car fully and back: the levels multiply as configured, and stock gives back the model's own handling.]] },
-    { name = "cleanvehicles", usage = "/cleanvehicles [all | player]", right = "command.cleanvehicles", summary = "Remove empty vehicles",
+    { name = "cleanvehicles", usage = "/cleanvehicles [all | player] [force]", right = "command.cleanvehicles", summary = "Remove empty vehicles",
       text = [[With nothing: every empty vehicle nobody keeps (abandoned traffic, parked cars, dropped cars).
 all: every empty vehicle, kept ones too.
 A player: that player's kept vehicles.
 
-Never a vehicle with anyone in any seat (player or ped), a trailer an occupied vehicle tows, mission and reward cars, or trains. Parked cars come back from their generators.]],
+Never a vehicle with anyone in any seat (player or ped), or a trailer an occupied vehicle tows, unless you add force: then those go too, everyone in them put out first. Never mission and reward cars, or trains. Parked cars come back from their generators.]],
     },
     { name = "vehicletest", usage = "vehicletest [keep | check]", console = true, summary = "Self-test: the vehicle registry",
       text = [[Snapshot round trip, list rules, persistence, rebuilding, fuel, radio picks and cleanup. keep, then restart vana-vehicles, then check: one kept car survives the restart.]],

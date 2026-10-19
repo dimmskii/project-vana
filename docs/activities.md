@@ -40,9 +40,9 @@ Vanilla `BURGJB` (the mission) and `BURG_BRAINS` (residents).
   The doors (yellow arrows) only work for a burglar, at night; `vana-interiors` no longer opens
   burglary-access doors (flag `0x1000`) to anyone. Each burglar's houses are in their own
   dimension. A house keeps its remaining loot (and resident) for the night.
-- **Stealing:** walk up to an item and press enter/exit: CJ lifts it with the engine's own
+- **Stealing:** walk up to an item and press F (/use): CJ lifts it with the engine's own
   pickup-and-carry (Neon `pickUpPedObject`). Carry it to the back of the van (6 m behind its centre)
-  and press enter/exit to load it.
+  and press F (/use) to load it.
 - **Noise:** with someone asleep in the house, the noise bar fills from the engine's noise level at
   CJ (Neon `getPedNoiseLevel`) with vanilla's formula (level x 1.6, minus 20, decaying 1% a frame).
   Full, the resident wakes: men fight or put their hands up, women cower or put their hands up, gang
@@ -143,7 +143,7 @@ the level: $10000, then $50000 at level 2 (saved).
 
 ### Trucking (`TRUCK`)
 
-Press enter/exit on the marker at RS Haul (Flint County). A truck and trailer wait at the depot: hook up and
+Press F (/use) on the marker at RS Haul (Flint County). A truck and trailer wait at the depot: hook up and
 take the load to one of vanilla's 39 drop-offs. The first loads follow vanilla's order of load
 types: fragile (damage costs cash), timed (late halves the pay, very late halves it again), hot
 (1-2 stars), fragile and fast, extremely fragile. You have 30 s to get back in the cab or re-hook the
@@ -153,7 +153,7 @@ timed deadline (distance x 140 ms).
 
 ### Quarry (`QUARRY`)
 
-Press enter/exit on the marker at the Hunter Quarry site office. Seven missions in turn, paying $500, $1000,
+Press F (/use) on the marker at the Hunter Quarry site office. Seven missions in turn, paying $500, $1000,
 $2000, $3000, $5000, $7500 and $10000: the cop's body (pushed to the crane's pick-up area, then
 dumped in the lake), seven rocks over the edge, four bombs to safe areas (each on its own clock,
 then it blows), the bombers' bodies burned on the quarry floor, explosives driven gently to the
@@ -173,7 +173,7 @@ throwing is client-side physics, which reports hits. Ours: the quota per level.
 
 ## Schools
 
-Vanilla `DSKOOL`, `BSKOOL`, `BOAT` and `DESERT5` (`config/schools.lua`, `schools/`). Press enter/exit on the
+Vanilla `DSKOOL`, `BSKOOL`, `BOAT` and `DESERT5` (`config/schools.lua`, `schools/`). Press F (/use) on the
 school's marker (the driving school's noticeboard inside the school, the bike school's board at the
 stadium, the boat school's office, the Verdant Meadows pilot) to pick a test; tests unlock in order
 (70% or better opens the next). Each test runs in your private dimension with vanilla's vehicle,
@@ -200,7 +200,7 @@ and that scores are client-judged.
 ### Race tournament (`CPRACE`)
 
 All 27 of vanilla's races, seeded from main.scm by `tools/seed/seed_races.py` into
-`[data]/vana-data-activities/activities.map` (checkpoints, line-ups, laps, stadium grids). Press enter/exit on an entry marker and pick
+`[data]/vana-data-activities/activities.map` (checkpoints, line-ups, laps, stadium grids). Press F (/use) on an entry marker and pick
 a race: Los Santos (races 0-8), San Fierro (9-14), Las Venturas (15-18), the LV airport's air races
 (19-24, against the clock), the LS stadium's 8-Track (12 laps) and the LV stadium's Dirt Track (6
 laps; the same marker offers Kickstart). Races run in your private dimension, with vanilla's
@@ -232,14 +232,14 @@ docks, then collect every corona (vanilla's 19 and 18) before the clock runs out
 
 ### Beat the Cock! (`TRIA`)
 
-Press enter/exit at the start on Santa Maria Beach or at Fleischberg: run into the sea, swim the course, take
+Press F (/use) at the start on Santa Maria Beach or at Fleischberg: run into the sea, swim the course, take
 the bicycle waiting at the shore, ride, then leave it and run to the finish (vanilla's checkpoints
 and legs; 10 s to get on or off the bike when the leg changes). Winning pays $10000 / $20000.
 Ours: you race the clock (each leg's length at a set pace) instead of vanilla's twelve athletes.
 
 ### Ammu-Nation shooting range (`SHRANGE`)
 
-At the four Ammu-Nations with a range, press enter/exit on the range marker and take the next weapon
+At the four Ammu-Nations with a range, press F (/use) on the range marker and take the next weapon
 challenge: pistol, micro SMG, shotgun, AK47. Three rounds against two rivals in the side lanes:
 first to destroy three targets, then the same with targets advancing, then one target at a time
 where every part shot off is a point, first to 20. Passing raises the weapon's skill (+50, +100 more
@@ -252,7 +252,7 @@ rounds are judged on your client.
 `tools/seed/seed_minigames.py` places every object vanilla attaches a minigame brain to (171: slot
 machines, video poker, roulette and blackjack tables, wheels of fortune, betting machines, arcade
 machines and consoles, basketball hoops, pool tables) into `[data]/vana-data-activities/activities.map`. Walk up and
-press enter/exit (vanilla's prompts where it has them).
+press F (/use) (vanilla's prompts where it has them).
 
 ### Casino (`BANDIT`, `VIDPOK`, `ROULETE`, `BLACKJ`, `WOF`)
 

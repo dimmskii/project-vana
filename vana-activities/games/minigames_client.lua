@@ -1,5 +1,5 @@
--- Minigame objects: walk up to a slot machine, table, arcade machine, hoop or pool table and press
--- enter/exit to play it (vanilla's prompts where it has them).
+-- Minigame objects: walk up to a slot machine, table, arcade machine, hoop or pool table and /use
+-- (F) to play it (vanilla's prompts where it has them).
 local texts = {}
 local OURS = {
     roulette = "~k~~VEHICLE_ENTER_EXIT~ Play Roulette", blackjack = "~k~~VEHICLE_ENTER_EXIT~ Play Blackjack",
@@ -16,10 +16,23 @@ addEventHandler("onClientResourceStart", resourceRoot, function() triggerServerE
 addEvent("vana-activities:session", true)
 addEventHandler("vana-activities:session", resourceRoot, function(name) busy = name ~= nil end)
 
+-- The spot in reach is an offer to vana-controls' /use, which shows its prompt.
+local ID = "vana-activities:minigame"
+local function offer(text)
+    local res = getResourceFromName("vana-controls")
+    if not res or getResourceState(res) ~= "running" then return end
+    if text then exports["vana-controls"]:offer(ID, text) else exports["vana-controls"]:withdraw(ID) end
+end
+
+local function spotText(i)
+    local s = i and MinigameSpots[i]
+    return s and (texts[s.kind] or OURS[s.kind]) or nil
+end
+
 setTimer(function()
     near = nil
     if busy or getPedOccupiedVehicle(localPlayer) or isPedDead(localPlayer) then
-        if shown then Hud.help(nil) shown = nil end
+        if shown then offer(nil) shown = nil end
         return
     end
     local x, y, z = getElementPosition(localPlayer)
@@ -34,19 +47,16 @@ setTimer(function()
     end
     if near ~= shown then
         shown = near
-        local s = near and MinigameSpots[near]
-        Hud.help(s and (texts[s.kind] or OURS[s.kind]) or nil, s ~= nil)
+        offer(spotText(near))
     end
 end, 300, 0)
 
-addEventHandler("onClientKey", root, function(key, pressed)
-    if not near or not pressed or busy then return end
-    for k in pairs(getBoundKeys("enter_exit") or {}) do
-        if k == key then
-            triggerServerEvent("vana-minigame:use", resourceRoot, near)
-            Hud.help(nil)
-            cancelEvent()
-            return
-        end
-    end
+addEvent("onClientVanaUse", false)
+addEventHandler("onClientVanaUse", root, function(id)
+    if id ~= ID or not near or busy then return end
+    triggerServerEvent("vana-minigame:use", resourceRoot, near)
+    offer(nil)
+    shown = nil
 end)
+addEvent("onClientVanaUseReset", false)
+addEventHandler("onClientVanaUseReset", root, function() offer(spotText(shown)) end)

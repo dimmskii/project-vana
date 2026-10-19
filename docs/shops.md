@@ -35,8 +35,13 @@ Prices and stock come from the retail `shopping.dat`, and names from the retail 
 - **Names:** each item's nametag in `shopping.dat` is a GXT key (`VESTA` is "Black Tank", `PISTOL`
   is "9mm"). `vana-shops/gxt.lua` reads the GXT's MAIN table, whose keys are JAMCRC32 hashes, so
   menus show exactly the vanilla names.
-- **Prices:** `shopping.dat`'s, overridable per item in `config/shops.lua` (`prices`). Each shop interior has a point where customers stand (`[data]/vana-data-shops/shops.map`): press enter/exit in
-its orange marker to open the menu.
+- **Prices:** `shopping.dat`'s, overridable per item in `config/shops.lua` (`prices`). Each shop interior has a point where customers stand (`[data]/vana-data-shops/shops.map`): walking onto
+its orange marker opens the menu, as vanilla's counters do, and `/use` (F) there opens it again.
+- **Actions** ([controls.md](controls.md)): each point runs its kind's action (`/buyfood`, `/buyweapons`,
+  `/buyclothes`, `/buyitems`, `/haircut`, `/tattoo`, `/learnstyle`), or the one its `action` field
+  names. The same command, or the keeper's entry in `/interact`, serves you from anywhere in the shop
+  in sight of the keeper (8 m), who seats you; shops without a keeper (24/7, the gym trainers) want
+  you at the counter.
 
 | Shop | Stock | Effect |
 | --- | --- | --- |
@@ -50,8 +55,8 @@ its orange marker to open the menu.
 The 24/7 stock is not vanilla; edit it in `config/shops.lua`, along with the weapon ID mapping,
 price overrides and `fatPerCalorie`.
 
-- **The menu:** vanilla-style, top-left. Arrow keys choose, Enter buys, Backspace goes back or
-  leaves; game controls are off while it's open.
+- **The menu:** vanilla-style, top-left. Arrow keys (the pad, or the mouse) choose, Enter (or a
+  click) buys, Backspace (or a right click) goes back or leaves; game controls are off while it's open.
 - **Clothes shops:** each chain sells exactly its own `shopping.dat` range (246 items are sold by
   only one chain).
   - The menu opens on apparel categories (`clothesCategories` in `config/shops.lua`: torso, legs,
@@ -132,7 +137,7 @@ half duck, the rest put their hands up); our shops have no customer peds yet.
 
 `tools/seed/seed_vendors.py` places them from the map IPLs and both IMGs into
 `[data]/vana-data-shops/shops.map` (104: soda and candy machines, hot dog, noodle and ice cream carts).
-Walk up to one and press enter/exit (F) to buy. The server checks the distance and money, then takes
+Walk up to one and `/use` (F) to buy. The server checks the distance and money, then takes
 the money, adds health and fat and plays the vanilla `VENDING` animation. Prices and effects are in
 `config/vendorkinds.lua`; they're ours, since vanilla's are inside the compiled vendor scripts.
 
@@ -203,7 +208,7 @@ The equipment is seeded from `gta_int.img` by `tools/seed/seed_gym.py` into
 gyms and Madd Dogg's home gym. Vanilla's gym scripts (`GYMBIKE`, `GYMBENC`, `GYMTREA`, `GYMDUMB` in
 `main.scm`) are script brains on those objects; the mats are the dumbbell stations.
 
-- **Working out:** press enter/exit on a machine's marker to get on (vanilla `GYMNASIUM`, `benchpress` and
+- **Working out:** press F (/use) on a machine's marker to get on (vanilla `GYMNASIUM`, `benchpress` and
   `freeweights` animations, played for their full length). Tap the sprint key to fill the power
   bar; a full bar is one rep. F or Backspace gets off.
 - **Props** (`props.lua`, `props` in `gym.lua`): as in vanilla, the barbell rests on the bench and

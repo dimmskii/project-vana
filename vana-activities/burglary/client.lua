@@ -10,6 +10,17 @@ local noise = 0
 local lastEnter = 0
 local loadZone = false
 
+-- Picking loot up and loading it are offers to vana-controls' /use (F), which shows their prompts.
+local ID = "vana-activities:burglary"
+local offered
+local function offer(text)
+    if text == offered then return end
+    offered = text
+    local res = getResourceFromName("vana-controls")
+    if not res or getResourceState(res) ~= "running" then return end
+    if text then exports["vana-controls"]:offer(ID, text) else exports["vana-controls"]:withdraw(ID) end
+end
+
 local function tidyArrows()
     for i, m in pairs(arrows) do if isElement(m) then destroyElement(m) end arrows[i] = nil end
 end
@@ -17,7 +28,7 @@ end
 addEvent("vana-burglary:doors", true)
 addEventHandler("vana-burglary:doors", resourceRoot, function(on, vehicle, strings)
     active = on
-    if on then van, texts = vehicle, strings else tidyArrows() end
+    if on then van, texts = vehicle, strings else tidyArrows() offer(nil) end
 end)
 
 addEvent("vana-burglary:objective", true)
@@ -159,7 +170,7 @@ setTimer(function()
             triggerServerEvent("vana-burglary:leave", resourceRoot)
             return
         end
-        if not carried() and nearestLoot() then Hud.help(texts and texts.pick, true) else Hud.help(nil) end
+        offer(not carried() and nearestLoot() and texts and texts.pick or nil)
         return
     end
     -- Outside: arrows on doors within 120 m, entering when stepping into one.
@@ -181,38 +192,35 @@ setTimer(function()
     for i, m in pairs(arrows) do
         if not near[i] then destroyElement(m) arrows[i] = nil end
     end
-    -- Holding loot behind the van: the enter/exit key loads it (and doesn't climb in).
+    -- Holding loot behind the van: /use loads it (and doesn't climb in).
     local obj = carried()
     local bx, by = vanBack()
-    local zone = obj and bx and getDistanceBetweenPoints2D(x, y, bx, by) < B.vanReach and not getPedOccupiedVehicle(localPlayer)
-    if zone ~= loadZone then
-        loadZone = zone
-        toggleControl("enter_exit", not zone)
-        Hud.help(zone and texts and texts.load or nil, zone)
-    end
+    loadZone = obj and bx and getDistanceBetweenPoints2D(x, y, bx, by) < B.vanReach and not getPedOccupiedVehicle(localPlayer) or false
+    offer(loadZone and texts and texts.load or nil)
 end, 200, 0)
 
-addEventHandler("onClientKey", root, function(key, pressed)
-    if not active or not pressed or isChatBoxInputActive() then return end
-    local bound = false
-    for k in pairs(getBoundKeys("enter_exit") or {}) do if k == key then bound = true end end
-    if not bound then return end
+addEvent("onClientVanaUse", false)
+addEventHandler("onClientVanaUse", root, function(id)
+    if id ~= ID or not active then return end
     local obj, state = carried()
     if inside and not obj then
         local loot = nearestLoot()
         if loot and pickUpPedObject(localPlayer, loot) then
             triggerServerEvent("vana-burglary:carry", resourceRoot, loot)
-            Hud.help(nil)
-            cancelEvent()
+            offer(nil)
         end
     elseif obj and loadZone and state == "holding" then
         cancelPedCarryObject(localPlayer)
         triggerServerEvent("vana-burglary:load", resourceRoot, obj)
         loadZone = false
-        toggleControl("enter_exit", true)
-        Hud.help(nil)
-        cancelEvent()
+        offer(nil)
     end
+end)
+addEvent("onClientVanaUseReset", false)
+addEventHandler("onClientVanaUseReset", root, function()
+    local text = offered
+    offered = nil
+    offer(text)
 end)
 
 -- Dropped (hit, interrupted): the item stays where it fell, still loot.
@@ -243,6 +251,7 @@ addEventHandler("vana-activities:session", resourceRoot, function(name)
     if name ~= "burglary" and active then
         active, inside = false, nil
         tidyArrows()
-        if loadZone then toggleControl("enter_exit", true) loadZone = false end
+        loadZone = false
+        offer(nil)
     end
 end)

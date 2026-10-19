@@ -6,16 +6,16 @@
 --   console  console only (the self-tests)
 --   summary  one line for the list;  text: the page;  see: related pages
 HelpPages = {
-    { name = "help", aliases = { "?" }, usage = "/help [command, topic or word]",
+    { name = "help", aliases = { "?" }, usage = "/? [command, topic or word] [part]",
       summary = "This manual: the commands and topics you can use",
-      text = [[With nothing after it, the list of everything you can use, by area. With a command's or topic's name, its page; with any other word, the pages that mention it.
+      text = [[With nothing after it, the list of everything you can use, by area. With a command's or topic's name, its page; with any other word, the pages that mention it. (Type /?: the game keeps /help for its own list.)
 
-In the manual: Up/Down to choose (or scroll a page), Enter to open, Backspace to go back, Escape to close.
+It prints in the chat, 8 lines at a time: a number after it shows the next part (/man warp 2). The whole page also goes to your console (F8).
 
 Only what you're allowed to use is listed: admin commands show to admins, the self-tests only at the server console.]],
-      see = { "man" } },
-    { name = "man", usage = "/man <command or topic>", summary = "One page of the manual (as /help <name>)",
-      text = [[Opens the page for a command or topic, as /help <name> does.]], see = { "help" } },
+      see = { "man", "controls" } },
+    { name = "man", usage = "/man <command or topic> [part]", summary = "One page of the manual (as /? <name>)",
+      text = [[Prints the page for a command or topic, as /? <name> does.]], see = { "help" } },
 }
 
 function getHelpPages() return HelpPages end

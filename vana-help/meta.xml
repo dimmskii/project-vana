@@ -2,6 +2,6 @@
     <info author="ProjectVana" name="Vana help" description="/help, /? and /man: every resource's commands and topics, as each player may use them" version="0.1.0" type="script" />
     <script src="help.lua" type="server" />
     <script src="server.lua" type="server" />
-    <script src="client.lua" type="client" />
+    <script src="desktop_client.lua" type="client" /> <!-- the help window: not opened yet -->
     <export function="getHelpPages" type="server" />
 </meta>

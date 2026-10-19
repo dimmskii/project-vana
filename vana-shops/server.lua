@@ -1,6 +1,7 @@
 -- Shops: Ammu-Nation, fast food, clothes (prices and stock from the retail shopping.dat) and our
--- 24/7 misc counters (config/shops.lua). Press enter/exit on a shop's marker to open its menu; every
--- purchase is checked and applied here, then saved (vana-player).
+-- 24/7 misc counters (config/shops.lua). Walking onto a shop's marker opens its menu (its action:
+-- /buyfood and the rest, also from the shop's keeper); every purchase is checked and applied here,
+-- then saved (vana-player).
 local prices = {}   -- section ("weapons", "food", "clothes") -> lowercase item name -> fields
 local stock = {}    -- lowercase shop section -> { type, items = { names } }
 local markers = {}  -- marker -> shop name
@@ -273,10 +274,11 @@ end
 
 local function openMenu(player, shopName, kind, categories)
     local seated, why = keeperSeat(player, shopName)
-    if not seated then return outputChatBox(why, player, 255, 200, 120) end
+    if not seated then return false, why end
     open[player] = shopName
     if WEARABLE[kind] and getElementModel(player) == 0 then snapshotClothes(player) else outfits[player] = nil end
     triggerClientEvent(player, "vana-shops:open", resourceRoot, shopName, kind, catalogue(shopName, player), categories)
+    return true
 end
 
 local function closeMenu(player, instant)
@@ -313,7 +315,8 @@ addEventHandler("onPlayerUseEntrance", root, function(name, _, toInterior, atHub
     local player = source
     local x, y, z = getElementPosition(player)
     closets[player] = { kind = "closet", interior = toInterior, x = x, y = y, z = z - 1 }
-    openMenu(player, "CLOSET", "closet", ShopConfig.clothesCategories)
+    local ok, why = openMenu(player, "CLOSET", "closet", ShopConfig.clothesCategories)
+    if not ok then Actions.status(player, why) end
 end)
 
 addEvent("vana-shops:buy", true)
@@ -365,18 +368,56 @@ end)
 addEvent("vana-shops:close", true)
 addEventHandler("vana-shops:close", resourceRoot, function() closeMenu(client) end)
 
--- What pressing enter/exit at a shop point does (vana-lib's prompts: nothing opens by walking in).
-local PROMPTS = { weapons = "buy weapons", food = "order food", clothes = "buy clothes", misc = "shop",
-                  closet = "change clothes", fighting = "learn a fighting style", hair = "get a haircut", tattoo = "get a tattoo" }
+-- Each shop point's action (vana-lib's actions): /buyfood and the rest, on the shop's keeper (from
+-- across the shop) or its counter marker. Walking onto the marker runs it too, as vanilla's counters
+-- open their menu; /use there runs it again after leaving the menu. A point's `action` (map data)
+-- names another one; by default it's its kind's.
+local ACTIONS = {
+    weapons = { "buyweapons", "Buy weapons", "buy weapons" }, food = { "buyfood", "Order food", "order food" },
+    clothes = { "buyclothes", "Buy clothes", "buy clothes" }, misc = { "buyitems", "Buy something", "shop" },
+    fighting = { "learnstyle", "Learn a fighting style", "learn a fighting style" },
+    hair = { "haircut", "Get a haircut", "get a haircut" }, tattoo = { "tattoo", "Get a tattoo", "get a tattoo" },
+}
 
-local function use(player, marker)
-    if open[player] then return end
-    local shopName = markers[marker]
-    local point = ShopPoints[shopName]
-    if not point then return end
-    local categories = point.kind == "tattoo" and ShopConfig.tattooCategories or ShopConfig.clothesCategories
-    openMenu(player, shopName, point.kind, categories)
+local function actionOf(point) return point.action or (ACTIONS[point.kind] or ACTIONS.misc)[1] end
+
+-- The shop a target stands for: a keeper ped's, or a counter marker's.
+local function shopOf(target)
+    if not isElement(target) then return end
+    if getElementType(target) == "ped" then return getElementData(target, "vana:keeper") end
+    return markers[target]
 end
+
+local function serve(player, shopName)
+    if open[player] then return false, "You're already being served." end
+    local point = ShopPoints[shopName]
+    if not point or getPedOccupiedVehicle(player) then return false end
+    -- Without a keeper to seat them, customers stand at the counter.
+    if not Keepers[shopName] and not nearPoint(player, point) then return false, "Walk up to the counter." end
+    local categories = point.kind == "tattoo" and ShopConfig.tattooCategories or ShopConfig.clothesCategories
+    local ok, why = openMenu(player, shopName, point.kind, categories)
+    if not ok then return false, why end
+end
+
+local added = {}
+local function addAction(name, label)
+    if added[name] then return end
+    added[name] = true
+    Actions.add{
+        name = name, label = label, usage = "",
+        summary = ("%s (at the counter, or at the shop's keeper)"):format(label),
+        targets = { "ped", "marker" }, reach = 8,
+        accepts = function(target)
+            local shopName = shopOf(target)
+            return shopName ~= nil and ShopPoints[shopName] ~= nil and actionOf(ShopPoints[shopName]) == name
+        end,
+        available = function(player) return not open[player] end,
+        run = function(player, target) return serve(player, shopOf(target)) end,
+    }
+end
+
+-- Added as the resource loads, so vana-controls finds them when it looks.
+for _, point in pairs(ShopPoints) do addAction(actionOf(point), (ACTIONS[point.kind] or ACTIONS.misc)[2]) end
 
 local pointMarkers = {}
 
@@ -389,7 +430,14 @@ local function placeMarker(shopName, point)
     setElementInterior(marker, point.interior)
     markers[marker] = shopName
     pointMarkers[shopName] = marker
-    Prompts.add(marker, { text = PROMPTS[point.kind] or "shop", use = function(player) use(player, marker) end })
+    local name = actionOf(point)
+    local a = ACTIONS[point.kind] or ACTIONS.misc
+    addAction(name, a[2])
+    Prompts.add(marker, { text = a[3], walkIn = true, use = function(player)
+        local ok, message = runAction(name, player, marker)
+        if message then Actions.status(player, message) end
+        return ok
+    end })
 end
 
 addEventHandler("onResourceStart", resourceRoot, function()
@@ -418,7 +466,7 @@ addCommandHandler("shoppoint", function(player, _, name)
     point.x, point.y, point.z, point.interior = x, y, z - 1, getElementInterior(player)
     placeMarker(name, point)
     local attrs = {}
-    for _, a in ipairs(MapData.toAttributes(MapDatasets.shops.types[1], { name = name, kind = point.kind, style = point.style,
+    for _, a in ipairs(MapData.toAttributes(MapDatasets.shops.types[1], { name = name, kind = point.kind, style = point.style, action = point.action,
         note = point.note, interior = point.interior, x = point.x, y = point.y, z = point.z })) do
         attrs[#attrs + 1] = ('%s="%s"'):format(a[1], a[2])
     end

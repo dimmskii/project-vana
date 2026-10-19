@@ -26,4 +26,8 @@
     <file src="data/hud.txd" /> <!-- the radar icons drawn in the garage markers: copied from your game at setup -->
     <script src="help.lua" type="server" />
     <export function="getHelpPages" type="server" />
+    <export function="getActions" type="server" />
+    <export function="checkActionTarget" type="server" />
+    <export function="getTargetActions" type="server" />
+    <export function="runAction" type="server" />
 </meta>

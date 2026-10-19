@@ -1,34 +1,56 @@
 -- Schools, the player's side: the test menu, and the test runner, which watches the vehicle (heading,
 -- wheels, roll, damage, knocked cones) and reports a score for the server to record.
 local R = SchoolRules
-local menu  -- { school, title, items, selected }
+local menu  -- { school, title, items, selected, rows }
 local run   -- the running test
 
--- The menu ------------------------------------------------------------------------------------------
+-- The menu (keys, the pad or the mouse: vana-lib's menu_input) ----------------------------------------
 addEvent("vana-school:menu", true)
 addEventHandler("vana-school:menu", resourceRoot, function(school, title, items)
-    menu = { school = school, title = title, items = items, selected = 1 }
+    if not menu then MenuInput.cursor(true) end
+    menu = { school = school, title = title, items = items, selected = 1, rows = {} }
     toggleAllControls(false, true, false)
 end)
 
 local function closeMenu()
+    if not menu then return end
     menu = nil
     toggleAllControls(true, true, false)
+    MenuInput.cursor(false)
+end
+
+local function choose()
+    local item = menu.items[menu.selected]
+    if item and item.open then
+        triggerServerEvent("vana-school:choose", resourceRoot, menu.school, item.index)
+        closeMenu()
+    end
 end
 
 addEventHandler("onClientKey", root, function(key, pressed)
     if not menu or not pressed then return end
-    if key == "arrow_u" then menu.selected = (menu.selected - 2) % #menu.items + 1
-    elseif key == "arrow_d" then menu.selected = menu.selected % #menu.items + 1
-    elseif key == "enter" or key == "num_enter" then
-        local item = menu.items[menu.selected]
-        if item and item.open then
-            triggerServerEvent("vana-school:choose", resourceRoot, menu.school, item.index)
-            closeMenu()
-        end
-    elseif key == "backspace" or key == "escape" then closeMenu()
+    local action = MenuInput.action(key)
+    if action == "up" then menu.selected = (menu.selected - 2) % #menu.items + 1
+    elseif action == "down" then menu.selected = menu.selected % #menu.items + 1
+    elseif action == "accept" then choose()
+    elseif action == "back" then closeMenu()
     else return end
     cancelEvent()
+end)
+
+addEventHandler("onClientCursorMove", root, function(_, _, x, y)
+    local i = menu and MenuInput.rowAt(menu.rows, x, y)
+    if i then menu.selected = i end
+end)
+
+addEventHandler("onClientClick", root, function(button, state, x, y)
+    if not menu or state ~= "up" then return end
+    if button == "right" then return closeMenu() end
+    local i = button == "left" and MenuInput.rowAt(menu.rows, x, y)
+    if i then
+        menu.selected = i
+        choose()
+    end
 end)
 
 local MEDALS = { "Bronze", "Silver", "Gold" }
@@ -43,6 +65,7 @@ addEventHandler("onClientRender", root, function()
     dxDrawText(menu.title, x + 12 * s, y + 6 * s, x + w, y + row, tocolor(172, 203, 241), 1.4 * s, "bankgothic")
     for i, item in ipairs(menu.items) do
         local ry = y + row * (i + 0.4)
+        menu.rows[i] = { x, ry, x + w, ry + row }
         if i == menu.selected then dxDrawRectangle(x + 4 * s, ry, w - 8 * s, row, tocolor(172, 203, 241, 60)) end
         local colour = item.open and (i == menu.selected and tocolor(255, 255, 255) or tocolor(180, 180, 180)) or tocolor(90, 90, 90)
         dxDrawText(item.title, x + 12 * s, ry, x + w, ry + row, colour, 1.1 * s, "default-bold", "left", "center")

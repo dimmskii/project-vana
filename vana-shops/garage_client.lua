@@ -1,8 +1,9 @@
 -- The mod garage menu, in the shop menu's style: categories (upgrade slots, then colours and
 -- paintjobs), their items (greyed out where this vehicle can't take them), a colour grid. Arrow keys
--- choose, Enter buys, Backspace goes back or drives out. What's highlighted is tried on the car (the
+-- (or the pad, or the mouse) choose, Enter (or a click) buys, Backspace (or a right click) goes back
+-- or drives out. What's highlighted is tried on the car (the
 -- server does it); the camera frames the part of the car the category is about.
-local menu -- { data, level ("top", "items", "colours", "grid"), top, category, selected, slot, message, messageAt, previewed }
+local menu -- { data, level ("top", "items", "colours", "grid"), top, category, selected, slot, message, messageAt, previewed, rects }
 
 -- Camera per category: an offset from the car (its own axes: right, forward, up) to look from.
 local VIEWS = {
@@ -71,6 +72,7 @@ addEventHandler("vana-garage:open", resourceRoot, function(data, refresh)
         menu.data = data
         return
     end
+    if not menu then MenuInput.cursor(true) end
     menu = { data = data, level = "top", selected = 1 }
     toggleAllControls(false, true, false)
 end)
@@ -80,6 +82,7 @@ addEventHandler("vana-garage:close", resourceRoot, function()
     if not menu then return end
     menu = nil
     toggleAllControls(true, true, false)
+    MenuInput.cursor(false)
     setCameraTarget(localPlayer)
 end)
 
@@ -88,11 +91,14 @@ addEventHandler("vana-garage:result", resourceRoot, function(ok, text)
     if menu then
         menu.message, menu.messageOk, menu.messageAt = text, ok, getTickCount()
     else
-        outputChatBox(text, 255, 200, 120)
+        -- Outside the menu (driving in with a bike, a boat...): the game's subtitle, as vanilla says it.
+        local res = getResourceFromName("vana-controls")
+        if res and getResourceState(res) == "running" then exports["vana-controls"]:subtitle(text, 4000) else outputChatBox(text, 255, 200, 120) end
     end
 end)
 
 local function back()
+    menu.first = nil
     if menu.level == "grid" then menu.level, menu.selected = "colours", menu.slot
     elseif menu.level == "items" then menu.level, menu.selected = "top", menu.category
     elseif menu.level == "colours" or menu.level == "paintjobs" then
@@ -105,54 +111,88 @@ local function back()
     end
 end
 
+local function accept()
+    if menu.level == "grid" then
+        return triggerServerEvent("vana-garage:buy", resourceRoot, "colour", { menu.slot, menu.selected - 1 })
+    end
+    local r = rows()[menu.selected]
+    if not r then return end
+    if r.open then
+        menu.level, menu.category, menu.selected, menu.first = r.open, r.category, 1, nil
+    elseif r.slot then
+        -- The grid starts on the car's current colour if it's a palette one.
+        menu.level, menu.slot, menu.selected = "grid", r.slot, 1
+        local c = menu.data.colours
+        for i, p in ipairs(menu.data.palette) do
+            if p[1] == c[r.slot * 3 - 2] and p[2] == c[r.slot * 3 - 1] and p[3] == c[r.slot * 3] then menu.selected = i break end
+        end
+    elseif r.paintjob then
+        triggerServerEvent("vana-garage:buy", resourceRoot, "paintjob", r.paintjob)
+    elseif r.kind then
+        if not r.fits then
+            menu.message, menu.messageOk, menu.messageAt = r.reason or "This part doesn't fit this vehicle.", false, getTickCount()
+        else
+            triggerServerEvent("vana-garage:buy", resourceRoot, r.kind, r.value)
+        end
+    end
+end
+
 addEventHandler("onClientKey", root, function(key, pressed)
     if not menu or not pressed or menu.leaving then return end
+    local action = MenuInput.action(key)
     if menu.level == "grid" then
         local n = #menu.data.palette
-        if key == "arrow_l" then menu.selected = (menu.selected - 2) % n + 1
-        elseif key == "arrow_r" then menu.selected = menu.selected % n + 1
-        elseif key == "arrow_u" then menu.selected = (menu.selected - 1 - GRID_COLUMNS) % n + 1
-        elseif key == "arrow_d" then menu.selected = (menu.selected - 1 + GRID_COLUMNS) % n + 1
-        elseif key == "enter" or key == "num_enter" then triggerServerEvent("vana-garage:buy", resourceRoot, "colour", { menu.slot, menu.selected - 1 })
-        elseif key == "backspace" or key == "escape" then back()
+        if action == "left" then menu.selected = (menu.selected - 2) % n + 1
+        elseif action == "right" then menu.selected = menu.selected % n + 1
+        elseif action == "up" then menu.selected = (menu.selected - 1 - GRID_COLUMNS) % n + 1
+        elseif action == "down" then menu.selected = (menu.selected - 1 + GRID_COLUMNS) % n + 1
+        elseif action == "accept" then accept()
+        elseif action == "back" then back()
         else return end
         preview()
         return cancelEvent()
     end
-    local list = rows()
-    local count = #list
-    if key == "arrow_u" and count > 0 then
+    local count = #rows()
+    if MenuInput.wheel(menu, key, count) then
+        preview()
+        return cancelEvent()
+    end
+    if action == "up" and count > 0 then
         menu.selected = (menu.selected - 2) % count + 1
-    elseif key == "arrow_d" and count > 0 then
+    elseif action == "down" and count > 0 then
         menu.selected = menu.selected % count + 1
-    elseif key == "enter" or key == "num_enter" then
-        local r = list[menu.selected]
-        if not r then return cancelEvent() end
-        if r.open then
-            menu.level, menu.category, menu.selected = r.open, r.category, 1
-        elseif r.slot then
-            -- The grid starts on the car's current colour if it's a palette one.
-            menu.level, menu.slot, menu.selected = "grid", r.slot, 1
-            local c = menu.data.colours
-            for i, p in ipairs(menu.data.palette) do
-                if p[1] == c[r.slot * 3 - 2] and p[2] == c[r.slot * 3 - 1] and p[3] == c[r.slot * 3] then menu.selected = i break end
-            end
-        elseif r.paintjob then
-            triggerServerEvent("vana-garage:buy", resourceRoot, "paintjob", r.paintjob)
-        elseif r.kind then
-            if not r.fits then
-                menu.message, menu.messageOk, menu.messageAt = r.reason or "This part doesn't fit this vehicle.", false, getTickCount()
-            else
-                triggerServerEvent("vana-garage:buy", resourceRoot, r.kind, r.value)
-            end
-        end
-    elseif key == "backspace" or key == "escape" then
+    elseif action == "accept" then
+        accept()
+    elseif action == "back" then
         back()
     else
         return
     end
+    menu.first = nil
     preview()
     cancelEvent()
+end)
+
+addEventHandler("onClientCursorMove", root, function(_, _, x, y)
+    if not menu or menu.leaving then return end
+    local i = MenuInput.rowAt(menu.rects, x, y)
+    if i and i ~= menu.selected then
+        menu.selected = i
+        preview()
+    end
+end)
+
+addEventHandler("onClientClick", root, function(button, state, x, y)
+    if not menu or menu.leaving or state ~= "up" then return end
+    if button == "left" then
+        local i = MenuInput.rowAt(menu.rects, x, y)
+        if not i then return end
+        menu.selected = i
+        accept()
+    elseif button == "right" then
+        back()
+    end
+    if menu then preview() end
 end)
 
 addEventHandler("onClientRender", root, function()
@@ -177,6 +217,7 @@ addEventHandler("onClientRender", root, function()
     elseif menu.level == "paintjobs" then title = title .. ": Paintjobs" end
 
     local hint
+    menu.rects, menu.box = {}, nil
     if menu.level == "grid" then
         local pal = menu.data.palette
         local cell = 20 * s
@@ -187,6 +228,7 @@ addEventHandler("onClientRender", root, function()
         for i, c in ipairs(pal) do
             local cx = x + 12 * s + ((i - 1) % GRID_COLUMNS) * cell
             local cy = y + row * 1.4 + math.floor((i - 1) / GRID_COLUMNS) * cell
+            menu.rects[i] = { cx - 2 * s, cy - 2 * s, cx - 2 * s + cell, cy - 2 * s + cell }
             if i == menu.selected then dxDrawRectangle(cx - 2 * s, cy - 2 * s, cell, cell, tocolor(255, 255, 255)) end
             dxDrawRectangle(cx, cy, cell - 4 * s, cell - 4 * s, tocolor(c[1], c[2], c[3]))
         end
@@ -196,13 +238,17 @@ addEventHandler("onClientRender", root, function()
     else
         local list = rows()
         local visible = math.min(#list, 12)
-        local first = math.max(1, math.min(menu.selected - 6, #list - visible + 1))
+        -- Where the keys left it (following the selection), or where the mouse wheel put it.
+        local first = math.max(1, math.min(menu.first or (menu.selected - 6), #list - visible + 1))
+        menu.first, menu.visible = first, visible
+        menu.box = { x, y, x + w, y + row * (visible + 2.6) }
         dxDrawRectangle(x, y, w, row * (visible + 2.6), tocolor(0, 0, 0, 190))
         dxDrawText(title, x + 12 * s, y + 6 * s, x + w, y + row, tocolor(172, 203, 241), 1.4 * s, "bankgothic")
         for i = first, first + visible - 1 do
             local r = list[i]
             local ry = y + row * (i - first + 1.4)
             local selected = i == menu.selected
+            menu.rects[i] = { x, ry, x + w, ry + row }
             if selected then dxDrawRectangle(x + 4 * s, ry, w - 8 * s, row, tocolor(172, 203, 241, 60)) end
             local greyed = r.fits == false
             local colour = greyed and tocolor(110, 110, 110) or selected and tocolor(255, 255, 255) or tocolor(180, 180, 180)

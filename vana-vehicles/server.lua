@@ -23,6 +23,12 @@ function isKept(vehicle)
     return vids[vehicle] ~= nil
 end
 
+-- Whether the player is one of the car's holders (its last driver, or its passengers).
+function holdsVehicle(player, vehicle)
+    local rec = records[vids[vehicle]]
+    return rec ~= nil and rec.holders[serialOf(player)] == true
+end
+
 -- Snapshot: everything about a car the server knows, enough to rebuild it exactly.
 local function snapshot(vehicle)
     local x, y, z = getElementPosition(vehicle)
@@ -367,8 +373,9 @@ local function forget(vid)
     if rec and isElement(rec.vehicle) then dropped[rec.vehicle] = nil end
 end
 
--- `among`: only these vehicles (the test); default every vehicle.
-local function cleanVehicles(mode, player, among)
+-- `among`: only these vehicles (the test); default every vehicle. `force`: occupied ones too, everyone
+-- in them put out first.
+local function cleanVehicles(mode, player, among, force)
     local only
     if player then
         only = {}
@@ -383,9 +390,10 @@ local function cleanVehicles(mode, player, among)
         elseif mode == "all" then wanted = true
         else wanted = not vid end
         if wanted and not managed(vehicle) and getVehicleType(vehicle) ~= "Train" then
-            if occupied(vehicle) then
+            if occupied(vehicle) and not force then
                 skipped = skipped + 1
             else
+                for _, occupant in pairs(getVehicleOccupants(vehicle) or {}) do removePedFromVehicle(occupant) end
                 if vid then forget(vid) kept = kept + 1 end
                 dropped[vehicle] = nil
                 destroyElement(vehicle)
@@ -396,7 +404,11 @@ local function cleanVehicles(mode, player, among)
     return removed, kept, skipped
 end
 
-addCommandHandler("cleanvehicles", function(source, _, arg)
+addCommandHandler("cleanvehicles", function(source, _, ...)
+    local arg, force
+    for _, word in ipairs({ ... }) do
+        if word:lower() == "force" then force = true else arg = arg or word end
+    end
     local function reply(msg)
         if getElementType(source) == "console" then outputServerLog("[cleanvehicles] " .. msg) else outputChatBox(msg, source, 200, 200, 255) end
     end
@@ -412,12 +424,13 @@ addCommandHandler("cleanvehicles", function(source, _, arg)
                 end
             end
         end
-        if not player then return reply("No player called " .. arg .. ". Usage: /cleanvehicles [all | player]") end
+        if not player then return reply("No player called " .. arg .. ". Usage: /cleanvehicles [all | player] [force]") end
     end
-    local removed, kept, skipped = cleanVehicles(arg and arg:lower() == "all" and "all" or nil, player)
-    reply(("Removed %d vehicles%s%s; %d occupied left alone."):format(removed,
+    local removed, kept, skipped = cleanVehicles(arg and arg:lower() == "all" and "all" or nil, player, nil, force)
+    reply(("Removed %d vehicles%s%s%s."):format(removed,
         player and (" of " .. getPlayerName(player) .. "'s") or "",
-        kept > 0 and not player and (" (" .. kept .. " kept by players)") or "", skipped))
+        kept > 0 and not player and (" (" .. kept .. " kept by players)") or "",
+        force and "" or ("; " .. skipped .. " occupied left alone")))
 end, true)
 
 -- Console-only: snapshot -> rebuild round trip, the list rules, and a persisted record.

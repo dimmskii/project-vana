@@ -41,6 +41,15 @@ player quits in one, and when the resource stops. A server restart rebuilds them
 GTA:SA has no free-form body deformation: all visible damage is these component states, which MTA
 syncs from the clients natively. So a snapshot is the complete damage.
 
+## Actions
+
+From vana-lib's actions ([controls.md](controls.md)): `/engine` and `/lights` (on, off, automatic,
+in turn) from the driver's seat; `/lock` from the driver's seat or beside a car you hold;
+`/hood`, `/trunk` and the four `/door...` commands: sitting in a car, only that car (the driver
+has the hood and trunk, each seat its own door); on foot, the car beside you that you look at, when
+it's unlocked. Each is in `/interact`'s menu when you click the car, and its message ("Lights turned
+on") shows in the help box. The car keeps lights, locks and doors (they're persisted).
+
 ## Fuel
 
 After the `gasoline.cs` CLEO mod (bytecode read with `SASCM.INI`):

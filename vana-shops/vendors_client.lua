@@ -1,37 +1,40 @@
--- Vending machines and food carts: walk up, press enter/exit (F) to buy. The server decides.
+-- Vending machines and food carts: walk up, /use (F) to buy. The server decides. The nearest one in
+-- reach is an offer to vana-controls' /use, which shows its prompt.
 local nearby -- index into Vendors
+local ID = "vana-shops:vendor"
+
+local function offer(index)
+    local res = getResourceFromName("vana-controls")
+    if not res or getResourceState(res) ~= "running" then return end
+    if index then
+        local kind = VendorKinds[Vendors[index].kind]
+        exports["vana-controls"]:offer(ID, ("buy %s ($%d)"):format(kind.name, kind.price))
+    else
+        exports["vana-controls"]:withdraw(ID)
+    end
+end
 
 setTimer(function()
-    nearby = nil
-    if getPedOccupiedVehicle(localPlayer) or isPedDead(localPlayer) then return end
-    local x, y, z = getElementPosition(localPlayer)
-    local interior = getElementInterior(localPlayer)
-    for i, v in ipairs(Vendors) do
-        if v.interior == interior and math.abs(v.z - z) < 2.5 and getDistanceBetweenPoints2D(x, y, v.x, v.y) < VendorReach then
-            nearby = i
-            return
+    local found
+    if not getPedOccupiedVehicle(localPlayer) and not isPedDead(localPlayer) then
+        local x, y, z = getElementPosition(localPlayer)
+        local interior = getElementInterior(localPlayer)
+        for i, v in ipairs(Vendors) do
+            if v.interior == interior and math.abs(v.z - z) < 2.5 and getDistanceBetweenPoints2D(x, y, v.x, v.y) < VendorReach then
+                found = i
+                break
+            end
         end
+    end
+    if found ~= nearby then
+        nearby = found
+        offer(nearby)
     end
 end, 250, 0)
 
-addEventHandler("onClientKey", root, function(key, pressed)
-    if not nearby or not pressed then return end
-    for bound in pairs(getBoundKeys("enter_exit") or {}) do
-        if bound == key then
-            triggerServerEvent("vana-shops:vend", resourceRoot, nearby)
-            cancelEvent()
-            return
-        end
-    end
+addEvent("onClientVanaUse", false)
+addEventHandler("onClientVanaUse", root, function(id)
+    if id == ID and nearby then triggerServerEvent("vana-shops:vend", resourceRoot, nearby) end
 end)
-
-addEventHandler("onClientRender", root, function()
-    if not nearby then return end
-    local kind = VendorKinds[Vendors[nearby].kind]
-    local key = next(getBoundKeys("enter_exit") or {}) or "F"
-    local sw, sh = guiGetScreenSize()
-    local s = sh / 720
-    local text = ("Press %s to buy %s ($%d)"):format(key:upper(), kind.name, kind.price)
-    dxDrawRectangle(40 * s, 120 * s, 360 * s, 34 * s, tocolor(0, 0, 0, 170))
-    dxDrawText(text, 52 * s, 120 * s, 400 * s, 154 * s, tocolor(255, 255, 255), 1.15 * s, "default-bold", "left", "center")
-end)
+addEvent("onClientVanaUseReset", false)
+addEventHandler("onClientVanaUseReset", root, function() offer(nearby) end)

@@ -60,6 +60,7 @@ Inside `<config>`, replace the stock `<resource>` lines with:
 ```xml
 <resource src="vana-lib" startup="1" protected="0" />
 <resource src="vana-text" startup="1" protected="0" />
+<resource src="vana-controls" startup="1" protected="0" />
 <resource src="vana-data-player" startup="1" protected="0" />
 <resource src="vana-data-parked" startup="1" protected="0" />
 <resource src="vana-data-interiors" startup="1" protected="0" />
@@ -122,11 +123,14 @@ After editing `acl.xml` on a running server, run `reloadacl` in the console.
 
 Our resources ask for ACL rights through `<aclrequest>`; approve them once from the console (the
 server saves it). Every resource that imports shared code from `vana-lib` on the server needs
-`loadstring` (see [libraries.md](libraries.md)), and `vana-player` creates an account per player
-(named after their serial):
+`loadstring` (see [libraries.md](libraries.md)), `vana-controls` runs other commands typed in
+`/interact`'s box (`executeCommandHandler`, which still checks the player's own rights), and
+`vana-player` creates an account per player (named after their serial):
 
 ```text
 aclrequest allow vana-text all
+aclrequest allow vana-controls all
+aclrequest allow vana-vehicles all
 aclrequest allow vana-population all
 aclrequest allow vana-player all
 aclrequest allow vana-parked all

@@ -27,10 +27,13 @@ local CONTROLS = {
     VEHICLE_TURRETUP = "special_control_up", VEHICLE_TURRETDOWN = "special_control_down",
 }
 
+local NUM = { add = "+", sub = "-", mul = "*", div = "/", dec = ".", enter = "ENTER" }
 local function keyFor(name)
     local control = CONTROLS[name] or name:lower()
     local key = next(getBoundKeys(control) or {})
-    return key and key:upper() or control
+    if not key then return control end
+    local num = key:match("^num_(%w+)$")
+    return num and ("NUM" .. (NUM[num] or num:upper())) or key:upper()
 end
 
 -- GXT -> MTA colour-coded text.
@@ -68,7 +71,10 @@ end
 addEvent("vana-activities:session", true)
 addEventHandler("vana-activities:session", resourceRoot, function(name)
     current = name
-    if not name then counters, order, help = {}, {}, nil end
+    if not name then
+        counters, order = {}, {}
+        Hud.help(nil)
+    end
 end)
 
 addEvent("vana-activities:big", true)
@@ -76,8 +82,27 @@ addEventHandler("vana-activities:big", resourceRoot, function(text, ms, style, m
     big = { text = Hud.format(text), untilTick = getTickCount() + ms, style = style, money = money }
 end)
 
+-- Subtitles are vana-controls' too (the game's own, bottom middle); ours only stand in without it.
+local function controls()
+    local res = getResourceFromName("vana-controls")
+    return res and getResourceState(res) == "running"
+end
+
+-- GXT for vana-controls' native text: keys other than enter/exit (which it names: /use's key) named here.
+local function namedKeys(text)
+    return text and (text:gsub("~k~~([%w_]+)~", function(name)
+        if name == "VEHICLE_ENTER_EXIT" then return nil end
+        return keyFor(name)
+    end)) or nil
+end
+
 addEvent("vana-activities:say", true)
 addEventHandler("vana-activities:say", resourceRoot, function(text, ms)
+    if controls() then
+        say = nil
+        exports["vana-controls"]:subtitle(namedKeys(text), ms or 5000)
+        return
+    end
     say = text and { text = Hud.format(text), untilTick = getTickCount() + (ms or 5000) } or nil
 end)
 
@@ -96,7 +121,14 @@ function Hud.counter(id, label, value, kind, up)
     counters[id] = { label = Hud.format(label), value = value, kind = kind, up = up, at = getTickCount() }
 end
 
+-- The help box is vana-controls' (the game's own, shared with /use's prompts); ours only stands in
+-- when it isn't running. Keys other than enter/exit (which vana-controls names: /use's key) are named here.
 function Hud.help(text, forever)
+    if controls() then
+        help = nil
+        exports["vana-controls"]:help(namedKeys(text), forever)
+        return
+    end
     help = text and { text = Hud.format(text), untilTick = forever and math.huge or getTickCount() + 10000 } or nil
 end
 
@@ -130,12 +162,13 @@ addEventHandler("onClientRender", root, function()
         shadowText(say.text, w * 0.15, h * 0.80, w * 0.85, h * 0.92, tocolor(255, 255, 255), sx(1.15), "default-bold", "center", "center")
     end
     if help and now < help.untilTick then
+        -- Top middle, as vana-controls' status box (clear of the chat).
         local bw = sx(330)
-        local x, y = sx(30), sx(30)
+        local x, y = (w - bw) / 2, sx(16)
         local lines = select(2, help.text:gsub("\n", "")) + 1
         local bh = sx(18) * lines + sx(24) + sx(14) * math.floor(#help.text / 48)
         dxDrawRectangle(x, y, bw, bh, tocolor(0, 0, 0, 190))
-        dxDrawText(help.text, x + sx(10), y + sx(10), x + bw - sx(10), y + bh, tocolor(255, 255, 255), sx(1.05), "default-bold", "left", "top", false, true, false, true)
+        dxDrawText(help.text, x + sx(10), y + sx(10), x + bw - sx(10), y + bh, tocolor(255, 255, 255), sx(1.05), "default-bold", "center", "top", false, true, false, true)
     end
     -- Counters on the right, below the vanilla HUD (money, wanted stars, weapon), as vanilla stacks them.
     local y = Hud.counterTop()
@@ -187,30 +220,58 @@ end)
 
 -- A vanilla-style pick list (top left): the server opens it with "vana-activities:menu" (id, title,
 -- items = { { label, right, enabled } }, hint); choosing sends "vana-activities:menuChoice" (id, index).
-local pick -- { id, title, items, selected, hint }
+-- Keys, the pad or the mouse (vana-lib's menu_input).
+local pick -- { id, title, items, selected, hint, rows }
+
+local function closePick()
+    if not pick then return end
+    pick = nil
+    toggleAllControls(true, true, false)
+    MenuInput.cursor(false)
+end
 
 addEvent("vana-activities:menu", true)
 addEventHandler("vana-activities:menu", resourceRoot, function(id, title, items, hint)
-    pick = id and { id = id, title = Hud.format(title), items = items, selected = 1, hint = hint } or nil
-    toggleAllControls(not pick, true, false)
+    if not id then return closePick() end
+    if not pick then MenuInput.cursor(true) end
+    pick = { id = id, title = Hud.format(title), items = items, selected = 1, hint = hint, rows = {} }
+    toggleAllControls(false, true, false)
 end)
+
+local function choosePick()
+    local item = pick.items[pick.selected]
+    if item and item.enabled ~= false then
+        triggerServerEvent("vana-activities:menuChoice", resourceRoot, pick.id, pick.selected)
+        closePick()
+    end
+end
 
 addEventHandler("onClientKey", root, function(key, pressed)
     if not pick or not pressed then return end
-    if key == "arrow_u" then pick.selected = (pick.selected - 2) % #pick.items + 1
-    elseif key == "arrow_d" then pick.selected = pick.selected % #pick.items + 1
-    elseif key == "enter" or key == "num_enter" then
-        local item = pick.items[pick.selected]
-        if item and item.enabled ~= false then
-            triggerServerEvent("vana-activities:menuChoice", resourceRoot, pick.id, pick.selected)
-            pick = nil
-            toggleAllControls(true, true, false)
-        end
-    elseif key == "backspace" or key == "escape" then
-        pick = nil
-        toggleAllControls(true, true, false)
+    if MenuInput.wheel(pick, key, #pick.items) then return cancelEvent() end
+    local action = MenuInput.action(key)
+    if action == "up" then pick.selected = (pick.selected - 2) % #pick.items + 1
+    elseif action == "down" then pick.selected = pick.selected % #pick.items + 1
+    elseif action == "accept" then choosePick()
+    elseif action == "back" then closePick()
     else return end
+    if pick then pick.first = nil end
     cancelEvent()
+end)
+
+addEventHandler("onClientCursorMove", root, function(_, _, x, y)
+    local i = pick and MenuInput.rowAt(pick.rows, x, y)
+    if i then pick.selected = i end
+end)
+
+addEventHandler("onClientClick", root, function(button, state, x, y)
+    if not pick or state ~= "up" then return end
+    if button == "right" then return closePick() end
+    local i = button == "left" and MenuInput.rowAt(pick.rows, x, y)
+    if i then
+        pick.selected = i
+        choosePick()
+    end
 end)
 
 addEventHandler("onClientRender", root, function()
@@ -219,12 +280,17 @@ addEventHandler("onClientRender", root, function()
     local s = sh / 720
     local x, y, w, row = 40 * s, 120 * s, 440 * s, 26 * s
     local visible = math.min(#pick.items, 14)
-    local first = math.max(1, math.min(pick.selected - 7, #pick.items - visible + 1))
+    pick.rows = {}
+    -- Where the keys left it (following the selection), or where the mouse wheel put it.
+    local first = math.max(1, math.min(pick.first or (pick.selected - 7), #pick.items - visible + 1))
+    pick.first, pick.visible = first, visible
+    pick.box = { x, y, x + w, y + row * (visible + 2.6) }
     dxDrawRectangle(x, y, w, row * (visible + 2.6), tocolor(0, 0, 0, 190))
     dxDrawText(pick.title, x + 12 * s, y + 6 * s, x + w, y + row, tocolor(172, 203, 241), 1.4 * s, "bankgothic", "left", "top", false, false, false, true)
     for i = first, first + visible - 1 do
         local item = pick.items[i]
         local ry = y + row * (i - first + 1.4)
+        pick.rows[i] = { x, ry, x + w, ry + row }
         if i == pick.selected then dxDrawRectangle(x + 4 * s, ry, w - 8 * s, row, tocolor(172, 203, 241, 60)) end
         local colour = item.enabled == false and tocolor(90, 90, 90) or (i == pick.selected and tocolor(255, 255, 255) or tocolor(180, 180, 180))
         dxDrawText(Hud.format(item.label), x + 12 * s, ry, x + w, ry + row, colour, 1.1 * s, "default-bold", "left", "center", false, false, false, true)
