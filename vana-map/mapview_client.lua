@@ -305,7 +305,7 @@ addEventHandler("onClientRender", root, function()
         end
     end
     -- Points and blips (smaller than MTA's), then you.
-    local icon = sx(11) * (tonumber(MapDraw.pref("map.blipSize", 1)) or 1)
+    local icon = sx(11) * (tonumber(MapDraw.pref("map.blipSize", 1.4)) or 1)
     local hover = drawItems(icon, getElementDimension(localPlayer), getElementInterior(localPlayer))
     local mx, my = toScreen(px, py)
     local _, _, rz = getElementRotation(localPlayer)

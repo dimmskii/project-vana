@@ -61,7 +61,7 @@ Each layer has one home; don't scatter windows.
 | --- | --- | --- |
 | F, Enter | `/use` | What the help box offers where you stand; otherwise GTA's enter/exit (cars). |
 | F9 | `/preferences` (`/prefs`) | The player's own settings (HUD: map, minimap), kept on their machine. |
-| F1 | `/interact` | The cursor and the command box: click a car, a ped or a player for what you can do to it, or type a command. Player-facing game functions (stats, progress, properties, the future cell phone) come in through here. |
+| F1, X | `/interact` | The cursor and the command box: click a car, a ped or a player for what you can do to it, or type a command. Player-facing game functions (stats, progress, properties, the future cell phone) come in through here. |
 | F2 (proposed) | Meta and social | Friends, social features, settings, help, server info. Nothing that affects the game world. |
 | F3 (proposed) | Admin | The admin toolset. The panel only opens for players whose rights the server confirms, and every action is still checked on the server. |
 

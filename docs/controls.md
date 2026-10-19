@@ -7,7 +7,7 @@ the keys:
 | Command | Default keys | What it does |
 | --- | --- | --- |
 | `/use` | F, Enter (vanilla's enter/exit keys) | What the help box offers where you stand: a shop counter, a machine, loot, getting off gym equipment. With nothing offered, the key is GTA's enter/exit again (cars). |
-| `/interact` | F1 | The cursor and a command box: click a vehicle, ped or player for its menu, or type any command, with suggestions. |
+| `/interact` | F1, X | The cursor and a command box: click a vehicle, ped or player for its menu, or type any command, with suggestions. |
 
 Both are bound with `bindKey(key, "down", command)`, so they're listed under **vana-controls** in
 MTA's Settings > Binds, where players rebind them (MTA remembers a player's change over our default).
@@ -117,7 +117,7 @@ hears about changes from `onClientPreferenceChange` (key, value) on the root ele
 
 | Key | Setting | Read by |
 | --- | --- | --- |
-| `map.blipSize` | HUD > Map > Blip size (60%-175%) | the map (F11) |
+| `map.blipSize` | HUD > Map > Blip size (60%-290%, normal 140%) | the map (F11) |
 | `minimap.rotation` | HUD > Minimap > Rotation: turns with the camera (vanilla), or north up | the radar |
 | `minimap.blipSize` | HUD > Minimap > Blip size | the radar |
 | `minimap.blipRange` | HUD > Minimap > Nearby icons' range (x0.5-x3 of the short range) | the radar |

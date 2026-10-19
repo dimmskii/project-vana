@@ -91,6 +91,7 @@ addEventHandler("onClientResourceStart", resourceRoot, function()
     bindKey("f", "down", "use")
     bindKey("enter", "down", "use")
     bindKey("f1", "down", "interact")
+    bindKey("x", "down", "interact")
     triggerEvent("onClientVanaUseReset", root)
 end)
 

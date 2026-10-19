@@ -128,7 +128,7 @@ addEventHandler("onClientRender", root, function()
     end
 
     -- Points and blips.
-    local icon = d * 0.12 * (tonumber(MapDraw.pref("minimap.blipSize", 1)) or 1)
+    local icon = d * 0.12 * (tonumber(MapDraw.pref("minimap.blipSize", 1.4)) or 1)
     local near = tonumber(MapDraw.pref("minimap.blipRange", 1)) or 1
     local mx, my = x + r, y + r
     local rim = r - icon * 0.35

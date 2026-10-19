@@ -3,7 +3,7 @@ HelpPages = {
     { name = "controls", topic = true, summary = "Using things: /use, /interact and the action commands",
       text = [[Two keys do everything that isn't driving or fighting:
   /use (F and Enter): what the box at the top left says, where you stand: order at a counter, play a machine, pick something up. Next to a car with nothing else here, it's the game's own enter/exit.
-  /interact (F1): the cursor and a command box. Click a car, a person or a player for what you can do to them, or type a command.
+  /interact (F1 or X): the cursor and a command box. Click a car, a person or a player for what you can do to them, or type a command.
 
 Every action is a command too (/engine, /lights, /givemoney, /buyfood...), so you can type it or bind it to a key (Settings > Binds, or bind <key> <command> in the console). Without a target it uses what you're looking at, else the nearest thing it can; #id (shown in /interact) or a player's name picks one.
 
