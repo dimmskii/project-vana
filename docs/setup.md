@@ -184,3 +184,10 @@ The popcycle group table (`vana-population/config/groups.lua`) comes from the US
 ```sh
 python3 tools/seed/seed_population.py "/path/to/GTA San Andreas" "vana-population/config"
 ```
+
+The radio's track data (`vana-radio/config/radio_data.lua`: track IDs, durations, beats; see
+[radio.md](radio.md)) comes from the US 1.0 `gta_sa.exe` and `audio/`:
+
+```sh
+python3 tools/seed/seed_radio.py "/path/to/GTA San Andreas" "vana-radio/config"
+```

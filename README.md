@@ -24,6 +24,7 @@ Start here:
 | [docs/activities.md](docs/activities.md) | Per-player activities ported from main.scm: the framework, burglary and the rest |
 | [docs/traffic.md](docs/traffic.md) | Traffic, pedestrians and the AI actor architecture: Lua decides, the engine executes |
 | [docs/vehicles.md](docs/vehicles.md) | Kept cars (registry and persistence), fuel, live radio |
+| [docs/radio.md](docs/radio.md) | The radio: vanilla's station data and track picking, seeded track data |
 | [docs/editor.md](docs/editor.md) | Placement data in MTA map resources (`[data]/vana-data-*`) and editing it in the Map Editor |
 | [docs/wildlife.md](docs/wildlife.md) | Creatures from community mods (Bigfoot) |
 | [docs/libraries.md](docs/libraries.md) | Shared code in `vana-lib` (imported at runtime): game-file readers (GXT, IDE, DAT, TXD), map data; `vana-text` |
