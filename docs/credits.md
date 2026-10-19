@@ -41,8 +41,14 @@
 - **Source:** a local copy (`gtaref/mta_modded`): `cleo/gasoline.cs`, `models/txd/gasoline.txd`.
 - **License:** none known.
 - **In the project:** `vana-vehicles/mods/gasoline/`: `gasoline.txd` (the gauge textures, for the
-  dashboard) and `gasoline.cs` (the compiled script; our fuel rules in `vana-vehicles/fuel.lua` are a
-  port of it, read through a disassembly with Sanny Builder's `SASCM.INI`).
+  dashboard), `gasoline.cs` (the compiled script; our fuel rules in `vana-vehicles/fuel.lua` are a
+  port of it, read through a disassembly with Sanny Builder's `SASCM.INI`) and `gasoline.txt` (its
+  decompile, the source of the pumps' exact positions).
+
+## Ours
+
+- **Gas station icons** (`vana-vehicles/icons/`: `radar_gasstn`, `radar_gasair`, `radar_gaswater`,
+  PNG with their Paint.NET `.pdn` sources): drawn for ProjectVana by Dimmskii.
 
 ## Available, not used yet
 

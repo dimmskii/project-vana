@@ -1,0 +1,392 @@
+{$CLEO .cs}
+Alloc($ACTIVE_INTERIOR, 43)
+Alloc($PLAYER_CHAR, 2)
+Alloc($PLAYER_ACTOR, 3)
+
+nop 
+
+:Noname_2
+wait 0
+if 
+  is_player_playing $PLAYER_CHAR
+goto_if_false @Noname_2
+if and
+  is_char_in_any_car $PLAYER_ACTOR
+  $flag_player_on_mission == 0
+goto_if_false @Noname_2
+if and
+  not is_char_in_any_boat $PLAYER_ACTOR
+  not is_char_in_flying_vehicle $PLAYER_ACTOR
+  not is_char_in_any_train $PLAYER_ACTOR
+  not is_char_in_model $PLAYER_ACTOR {modelId} 481
+  not is_char_in_model $PLAYER_ACTOR {modelId} 509
+  not is_char_in_model $PLAYER_ACTOR {modelId} 510
+goto_if_false @Noname_2574
+$ACTIVE_INTERIOR = get_area_visible 
+if 
+  $ACTIVE_INTERIOR == 0
+goto_if_false @Noname_2
+8@ = store_car_char_is_in_no_save $PLAYER_ACTOR
+26@ = get_driver_of_car 8@
+if 
+  is_int_lvar_equal_to_int_lvar 26@ == $PLAYER_ACTOR
+goto_if_false @Noname_2
+remove_texture_dictionary 
+load_texture_dictionary "GASOLINE"
+load_sprite 1 {spriteName} "SCALEF"
+load_sprite 2 {spriteName} "SCALEE"
+load_sprite 3 {spriteName} "ARROW"
+load_sprite 4 {spriteName} "LOCK"
+load_sprite 5 {spriteName} "SPEEDOM"
+load_sprite 6 {spriteName} "STRELK"
+load_sprite 7 {spriteName} "ARROWN"
+load_sprite 8 {spriteName} "NITRO"
+wait 250
+set_cleo_shared_var 2 {value} 0
+stream_custom_script "ASSET_RADAR.ARD" {args} 
+gosub @Noname_1955
+if 
+  not is_local_var_bit_set_const 12@ {bitIndex} 1
+goto_if_false @Noname_347
+10@ = generate_random_int 
+set_local_var_bit_const 12@ {bitIndex} 1
+write_memory 11@ {size} 1 {value} 12@ {vp} False
+goto @Noname_374
+
+:Noname_347
+22@ = get_vehicle_pointer 8@
+22@ += 5
+10@ = read_memory 22@ {size} 4 {vp} False
+
+:Noname_374
+wait 0
+28@ = read_memory 11989093 {size} 1 {vp} False
+if 
+  28@ <> 1
+goto_if_false @Noname_1720
+$ACTIVE_INTERIOR = get_area_visible 
+if 
+  $ACTIVE_INTERIOR == 0
+goto_if_false @Noname_1819
+if 
+  $flag_player_on_mission == 0
+goto_if_false @Noname_1819
+if 
+  is_char_in_car $PLAYER_ACTOR {vehicle} 8@
+goto_if_false @Noname_1720
+gosub @Noname_1984
+if 
+  10@ > 0
+goto_if_false @Noname_1848
+9@ = get_car_speed 8@
+if 
+  9@ == 0.0
+goto_if_false @Noname_531
+goto @Noname_1720
+
+:Noname_531
+get_cleo_shared_var 0 {var_result} 30@
+if 
+  30@ == 0
+goto_if_false @Noname_773
+if and
+  45.0 > 9@
+  9@ > 1.0
+goto_if_false @Noname_594
+10@ -= 1
+
+:Noname_594
+if 
+  not is_car_in_air_proper 8@
+goto_if_false @Noname_766
+if and
+  9@ > 45.0
+  85.0 > 9@
+goto_if_false @Noname_648
+10@ -= 2
+
+:Noname_648
+if and
+  9@ > 85.0
+  110.0 > 9@
+goto_if_false @Noname_686
+10@ -= 3
+
+:Noname_686
+if and
+  9@ > 110.0
+  140.0 > 9@
+goto_if_false @Noname_731
+10@ -= 4
+goto @Noname_773
+
+:Noname_731
+if 
+  9@ > 140.0
+goto_if_false @Noname_773
+10@ -= 5
+goto @Noname_773
+
+:Noname_766
+10@ -= 1
+
+:Noname_773
+if and
+  not locate_char_in_car_3d $PLAYER_ACTOR {x} 1944.8521 {y} -1769.554 {z} 13.0125 {xRadius} 1.5 {yRadius} 1.5 {zRadius} 3.0 {drawSphere} False
+  not locate_char_in_car_3d $PLAYER_ACTOR {x} 2209.8159 {y} 2481.9341 {z} 10.8203 {xRadius} 1.5 {yRadius} 1.5 {zRadius} 3.0 {drawSphere} False
+  not locate_char_in_car_3d $PLAYER_ACTOR {x} 604.8804 {y} 1705.2729 {z} 6.541 {xRadius} 1.5 {yRadius} 1.5 {zRadius} 3.0 {drawSphere} False
+  not locate_char_in_car_3d $PLAYER_ACTOR {x} -2414.49 {y} 982.081 {z} 45.2969 {xRadius} 1.5 {yRadius} 1.5 {zRadius} 3.0 {drawSphere} False
+  not locate_char_in_car_3d $PLAYER_ACTOR {x} -2244.623 {y} -2561.8279 {z} 31.9219 {xRadius} 1.5 {yRadius} 1.5 {zRadius} 3.0 {drawSphere} False
+  not locate_char_in_car_3d $PLAYER_ACTOR {x} -1327.512 {y} 2678.1069 {z} 50.0625 {xRadius} 1.5 {yRadius} 1.5 {zRadius} 3.0 {drawSphere} False
+  not locate_char_in_car_3d $PLAYER_ACTOR {x} -95.1488 {y} -1174.303 {z} 1.9281 {xRadius} 1.5 {yRadius} 1.5 {zRadius} 3.0 {drawSphere} False
+  not locate_char_in_car_3d $PLAYER_ACTOR {x} -1679.9821 {y} 408.9051 {z} 7.2365 {xRadius} 1.5 {yRadius} 1.5 {zRadius} 3.0 {drawSphere} False
+goto_if_false @Noname_1394
+if and
+  not locate_char_in_car_3d $PLAYER_ACTOR {x} 652.03 {y} -571.34 {z} 16.34 {xRadius} 1.5 {yRadius} 1.5 {zRadius} 3.0 {drawSphere} False
+  not locate_char_in_car_3d $PLAYER_ACTOR {x} -1605.897 {y} -2714.252 {z} 48.5335 {xRadius} 1.5 {yRadius} 1.5 {zRadius} 3.0 {drawSphere} False
+  not locate_char_in_car_3d $PLAYER_ACTOR {x} -1471.48 {y} 1864.3101 {z} 32.64 {xRadius} 1.5 {yRadius} 1.5 {zRadius} 3.0 {drawSphere} False
+  not locate_char_in_car_3d $PLAYER_ACTOR {x} 1596.5 {y} 2199.1001 {z} 10.83 {xRadius} 1.5 {yRadius} 1.5 {zRadius} 3.0 {drawSphere} False
+  not locate_char_in_car_3d $PLAYER_ACTOR {x} 2145.8999 {y} 2748.1599 {z} 10.83 {xRadius} 1.5 {yRadius} 1.5 {zRadius} 3.0 {drawSphere} False
+  not locate_char_in_car_3d $PLAYER_ACTOR {x} 2642.1101 {y} 1106.53 {z} 10.83 {xRadius} 1.5 {yRadius} 1.5 {zRadius} 3.0 {drawSphere} False
+  not locate_char_in_car_3d $PLAYER_ACTOR {x} 2117.4199 {y} 920.42 {z} 10.83 {xRadius} 1.5 {yRadius} 1.5 {zRadius} 3.0 {drawSphere} False
+  not locate_char_in_car_3d $PLAYER_ACTOR {x} 1381.6801 {y} 456.26 {z} 19.91 {xRadius} 1.5 {yRadius} 1.5 {zRadius} 3.0 {drawSphere} False
+goto_if_false @Noname_1394
+goto @Noname_1720
+
+:Noname_1394
+$ACTIVE_INTERIOR = get_area_visible 
+if 
+  $ACTIVE_INTERIOR == 0
+goto_if_false @Noname_1819
+if 
+  $flag_player_on_mission == 0
+goto_if_false @Noname_1819
+if 
+  29000 > 10@
+goto_if_false @Noname_1720
+if 
+  is_score_greater $PLAYER_CHAR {money} 0
+goto_if_false @Noname_1932
+31@ = store_score $PLAYER_CHAR
+wait 150
+set_everyone_ignore_player $PLAYER_CHAR {state} True
+set_player_enter_car_button $PLAYER_CHAR {enabled} False
+24@ = 0
+freeze_car_position 8@ {state} True
+set_player_control $PLAYER_CHAR {state} False
+
+:Noname_1520
+wait 0
+31@ = store_score $PLAYER_CHAR
+sub_int_lvar_from_int_lvar 31@ -= 24@
+if 
+  1 <= 31@
+goto_if_false @Noname_1909
+if 
+  29700 >= 10@
+goto_if_false @Noname_1663
+if 
+  $flag_player_on_mission == 0
+goto_if_false @Noname_1819
+if 
+  is_char_in_car $PLAYER_ACTOR {vehicle} 8@
+goto_if_false @Noname_1819
+gosub @Noname_1984
+10@ += 300
+report_mission_audio_event_at_position 0.0 {y} 0.0 {z} 0.0 {soundId} ScriptSound.SoundBuyCarMod
+24@ += 1
+goto @Noname_1520
+
+:Noname_1663
+24@ *= -1
+add_score $PLAYER_CHAR {money} 24@
+warp_char_into_car $PLAYER_ACTOR {vehicle} 8@
+freeze_car_position 8@ {state} False
+set_player_control $PLAYER_CHAR {state} True
+set_player_enter_car_button $PLAYER_CHAR {enabled} True
+set_everyone_ignore_player $PLAYER_CHAR {state} False
+set_cleo_shared_var 0 {value} 0
+
+:Noname_1720
+if or
+  is_char_dead $PLAYER_ACTOR
+  is_car_dead 8@
+goto_if_false @Noname_1755
+clear_local_var_bit_const 12@ {bitIndex} 1
+goto @Noname_1823
+
+:Noname_1755
+22@ = get_vehicle_pointer 8@
+22@ += 5
+write_memory 22@ {size} 4 {value} 10@ {vp} False
+if 
+  $flag_player_on_mission == 0
+goto_if_false @Noname_1819
+if 
+  not is_char_in_car $PLAYER_ACTOR {vehicle} 8@
+goto_if_false @Noname_374
+
+:Noname_1819
+wait 0
+
+:Noname_1823
+set_cleo_shared_var 2 {value} 1
+clear_local_var_bit_const 12@ {bitIndex} 1
+wait 1250
+goto @Noname_2
+
+:Noname_1848
+10@ = 0
+if 
+  is_char_on_any_bike $PLAYER_ACTOR
+goto_if_false @Noname_1889
+boat_stop 8@
+set_cleo_shared_var 0 {value} 1
+goto @Noname_773
+
+:Noname_1889
+set_car_engine_on 8@ {state} False
+set_cleo_shared_var 0 {value} 1
+goto @Noname_773
+
+:Noname_1909
+print_now 'GA_3' {time} 3000 {flag} 1
+goto @Noname_1663
+
+:Noname_1932
+print_now 'NOMONEY' {time} 3000 {flag} 1
+goto @Noname_1720
+
+:Noname_1955
+11@ = get_vehicle_pointer 8@
+11@ += 4
+12@ = read_memory 11@ {size} 1 {vp} False
+return 
+
+:Noname_1984
+get_cleo_shared_var 3 {var_result} 3@
+get_cleo_shared_var 4 {var_result} 4@
+if 
+  4@ > 0
+goto_if_false @Noname_2149
+cset_lvar_float_to_lvar_int 5@ =# 4@
+5@ += 108.6
+use_text_commands False
+set_text_scale 0.3 {heightScale} 1.0
+display_text_with_number 209.05 {offsetTop} 356.333 {key} 'NUMBER' {num} 3@
+draw_sprite 8 {offsetLeft} 213.5 {offsetTop} 339.0 {width} 128.0 {height} 111.0 {r} 255 {g} 255 {b} 255 {a} 255
+draw_sprite_with_rotation 7 {offsetLeft} 213.5 {offsetTop} 339.0 {width} 128.0 {height} 128.0 {angle} 5@ {red} 255 {green} 255 {blue} 255 {alpha} 255
+
+:Noname_2149
+23@ = get_car_speed 8@
+23@ *= 3.6
+cset_lvar_int_to_lvar_float 27@ =# 23@
+23@ += 54.0
+set_sprites_draw_before_fade True
+set_text_scale 0.0 {heightScale} 0.0
+display_text_with_number 535.5 {offsetTop} 425.4 {key} 'NUMBER' {num} 27@
+draw_sprite 5 {offsetLeft} 506.5 {offsetTop} 385.0 {width} 242.5 {height} 218.0 {r} 255 {g} 255 {b} 255 {a} 255
+draw_sprite_with_rotation 6 {offsetLeft} 548.0 {offsetTop} 379.0 {width} 241.0 {height} 205.0 {angle} 23@ {red} 255 {green} 255 {blue} 255 {alpha} 255
+if 
+  10@ > 5000
+goto_if_false @Noname_2366
+use_text_commands True
+draw_sprite 1 {offsetLeft} 414.0 {offsetTop} 414.0 {width} 65.5 {height} 53.5 {r} 255 {g} 255 {b} 255 {a} 255
+goto @Noname_2425
+
+:Noname_2366
+if 
+  5000 > 10@
+goto_if_false @Noname_2425
+use_text_commands True
+draw_sprite 2 {offsetLeft} 414.0 {offsetTop} 414.0 {width} 65.5 {height} 53.5 {r} 255 {g} 255 {b} 255 {a} 255
+
+:Noname_2425
+cset_lvar_float_to_lvar_int 25@ =# 10@
+25@ /= 500.0
+25@ *= 2.3
+25@ += 108.6
+use_text_commands True
+draw_sprite_with_rotation 3 {offsetLeft} 438.5 {offsetTop} 412.0 {width} 109.0 {height} 109.0 {angle} 25@ {red} 255 {green} 255 {blue} 255 {alpha} 255
+21@ = get_car_door_lock_status 8@
+if 
+  21@ <> 1
+goto_if_false @Noname_2572
+use_text_commands True
+draw_sprite 4 {offsetLeft} 459.0 {offsetTop} 432.3 {width} 14.0 {height} 14.0 {r} 255 {g} 255 {b} 255 {a} 255
+
+:Noname_2572
+return 
+
+:Noname_2574
+wait 0
+$ACTIVE_INTERIOR = get_area_visible 
+if 
+  $ACTIVE_INTERIOR == 0
+goto_if_false @Noname_2
+if 
+  is_char_in_any_car $PLAYER_ACTOR
+goto_if_false @Noname_2
+if and
+  not is_char_in_flying_vehicle $PLAYER_ACTOR
+  not is_char_in_model $PLAYER_ACTOR {modelId} 481
+  not is_char_in_model $PLAYER_ACTOR {modelId} 509
+  not is_char_in_model $PLAYER_ACTOR {modelId} 510
+  $flag_player_on_mission == 0
+goto_if_false @Noname_2
+8@ = store_car_char_is_in_no_save $PLAYER_ACTOR
+26@ = get_driver_of_car 8@
+if 
+  is_int_lvar_equal_to_int_lvar 26@ == $PLAYER_ACTOR
+goto_if_false @Noname_2
+remove_texture_dictionary 
+load_texture_dictionary "GASOLINE"
+load_sprite 1 {spriteName} "SPEEDOM"
+load_sprite 2 {spriteName} "STRELK"
+
+:Noname_2738
+wait 0
+28@ = read_memory 11989093 {size} 1 {vp} False
+if 
+  28@ <> 1
+goto_if_false @Noname_3003
+$ACTIVE_INTERIOR = get_area_visible 
+if 
+  $ACTIVE_INTERIOR == 0
+goto_if_false @Noname_3068
+if 
+  $flag_player_on_mission == 0
+goto_if_false @Noname_3068
+if 
+  is_char_in_car $PLAYER_ACTOR {vehicle} 8@
+goto_if_false @Noname_3068
+use_text_commands False
+23@ = get_car_speed 8@
+23@ *= 3.56
+cset_lvar_int_to_lvar_float 27@ =# 23@
+23@ += 68.0
+set_text_colour 180 {green} 180 {blue} 180 {alpha} 255
+set_text_scale 0.0 {heightScale} 0.0
+display_text_with_number 940.5 {offsetTop} 830.4 {key} 'NUMBER' {num} 27@
+set_sprites_draw_before_fade True
+draw_sprite 1 {offsetLeft} 506.5 {offsetTop} 385.0 {width} 242.5 {height} 206.0 {r} 255 {g} 255 {b} 255 {a} 255
+draw_sprite_with_rotation 2 {offsetLeft} 550.5 {offsetTop} 385.0 {width} 242.5 {height} 206.0 {angle} 23@ {red} 255 {green} 255 {blue} 255 {alpha} 255
+
+:Noname_3003
+if or
+  is_char_dead $PLAYER_ACTOR
+  is_car_dead 8@
+goto_if_false @Noname_3031
+goto @Noname_3068
+
+:Noname_3031
+if 
+  $flag_player_on_mission == 0
+goto_if_false @Noname_3068
+if 
+  not is_char_in_car $PLAYER_ACTOR {vehicle} 8@
+goto_if_false @Noname_2738
+
+:Noname_3068
+wait 1250
+goto @Noname_2

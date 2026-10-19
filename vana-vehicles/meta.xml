@@ -16,6 +16,8 @@
     <script src="client.lua" type="client" />
     <script src="dashboard_client.lua" type="client" />
     <script src="turbo_client.lua" type="client" />
+    <script src="pumps_client.lua" type="client" />
+    <file src="icons/radar_gasstn.png" /> <!-- ours (vanilla has no fuel icon); the .pdn next to each is its Paint.NET source -->
     <file src="mods/gasoline/gasoline.txd" />
     <export function="isKept" type="server" />
     <export function="assignRadio" type="server" />

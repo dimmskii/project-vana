@@ -131,5 +131,14 @@ addEventHandler("onVehicleEnter", root, function(player, seat)
     end
 end)
 
+-- The pumps' markers: where to roll up to (the icon in them is pumps_client.lua's).
+addEventHandler("onResourceStart", resourceRoot, function()
+    if not F.enabled then return end
+    local m = F.pumpMarker
+    for _, p in ipairs(F.pumps) do
+        createMarker(p[1], p[2], p[3] - 0.6, "cylinder", m.size, m.colour[1], m.colour[2], m.colour[3], m.colour[4])
+    end
+end)
+
 addEventHandler("onPlayerQuit", root, function() stopRefuel(source) end)
 addEventHandler("onPlayerWasted", root, function() stopRefuel(source) end)

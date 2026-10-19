@@ -20,14 +20,19 @@ VehicleConfig = {
         refillBelow = 29000, refillTo = 29700,
         step = 300, stepPrice = 1, stepMs = 40, -- $1 per 300 units: a full tank is about $100
         pumpRadius = 1.5, pumpHeight = 3, pumpSpeed = 3, -- m/s: rolling up to the pump, not driving past
+        -- The mod's 16 spots, exactly as its script checks them (mods/gasoline/gasoline.txt,
+        -- locate_char_in_car_3d): where a car stands at the pump.
         pumps = {
-            { 1945.0, -1770.0, 13.01 }, { 2210.0, 2482.0, 10.82 }, { 604.9, 1705.0, 6.541 },
-            { -2414.0, 982.1, 45.3 }, { -2245.0, -2562.0, 31.92 }, { -1328.0, 2678.0, 50.06 },
-            { -95.15, -1174.0, 1.928 }, { -1680.0, 408.9, 7.236 }, { 652.0, -571.3, 16.34 },
-            { -1606.0, -2714.0, 48.53 }, { -1471.0, 1864.0, 32.64 }, { 1596.0, 2199.0, 10.83 },
-            { 2146.0, 2748.0, 10.83 }, { 2642.0, 1107.0, 10.83 }, { 2117.0, 920.4, 10.83 },
-            { 1382.0, 456.3, 19.91 },
+            { 1944.8521, -1769.554, 13.0125 }, { 2209.8159, 2481.9341, 10.8203 }, { 604.8804, 1705.2729, 6.541 },
+            { -2414.49, 982.081, 45.2969 }, { -2244.623, -2561.8279, 31.9219 }, { -1327.512, 2678.1069, 50.0625 },
+            { -95.1488, -1174.303, 1.9281 }, { -1679.9821, 408.9051, 7.2365 }, { 652.03, -571.34, 16.34 },
+            { -1605.897, -2714.252, 48.5335 }, { -1471.48, 1864.3101, 32.64 }, { 1596.5, 2199.1001, 10.83 },
+            { 2145.8999, 2748.1599, 10.83 }, { 2642.1101, 1106.53, 10.83 }, { 2117.4199, 920.42, 10.83 },
+            { 1381.6801, 456.26, 19.91 },
         },
+        -- Each pump's marker, as the mod garages' and Pay 'n' Sprays' (vana-shops) but white, with the
+        -- gas station icon standing in it (icons/radar_gasstn.png, pumps_client.lua).
+        pumpMarker = { size = 4, colour = { 255, 255, 255, 90 }, icon = "icons/radar_gasstn.png" },
     },
 
     -- Ambient cars (traffic, parked, random events) as they're made: tuneRandomly (tuning.lua).

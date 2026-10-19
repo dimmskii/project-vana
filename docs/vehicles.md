@@ -58,8 +58,13 @@ After the `gasoline.cs` CLEO mod (bytecode read with `SASCM.INI`):
   1 unit below 45 m/s, 2 to 85, 3 to 110, 4 to 140, 5 above, 1 in the air, none standing still.
   About 20 minutes of ordinary driving per tank.
 - Empty: the engine dies and won't start again.
-- Pumps: the mod's 16 gas station spots. Roll up to one (within 1.5 m) with less than 29000 in the
-  tank: the car is held while it fills, 300 units per $1 (a full tank is about $100), paid at the end.
+- Pumps: the mod's 16 gas station spots, exactly as its script checks them (`gasoline.txt`). Roll up
+  to one (within 1.5 m) with less than 29000 in the tank: the car is held while it fills, 300 units
+  per $1 (a full tank is about $100), paid at the end.
+- Each pump has a white marker, as the mod garages' and Pay 'n' Sprays' (4 m, `pumpMarker` in
+  `config/vehicles.lua`), with our gas station icon standing in it, turned to face you
+  (`icons/radar_gasstn.png`, `pumps_client.lua`; vanilla has no fuel icon). The icons' Paint.NET
+  sources sit next to them, with `radar_gasair` and `radar_gaswater` for aircraft and boat fuel later.
 - A car first driven by a player has 10-100% of a tank (the mod: anything from empty).
 - Bicycles, boats, aircraft and trains don't use fuel. Ped drivers don't burn fuel.
 - The gauge sits above the radar.
@@ -156,7 +161,8 @@ Traffic, parked cars and random-event cars get parts as they're made (`tuneRando
 
 ## Not yet done / known gaps
 
-- Pump blips: SA has no fuel radar icon; pumps could get a vana-map category once there's an icon.
+- Pump blips: vana-map draws vanilla's blip icons only; ours (`radar_gasstn`) would need a custom
+  radar icon (Neon's extended radar) before pumps get a vana-map category.
 - Not persisted (no server API): dirt level, nitro charge, the police scanner state.
 - Kept wrecks stay until they fall off every list.
 - Peds are not persisted (a kept traffic car loses its driver when it despawns).
