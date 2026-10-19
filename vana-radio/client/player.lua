@@ -213,6 +213,40 @@ addEventHandler("onClientRender", root, function()
     for e in pairs(emitters) do update(e, now) end
 end)
 
+-- /radiodebug: the game's own radio, the clock, and what each emitter plays against what's due.
+local debugOn = false
+addCommandHandler("radiodebug", function() debugOn = not debugOn end)
+
+addEventHandler("onClientRender", root, function()
+    if not debugOn then return end
+    local now = Radio.now()
+    local best
+    for _, s in ipairs(samples) do if not best or s[1] < best[1] then best = s end end
+    local n = getRadioPlaybackState()
+    local lines = {
+        ("native: channel %s, mode %s, station %s, track %s"):format(tostring(getRadioChannel()), tostring(n and n.mode),
+            tostring(n and n.station), tostring(n and n.trackId)),
+        ("clock: offset %s ms, best round trip %s ms"):format(offset and math.floor(offset) or "-", best and best[1] or "-"),
+    }
+    for e in pairs(emitters) do
+        local p = e.playing
+        local seg = p and p.seg
+        local line = ("%s station %s: "):format(e.is3D and "3D" or "2D", tostring(e.station))
+        if seg and now then
+            local archive, index = archiveOf(seg.track or 0)
+            line = line .. ("%s %s (%s #%s) due %.1fs / %.1fs"):format(seg.kind or "?", tostring(seg.track or seg.label),
+                tostring(archive), tostring(index), (now - seg.at) / 1000, seg.length / 1000)
+            if p.sound and isElement(p.sound) then line = line .. (", sound at %.1fs"):format(getSoundPosition(p.sound)) else line = line .. ", no sound" end
+        else
+            line = line .. (p and p.url or "nothing")
+        end
+        if e.loaded then line = line .. (" | next %s loaded"):format(tostring(e.loaded.seg.track)) end
+        lines[#lines + 1] = line
+    end
+    dxDrawText(table.concat(lines, "\n"), 21, 301, 0, 0, tocolor(0, 0, 0, 220), 1, "default-bold")
+    dxDrawText(table.concat(lines, "\n"), 20, 300, 0, 0, tocolor(255, 255, 255, 230), 1, "default-bold")
+end)
+
 addEventHandler("onClientResourceStart", resourceRoot, function()
     triggerServerEvent("vana-radio:hello", resourceRoot)
     -- A few quick pings for a first offset, then one every 30 s.

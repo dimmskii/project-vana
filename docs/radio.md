@@ -26,6 +26,8 @@ Music zones (speakers, dancing and the lowrider contest on real beat tracks) com
 ### In the car
 
 - The native radio is kept on channel 0 with its HUD hidden, and its own switching is cancelled.
+  MTA's channel alone isn't checked: the game's radio can play while it reads 0 (started by
+  `setRadioPlaybackState`), so the game's track manager is checked too (`getRadioPlaybackState`).
 - The radio keys (`radio_next` / `radio_previous`, the mouse wheel by default) step through the
   stations, then off. The driver chooses; passengers only when no player drives. The server checks
   the same rule (`vana-radio:tune`) and sets the car's station.
@@ -45,6 +47,8 @@ Music zones (speakers, dancing and the lowrider contest on real beat tracks) com
 
 - `getStationNow(id)` (server export): the track ID (or label) playing, ms into it, its kind and
   length; or, for a stream station, `false, 0, "stream", 0, url`.
+- `/radiodebug` (client): the game's own radio state, the clock offset, and each emitter's segment,
+  where it's due and where its sound is.
 - `radiostatus` (console): every station's current and upcoming segments, and how many clients
   are listening.
 

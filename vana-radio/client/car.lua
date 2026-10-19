@@ -29,8 +29,12 @@ addEventHandler("onClientPlayerRadioSwitch", localPlayer, function(channel)
     if channel ~= 0 and not switching then cancelEvent() end
 end)
 
+-- MTA's channel isn't enough: the game's radio can play with it at 0 (started by
+-- setRadioPlaybackState, as vana-vehicles' old sync did), so the game's own track manager is
+-- checked too (modes 0-2: starting, waiting to play, playing).
 local function nativeOff()
-    if getRadioChannel() ~= 0 then
+    local state = getRadioPlaybackState()
+    if getRadioChannel() ~= 0 or (state and state.mode and state.mode <= 2) then
         switching = true
         setRadioChannel(0)
         switching = false
