@@ -35,7 +35,7 @@ function MenuList.new(opts)
     return m
 end
 
-function MenuList:isOpen() return self.open == true end
+function MenuList:isOpen() return self.shown == true end
 
 function MenuList:step(dir)
     local n = #self.items
@@ -46,8 +46,8 @@ function MenuList:step(dir)
 end
 
 function MenuList:open()
-    if self.open then return end
-    self.open, self.first = true, nil
+    if self.shown then return end
+    self.shown, self.first = true, nil
     if not selectable(self.items[self.selected]) then self:step(1) end
     MenuInput.cursor(true)
     toggleAllControls(false, true, false)
@@ -58,8 +58,8 @@ function MenuList:open()
 end
 
 function MenuList:close()
-    if not self.open then return end
-    self.open = false
+    if not self.shown then return end
+    self.shown = false
     removeEventHandler("onClientRender", root, self.handlers.render)
     removeEventHandler("onClientKey", root, self.handlers.key)
     removeEventHandler("onClientCursorMove", root, self.handlers.move)
@@ -69,7 +69,7 @@ function MenuList:close()
     if self.onClose then self.onClose() end
 end
 
-function MenuList:toggle() if self.open then self:close() else self:open() end end
+function MenuList:toggle() if self.shown then self:close() else self:open() end end
 
 -- A choice's current index (the nearest value), or 1.
 local function current(item)

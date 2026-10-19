@@ -4,7 +4,9 @@
 
 A client's script errors and warnings normally show only in that player's own debug view. vana-core
 forwards them: `[client <name>] ERROR: file:line: message` (warnings likewise) in the server log, at
-most 20 per 10 s from a client (repeats within 5 s dropped) and 30 a minute per player. Always on.
+most 20 per 10 s from a client (repeats within 5 s dropped) and 30 a minute per player. Always on. vana-core
+starts second (after vana-lib), so a joining player's errors while the other resources load are
+caught too.
 
 ## Debug switches: `/vanadebug`
 

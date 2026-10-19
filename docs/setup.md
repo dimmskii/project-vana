@@ -61,6 +61,7 @@ Inside `<config>`, replace the stock `<resource>` lines with:
 
 ```xml
 <resource src="vana-lib" startup="1" protected="0" />
+<resource src="vana-core" startup="1" protected="0" />
 <resource src="vana-text" startup="1" protected="0" />
 <resource src="vana-controls" startup="1" protected="0" />
 <resource src="vana-data-player" startup="1" protected="0" />
@@ -88,7 +89,6 @@ Inside `<config>`, replace the stock `<resource>` lines with:
 <resource src="vana-activities" startup="1" protected="0" />
 <resource src="vana-wildlife" startup="1" protected="0" />
 <resource src="vana-player" startup="1" protected="0" />
-<resource src="vana-core" startup="1" protected="0" />
 ```
 
 For a private development server, keep it out of the public server lists:
