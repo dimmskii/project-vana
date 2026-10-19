@@ -18,6 +18,7 @@ local CONFIG = {
     stuckMs = 8000,     -- not moving this long (and not holding at a kerb): the target is sent again
     resends = 2,        -- after this many sends in vain, a fresh route from where the ped stands
     maxHoldMs = 60000,  -- the longest a ped waits at a kerb before walking somewhere else
+    followLost = 25,    -- a follower this far (m) from its slot leaves the group and walks on alone
 }
 
 local walkers = {}    -- ped -> walker
@@ -337,8 +338,16 @@ local function updateWalker(walker, players, signal, walkMsLeft)
         if not current or current.hold ~= hold or (current.x - sx) ^ 2 + (current.y - sy) ^ 2 > 6 then
             sendTarget(walker, { x = sx, y = sy, z = lz, hold = hold })
         end
-        -- A follower left behind (far from its slot, not moving) gets its slot again.
+        -- A follower left behind (far from its slot, not moving) gets its slot again; one that's lost its
+        -- leader for good (FOLLOW_LOST m behind) walks on alone.
         local now = getTickCount()
+        if (x - sx) ^ 2 + (y - sy) ^ 2 > CONFIG.followLost ^ 2 then
+            debugLog(("follower %s %.0f m behind its leader: walks on alone"):format(tostring(ped):sub(-8), math.sqrt((x - sx) ^ 2 + (y - sy) ^ 2)))
+            walker.leader, walker.target = nil, nil
+            walker.route = routeFromHere(ped)
+            if not walker.route then return removeWalker(walker) end
+            return
+        end
         if getDistanceBetweenPoints2D(x, y, walker.lastX, walker.lastY) > 1.5 or (x - sx) ^ 2 + (y - sy) ^ 2 < 16 then
             walker.lastX, walker.lastY, walker.lastMoved = x, y, now
         elseif now - walker.lastMoved > CONFIG.stuckMs and now - (walker.retried or 0) > CONFIG.stuckMs then

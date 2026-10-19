@@ -119,7 +119,7 @@ Road crossings use the intersection flags on the links:
 - **The target can't be reached:** not moving 1.5 m in 8 s, the server sends the target again, and
   after two sends a fresh route from where the ped stands. Waiting at a kerb counts for up to 60 s,
   then the ped walks somewhere else. A follower (couples, gangs) more than 4 m from its slot gets its
-  slot sent again the same way.
+  slot sent again the same way; one 25 m behind leaves the group and walks on alone.
 
 A ped hanging in the air is put back on the ground under it; with no ground loaded there and out of
 view, it's removed. With `vana-peds:orders` on (docs/debug.md), every one of these is logged.
