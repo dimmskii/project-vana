@@ -11,4 +11,5 @@
     <file src="lib/map_data.lua" />
     <file src="lib/map_points.lua" />
     <file src="lib/text.lua" />
+    <file src="lib/prompts.lua" />
 </meta>

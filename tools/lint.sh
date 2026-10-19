@@ -10,6 +10,12 @@ EVENT_VARS="source client root resourceRoot localPlayer resource sourceResource 
 status=0
 cd "$ROOT"
 "$HERE/sync-libs.sh" --check || status=1
+# Modules imported on the client must be served to clients: a <file> in vana-lib's meta.xml.
+for lib in $(find vana-* -name lib.lua); do
+    for m in $(grep "local modules" "$lib" | sed 's/ or .*//' | grep -oE '"[a-z_]+"' | tr -d '"'); do
+        grep -q "<file src=\"lib/$m.lua\"" vana-lib/meta.xml || { echo "$lib imports $m on the client, but vana-lib/meta.xml doesn't serve lib/$m.lua"; status=1; }
+    done
+done
 resources=("$@")
 [[ ${#resources[@]} -eq 0 ]] && resources=($(ls -d vana-*/ | tr -d /))
 for res in "${resources[@]}"; do
