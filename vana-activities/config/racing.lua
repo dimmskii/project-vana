@@ -40,7 +40,7 @@ Racing = {
     -- as you win them, paying $500, $1000, $2000.
     chiliad = { entry = At("Racing.chiliad.entry"), bike = 510, racers = 6,
                 names = { "MTROUT1", "MTROUT2", "MTROUT3" }, wins = { "MTWIN1", "MTWIN2", "MTWIN3" }, prizes = { 500, 1000, 2000 } },
-    -- BMX and NRG-500 stunt courses (vanilla STUNT): ride the bike into the marker; collect every corona
+    -- BMX and NRG-500 stunt courses (vanilla STUNT): ride the bike onto the marker, enter/exit; collect every corona
     -- before the clock runs out (11 s to start, +10 s per corona). First completion pays $1000.
     stunts = {
         entries = { bmx = At("Racing.stunts.entries.bmx"), nrg = At("Racing.stunts.entries.nrg") },

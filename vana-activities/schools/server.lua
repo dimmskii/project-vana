@@ -1,4 +1,4 @@
--- Schools (vanilla DSKOOL / BSKOOL / BOAT / DESERT5): walk into the school's marker to pick a test.
+-- Schools (vanilla DSKOOL / BSKOOL / BOAT / DESERT5): press enter/exit on the school's marker to pick a test.
 -- Tests unlock in order (pass one at 70%+ for the next), run in the player's private dimension, and are
 -- judged on the player's client (schools/client.lua), which knows the vehicle best; the server keeps
 -- the best scores, medals, skill gains and vanilla's reward vehicles. Progress: "school.<school>.<test>".
@@ -244,11 +244,9 @@ addEventHandler("onResourceStart", resourceRoot, function()
         if (m.interior or 0) == 0 then MapPoints.set("school:" .. key, { category = "school", x = m[1], y = m[2], z = m[3], label = school.title }) end
         local marker = createMarker(m[1], m[2], m[3] - 0.1, "cylinder", 1.2, 255, 200, 0, 120)
         setElementInterior(marker, m.interior or 0)
-        addEventHandler("onMarkerHit", marker, function(player, matching)
-            if matching and getElementType(player) == "player" and not getPedOccupiedVehicle(player) and not Activity.of(player) then
-                triggerClientEvent(player, "vana-school:menu", resourceRoot, key, school.title, menuFor(player, key))
-            end
-        end)
+        Prompts.add(marker, { text = "take a test", use = function(player)
+            if not Activity.of(player) then triggerClientEvent(player, "vana-school:menu", resourceRoot, key, school.title, menuFor(player, key)) end
+        end })
     end
 end)
 

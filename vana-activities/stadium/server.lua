@@ -172,11 +172,9 @@ addEventHandler("onResourceStart", resourceRoot, function()
     local e = B.entry
     local m = createMarker(e.x, e.y, e.z - 0.1, "cylinder", 1.5, 255, 200, 0, 120)
     MapPoints.set("bloodring", { category = "stadium", x = e.x, y = e.y, z = e.z })
-    addEventHandler("onMarkerHit", m, function(player, matching)
-        if matching and getElementType(player) == "player" and not getPedOccupiedVehicle(player) and not Activity.of(player) then
-            Activity.start(player, "bloodring")
-        end
-    end)
+    Prompts.add(m, { text = "enter the Blood Ring", use = function(player)
+        if not Activity.of(player) then Activity.start(player, "bloodring") end
+    end })
 end)
 
 Activity.test("stadium", function()

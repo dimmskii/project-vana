@@ -35,7 +35,7 @@ Prices and stock come from the retail `shopping.dat`, and names from the retail 
 - **Names:** each item's nametag in `shopping.dat` is a GXT key (`VESTA` is "Black Tank", `PISTOL`
   is "9mm"). `vana-shops/gxt.lua` reads the GXT's MAIN table, whose keys are JAMCRC32 hashes, so
   menus show exactly the vanilla names.
-- **Prices:** `shopping.dat`'s, overridable per item in `config/shops.lua` (`prices`). Each shop interior has a point where customers stand (`[data]/vana-data-shops/shops.map`): walk into
+- **Prices:** `shopping.dat`'s, overridable per item in `config/shops.lua` (`prices`). Each shop interior has a point where customers stand (`[data]/vana-data-shops/shops.map`): press enter/exit in
 its orange marker to open the menu.
 
 | Shop | Stock | Effect |
@@ -181,7 +181,7 @@ The equipment is seeded from `gta_int.img` by `tools/seed/seed_gym.py` into
 gyms and Madd Dogg's home gym. Vanilla's gym scripts (`GYMBIKE`, `GYMBENC`, `GYMTREA`, `GYMDUMB` in
 `main.scm`) are script brains on those objects; the mats are the dumbbell stations.
 
-- **Working out:** walk into a machine's marker to get on (vanilla `GYMNASIUM`, `benchpress` and
+- **Working out:** press enter/exit on a machine's marker to get on (vanilla `GYMNASIUM`, `benchpress` and
   `freeweights` animations, played for their full length). Tap the sprint key to fill the power
   bar; a full bar is one rep. F or Backspace gets off.
 - **Props** (`props.lua`, `props` in `gym.lua`): as in vanilla, the barbell rests on the bench and

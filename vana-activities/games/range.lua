@@ -1,4 +1,4 @@
--- Ammu-Nation shooting range (vanilla SHRANGE): walk into the range at any of the four Ammu-Nations
+-- Ammu-Nation shooting range (vanilla SHRANGE): press enter/exit at the range at any of the four Ammu-Nations
 -- with a range and take the next weapon challenge (pistol, micro SMG, shotgun, AK47): three rounds against
 -- two rivals, judged on your client (games/range_client.lua). Passing raises that weapon's skill; all
 -- four earn vanilla's fast reload (recorded: MTA has no control for it).
@@ -71,8 +71,8 @@ addEventHandler("onResourceStart", resourceRoot, function()
     for i, r in ipairs(G.ranges) do
         local m = createMarker(r.entry[1], r.entry[2], r.entry[3] - 0.1, "cylinder", 1.2, 255, 200, 0, 120)
         setElementInterior(m, r.interior)
-        addEventHandler("onMarkerHit", m, function(player, matching)
-            if not matching or getElementType(player) ~= "player" or Activity.of(player) then return end
+        Prompts.add(m, { text = "use the shooting range", use = function(player)
+            if Activity.of(player) then return end
             local items = {}
             for wi, w in ipairs(G.weapons) do
                 local done = Activity.progress(player, "range." .. wi)
@@ -82,7 +82,7 @@ addEventHandler("onResourceStart", resourceRoot, function()
             Activity.menu(player, Activity.text("ANR_1"), items, function(p, wi)
                 if not Activity.of(p) then Activity.start(p, "range", i, wi) end
             end)
-        end)
+        end })
     end
 end)
 

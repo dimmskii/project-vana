@@ -57,5 +57,8 @@ Each layer has one home; don't scatter windows.
 - **One visual style.** Shared colours, fonts and window chrome come from one place. Prefer
   diegetic, vanilla-style presentation (HUD-style text, the phone, in-world markers) over
   generic windows for gameplay.
+- **Nothing starts by walking or driving into it.** Markers that start an activity, open a shop or
+  take a car into a garage show "Press F to ..." and wait for the enter/exit key (vana-lib's
+  `prompts`), as vanilla's tables and machines do. Entrances (doors) stay walk-through, as vanilla's.
 - **In-world interactions stay in-world.** Shops, food, gyms, clothes and similar use vanilla
   markers and menus, not F1 buttons.

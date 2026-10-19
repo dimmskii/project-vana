@@ -1,4 +1,4 @@
--- Quarry (vanilla QUARRY): walk into the marker at the Hunter Quarry site office. Seven missions in
+-- Quarry (vanilla QUARRY): press enter/exit on the marker at the Hunter Quarry site office. Seven missions in
 -- turn, each paying more (vanilla $500 .. $10000): the cop's body, clearing rocks, bombs, burning the
 -- bombers, explosives to the airstrip, the spill on the tracks, and the thieves. All seven earn
 -- vanilla's reward, a dumper and a bulldozer always at the quarry. Pushed objects only move on the
@@ -361,11 +361,9 @@ addEventHandler("onResourceStart", resourceRoot, function()
     local p = Q.start
     local m = createMarker(p[1], p[2], p[3] - 1, "cylinder", 1.5, 255, 200, 0, 120)
     MapPoints.set("quarry", { category = "quarry", x = p[1], y = p[2], z = p[3] })
-    addEventHandler("onMarkerHit", m, function(player, matching)
-        if matching and getElementType(player) == "player" and not getPedOccupiedVehicle(player) and not Activity.of(player) then
-            Activity.start(player, "quarry")
-        end
-    end)
+    Prompts.add(m, { text = "start quarry work", use = function(player)
+        if not Activity.of(player) then Activity.start(player, "quarry") end
+    end })
 end)
 
 Activity.test("quarry", function()

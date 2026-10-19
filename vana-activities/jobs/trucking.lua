@@ -1,4 +1,4 @@
--- Trucking (vanilla TRUCK): walk into the marker at RS Haul. Hook up the trailer and deliver the load to
+-- Trucking (vanilla TRUCK): press enter/exit on the marker at RS Haul. Hook up the trailer and deliver the load to
 -- one of vanilla's drop-offs; the load type decides the catch (fragile, timed, hot). Eight deliveries buy
 -- you the depot, which then earns revenue.
 local T = Jobs.trucking
@@ -10,11 +10,9 @@ local function startMarker()
     local s = T.start
     local m = createMarker(s[1], s[2], s[3] - 0.1, "cylinder", 1.5, 255, 200, 0, 120)
     MapPoints.set("trucking", { category = "trucking", x = s[1], y = s[2], z = s[3] })
-    addEventHandler("onMarkerHit", m, function(player, matching)
-        if matching and getElementType(player) == "player" and not getPedOccupiedVehicle(player) and not Activity.of(player) then
-            Activity.start(player, "trucking")
-        end
-    end)
+    Prompts.add(m, { text = "start trucking", use = function(player)
+        if not Activity.of(player) then Activity.start(player, "trucking") end
+    end })
     return m
 end
 

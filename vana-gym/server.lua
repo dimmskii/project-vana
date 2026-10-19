@@ -4,7 +4,6 @@
 local sessions = {}   -- player -> { machine, index, kind, started, lastRep, leaving }
 local inUse = {}      -- machine -> player
 local gains = {}      -- serial -> { [stat] = { hourStart, gained } }
-local markers = {}    -- marker -> machine
 
 local function savePlayer(player)
     local res = getResourceFromName("vana-player")
@@ -104,12 +103,6 @@ end)
 addEvent("vana-gym:stop", true)
 addEventHandler("vana-gym:stop", resourceRoot, function() stop(client) end)
 
-local function onMarkerHit(player, matching)
-    local index = markers[source]
-    if not matching or not index or getElementType(player) ~= "player" or getPedOccupiedVehicle(player) then return end
-    if getElementInterior(player) ~= GymEquipment[index].interior then return end
-    start(player, index)
-end
 
 addEventHandler("onResourceStart", resourceRoot, function()
     for index, machine in ipairs(GymEquipment) do
@@ -117,8 +110,8 @@ addEventHandler("onResourceStart", resourceRoot, function()
             local x, y = standPoint(machine)
             local marker = createMarker(x, y, machine.z - 0.1, "cylinder", 1.0, 255, 120, 0, 90)
             setElementInterior(marker, machine.interior)
-            markers[marker] = index
-            addEventHandler("onMarkerHit", marker, onMarkerHit)
+            -- Press enter/exit on the marker to get on (vana-lib's prompts).
+            Prompts.add(marker, { text = "use the " .. Gym.machines[machine.kind].name:lower(), use = function(player) start(player, index) end })
         end
     end
 end)

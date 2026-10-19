@@ -1,4 +1,4 @@
--- BMX and NRG-500 stunt challenges (vanilla STUNT): ride the course's bike into its marker, then collect
+-- BMX and NRG-500 stunt challenges (vanilla STUNT): ride the course's bike onto its marker and press enter/exit, then collect
 -- every corona before the clock runs out: 11 s to start, +10 s for each corona. First completion pays
 -- $1000; best times are saved ("stunt.<course>.time").
 local S = Racing.stunts
@@ -47,10 +47,10 @@ Activity.register("stunt", {
 addEventHandler("onResourceStart", resourceRoot, function()
     for key, p in pairs(S.entries) do
         local m = createMarker(p[1], p[2], p[3] - 0.5, "cylinder", 4, 255, 200, 0, 110)
-        addEventHandler("onMarkerHit", m, function(player, matching)
-            local v = matching and getElementType(player) == "player" and getPedOccupiedVehicle(player)
+        Prompts.add(m, { text = "start the stunt challenge", vehicle = true, use = function(player)
+            local v = getPedOccupiedVehicle(player)
             if v and getElementModel(v) == S[key].bike and not Activity.of(player) then Activity.start(player, "stunt", key) end
-        end)
+        end })
     end
 end)
 

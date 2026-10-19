@@ -1,4 +1,4 @@
--- Race tournament (vanilla CPRACE): walk into an entry marker and pick a race. Street, bike and air races
+-- Race tournament (vanilla CPRACE): press enter/exit on an entry marker and pick a race. Street, bike and air races
 -- and the 8-Track and Dirt Track, against vanilla's line-ups (air races are against the clock), in your
 -- private dimension. Opponents are driven by your client (races/client.lua); positions and checkpoints
 -- are kept here. First wins pay vanilla's prizes; best results and times are saved ("race.<n>.*").
@@ -248,19 +248,17 @@ addEventHandler("onResourceStart", resourceRoot, function()
     local e = C.chiliad.entry
     local cm = createMarker(e.x, e.y, e.z - 0.5, "cylinder", 4, 255, 200, 0, 110)
     MapPoints.set("chiliad", { category = "race", x = e.x, y = e.y, z = e.z })
-    addEventHandler("onMarkerHit", cm, function(player, matching)
-        local v = matching and getElementType(player) == "player" and getPedOccupiedVehicle(player)
+    Prompts.add(cm, { text = "race down Mount Chiliad", vehicle = true, use = function(player)
+        local v = getPedOccupiedVehicle(player)
         if v and getElementModel(v) == C.chiliad.bike and not Activity.of(player) then openChiliad(player) end
-    end)
+    end })
     for i, car in ipairs(C.stadiumCars) do OwnedCars.define("stadium" .. i, car) end
     for _, entry in ipairs(C.entries) do
         local m = createMarker(entry.x, entry.y, entry.z - 0.1, "cylinder", 1.5, 255, 200, 0, 120)
         MapPoints.set(("race:%d:%d"):format(entry.x, entry.y), { category = entry.races[1] >= 25 and "stadium" or "race", x = entry.x, y = entry.y, z = entry.z })
-        addEventHandler("onMarkerHit", m, function(player, matching)
-            if matching and getElementType(player) == "player" and not getPedOccupiedVehicle(player) and not Activity.of(player) then
-                openMenu(player, entry)
-            end
-        end)
+        Prompts.add(m, { text = "race", use = function(player)
+            if not Activity.of(player) then openMenu(player, entry) end
+        end })
     end
 end)
 

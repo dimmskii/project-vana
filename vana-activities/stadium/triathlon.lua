@@ -1,4 +1,4 @@
--- Beat the Cock! (vanilla TRIA): walk into the start on Santa Maria Beach or at Fleischberg. Run into the
+-- Beat the Cock! (vanilla TRIA): press enter/exit at the start on Santa Maria Beach or at Fleischberg. Run into the
 -- water, swim the course, take the bicycle waiting at the shore, ride, then leave the bike and run to the
 -- finish. Ours: you race the clock (each leg's length at a set pace) instead of vanilla's 12 athletes.
 -- Winning pays vanilla's $10000 / $20000; best times are saved ("triathlon.<course>.*").
@@ -96,11 +96,9 @@ addEventHandler("onResourceStart", resourceRoot, function()
     for key, p in pairs(T.entries) do
         local m = createMarker(p[1], p[2], p[3] - 1, "cylinder", 3, 255, 200, 0, 110)
         MapPoints.set("triathlon:" .. key, { category = "race", x = p[1], y = p[2], z = p[3] })
-        addEventHandler("onMarkerHit", m, function(player, matching)
-            if matching and getElementType(player) == "player" and not getPedOccupiedVehicle(player) and not Activity.of(player) then
-                Activity.start(player, "triathlon", key)
-            end
-        end)
+        Prompts.add(m, { text = "start the triathlon", use = function(player)
+            if not Activity.of(player) then Activity.start(player, "triathlon", key) end
+        end })
     end
 end)
 

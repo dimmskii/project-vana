@@ -1,5 +1,5 @@
 -- Shops: Ammu-Nation, fast food, clothes (prices and stock from the retail shopping.dat) and our
--- 24/7 misc counters (config/shops.lua). Walk into a shop's marker to open its menu; every
+-- 24/7 misc counters (config/shops.lua). Press enter/exit on a shop's marker to open its menu; every
 -- purchase is checked and applied here, then saved (vana-player).
 local prices = {}   -- section ("weapons", "food", "clothes") -> lowercase item name -> fields
 local stock = {}    -- lowercase shop section -> { type, items = { names } }
@@ -365,11 +365,15 @@ end)
 addEvent("vana-shops:close", true)
 addEventHandler("vana-shops:close", resourceRoot, function() closeMenu(client) end)
 
-local function onMarkerHit(player, matching)
-    if not matching or getElementType(player) ~= "player" or getPedOccupiedVehicle(player) or open[player] then return end
-    local shopName = markers[source]
+-- What pressing enter/exit at a shop point does (vana-lib's prompts: nothing opens by walking in).
+local PROMPTS = { weapons = "buy weapons", food = "order food", clothes = "buy clothes", misc = "shop",
+                  closet = "change clothes", fighting = "learn a fighting style", hair = "get a haircut", tattoo = "get a tattoo" }
+
+local function use(player, marker)
+    if open[player] then return end
+    local shopName = markers[marker]
     local point = ShopPoints[shopName]
-    if not point or getElementInterior(player) ~= point.interior then return end
+    if not point then return end
     local categories = point.kind == "tattoo" and ShopConfig.tattooCategories or ShopConfig.clothesCategories
     openMenu(player, shopName, point.kind, categories)
 end
@@ -385,7 +389,7 @@ local function placeMarker(shopName, point)
     setElementInterior(marker, point.interior)
     markers[marker] = shopName
     pointMarkers[shopName] = marker
-    addEventHandler("onMarkerHit", marker, onMarkerHit)
+    Prompts.add(marker, { text = PROMPTS[point.kind] or "shop", use = function(player) use(player, marker) end })
 end
 
 addEventHandler("onResourceStart", resourceRoot, function()

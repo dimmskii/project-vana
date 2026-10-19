@@ -171,17 +171,15 @@ addEventHandler("onResourceStart", resourceRoot, function()
     for _, f in ipairs(D.floors) do
         local m = createMarker(f.x, f.y, f.z - 0.1, "cylinder", 1.5, 255, 120, 220, 110)
         setElementInterior(m, f.interior)
-        addEventHandler("onMarkerHit", m, function(player, matching)
-            if matching and getElementType(player) == "player" and not getPedOccupiedVehicle(player) and not Activity.of(player) then
-                Activity.start(player, "dance", floorOf(player) or f)
-            end
-        end)
+        Prompts.add(m, { text = "dance", use = function(player)
+            if not Activity.of(player) then Activity.start(player, "dance", floorOf(player) or f) end
+        end })
     end
-    -- The lowrider contest: any car with hydraulics (the mod garages fit them to all) into the marker, then the wager.
+    -- The lowrider contest: any car with hydraulics (the mod garages fit them to all) onto the marker and enter/exit, then the wager.
     local m = createMarker(L.x, L.y, L.z - 0.5, "cylinder", 5, 255, 200, 0, 100)
     MapPoints.set("lowrider", { category = "lowrider", x = L.x, y = L.y, z = L.z })
-    addEventHandler("onMarkerHit", m, function(player, matching)
-        local v = matching and getElementType(player) == "player" and getPedOccupiedVehicle(player)
+    Prompts.add(m, { text = "enter the lowrider contest", vehicle = true, use = function(player)
+        local v = getPedOccupiedVehicle(player)
         if not v or Activity.of(player) then return end
         if getVehicleUpgradeOnSlot(v, 9) ~= L.hydraulics then
             return triggerClientEvent(player, "vana-activities:say", resourceRoot, "You must have hydraulics for this.", 4000)
@@ -199,5 +197,5 @@ addEventHandler("onResourceStart", resourceRoot, function()
             takePlayerMoney(p, amounts[i])
             Activity.start(p, "lowrider", amounts[i])
         end, "Choose your wager   Enter: bet   Backspace: leave")
-    end)
+    end })
 end)

@@ -81,7 +81,7 @@ Jobs = {
         radius = 10, outMs = 10000,
     },
     trucking = {
-        start = At("Jobs.trucking.start"),       -- RS Haul, Flint County: walk into the marker
+        start = At("Jobs.trucking.start"),       -- RS Haul, Flint County: enter/exit on the marker
         truckSpot = At("Jobs.trucking.truckSpot"), trailerSpot = At("Jobs.trucking.trailerSpot"),
         trucks = { 514, 403, 515 }, trailers = { 584, 435, 450, 591 },
         -- Vanilla's drop-offs.
