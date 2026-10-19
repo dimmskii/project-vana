@@ -420,6 +420,19 @@ local function reportCrime(player, crime, x, y, z)
     pcall(function() exports["vana-services"]:reportCrime(player, crime, x, y, z) end)
 end
 
+-- Our pedestrians of a kind ("civilian", "cop", "gang", or nil for any) within radius of a point,
+-- not already in an encounter.
+function findPeds(x, y, z, radius, kind)
+    local list = {}
+    for ped, w in pairs(walkers) do
+        if (not kind or w.kind == kind) and not w.encounter and isElement(ped) and not isPedDead(ped) then
+            local px, py, pz = getElementPosition(ped)
+            if getDistanceBetweenPoints3D(x, y, z, px, py, pz) < radius then list[#list + 1] = ped end
+        end
+    end
+    return list
+end
+
 -- Lets other resources (police response) send one of our peds into an encounter.
 function engagePed(ped, mode, target)
     local walker = walkers[ped]

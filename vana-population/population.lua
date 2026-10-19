@@ -174,6 +174,19 @@ local function ped(kind, model, extra)
     return spec
 end
 
+-- A ped for a scripted scene (vana-services world events): "gang" (a member of `gang`, armed and
+-- with the weapon drawn) or "criminal" (the place's street dealers).
+function Population.scenePed(profile, kind, gang)
+    if kind == "gang" and Gangs[gang] then
+        local model = randomFrom(groupModels(GANG_GROUP_BASE + Gangs[gang].id, profile.city))
+        local armed = {}
+        for _, weapon in ipairs(Gangs[gang].weapons) do if weapon ~= 0 then armed[#armed + 1] = weapon end end
+        return model and ped("gang", model, { gang = gang, weapon = randomFrom(armed), weaponDrawn = true })
+    end
+    local model = randomFrom(groupModels(DEALER_GROUP, profile.city))
+    return model and ped("civilian", model)
+end
+
 -- A ped to add near a player. counts: { civilian, cop, dealer, gang, gangs = { [gang] = n } }.
 -- Returns { kind, model, gang, group, weapon } or false when the area is full.
 function Population.pickPed(profile, counts)

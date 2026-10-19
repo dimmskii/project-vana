@@ -79,8 +79,10 @@ an offset from it, in `config/keepers.lua`; the keeper models are vanilla's.
   object, which MTA can't do yet, so the kit stays still.
 - **Ammu-Nation:** the clerk lifts the highlighted weapon (`SHP_1H/2H/Ar_Lift`, as vanilla picks
   per weapon) and puts it back to show the next.
-- **Fast food:** the server lifts the highlighted meal on its tray; buying it, CJ eats at the counter
-  (`EAT_Burger/Pizza/Chicken`) and gets thanked on the way out.
+- **Fast food:** the server lifts the highlighted meal on its tray. As in vanilla, CJ eats on the way
+  out after buying (`EAT_Burger/Pizza/Chicken`, 5 s) and gets thanked. From the 11th item in a game
+  day he throws up instead (`EAT_Vomit_P` with the `puke` effect, 8 s; the keeper recoils with
+  `EAT_Vomit_SK`): that visit's health and fat are undone and 10 more health is lost.
 - **Clothes:** CJ steps into the changing room (`CLO_In`), poses per apparel category, `CLO_Buy` on
   a purchase and steps out when done; hats and glasses use vanilla's hat camera. Each chain's
   changing room door is placed as vanilla does and hidden while CJ passes it (vanilla animates it).

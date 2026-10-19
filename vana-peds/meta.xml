@@ -9,4 +9,5 @@
     <script src="client.lua" type="client" />
     <export function="adoptPed" type="server" />
     <export function="engagePed" type="server" />
+    <export function="findPeds" type="server" />
 </meta>

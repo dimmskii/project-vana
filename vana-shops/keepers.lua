@@ -5,6 +5,22 @@ local staff = {}    -- shopName -> ped
 local props = {}    -- shopName -> object (tattoo kit, changing room door)
 local serving = {}  -- shopName -> player
 local customers = {} -- player -> { shop, layout, part, token }
+local meals = {}     -- player -> ticks of food bought (the last game day's)
+
+-- Vanilla junk food: CJ eats on the way out (EAT_Burger/Pizza/Chicken, 5 s), and from the 11th item
+-- in a game day throws it all back up instead (EAT_Vomit_P, 8 s): that meal's health and fat are
+-- undone, and 10 health more is lost.
+local EAT_MS, VOMIT_MS, MEALS_PER_DAY = 5000, 8000, 10
+
+local function mealsToday(player)
+    local day = 24 * 60 * getMinuteDuration()
+    local list, now = meals[player] or {}, getTickCount()
+    for i = #list, 1, -1 do
+        if now - list[i] > day then table.remove(list, i) end
+    end
+    meals[player] = list
+    return list
+end
 
 local function spot(shopName, point)
     local o = Keepers[shopName].offset
@@ -193,7 +209,8 @@ Flows.weapons = {
 -- Fast food: the server lifts the highlighted meal on its tray; buying it, CJ eats at the counter.
 Flows.food = {
     idle = function(ped) stand(ped) end,
-    sit = function(player, ped)
+    sit = function(player, ped, c)
+        c.health0, c.fat0 = getElementHealth(player), getPedStat(player, 21)
         play(ped, "FOOD", "SHP_Tray_In")
         later(player, 670, function() play(ped, "FOOD", "SHP_Tray_Pose", true) end)
     end,
@@ -220,15 +237,32 @@ Flows.food = {
         later(player, delay + 2170, function() play(ped, "FOOD", "SHP_Tray_Lift_Loop", true) end)
     end,
     buy = function(player, ped, entry, c)
-        setPedAnimation(player, "FOOD", Keepers[c.shop].eat, -1, false, false, false, false)
+        c.bought = (c.bought or 0) + 1
+        table.insert(mealsToday(player), getTickCount())
     end,
     leave = function(player, ped, done, c, shopName)
-        done()
-        local delay = 0
+        local delay = 0 -- the keeper puts things away after reacting to a customer being sick
+        if c.bought and isElement(player) then
+            local vomit = #mealsToday(player) > MEALS_PER_DAY
+            if vomit then
+                setElementHealth(player, math.max(10, (c.health0 or getElementHealth(player)) - 10))
+                if c.fat0 then setPedStat(player, 21, c.fat0) end
+                setPedAnimation(player, "FOOD", "EAT_Vomit_P", -1, false, false, false, false)
+                play(ped, "FOOD", "EAT_Vomit_SK")
+                local x, y, z = getElementPosition(player)
+                triggerClientEvent(root, "vana-shops:puke", resourceRoot, player, x, y, z)
+            else
+                setPedAnimation(player, "FOOD", Keepers[shopName].eat, -1, false, false, false, false)
+            end
+            if vomit then delay = VOMIT_MS end
+            setTimer(done, vomit and VOMIT_MS or EAT_MS, 1)
+        else
+            done()
+        end
         if c.holding then
-            play(ped, "FOOD", "SHP_Tray_Return")
-            afterLeaving(shopName, 1330, function() hold(ped, nil); play(ped, "FOOD", "SHP_Tray_Lift_Out") end)
-            delay = 1830
+            afterLeaving(shopName, delay, function() play(ped, "FOOD", "SHP_Tray_Return") end)
+            afterLeaving(shopName, delay + 1330, function() hold(ped, nil); play(ped, "FOOD", "SHP_Tray_Lift_Out") end)
+            delay = delay + 1830
         end
         afterLeaving(shopName, delay, function() play(ped, "FOOD", "SHP_Thank") end)
         afterLeaving(shopName, delay + 1170, function() Flows.food.idle(ped) end)
@@ -380,3 +414,5 @@ function keeperStatus()
     end
     return alive, total
 end
+
+addEventHandler("onPlayerQuit", root, function() meals[source] = nil end)

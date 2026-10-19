@@ -40,3 +40,13 @@ addEventHandler("onClientPedsProcessed", root, function()
         if b then setElementMatrix(object, b) end
     end
 end)
+
+-- A customer being sick at a fast food counter (keepers.lua): vanilla's PUKE effect at their mouth.
+addEvent("vana-shops:puke", true)
+addEventHandler("vana-shops:puke", resourceRoot, function(player, x, y, z)
+    if not isElement(player) or not isElementStreamedIn(player) then return end
+    local _, _, rz = getElementRotation(player)
+    local h = math.rad(rz)
+    local fx = createEffect("puke", x - math.sin(h) * 0.35, y + math.cos(h) * 0.35, z + 0.6, -90, 0, rz)
+    if fx then setTimer(function() if isElement(fx) then destroyElement(fx) end end, 4000, 1) end
+end)

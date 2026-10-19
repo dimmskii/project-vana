@@ -86,6 +86,27 @@ minute; the player's own car doesn't count (`Firefighters` in `config/wanted.lua
 
 Not yet: fires that aren't wrecks (burning peds, molotovs, grass).
 
+## World events (`events.lua`)
+
+Random scenes near players (ours: vanilla has the ingredients, not the scenes), staged with the
+ordinary systems. Every `checkEveryMs` each player gets one with `chance`, between `distance` metres
+away and never closer than `minToAnyone` to any player, at most `maxActive` at once
+(`config/events.lua`):
+
+- **Mugging:** a street criminal (the place's dealers) with a knife, bat or fists goes for a
+  pedestrian, who answers as anyone attacked would; cops walking nearby step in.
+- **Car theft:** a criminal breaks into a parked car and drives off in it as traffic (in a panic).
+- **Shootout:** two crews of rival gangs (`rivals` in vana-population) open fire on each other; the
+  usual gang backup applies.
+- **Car fire:** a parked car's engine catches fire, burns out and explodes; a fire truck always comes.
+- **Street fire:** a fire in the street, kept alight (GTA fires burn out, and are local to each
+  client) until the firefighters have hosed it down.
+- **Collapse:** a pedestrian collapses; an ambulance always comes, and the medics may revive them.
+- **Police chase:** a criminal's car tears through traffic with a police car after it; once it stops
+  (or the criminals are on foot) the cops get out and fight, the criminals fight back.
+
+`/event [kind]` starts one near you (restricted: `command.event`); `eventtest` checks the config.
+
 ## Parked cars (`vana-parked`)
 
 Vanilla car generators (`CCarGenerator`), seeded by `tools/seed/seed_cargens.py` into

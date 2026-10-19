@@ -215,3 +215,10 @@ addEventHandler("onClientPedDamage", root, function(attacker, weapon)
 end)
 
 addEventHandler("onClientElementDestroy", root, function() reportedDown[source], lastHit[source] = nil, nil end)
+
+-- World events: a fire burning at a spot (vana-services events.lua) until the server puts it out.
+-- GTA fires are local to each client, so the server tells everyone near.
+addEvent("vana-services:fire", true)
+addEventHandler("vana-services:fire", resourceRoot, function(x, y, z, size, burning)
+    if burning then createFire(x, y, z, size) else extinguishFire(x, y, z, size * 2) end
+end)

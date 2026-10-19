@@ -669,6 +669,7 @@ local function updateCallout(r, players, now)
                     end
                 end
             end
+            if r.onDone then r.onDone(r) end
             regroup(r)
         end
     elseif r.state == "regrouping" then
@@ -680,9 +681,9 @@ local function updateCallout(r, players, now)
     end
 end
 
--- One medic or fire call per area at a time.
-local function callout(kind, rules, x, y, z, fields)
-    if math.random() >= rules.callChance then return end
+-- One medic or fire call per area at a time. force: always answered (world events), still one per area.
+local function callout(kind, rules, x, y, z, fields, force)
+    if not force and math.random() >= rules.callChance then return end
     local players = eligiblePlayers()
     local owner = nearestPlayer(x, y, z, players, rules.callRadius)
     if not owner then return end
@@ -700,6 +701,7 @@ local function callout(kind, rules, x, y, z, fields)
         for k, v in pairs(fields) do r[k] = v end
         recentCalls[#recentCalls + 1] = { kind = kind, x = x, y = y, z = z, at = now }
     end
+    return r
 end
 
 addEventHandler("onPedWasted", root, function(_, killer, weapon)
@@ -719,7 +721,7 @@ addEventHandler("onPedWasted", root, function(_, killer, weapon)
     end
 
     if getElementData(ped, "vana:service") then return end
-    callout("medics", Medics, x, y, z, { body = ped })
+    callout("medics", Medics, x, y, z, { body = ped }, getElementData(ped, "vana:eventVictim"))
 end)
 
 addEventHandler("onVehicleExplode", root, function()
@@ -728,7 +730,7 @@ addEventHandler("onVehicleExplode", root, function()
     for _, occupant in pairs(getVehicleOccupants(source) or {}) do
         if getElementType(occupant) == "player" then return end -- the player's own car: no audience
     end
-    callout("fire", Firefighters, x, y, z, { site = { x = x, y = y, z = z } })
+    callout("fire", Firefighters, x, y, z, { site = { x = x, y = y, z = z } }, getElementData(source, "vana:eventFire"))
 end)
 
 ---------------------------------------------------------------------------------------------------
@@ -762,6 +764,8 @@ setTimer(function()
                 if not isElement(r.owner) or select(2, nearestPlayer(x, y, z, { r.owner })) > CONFIG.despawn then setOwner(r, owner) end
                 if r.state == "leaving" then
                     if ownerDist > 150 or now - r.since > 60000 then destroyResponder(r) end
+                elseif r.update then
+                    r.update(r, players, now) -- world events (events.lua) run their own units
                 elseif r.kind == "heli" then
                     updateHeli(r, players, now)
                 elseif POLICE_UNITS[r.kind] then
@@ -815,3 +819,10 @@ addCommandHandler("wantedtest", function(source)
     end
     outputServerLog("[wantedtest] " .. (ok and "PASS" or "FAIL"))
 end)
+
+-- For events.lua (world events): the responder machinery.
+Services = {
+    responders = responders, eligiblePlayers = eligiblePlayers, nearestPlayer = nearestPlayer, running = running,
+    spawnResponder = spawnResponder, callout = callout, send = send, driveTo = driveTo, leave = leave,
+    release = release, crewAlive = crewAlive, allOnFoot = allOnFoot, distanceTo = distanceTo, bestGunSlot = bestGunSlot,
+}

@@ -31,6 +31,10 @@ function getPersonality(model)
     return Population.personality(model)
 end
 
+function pickScenePed(x, y, z, kind, gang)
+    return Population.scenePed(Population.profile(x, y, z, Population.now()), kind, gang)
+end
+
 -- A driver's favourite stations (MTA radio channels), as CPed::SetRadioStation picks from.
 function getPedRadio(model)
     local ped = PopData.peds[model]

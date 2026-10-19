@@ -9,4 +9,5 @@
     <script src="client.lua" type="client" />
     <export function="adoptVehicle" type="server" />
     <export function="handOverUnit" type="server" />
+    <export function="panicUnit" type="server" />
 </meta>

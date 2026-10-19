@@ -3,7 +3,9 @@
     <include resource="vana-paths" />
     <include resource="vana-population" />
     <script src="config/wanted.lua" type="server" />
+    <script src="config/events.lua" type="server" />
     <script src="server.lua" type="server" />
+    <script src="events.lua" type="server" />
     <script src="client.lua" type="client" />
     <export function="reportCrime" type="server" />
     <export function="setMinimumWanted" type="server" />

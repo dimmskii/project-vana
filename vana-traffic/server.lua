@@ -283,6 +283,14 @@ function adoptVehicle(vehicle, ped, kind, gang, personality)
     return true
 end
 
+-- Keeps a unit driving in a panic (fast, running lights) for the next `seconds`: a car being chased.
+function panicUnit(vehicle, seconds)
+    local unit = units[vehicle]
+    if not unit then return false end
+    unit.panicUntil = math.max(unit.panicUntil or 0, getTickCount() + (seconds or 10) * 1000)
+    return true
+end
+
 local function updateUnit(unit, players, lightState)
     local vehicle, ped = unit.vehicle, unit.ped
     if not isElement(vehicle) then return removeUnit(unit) end
