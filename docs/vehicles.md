@@ -1,4 +1,4 @@
-# Vehicles: registry, persistence, fuel and radio (`vana-vehicles`)
+# Vehicles: registry, persistence, fuel and radio stations (`vana-vehicles`)
 
 ## The registry
 
@@ -72,20 +72,12 @@ gauge above the radar stands in.
 
 ## Radio
 
-- **Station per car** (`vana:radio`, an MTA channel: 1 Playback FM .. 11 WCTR, 0 off), first picked
-  as vanilla (`CPed::SetRadioStation`): one of the driver's two favourites from `peds.ide`, else the
-  model's default (engine vehicle audio settings, via gta-reversed). Police and other emergency
-  vehicles keep the native police scanner; some vehicles have no radio.
-- **The driver chooses**; passengers only when no player drives.
-- **Live stations:** one client listening in a car leads each station. It reports its native radio
-  state (Neon `getRadioPlaybackState`: track, position, queue) on every new track and every 15 s.
-  Everyone else tuned in applies it (`setRadioPlaybackState`), so the whole server hears the same
-  song at the same moment.
-- **From outside:** a running car's radio is heard within 25 m, muffled (BASS parametric EQ), as a
-  3D `playSFX3D("radio", archive, track)` sound in sync with the station. Native track IDs map to an
-  archive and track through `TrakLkup.dat`'s order (track counts per archive in `config/radio.lua`).
-  A station nobody listens to in a car gets its tracks picked by the clients hearing it from
-  outside, shared through the server the same way.
+- **Station per car** (`vana:radio`: a `vana-radio` station ID, 1 Playback FM .. 11 WCTR, 0 off),
+  first picked as vanilla (`CPed::SetRadioStation`): one of the driver's two favourites from
+  `peds.ide`, else the model's default (engine vehicle audio settings, via gta-reversed). Police and
+  other emergency vehicles, and vehicles without a radio, get no station. The station is persisted
+  with the car.
+- **Playing it, switching and the outside radio** are `vana-radio`'s: see [radio.md](radio.md).
 
 ## Testing
 
@@ -94,12 +86,9 @@ gauge above the radar stands in.
   and radio picks.
 - `vehicletest keep`, then restart (or stop and start) `vana-vehicles`, then `vehicletest check`:
   one kept car survives the restart exactly.
-- `radiostatus` (console): live stations, their leaders, and every player's car and station.
 
 ## Not yet verified in game
 
-- The radio switch flow (driver vs passenger), followers jumping to the leader's track, and how
-  the outside radio sounds (volume, muffling, range).
 - The fuel gauge's position at other resolutions; the refuel hold at each pump.
 
 ## Not yet done / known gaps

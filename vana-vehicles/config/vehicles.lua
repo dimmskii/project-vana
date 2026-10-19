@@ -1,4 +1,4 @@
--- Vehicle registry, persistence, fuel and radio settings.
+-- Vehicle registry, persistence and fuel settings.
 VehicleConfig = {
     registrySize = 10,       -- each player's remembered cars, most recently used first
     saveIntervalMs = 30000,  -- remembered cars are saved this often (and on exit, quit and stop)
@@ -28,12 +28,5 @@ VehicleConfig = {
             { 2146.0, 2748.0, 10.83 }, { 2642.0, 1107.0, 10.83 }, { 2117.0, 920.4, 10.83 },
             { 1382.0, 456.3, 19.91 },
         },
-    },
-
-    radio = {
-        reportMs = 15000,     -- a station's leader re-reports its position this often (and on every new track)
-        outsideRange = 25,    -- a running car's radio is heard this far away, muffled
-        outsideVolume = 0.55,
-        muffle = { fCenter = 1800, fBandwidth = 36, fGain = -15 }, -- the parameq effect on outside radio
     },
 }

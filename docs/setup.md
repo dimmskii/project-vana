@@ -70,6 +70,7 @@ Inside `<config>`, replace the stock `<resource>` lines with:
 <resource src="vana-lights" startup="1" protected="0" />
 <resource src="vana-population" startup="1" protected="0" />
 <resource src="vana-vehicles" startup="1" protected="0" />
+<resource src="vana-radio" startup="1" protected="0" />
 <resource src="vana-traffic" startup="1" protected="0" />
 <resource src="vana-peds" startup="1" protected="0" />
 <resource src="vana-parked" startup="1" protected="0" />

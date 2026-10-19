@@ -1,11 +1,4 @@
--- Radio data. Stations are MTA radio channels (1 Playback FM .. 11 WCTR, 0 off).
-
--- Each station's stream archive (audio/streams), as indexed by playSFX("radio", stream, track).
-RadioStreams = { [1] = 4, [2] = 5, [3] = 6, [4] = 8, [5] = 9, [6] = 10, [7] = 11, [8] = 12, [9] = 13, [10] = 14, [11] = 15 }
-
--- Tracks per stream archive, in TrakLkup.dat order (AA, ADVERTS, AMBIENCE, BEATS, CH, CO, CR, CUTSCENE,
--- DS, HC, MH, MR, NJ, RE, RG, TK). The native radio's track IDs count through them in this order.
-RadioStreamTracks = { 66, 69, 40, 10, 130, 155, 156, 141, 179, 115, 152, 147, 130, 161, 170, 101 }
+-- Vehicle radio types and default stations (vana-radio station IDs: 1 Playback FM .. 11 WCTR, 0 off).
 
 -- Per model, from the engine's vehicle audio settings (gta-reversed, AEVehicleAudioEntity.VehicleAudioSettings.h):
 -- the radio type ("civilian" plays stations, "emergency" the police scanner, "special"/"disabled" none)

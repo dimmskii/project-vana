@@ -59,7 +59,7 @@ setTimer(function()
     local vehicle = getPedOccupiedVehicle(localPlayer)
     triggerServerEvent("vana-dating:report", resourceRoot, {
         airborne = vehicle and not isVehicleOnGround(vehicle) or false,
-        radio = getRadioChannel(),
+        radio = vehicle and getElementData(vehicle, "vana:radio") or 0, -- vana-radio's station (1..11 vanilla's)
     })
 end, 1000, 0)
 

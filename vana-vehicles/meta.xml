@@ -1,5 +1,5 @@
 <meta>
-    <info author="ProjectVana" name="Vana vehicles" description="Vehicle registry and persistence, fuel, live car radio" version="0.1.0" type="script" />
+    <info author="ProjectVana" name="Vana vehicles" description="Vehicle registry and persistence, fuel, radio stations per car" version="0.1.0" type="script" />
     <script src="lib.lua" type="client" />
     <script src="config/vehicles.lua" type="shared" />
     <script src="config/radio.lua" type="shared" />

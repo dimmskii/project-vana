@@ -23,8 +23,8 @@ Start here:
 | [docs/map.md](docs/map.md) | The shared map: publishing points, categories, blips |
 | [docs/activities.md](docs/activities.md) | Per-player activities ported from main.scm: the framework, burglary and the rest |
 | [docs/traffic.md](docs/traffic.md) | Traffic, pedestrians and the AI actor architecture: Lua decides, the engine executes |
-| [docs/vehicles.md](docs/vehicles.md) | Kept cars (registry and persistence), fuel, live radio |
-| [docs/radio.md](docs/radio.md) | The radio: vanilla's station data and track picking, seeded track data |
+| [docs/vehicles.md](docs/vehicles.md) | Kept cars (registry and persistence), fuel, each car's radio station |
+| [docs/radio.md](docs/radio.md) | The radio: stations on one server clock, car and outside radios, vanilla's programme and track data |
 | [docs/editor.md](docs/editor.md) | Placement data in MTA map resources (`[data]/vana-data-*`) and editing it in the Map Editor |
 | [docs/wildlife.md](docs/wildlife.md) | Creatures from community mods (Bigfoot) |
 | [docs/libraries.md](docs/libraries.md) | Shared code in `vana-lib` (imported at runtime): game-file readers (GXT, IDE, DAT, TXD), map data; `vana-text` |
@@ -48,7 +48,8 @@ Start here:
 | `vana-gym` | Gym equipment workouts: stamina, muscle, fat |
 | `vana-activities` | Per-player activities: burglary, dating, side jobs, schools, races, minigames |
 | `vana-map` | Map points and radar blips for every resource (categories, icons, ranges) |
-| `vana-vehicles` | Vehicle registry and exact persistence, fuel, live car radio |
+| `vana-vehicles` | Vehicle registry and exact persistence, fuel, each car's radio station |
+| `vana-radio` | Radio stations on one server clock (vanilla's programme, internet streams), car and outside radios |
 | `[data]/vana-data-*` | Map resources holding placement data (spots, markers, paths); see docs/editor.md |
 | `vana-wildlife` | Creatures from community mods: Bigfoot |
 | `vana-traffic` | Road traffic: server-planned routes and light stops, driven by native drive-to tasks |
