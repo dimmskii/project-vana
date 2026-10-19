@@ -35,6 +35,12 @@ PlayerConfig = {
         transfender = { 1042.01, -1019.93, 31.13 }, ["transfender.sf"] = { -1935.53, 247.03, 33.56 },
         ["transfender.lv"] = { 2387.08, 1050.51, 9.81 }, locolow = { 2645.11, -2045.75, 12.61 },
         waa = { -2723.85, 217.8, 3.59 },
+        -- The Pay 'n' Sprays (vana-shops' config/sprays.lua), inside each.
+        ["spray.idlewood"] = { 2063.95, -1831.44, 12.54 }, ["spray.temple"] = { 1024.87, -1024.12, 30.91 },
+        ["spray.santamariabeach"] = { 487.34, -1741.03, 9.46 }, ["spray.downtown"] = { -1904.52, 285.17, 40.04 },
+        ["spray.juniperhollow"] = { -2425.66, 1020.74, 49.34 }, ["spray.oldventurasstrip"] = { 2393.86, 1490.55, 9.82 },
+        ["spray.redsandseast"] = { 1975.78, 2162.45, 9.60 }, ["spray.elquebrados"] = { -1420.48, 2583.72, 54.82 },
+        ["spray.fortcarson"] = { -100.00, 1119.11, 18.70 }, ["spray.dillimore"] = { 720.05, -454.84, 14.96 },
     },
 
     -- ACL groups players belong to, by MTA serial (their auto-login account is named after it). Applied

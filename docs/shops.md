@@ -178,6 +178,20 @@ Low Co. (LS) and Wheel Arch Angels (SF), all open.
 - **Not done:** the door closing behind you as vanilla's does, vanilla's per-part camera moves, the bonnet ornaments 1111/1112
   (MTA refuses them on every model).
 
+### Pay 'n' Spray
+
+Vanilla's ten respray garages (`sprays.lua`, `config/sprays.lua`: the map files' `grge` entries of
+type 5, their game indices for `setGarageOpen`), with vanilla's radar icon (63). Drive in and stop
+(inside the garage's box): the door comes down, vanilla's respray sound plays (frontend event 16),
+and the vehicle comes out fixed for $100 (`fixVehicle` on the server, so every client gets the same
+car). Ours: it only repairs (no new colour, no change to the wanted level), and only when there's
+something to fix (health, or any panel, door, light or tyre not as new); without the money,
+vanilla's `GA_3` and its no-cash sound. The doors stay up otherwise. Boats, aircraft and trains
+aren't served. `spraytest` (console) checks the boxes and the damage test.
+
+The mod garages repair too: **Repair** at the top of their menu, $100, greyed out when there's
+nothing to fix.
+
 ## Gym (`vana-gym`)
 
 The equipment is seeded from `gta_int.img` by `tools/seed/seed_gym.py` into

@@ -23,6 +23,7 @@ MapCategories = {
     courier = { icon = 53, name = "Courier", short = true },
     lowrider = { icon = 33, name = "Lowrider contest", short = true },
     modgarage = { icon = 27, name = "Mod garage", short = true },
+    spray = { icon = 63, name = "Pay 'n' Spray", short = true },
 }
 
 -- Entrances (vana-interiors' enex names) and the category their street doors show as. Patterns are Lua

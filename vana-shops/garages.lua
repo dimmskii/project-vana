@@ -100,7 +100,9 @@ local function menuFor(s)
                                          fits = fits[id] == true, owned = s.base.upgrades[id] == true })
         end
     end
-    local categories = {}
+    -- Ours: a repair, as a Pay 'n' Spray does it, only when there's something to fix.
+    local categories = { { name = "Repair", items = { { key = "repair", kind = "repair", value = 1, label = "Repair the vehicle",
+        price = SprayConfig.price, fits = isVehicleDamaged(s.vehicle), reason = "Nothing to repair." } } } }
     for slot = 0, 16 do
         local name = getVehicleUpgradeSlotName(slot)
         if bySlot[name] then
@@ -247,6 +249,9 @@ addEventHandler("vana-garage:buy", resourceRoot, function(kind, value)
         price = p[2]
     elseif kind == "colour" or kind == "paintjob" then
         price = G.paintPrice
+    elseif kind == "repair" then
+        if not isVehicleDamaged(v) then return say(client, "Nothing to repair.") end
+        price = SprayConfig.price
     elseif kind == "tune" and type(value) == "table" then
         local cat, level = tostring(value[1]), tonumber(value[2])
         for _, c in ipairs(vehicles("getTuneOptions") or {}) do
@@ -273,6 +278,8 @@ addEventHandler("vana-garage:buy", resourceRoot, function(kind, value)
         end
         base.colours[i], base.colours[i + 1], base.colours[i + 2] = c[1], c[2], c[3]
         setVehicleColor(v, unpack(base.colours))
+    elseif kind == "repair" then
+        fixVehicle(v)
     elseif kind == "tune" then
         base.tune[tostring(value[1])] = tonumber(value[2])
         vehicles("setTuneTable", v, base.tune)
