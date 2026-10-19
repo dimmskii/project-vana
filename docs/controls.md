@@ -20,9 +20,17 @@ Scripts *offer* what `/use` does (client: `exports["vana-controls"]:offer(id, te
 element. Ids start with the resource's name (`vana-shops:vendor`), so a stopping resource's offers go
 with it. When vana-controls (re)starts it raises `onClientVanaUseReset` and scripts offer again.
 
-- **The prompt** ("Press F to order food") shows in the status box, top middle: GTA's own font,
-  drawn by the game (Neon's positioned `drawText` on a `rectangle`), clear of the chat in the top left.
-  Not GTA's help box: that one is pinned top left and its slot can stay busy with nothing showing. `text` is a verb phrase, or a GXT string with `~k~~VEHICLE_ENTER_EXIT~` where the key
+- **The prompt** ("Press F to order food") shows as the status text, top middle with no box: GTA's
+  own font with its drop shadow, drawn by the game (Neon's positioned `drawText`), clear of the chat
+  in the top left. Not GTA's help box: that one is pinned top left and its slot can stay busy with
+  nothing showing.
+- **Where it lands:** GTA places script text from the bottom of the screen, with a vertical scale
+  that MTA's HUD aspect setting (Settings > Video) multiplies by aspect ratio / 4:3, while script
+  rectangles are placed from the top. A box and its text therefore drift apart on any screen but
+  4:3, and a y near the top can land off-screen. The script y is worked out from the setting
+  (`dxGetStatus`) so the text sits 3.5% down the screen whatever it is. Our own DX drawing doesn't
+  follow that setting at all (MTA's `dxSetAspectRatioAdjustmentEnabled` would), which is why it can
+  sit a little off GTA's HUD. `text` is a verb phrase, or a GXT string with `~k~~VEHICLE_ENTER_EXIT~` where the key
   name goes (the `/use` key, whatever it's bound to). `silent` offers show nothing (the script has
   its own help, like the gym's bar). The prompt waits while a menu has the controls off.
 - **The key is ours alone:** while there's an offer (on foot), GTA's `enter_exit` control is off, so
@@ -60,8 +68,8 @@ Line of sight is the client's word: the server has no collision to check it agai
 
 **Messages** go to the status line (`exports["vana-controls"]:status(player, text)` on the server,
 `Actions.status` from the module, or `status(text)` from another resource's client): the status
-box (top middle) for 4 s, copied to the player's console. Activity help (vana-activities'
-`Hud.help`) shares the box: a message first, then help, then the prompt. **Subtitles** (objectives, spoken lines, "You cannot mod
+text (top middle) for 4 s, copied to the player's console. Activity help (vana-activities'
+`Hud.help`) shares it: a message first, then help, then the prompt. **Subtitles** (objectives, spoken lines, "You cannot mod
 this vehicle.") go to the game's own subtitle line, bottom middle (`subtitle(text, ms)` on the
 client; vana-activities' subtitles use it). A text longer than the game takes (160 bytes) is drawn by
 us in the same place instead.

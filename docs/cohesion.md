@@ -41,7 +41,7 @@ Rules that keep the gamemode feeling like one product instead of a pile of scrip
   use (the page's `right` in the ACL); self-tests show at the console only. A new command gets its
   page in the same change.
 - **Feedback:** one shared helper for success and error messages, so wording and colours match
-  everywhere: vana-controls' status box (top middle, in the game's own font, copied to the console), from the
+  everywhere: vana-controls' status text (top middle, in the game's own font, copied to the console), from the
   server `exports["vana-controls"]:status(player, text)` (or `Actions.status`).
 
 ## Freeroam tools are admin tools
@@ -68,7 +68,7 @@ Each layer has one home; don't scatter windows.
   (screenshot), T and Y (chat), Tab (scoreboard).
 - **One visual style.** Shared colours, fonts and window chrome come from one place. Prefer
   diegetic, vanilla-style presentation (HUD-style text, the phone, in-world markers) over
-  generic windows for gameplay. Messages and help use the status box, top middle, in the game's own font (Neon's native text); subtitles the game's own subtitle line.
+  generic windows for gameplay. Messages and help use the status text, top middle with no box, in the game's own font (Neon's native text); subtitles the game's own subtitle line.
 - **Menus take every input:** arrows, the pad and the mouse (vana-lib's `menu_input`); picking
   something in the world with `/interact` is the one thing that needs the mouse.
 - **Screen edges stay clear** for a possible column of desktop icons (help and the like) later.

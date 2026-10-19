@@ -1,14 +1,14 @@
 -- The status line and the subtitle, drawn by the game itself (Neon's native text: GTA's own font),
 -- so every message looks like vanilla's.
--- The status box, top middle (clear of the chat, top left), has three layers; the first one present
+-- The status text, top middle (clear of the chat, top left), has three layers; the first one present
 -- shows:
 --   status  a short message ("Engine turned off"), also printed to the console
 --   help    an activity's help text (vana-activities' Hud.help), for 10 s or until cleared
 --   prompt  what /use does here ("Press F to order food"), while it can
 -- The subtitle, bottom middle: objectives and spoken lines (vana-activities' Hud say), messages like
 -- "You must have hydraulics for this." or "You cannot mod this vehicle.".
--- The status box is the game's text drawn where we put it (Neon's drawText on a rectangle), not
--- GTA's help box: that one is pinned top left, under the chat, and its slot can stay busy. If the
+-- The status text is the game's text drawn where we put it (Neon's drawText), not GTA's help box:
+-- that one is pinned top left, under the chat, and its slot can stay busy. If the
 -- game refuses a text (too long, another resource holds its messages), a box of our own stands in.
 Status = {}
 local STATUS_MS = 4000
@@ -101,49 +101,51 @@ local function line(channel, name)
     return l
 end
 
--- The status box: in GTA's 640 x 448 script space, centred at the top. Its height follows the text's
--- lines, estimated from the font's average width at this scale (GTA doesn't tell scripts).
-local BOX = { centre = 320, y = 10, width = 300, pad = 6, scaleX = 0.48, scaleY = 1.6, lineHeight = 14, charsPerLine = 52,
-              background = 0x000000BE, colour = 0xFFFFFFFF }
+-- The status text: GTA's own font, drawn by the game, centred near the top of the screen, no box.
+-- GTA places script text from the bottom of the screen in its 640 x 448 space, with a vertical scale
+-- that MTA's HUD aspect setting multiplies by (aspect ratio / 4:3); so the script y for a spot on
+-- screen is worked out from that setting (dxGetStatus), and again when it changes.
+local TEXT = { centre = 320, top = 0.035, width = 400, scaleX = 0.48, scaleY = 1.6, colour = 0xFFFFFFFF }
+local ASPECTS = { ["4:3"] = 4 / 3, ["16:10"] = 16 / 10, ["16:9"] = 16 / 9 }
 
-local function lineCount(text)
-    local n = 0
-    for part in (plain(text) .. "\n"):gmatch("(.-)\n") do n = n + math.max(1, math.ceil(#part / BOX.charsPerLine)) end
-    return n
+-- The vertical HUD scale relative to 4:3 (1 when MTA leaves GTA's HUD alone).
+local function hudScaleY()
+    local st = dxGetStatus()
+    if not st.SettingHUDMatchAspectRatio then return 1 end
+    local w, h = guiGetScreenSize()
+    return (ASPECTS[st.SettingAspectRatio] or w / h) / (4 / 3)
 end
 
-local helpBox = { shownUntil = 0 }
+-- Script y for `top` (a fraction of the screen height from the top), as GTA's script text places it.
+local function scriptY(top)
+    return math.max(0, math.min(448, 448 - 448 * (1 - top) / hudScaleY()))
+end
+
+local helpBox = {}
 function helpBox.show(entry)
-    helpBox.entry, helpBox.nativeOk, helpBox.fallback = entry, false, nil
     local h = helpBox
+    h.entry, h.nativeOk, h.fallback = entry, false, nil
     if not entry then
-        if h.rect then updateNativeUI(h.rect, { visible = false }) updateNativeUI(h.draw, { visible = false }) end
+        if h.draw then updateNativeUI(h.draw, { visible = false }) end
         return
     end
     if #entry.text <= MAX then
-        local height = BOX.pad * 2 + lineCount(entry.text) * BOX.lineHeight
         local why
-        local function make(kind, options)
-            local id, reason = createNativeUI(kind, options)
-            if not id then why = reason end
-            return id or nil
-        end
+        local y = scriptY(TEXT.top)
         if not h.text then
-            h.text = make("text", { name = "vana-status", content = entry.text })
+            local reason
+            h.text, reason = createNativeUI("text", { name = "vana-status", content = entry.text })
+            why = reason
             if h.text then
-                h.rect = make("rectangle", { x = BOX.centre - BOX.width / 2, y = BOX.y, width = BOX.width, height = height,
-                    background = BOX.background, visible = false })
-                h.draw = make("drawText", { text = h.text, x = BOX.centre, y = BOX.y + BOX.pad, width = BOX.width - BOX.pad * 2,
-                    scaleX = BOX.scaleX, scaleY = BOX.scaleY, font = 1, alignment = 0, color = BOX.colour, visible = false })
+                h.draw, reason = createNativeUI("drawText", { text = h.text, x = TEXT.centre, y = y, width = TEXT.width,
+                    scaleX = TEXT.scaleX, scaleY = TEXT.scaleY, font = 1, alignment = 0, color = TEXT.colour, visible = false })
+                why = reason
             end
         end
-        local ok = h.text and h.rect and h.draw and updateNativeUI(h.text, { content = entry.text })
+        local ok = h.text and h.draw and updateNativeUI(h.text, { content = entry.text })
+        if ok then ok, why = updateNativeUI(h.draw, { y = y, visible = true }) end
         if ok then
-            updateNativeUI(h.rect, { height = height, visible = true })
-            ok, why = updateNativeUI(h.draw, { visible = true })
-        end
-        if ok then
-            h.nativeOk = true
+            h.nativeOk, h.y = true, y
             return
         end
         if not h.warned then
@@ -151,12 +153,12 @@ function helpBox.show(entry)
             outputDebugString(("[vana-controls] the game refused the status text (%s), drawing it ourselves: %s"):format(tostring(why), entry.text), 2)
         end
     end
-    if h.rect then updateNativeUI(h.rect, { visible = false }) end
     if h.draw then updateNativeUI(h.draw, { visible = false }) end
     h.fallback = plain(entry.text)
 end
 function helpBox.want(entry)
-    if entry ~= helpBox.entry then helpBox.show(entry) end
+    -- Shown again when MTA's aspect setting moved where it belongs.
+    if entry ~= helpBox.entry or (entry and helpBox.nativeOk and helpBox.y ~= scriptY(TEXT.top)) then helpBox.show(entry) end
 end
 
 local subtitleLine = line("objective", "vana-subtitle")
@@ -213,9 +215,9 @@ addEventHandler("onClientResourceStop", resourceRoot, function()
     if subtitleLine.nativeOk then clearNativeText("objective") end
 end)
 
-local function shadowText(text, x1, y1, x2, y2, scale)
-    dxDrawText(text, x1 + 2, y1 + 2, x2 + 2, y2 + 2, tocolor(0, 0, 0, 220), scale, "default-bold", "center", "center", false, true)
-    dxDrawText(text, x1, y1, x2, y2, tocolor(255, 255, 255), scale, "default-bold", "center", "center", false, true)
+local function shadowText(text, x1, y1, x2, y2, scale, alignY)
+    dxDrawText(text, x1 + 2, y1 + 2, x2 + 2, y2 + 2, tocolor(0, 0, 0, 220), scale, "default-bold", "center", alignY or "center", false, true)
+    dxDrawText(text, x1, y1, x2, y2, tocolor(255, 255, 255), scale, "default-bold", "center", alignY or "center", false, true)
 end
 
 addEventHandler("onClientRender", root, function()
@@ -223,13 +225,9 @@ addEventHandler("onClientRender", root, function()
     local s = sh / 720
     local text = helpBox.fallback
     if text then
-        -- Where the game's box would be: the same script-space rectangle, scaled to the screen.
-        local fx, fy = w / 640, sh / 448
-        local bw = BOX.width * fx
-        local x, y = BOX.centre * fx - bw / 2, BOX.y * fy
-        local h = (BOX.pad * 2 + lineCount(text) * BOX.lineHeight) * fy
-        dxDrawRectangle(x, y, bw, h, tocolor(0, 0, 0, 190))
-        dxDrawText(text, x + BOX.pad * fx, y + BOX.pad * fy, x + bw - BOX.pad * fx, y + h, tocolor(255, 255, 255), 1.05 * s, "default-bold", "center", "top", false, true)
+        local y = sh * TEXT.top
+        local half = TEXT.width / 2 * w / 640
+        shadowText(text, w / 2 - half, y, w / 2 + half, y + 80 * s, 1.05 * s, "top")
     end
     if subtitleLine.fallback then shadowText(subtitleLine.fallback, w * 0.15, sh * 0.80, w * 0.85, sh * 0.92, 1.15 * s) end
 end)
