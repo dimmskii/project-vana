@@ -220,7 +220,7 @@ stadium); winning every race pays $1000000. Best results and times are saved.
 
 ### The Chiliad Challenge (`MTBIKER`)
 
-Ride a mountain bike onto the marker on the summit (then enter/exit) of Mount Chiliad and pick a route: Scotch Bonnet
+Ride a mountain bike into the marker on the summit of Mount Chiliad and pick a route: Scotch Bonnet
 Yellow Route, Birdseye Winder, Cobra Run (seeded from main.scm). Each opens when you win the one
 before; wins pay $500, $1000, $2000. Five rival riders, on the race engine.
 

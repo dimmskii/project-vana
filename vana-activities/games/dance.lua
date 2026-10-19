@@ -175,11 +175,11 @@ addEventHandler("onResourceStart", resourceRoot, function()
             if not Activity.of(player) then Activity.start(player, "dance", floorOf(player) or f) end
         end })
     end
-    -- The lowrider contest: any car with hydraulics (the mod garages fit them to all) onto the marker and enter/exit, then the wager.
+    -- The lowrider contest: any car with hydraulics (the mod garages fit them to all) into the marker, then the wager.
     local m = createMarker(L.x, L.y, L.z - 0.5, "cylinder", 5, 255, 200, 0, 100)
     MapPoints.set("lowrider", { category = "lowrider", x = L.x, y = L.y, z = L.z })
-    Prompts.add(m, { text = "enter the lowrider contest", vehicle = true, use = function(player)
-        local v = getPedOccupiedVehicle(player)
+    addEventHandler("onMarkerHit", m, function(player, matching)
+        local v = matching and getElementType(player) == "player" and getPedOccupiedVehicle(player)
         if not v or Activity.of(player) then return end
         if getVehicleUpgradeOnSlot(v, 9) ~= L.hydraulics then
             return triggerClientEvent(player, "vana-activities:say", resourceRoot, "You must have hydraulics for this.", 4000)
@@ -197,5 +197,5 @@ addEventHandler("onResourceStart", resourceRoot, function()
             takePlayerMoney(p, amounts[i])
             Activity.start(p, "lowrider", amounts[i])
         end, "Choose your wager   Enter: bet   Backspace: leave")
-    end })
+    end)
 end)

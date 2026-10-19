@@ -7,6 +7,7 @@ local prices = {}   -- shopping.dat CarMods: lowercase name -> { nametag, price 
 local stock = {}    -- garage shop ("carmod1") -> { names }
 local sessions = {} -- player -> { garage, index, vehicle, dimension, base, lock, occupants }
 local busy = {}     -- doorway index -> player inside
+local cleared = {}  -- player -> doorway they came out into (no way back in until they drive off it)
 local nameOf = {}   -- upgrade ID -> name
 for name, id in pairs(CarModIds) do nameOf[id] = name end
 
@@ -155,7 +156,7 @@ end
 local function leave(player, now)
     local s = sessions[player]
     if not s then return end
-    sessions[player], busy[s.index] = nil, nil
+    sessions[player], busy[s.index], cleared[player] = nil, nil, s.index
     local function out()
         local v, g = s.vehicle, s.garage
         if not isElement(v) then return end
@@ -250,7 +251,27 @@ end)
 addEvent("vana-garage:leave", true)
 addEventHandler("vana-garage:leave", resourceRoot, function() leave(client) end)
 
-addEventHandler("onPlayerQuit", root, function() leave(source, true) end)
+-- Doorways: a driver stopped in one is taken in. Coming back out lands you in it, so you're only
+-- taken in again once you've been out in the world and off it.
+setTimer(function()
+    for _, player in ipairs(getElementsByType("player")) do
+        local v = getPedOccupiedVehicle(player)
+        if v and not sessions[player] and getVehicleOccupant(v, 0) == player and getElementDimension(v) == 0 and getElementInterior(v) == 0 then
+            local x, y, z = getElementPosition(v)
+            local inDoorway
+            for i, g in ipairs(G.garages) do
+                if getDistanceBetweenPoints2D(x, y, g.x, g.y) < G.radius and math.abs(z - g.z) < 3 then inDoorway = i end
+            end
+            if cleared[player] and cleared[player] ~= inDoorway then cleared[player] = nil end
+            if inDoorway and cleared[player] ~= inDoorway then
+                local vx, vy, vz = getElementVelocity(v)
+                if (vx * vx + vy * vy + vz * vz) ^ 0.5 < G.stoppedSpeed then enter(player, v, inDoorway) end
+            end
+        end
+    end
+end, 250, 0)
+
+addEventHandler("onPlayerQuit", root, function() leave(source, true) cleared[source] = nil end)
 addEventHandler("onPlayerWasted", root, function() leave(source, true) end)
 addEventHandler("onVehicleExplode", root, function()
     for player, s in pairs(sessions) do if s.vehicle == source then leave(player, true) end end
@@ -270,12 +291,8 @@ addEventHandler("onResourceStart", resourceRoot, function()
         MapPoints.set("modgarage:" .. i, { category = "modgarage", x = g.x, y = g.y, z = g.z })
         -- The door stays up, and the spot to stop on is marked.
         if g.door then setGarageOpen(g.door, true) end
-        -- Drive onto the marker and press enter/exit to go in (vana-lib's prompts).
-        local marker = createMarker(g.x, g.y, g.z - 0.6, "cylinder", m.size, m.colour[1], m.colour[2], m.colour[3], m.colour[4])
-        Prompts.add(marker, { text = "mod your vehicle at " .. g.name, vehicle = true, use = function(player)
-            local v = getPedOccupiedVehicle(player)
-            if v and not sessions[player] then enter(player, v, i) end
-        end })
+        -- Where to stop to be taken in.
+        createMarker(g.x, g.y, g.z - 0.6, "cylinder", m.size, m.colour[1], m.colour[2], m.colour[3], m.colour[4])
     end
 end)
 

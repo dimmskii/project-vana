@@ -248,10 +248,10 @@ addEventHandler("onResourceStart", resourceRoot, function()
     local e = C.chiliad.entry
     local cm = createMarker(e.x, e.y, e.z - 0.5, "cylinder", 4, 255, 200, 0, 110)
     MapPoints.set("chiliad", { category = "race", x = e.x, y = e.y, z = e.z })
-    Prompts.add(cm, { text = "race down Mount Chiliad", vehicle = true, use = function(player)
-        local v = getPedOccupiedVehicle(player)
+    addEventHandler("onMarkerHit", cm, function(player, matching)
+        local v = matching and getElementType(player) == "player" and getPedOccupiedVehicle(player)
         if v and getElementModel(v) == C.chiliad.bike and not Activity.of(player) then openChiliad(player) end
-    end })
+    end)
     for i, car in ipairs(C.stadiumCars) do OwnedCars.define("stadium" .. i, car) end
     for _, entry in ipairs(C.entries) do
         local m = createMarker(entry.x, entry.y, entry.z - 0.1, "cylinder", 1.5, 255, 200, 0, 120)

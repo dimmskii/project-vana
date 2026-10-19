@@ -142,7 +142,8 @@ Vanilla's `CARMOD` (`garages.lua`, `config/garages.lua`): the three Transfenders
 Low Co. (LS) and Wheel Arch Angels (SF), all open.
 
 - **Getting in:** the garage doors stay up (`setGarageOpen` with each garage's game index, `door`);
-  drive in and stop on the marker just inside (vanilla's spot, 4 m) driving a vehicle. It's taken into the garage
+  drive in and stop on the marker just inside (vanilla's spot, 4 m). Coming back out puts you on it,
+  so you're only taken in again after driving off it. It's taken into the garage
   (vanilla's interior and spot for that garage), alone: each customer gets their own dimension.
   With `exclusive` on (it is), one customer per doorway at a time; anyone else is told "Somebody is
   already in the garage." Backspace at the top of the menu drives out, back in the doorway facing

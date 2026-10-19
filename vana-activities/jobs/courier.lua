@@ -108,17 +108,19 @@ Activity.register("courier", {
     end,
 })
 
--- Start points: the courier bike ridden onto the pick-up point, then enter/exit (vanilla's bikes are parked there).
+-- Start points: the courier bike ridden into the pick-up point (vanilla's bikes are parked there).
 local parked = {}
 addEventHandler("onResourceStart", resourceRoot, function()
     for i, city in ipairs(C.cities) do
         local b = city.base
         local m = createMarker(b[1], b[2], b[3] - 0.5, "cylinder", 2.5, 255, 200, 0, 110)
         MapPoints.set("courier:" .. i, { category = "courier", x = b[1], y = b[2], z = b[3] })
-        Prompts.add(m, { text = "start courier work", vehicle = true, use = function(player)
-            local bike = getPedOccupiedVehicle(player)
-            if bike and getElementModel(bike) == city.bike and not Activity.of(player) then Activity.start(player, "courier", i) end
-        end })
+        addEventHandler("onMarkerHit", m, function(player, matching)
+            local bike = isElement(player) and getElementType(player) == "player" and getPedOccupiedVehicle(player)
+            if matching and bike and getElementModel(bike) == city.bike and not Activity.of(player) then
+                Activity.start(player, "courier", i)
+            end
+        end)
     end
     setTimer(function()
         for i, city in ipairs(C.cities) do

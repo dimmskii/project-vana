@@ -1,7 +1,7 @@
 -- This resource's pages in /help (vana-help; the fields are explained in vana-help/help.lua).
 HelpPages = {
     { name = "garages", topic = true, summary = "Mod garages: Transfender, Loco Low Co., Wheel Arch Angels",
-      text = [[Drive onto the marker inside a mod garage's door and press F to go in. Any car, monster truck or quad, at any garage. Parts that don't fit your car are greyed out; the highlighted one is tried on, and leaving takes off what you didn't buy. Colours and paintjobs are $150.
+      text = [[Drive in and stop on the marker inside a mod garage's door to go in. Any car, monster truck or quad, at any garage. Parts that don't fit your car are greyed out; the highlighted one is tried on, and leaving takes off what you didn't buy. Colours and paintjobs are $150.
 
 Up/Down choose, Enter buys or opens, Backspace goes back or drives out.]],
       see = { "warp" },

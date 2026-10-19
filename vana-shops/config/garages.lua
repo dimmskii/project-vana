@@ -3,8 +3,8 @@
 -- lowriders, carmod3 street racers; CarMods prices); part IDs and the colour palette are seeded
 -- (config/carmods_data.lua). Hand-written: edit freely.
 GarageConfig = {
-    -- Vanilla's doorways (the locate CARMOD stops you in, just inside the garage door: here a marker
-    -- where enter/exit takes you in) and their
+    -- Vanilla's doorways (the locate CARMOD stops you in, 4 m, just inside the garage door, marked) and
+    -- their
     -- garages: the game's garage (`door`: its index, from the map files' grge entries in load order,
     -- for setGarageOpen), the interior and spot the car goes to, and the heading it leaves facing. All
     -- open, doors up (vanilla unlocks the LS and SF ones through the story).
@@ -20,6 +20,8 @@ GarageConfig = {
         { name = "Wheel Arch Angels", shop = "carmod3", x = -2723.845, y = 217.804, z = 3.585, exit = 90, door = 15,
           interior = 3, inside = { 615.286, -124.239, 996.995, 90 } },      -- San Fierro (Ocean Flats)
     },
+    radius = 4,
+    stoppedSpeed = 0.05, -- MTA velocity units: "stopped" in the doorway
     marker = { size = 4, colour = { 172, 203, 241, 90 } }, -- where to stop (vanilla draws a sphere there)
 
     -- Ours: every vehicle MTA can upgrade gets in, at any garage (vanilla turns away aircraft, boats,
