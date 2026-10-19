@@ -200,7 +200,7 @@ and that scores are client-judged.
 ### Race tournament (`CPRACE`)
 
 All 27 of vanilla's races, seeded from main.scm by `tools/seed/seed_races.py` into
-`config/races.lua` (checkpoints, line-ups, laps, stadium grids). Walk into an entry marker and pick
+`[data]/vana-data-activities/activities.map` (checkpoints, line-ups, laps, stadium grids). Walk into an entry marker and pick
 a race: Los Santos (races 0-8), San Fierro (9-14), Las Venturas (15-18), the LV airport's air races
 (19-24, against the clock), the LS stadium's 8-Track (12 laps) and the LV stadium's Dirt Track (6
 laps; the same marker offers Kickstart). Races run in your private dimension, with vanilla's
@@ -251,7 +251,7 @@ rounds are judged on your client.
 
 `tools/seed/seed_minigames.py` places every object vanilla attaches a minigame brain to (171: slot
 machines, video poker, roulette and blackjack tables, wheels of fortune, betting machines, arcade
-machines and consoles, basketball hoops, pool tables) into `config/minigames.lua`. Walk up and
+machines and consoles, basketball hoops, pool tables) into `[data]/vana-data-activities/activities.map`. Walk up and
 press enter/exit (vanilla's prompts where it has them).
 
 ### Casino (`BANDIT`, `VIDPOK`, `ROULETE`, `BLACKJ`, `WOF`)

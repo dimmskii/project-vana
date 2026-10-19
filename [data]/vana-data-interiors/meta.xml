@@ -1,0 +1,4 @@
+<meta>
+    <info type="map" name="vana-data-interiors" author="ProjectVana" description="Placement data for vana-interiors: open it in the Map Editor (definitions: vana-interiors)" version="1.0.0" edf:definitions="vana-interiors" />
+    <map src="entrances.map" dimension="0" />
+</meta>

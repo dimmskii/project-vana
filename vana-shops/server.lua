@@ -344,7 +344,7 @@ addEventHandler("vana-shops:buy", resourceRoot, function(key)
     triggerClientEvent(client, "vana-shops:result", resourceRoot, true, verb .. ": " .. item.label, key, point.kind == "clothes" or point.kind == "fighting")
 end)
 
--- Vending machines and food carts (config/vendors.lua, config/vendorkinds.lua).
+-- Vending machines and food carts ([data]/vana-data-shops/shops.map, config/vendorkinds.lua).
 local lastVend = {}
 addEvent("vana-shops:vend", true)
 addEventHandler("vana-shops:vend", resourceRoot, function(index)
@@ -404,7 +404,8 @@ addEventHandler("onPlayerQuit", root, function()
 end)
 addEventHandler("onPlayerWasted", root, function() if open[source] then closeMenu(source, true) end end)
 
--- Admin: put a shop's point where you stand, and print the config line to keep it.
+-- Admin: put a shop's point where you stand, and print the map element to keep it (or move it in
+-- the Map Editor: vana-data-shops).
 -- Restricted: needs command.shoppoint in the ACL.
 addCommandHandler("shoppoint", function(player, _, name)
     if getElementType(player) ~= "player" then return end
@@ -414,9 +415,13 @@ addCommandHandler("shoppoint", function(player, _, name)
     local x, y, z = getElementPosition(player)
     point.x, point.y, point.z, point.interior = x, y, z - 1, getElementInterior(player)
     placeMarker(name, point)
-    local line = ('    %-10s = { kind = "%s", interior = %d, x = %.2f, y = %.2f, z = %.2f },'):format(name, point.kind, point.interior, point.x, point.y, point.z)
-    outputServerLog("[vana-shops] new point (paste into config/points.lua): " .. line)
-    outputChatBox("Shop point moved here. The config line is in the server log.", player, 120, 255, 120)
+    local attrs = {}
+    for _, a in ipairs(MapData.toAttributes(MapDatasets.shops.types[1], { name = name, kind = point.kind, style = point.style,
+        note = point.note, interior = point.interior, x = point.x, y = point.y, z = point.z })) do
+        attrs[#attrs + 1] = ('%s="%s"'):format(a[1], a[2])
+    end
+    outputServerLog("[vana-shops] new point (replace it in [data]/vana-data-shops/shops.map): <shoppoint " .. table.concat(attrs, " ") .. " />")
+    outputChatBox("Shop point moved here. The map element is in the server log.", player, 120, 255, 120)
 end, true)
 
 -- Console-only: every shop point has a stock, every item a price.

@@ -1,5 +1,5 @@
 -- Casino games (vanilla BANDIT, VIDPOK, ROULETE, BLACKJ, WOF) at the seeded machines and tables
--- (config/minigames.lua). Walk up and press enter/exit; games/casino_client.lua draws the game. Every
+-- ([data]/vana-data-activities/activities.map). Walk up and press enter/exit; games/casino_client.lua draws the game. Every
 -- bet, card and spin is decided here, and money moves only here.
 local G = Games
 

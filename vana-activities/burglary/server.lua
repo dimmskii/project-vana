@@ -1,5 +1,5 @@
 -- Burglary (vanilla BURGJB): at night, in a Boxville, press the sub-mission key. Break into houses
--- (doors in config/burglary_houses.lua), carry what you can to the back of the van, and sell each
+-- (doors in [data]/vana-data-activities/activities.map), carry what you can to the back of the van, and sell each
 -- load at a lock-up before daylight runs out. Houses are instanced in the burglar's private dimension.
 -- The client (burglary/client.lua) finds the doors, places loot, runs the noise meter and the carrying.
 local B = Burglary

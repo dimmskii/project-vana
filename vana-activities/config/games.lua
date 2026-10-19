@@ -23,7 +23,7 @@ Games = {
         targetsToWin = 3, pointsToWin = 20,  -- vanilla: first to three targets (rounds 1-2), to 20 points (round 3)
         rivalSeconds = { 7, 5, 5.5, 4.5 },   -- ours: how long a rival takes per target, by weapon
     },
-    -- Casino games (vanilla BANDIT, VIDPOK, ROULETE, BLACKJ, WOF), at the seeded spots (config/minigames.lua).
+    -- Casino games (vanilla BANDIT, VIDPOK, ROULETE, BLACKJ, WOF), at the seeded spots ([data]/vana-data-activities/activities.map).
     -- Table tiers by interior (ours: vanilla varies them per table): 1 low .. 4 high.
     tiers = { [1] = 4, [10] = 3, [12] = 2 }, defaultTier = 1,
     slots = {

@@ -1,0 +1,57 @@
+<def name="vana-activities">
+    <element name="minigamespot" friendlyname="Minigame object">
+        <data name="position" type="coord3d" default="0,0,0" />
+        <data name="rotation" type="coord3d" default="0,0,0" />
+        <data name="kind" type="string" default="slot" required="false" description="the minigame (slot, videopoker, roulette, blackjack, wheel, betting, arcade, basketball, pool)" />
+        <data name="model" type="string" default="" required="false" description="the map object it belongs to" />
+        <marker type="corona" size="0.8" color="#00FF8080" />
+    </element>
+    <element name="burglaryhouse" friendlyname="Burglary house">
+        <data name="position" type="coord3d" default="0,0,0" />
+        <data name="ex" type="number" default="0" required="false" description="arrival point x inside" />
+        <data name="ey" type="number" default="0" required="false" description="arrival point y" />
+        <data name="ez" type="number" default="0" required="false" description="arrival point z" />
+        <data name="heading" type="number" default="0" required="false" description="facing on arrival" />
+        <marker type="arrow" size="1" color="#FFAA00AA" />
+    </element>
+    <element name="burglarydoor" friendlyname="Burglary door">
+        <data name="position" type="coord3d" default="0,0,0" />
+        <data name="house" type="element:burglaryhouse" default="" required="false" description="the burglaryhouse it leads into" />
+        <data name="ex" type="number" default="0" required="false" description="where you come back out x" />
+        <data name="ey" type="number" default="0" required="false" description="y" />
+        <data name="ez" type="number" default="0" required="false" description="z" />
+        <data name="heading" type="number" default="0" required="false" description="facing coming out" />
+        <data name="note" type="string" default="" required="false" description="free-form note (seeded: the map model the door belongs to)" />
+        <marker type="arrow" size="0.8" color="#FFDC0080" />
+    </element>
+    <element name="race" friendlyname="Race">
+        <data name="position" type="coord3d" default="0,0,0" />
+        <data name="index" type="integer" default="0" required="false" description="vanilla's race number (name: GXT RACE00..)" />
+        <data name="racers" type="integer" default="6" required="false" description="racers, you included" />
+        <data name="laps" type="integer" default="1" required="false" description="laps" />
+        <data name="cars" type="string" default="" required="false" description="your car, then the opponents'" />
+        <data name="grid" type="selection:true,false" default="false" required="false" description="this element is the starting grid (stadium races); else the start is the first checkpoint" />
+        <data name="gridHeading" type="number" default="0" required="false" description="facing on the grid" />
+        <data name="first" type="element:racecheckpoint" default="" required="false" description="the first racecheckpoint" />
+        <marker type="cylinder" size="4" color="#FFC80080" />
+    </element>
+    <element name="racecheckpoint" friendlyname="Race checkpoint">
+        <data name="position" type="coord3d" default="0,0,0" />
+        <data name="race" type="element:race" default="" required="false" description="the race it belongs to" />
+        <data name="nextid" type="element:racecheckpoint" default="" required="false" description="the next checkpoint (none: the finish)" />
+        <marker type="checkpoint" size="6" color="#FFD200A0" />
+    </element>
+    <element name="chiliadroute" friendlyname="Chiliad Challenge route">
+        <data name="position" type="coord3d" default="0,0,0" />
+        <data name="index" type="integer" default="1" required="false" description="route number (1-3)" />
+        <data name="first" type="element:routepoint" default="" required="false" description="the first routepoint" />
+        <marker type="cylinder" size="4" color="#80FF0080" />
+    </element>
+    <element name="routepoint" friendlyname="Route point">
+        <data name="position" type="coord3d" default="0,0,0" />
+        <data name="route" type="element:chiliadroute" default="" required="false" description="the route it belongs to" />
+        <data name="nextid" type="element:routepoint" default="" required="false" description="the next point (none: the finish)" />
+        <marker type="checkpoint" size="6" color="#80FF00A0" />
+    </element>
+    <script src="edf/edf_lines_client.lua" type="client" />
+</def>

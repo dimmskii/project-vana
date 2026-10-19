@@ -1,0 +1,4 @@
+<meta>
+    <info type="map" name="vana-data-activities" author="ProjectVana" description="Placement data for vana-activities: open it in the Map Editor (definitions: vana-activities)" version="1.0.0" edf:definitions="vana-activities" />
+    <map src="activities.map" dimension="0" />
+</meta>

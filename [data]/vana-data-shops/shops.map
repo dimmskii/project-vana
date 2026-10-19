@@ -1,0 +1,137 @@
+<map edf:definitions="vana-shops">
+    <!-- Shop point -->
+    <shoppoint id="AMMUN1" posX="296.51" posY="-38.17" posZ="1000.55" interior="1" kind="weapons" note="vanilla: at the counter" />
+    <shoppoint id="AMMUN2" posX="295.74" posY="-80.48" posZ="1000.53" interior="4" kind="weapons" note="vanilla: at the counter" />
+    <shoppoint id="AMMUN3" posX="290.24" posY="-109.51" posZ="1000.55" interior="6" kind="weapons" note="vanilla: at the counter" />
+    <shoppoint id="AMMUN4" posX="308.15" posY="-141.1" posZ="998.62" interior="7" kind="weapons" note="vanilla: at the counter" />
+    <shoppoint id="AMMUN5" posX="312.79" posY="-165.95" posZ="998.62" interior="6" kind="weapons" note="vanilla: at the counter" />
+    <shoppoint id="BARBER2" posX="421.29" posY="-81.3" posZ="1000.81" interior="3" kind="hair" />
+    <shoppoint id="BARBER3" posX="414.67" posY="-51.32" posZ="1000.81" interior="12" kind="hair" />
+    <shoppoint id="BARBERS" posX="414.3" posY="-19.9" posZ="1000.81" interior="2" kind="hair" />
+    <shoppoint id="CLOTHGP" posX="181.42" posY="-86.9" posZ="1001.03" interior="18" kind="clothes" note="vanilla: the changing room" />
+    <shoppoint id="CSCHP" posX="217.47" posY="-98.19" posZ="1004.29" interior="15" kind="clothes" note="vanilla: the changing room" />
+    <shoppoint id="CSDESGN" posX="208.82" posY="-3.92" posZ="1000.22" interior="5" kind="clothes" note="vanilla: the changing room" />
+    <shoppoint id="CSEXL" posX="215.82" posY="-155.18" posZ="999.52" interior="14" kind="clothes" note="vanilla: the changing room" />
+    <shoppoint id="CSSPRT" posX="201.97" posY="-131.41" posZ="1002.51" interior="3" kind="clothes" note="vanilla: the changing room" />
+    <shoppoint id="FDBURG" posX="375.57" posY="-68.22" posZ="1000.55" interior="10" kind="food" note="vanilla: at the till" />
+    <shoppoint id="FDCHICK" posX="368.79" posY="-6.86" posZ="1000.84" interior="9" kind="food" note="vanilla: at the till" />
+    <shoppoint id="FDPIZA" posX="374" posY="-119.64" posZ="1000.54" interior="5" kind="food" note="vanilla: at the till" />
+    <shoppoint id="GYM1" posX="767.14" posY="12.51" posZ="999.7" interior="5" kind="fighting" style="5" note="Ganton: boxing (vanilla trainer spot)" />
+    <shoppoint id="GYM2" posX="769.79" posY="-42.11" posZ="999.69" interior="6" kind="fighting" style="6" note="Cobra (SF): kung fu (vanilla trainer spot)" />
+    <shoppoint id="GYM3" posX="763.36" posY="-76.76" posZ="999.66" interior="7" kind="fighting" style="7" note="Below the Belt (LV): kickboxing (vanilla trainer spot)" />
+    <shoppoint id="LACS1" posX="214.62" posY="-40.65" posZ="1001.03" interior="1" kind="clothes" note="vanilla: the changing room" />
+    <shoppoint id="TATTO2" posX="-203.32" posY="-7.06" posZ="1001.28" interior="17" kind="tattoo" />
+    <shoppoint id="TATTO3" posX="-203.32" posY="-42.38" posZ="1001.28" interior="3" kind="tattoo" />
+    <shoppoint id="TATTOO" posX="-203.32" posY="-25.33" posZ="1001.28" interior="16" kind="tattoo" />
+    <shoppoint id="X711S2" posX="-27.31" posY="-25.28" posZ="1002.55" interior="4" kind="misc" note="4 m inside the door (no counter found)" />
+    <shoppoint id="X711S3" posX="6.09" posY="-25.27" posZ="1002.55" interior="10" kind="misc" note="4 m inside the door (no counter found)" />
+    <shoppoint id="X7_11B" posX="-30.95" posY="-85.61" posZ="1002.55" interior="18" kind="misc" note="4 m inside the door (no counter found)" />
+    <shoppoint id="X7_11C" posX="-25.13" posY="-135.07" posZ="1002.55" interior="16" kind="misc" note="4 m inside the door (no counter found)" />
+    <shoppoint id="X7_11D" posX="-25.88" posY="-181.87" posZ="1002.55" interior="17" kind="misc" note="4 m inside the door (no counter found)" />
+    <shoppoint id="X7_11S" posX="-26.69" posY="-51.71" posZ="1002.55" interior="6" kind="misc" note="4 m inside the door (no counter found)" />
+    <!-- Vending machine / food cart -->
+    <vendor posX="-2420.18" posY="985.95" posZ="44.3" interior="0" kind="candy" />
+    <vendor posX="-2229.19" posY="286.41" posZ="34.7" interior="0" kind="candy" />
+    <vendor posX="-1455.12" posY="2591.66" posZ="55.23" interior="0" kind="candy" />
+    <vendor posX="-1350.12" posY="493.86" posZ="10.59" interior="0" kind="candy" />
+    <vendor posX="-253.74" posY="2599.76" posZ="62.24" interior="0" kind="candy" />
+    <vendor posX="-76.03" posY="1227.99" posZ="19.12" interior="0" kind="candy" />
+    <vendor posX="662.43" posY="-552.16" posZ="15.71" interior="0" kind="candy" />
+    <vendor posX="1398.84" posY="2222.61" posZ="10.42" interior="0" kind="candy" />
+    <vendor posX="1634.11" posY="-2237.53" posZ="12.89" interior="0" kind="candy" />
+    <vendor posX="1659.46" posY="1722.86" posZ="10.22" interior="0" kind="candy" />
+    <vendor posX="2139.52" posY="-1161.48" posZ="23.36" interior="0" kind="candy" />
+    <vendor posX="2153.23" posY="-1016.15" posZ="62.23" interior="0" kind="candy" />
+    <vendor posX="2271.73" posY="-76.46" posZ="25.96" interior="0" kind="candy" />
+    <vendor posX="2480.86" posY="-1959.27" posZ="12.96" interior="0" kind="candy" />
+    <vendor posX="2647.7" posY="1129.66" posZ="10.22" interior="0" kind="candy" />
+    <vendor posX="2845.73" posY="1295.05" posZ="10.79" interior="0" kind="candy" />
+    <vendor posX="2155.84" posY="1607.88" posZ="1000.06" interior="1" kind="candy" />
+    <vendor posX="2202.45" posY="1617.01" posZ="1000.06" interior="1" kind="candy" />
+    <vendor posX="2209.24" posY="1621.21" posZ="1000.06" interior="1" kind="candy" />
+    <vendor posX="2222.37" posY="1602.64" posZ="1000.06" interior="1" kind="candy" />
+    <vendor posX="330.68" posY="178.5" posZ="1020.07" interior="3" kind="candy" />
+    <vendor posX="331.92" posY="178.5" posZ="1020.07" interior="3" kind="candy" />
+    <vendor posX="350.91" posY="206.09" posZ="1008.48" interior="3" kind="candy" />
+    <vendor posX="361.56" posY="158.62" posZ="1008.48" interior="3" kind="candy" />
+    <vendor posX="371.59" posY="178.45" posZ="1020.07" interior="3" kind="candy" />
+    <vendor posX="374.89" posY="188.98" posZ="1008.48" interior="3" kind="candy" />
+    <vendor posX="-36.15" posY="-57.88" posZ="1003.63" interior="6" kind="candy" />
+    <vendor posX="-16.53" posY="-140.3" posZ="1003.63" interior="16" kind="candy" />
+    <vendor posX="-33.88" posY="-186.77" posZ="1003.63" interior="17" kind="candy" />
+    <vendor posX="379.04" posY="-178.88" posZ="1000.73" interior="17" kind="candy" />
+    <vendor posX="500.56" posY="-1.37" posZ="1000.73" interior="17" kind="candy" />
+    <vendor posX="-17.55" posY="-91.71" posZ="1003.63" interior="18" kind="candy" />
+    <vendor posX="-2691.68" posY="384.49" posZ="4.48" interior="0" kind="hotdog" />
+    <vendor posX="-2199.99" posY="-2386.89" posZ="30.72" interior="0" kind="hotdog" />
+    <vendor posX="-2146.52" posY="-424.77" posZ="35.33" interior="0" kind="hotdog" />
+    <vendor posX="-2094.23" posY="-396.46" posZ="35.66" interior="0" kind="hotdog" />
+    <vendor posX="-2036.32" posY="-396.76" posZ="35.66" interior="0" kind="hotdog" />
+    <vendor posX="-799.78" posY="1624.22" posZ="27.12" interior="0" kind="hotdog" />
+    <vendor posX="-197.49" posY="2659.91" posZ="62.82" interior="0" kind="hotdog" />
+    <vendor posX="388.86" posY="-2071.66" posZ="7.95" interior="0" kind="hotdog" />
+    <vendor posX="1000.48" posY="-1849.04" posZ="12.8" interior="0" kind="hotdog" />
+    <vendor posX="1558.2" posY="979.45" posZ="10.95" interior="0" kind="hotdog" />
+    <vendor posX="1589.7" posY="-1287.27" posZ="17.64" interior="0" kind="hotdog" />
+    <vendor posX="2144.64" posY="1441.93" posZ="10.85" interior="0" kind="hotdog" />
+    <vendor posX="2327.86" posY="2421.25" posZ="10.86" interior="0" kind="hotdog" />
+    <vendor posX="2537.82" posY="2137.12" posZ="10.86" interior="0" kind="hotdog" />
+    <vendor posX="-2384.23" posY="-584.01" posZ="132.11" interior="0" kind="icecream" />
+    <vendor posX="-2286.54" posY="147.63" posZ="35.32" interior="0" kind="icecream" />
+    <vendor posX="1030.59" posY="1362.59" posZ="10.81" interior="0" kind="icecream" />
+    <vendor posX="2125.13" posY="1442.08" posZ="10.7" interior="0" kind="icecream" />
+    <vendor posX="2175.09" posY="1523.41" posZ="10.73" interior="0" kind="icecream" />
+    <vendor posX="2295.71" posY="2250.1" posZ="10.73" interior="0" kind="icecream" />
+    <vendor posX="2538.03" posY="2153.7" posZ="10.73" interior="0" kind="icecream" />
+    <vendor posX="-2515.79" posY="-15.62" posZ="25.63" interior="0" kind="noodles" />
+    <vendor posX="-2197.59" posY="613.41" posZ="35.21" interior="0" kind="noodles" />
+    <vendor posX="-2194.02" posY="613.41" posZ="35.21" interior="0" kind="noodles" />
+    <vendor posX="-2193.77" posY="605.19" posZ="35.21" interior="0" kind="noodles" />
+    <vendor posX="-2187.15" posY="614.55" posZ="35.21" interior="0" kind="noodles" />
+    <vendor posX="-2181.48" posY="613.7" posZ="35.21" interior="0" kind="noodles" />
+    <vendor posX="-2151.84" posY="-435.56" posZ="35.29" interior="0" kind="noodles" />
+    <vendor posX="2536.12" posY="2290.85" posZ="10.86" interior="0" kind="noodles" />
+    <vendor posX="-2420.22" posY="984.58" posZ="44.3" interior="0" kind="soda" />
+    <vendor posX="-2118.97" posY="-423.65" posZ="34.73" interior="0" kind="soda" />
+    <vendor posX="-2118.62" posY="-422.41" posZ="34.73" interior="0" kind="soda" />
+    <vendor posX="-2097.27" posY="-398.34" posZ="34.73" interior="0" kind="soda" />
+    <vendor posX="-2092.09" posY="-490.05" posZ="34.73" interior="0" kind="soda" />
+    <vendor posX="-2068.56" posY="-398.34" posZ="34.73" interior="0" kind="soda" />
+    <vendor posX="-2063.27" posY="-490.05" posZ="34.73" interior="0" kind="soda" />
+    <vendor posX="-2039.85" posY="-398.34" posZ="34.73" interior="0" kind="soda" />
+    <vendor posX="-2034.46" posY="-490.05" posZ="34.73" interior="0" kind="soda" />
+    <vendor posX="-2011.14" posY="-398.34" posZ="34.73" interior="0" kind="soda" />
+    <vendor posX="-2005.65" posY="-490.05" posZ="34.73" interior="0" kind="soda" />
+    <vendor posX="-1980.79" posY="142.66" posZ="27.07" interior="0" kind="soda" />
+    <vendor posX="-1350.12" posY="492.29" posZ="10.59" interior="0" kind="soda" />
+    <vendor posX="-862.83" posY="1536.61" posZ="21.98" interior="0" kind="soda" />
+    <vendor posX="-253.74" posY="2597.95" posZ="62.24" interior="0" kind="soda" />
+    <vendor posX="-14.7" posY="1175.36" posZ="18.95" interior="0" kind="soda" />
+    <vendor posX="201.02" posY="-107.62" posZ="0.9" interior="0" kind="soda" />
+    <vendor posX="1154.73" posY="-1460.89" posZ="15.16" interior="0" kind="soda" />
+    <vendor posX="1277.84" posY="372.52" posZ="18.95" interior="0" kind="soda" />
+    <vendor posX="1520.15" posY="1055.27" posZ="10" interior="0" kind="soda" />
+    <vendor posX="1729.79" posY="-1943.05" posZ="12.95" interior="0" kind="soda" />
+    <vendor posX="1789.21" posY="-1369.27" posZ="15.16" interior="0" kind="soda" />
+    <vendor posX="1928.73" posY="-1772.45" posZ="12.95" interior="0" kind="soda" />
+    <vendor posX="2060.12" posY="-1897.64" posZ="12.93" interior="0" kind="soda" />
+    <vendor posX="2085.77" posY="2071.36" posZ="10.45" interior="0" kind="soda" />
+    <vendor posX="2319.99" posY="2532.85" posZ="10.22" interior="0" kind="soda" />
+    <vendor posX="2325.98" posY="-1645.13" posZ="14.21" interior="0" kind="soda" />
+    <vendor posX="2352.18" posY="-1357.16" posZ="23.77" interior="0" kind="soda" />
+    <vendor posX="2503.14" posY="1243.7" posZ="10.22" interior="0" kind="soda" />
+    <vendor posX="2155.91" posY="1606.77" posZ="1000.05" interior="1" kind="soda" />
+    <vendor posX="2209.91" posY="1607.2" posZ="1000.05" interior="1" kind="soda" />
+    <vendor posX="2222.2" posY="1606.77" posZ="1000.05" interior="1" kind="soda" />
+    <vendor posX="2576.7" posY="-1284.43" posZ="1061.09" interior="2" kind="soda" />
+    <vendor posX="-19.04" posY="-57.84" posZ="1003.63" interior="6" kind="soda" />
+    <vendor posX="316.88" posY="-140.35" posZ="998.59" interior="7" kind="soda" />
+    <vendor posX="2225.2" posY="-1153.42" posZ="1025.91" interior="15" kind="soda" />
+    <vendor posX="-35.73" posY="-140.23" posZ="1003.63" interior="16" kind="soda" />
+    <vendor posX="-15.1" posY="-140.23" posZ="1003.63" interior="16" kind="soda" />
+    <vendor posX="-32.45" posY="-186.7" posZ="1003.63" interior="17" kind="soda" />
+    <vendor posX="373.83" posY="-178.14" posZ="1000.73" interior="17" kind="soda" />
+    <vendor posX="495.97" posY="-24.32" posZ="1000.73" interior="17" kind="soda" />
+    <vendor posX="501.83" posY="-1.43" posZ="1000.73" interior="17" kind="soda" />
+    <vendor posX="-16.12" posY="-91.64" posZ="1003.63" interior="18" kind="soda" />
+</map>

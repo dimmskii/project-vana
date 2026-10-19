@@ -110,7 +110,7 @@ away and never closer than `minToAnyone` to any player, at most `maxActive` at o
 ## Parked cars (`vana-parked`)
 
 Vanilla car generators (`CCarGenerator`), seeded by `tools/seed/seed_cargens.py` into
-`vana-parked/config/cargens.lua`:
+`[data]/vana-data-parked/cargens.map`:
 
 - 1,043 from the binary streaming IPLs inside `gta3.img` (`CFileCarGenerator`, 48 bytes each;
   headings converted from radians).

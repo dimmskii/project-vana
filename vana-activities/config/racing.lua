@@ -1,5 +1,5 @@
 -- The race tournament (vanilla CPRACE): where races are entered, prizes and race rules. The races
--- themselves (checkpoints, cars) are seeded into config/races.lua.
+-- themselves (checkpoints, cars) are seeded into [data]/vana-data-activities/activities.map.
 Racing = {
     -- Entry points (vanilla's on-foot markers) and the races each offers.
     entries = {

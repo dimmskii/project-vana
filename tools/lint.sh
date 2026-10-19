@@ -9,6 +9,7 @@ ROOT="$(cd "$HERE/.." && pwd)"
 EVENT_VARS="source client root resourceRoot localPlayer resource sourceResource sourceResourceRoot exports eventName this guiRoot sourceTimer"
 status=0
 cd "$ROOT"
+"$HERE/sync-libs.sh" --check || status=1
 resources=("$@")
 [[ ${#resources[@]} -eq 0 ]] && resources=($(ls -d vana-*/ | tr -d /))
 for res in "${resources[@]}"; do
@@ -19,6 +20,8 @@ for res in "${resources[@]}"; do
     for f in "${files[@]}"; do
         # Client, server or shared, as the resource's meta.xml loads it (server if it isn't listed).
         type=$(grep -oE "<script[^>]*src=\"${f#$res/}\"[^>]*>" "$res/meta.xml" | grep -oE 'type="[a-z]+"' | head -1 | cut -d'"' -f2)
+        # Map Editor scripts (edf/) aren't in meta.xml: the editor runs them on the client.
+        [[ -z "$type" && "$f" == */edf/* ]] && type=client
         case "$type" in
             client) mta=$(tr '\n' ' ' < "$HERE/luacheck/mta-client.txt") ;;
             shared) mta=$(cat "$HERE"/luacheck/mta-*.txt | sort -u | tr '\n' ' ') ;;

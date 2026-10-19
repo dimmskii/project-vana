@@ -1,6 +1,7 @@
 <meta>
-    <info author="ProjectVana" name="Vana parked cars" description="Vanilla parked car generators from the map and main.scm" version="0.1.0" type="script" />
+    <info author="ProjectVana" name="Vana parked cars" description="Vanilla parked car generators from the map and main.scm" version="0.1.0" type="script" edf:definition="edf/vana-parked.edf" />
     <include resource="vana-population" />
-    <script src="config/cargens.lua" type="server" />
+    <script src="map_data.lua" type="server" />
+    <script src="config/maps.lua" type="server" />
     <script src="server.lua" type="server" />
 </meta>

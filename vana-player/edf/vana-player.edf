@@ -1,0 +1,8 @@
+<def name="vana-player">
+    <element name="restart" friendlyname="Restart point">
+        <data name="position" type="coord3d" default="0,0,0" />
+        <data name="rotation" type="coord3d" default="0,0,0" />
+        <data name="kind" type="string" default="hospital" required="false" description="hospital (wasted) or police (busted)" />
+        <marker type="cylinder" size="1.5" color="#FF404080" /><ped model="274" rotation="!rotation!" />
+    </element>
+</def>

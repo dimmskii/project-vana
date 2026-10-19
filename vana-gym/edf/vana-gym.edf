@@ -1,0 +1,8 @@
+<def name="vana-gym">
+    <element name="gymequipment" friendlyname="Gym equipment">
+        <data name="position" type="coord3d" default="0,0,0" />
+        <data name="rotation" type="coord3d" default="0,0,0" />
+        <data name="kind" type="string" default="bike" required="false" description="bike, treadmill, bench or mat" />
+        <marker type="cylinder" size="1" color="#FF780060" />
+    </element>
+</def>

@@ -1,0 +1,4 @@
+<meta>
+    <info type="map" name="vana-data-parked" author="ProjectVana" description="Placement data for vana-parked: open it in the Map Editor (definitions: vana-parked)" version="1.0.0" edf:definitions="vana-parked" />
+    <map src="cargens.map" dimension="0" />
+</meta>

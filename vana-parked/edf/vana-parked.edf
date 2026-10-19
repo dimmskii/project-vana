@@ -1,0 +1,16 @@
+<def name="vana-parked">
+    <element name="cargen" friendlyname="Car generator">
+        <data name="position" type="coord3d" default="0,0,0" />
+        <data name="rotation" type="coord3d" default="0,0,0" />
+        <data name="model" type="integer" default="-1" required="false" description="vehicle model; -1 picks one for the zone (kept once picked)" />
+        <data name="colors" type="string" default="-1,-1" required="false" description="primary,secondary colour; -1 random" />
+        <data name="force" type="selection:true,false" default="false" required="false" description="spawns regardless of the parked-car limit" />
+        <data name="ignoreLimit" type="selection:true,false" default="false" required="false" description="doesn't count toward the parked-car limit" />
+        <data name="alarm" type="integer" default="0" required="false" description="percent chance of an alarm" />
+        <data name="lock" type="integer" default="0" required="false" description="percent chance of locked doors" />
+        <data name="delay" type="string" default="10000,60000" required="false" description="respawn delay range (ms)" />
+        <data name="enabled" type="selection:true,false" default="true" required="false" description="generates at all" />
+        <data name="source" type="string" default="" required="false" description="where it came from (an IPL in gta3.img, or main.scm's variable)" />
+        <marker type="cylinder" size="2" color="#00A0FF60" />
+    </element>
+</def>

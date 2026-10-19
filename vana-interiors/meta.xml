@@ -1,6 +1,7 @@
 <meta>
-    <info author="ProjectVana" name="Vana interiors" description="Vanilla entry/exit markers into interiors" version="0.1.0" type="script" />
-    <script src="config/entrances.lua" type="server" />
+    <info author="ProjectVana" name="Vana interiors" description="Vanilla entry/exit markers into interiors" version="0.1.0" type="script" edf:definition="edf/vana-interiors.edf" />
+    <script src="map_data.lua" type="server" />
+    <script src="config/maps.lua" type="server" />
     <script src="map_points.lua" type="server" />
     <script src="server.lua" type="server" />
 </meta>

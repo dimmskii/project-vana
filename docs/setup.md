@@ -54,6 +54,12 @@ Keep the file names in upper case; the Linux server is case-sensitive. Check the
 Inside `<config>`, replace the stock `<resource>` lines with:
 
 ```xml
+<resource src="vana-data-player" startup="1" protected="0" />
+<resource src="vana-data-parked" startup="1" protected="0" />
+<resource src="vana-data-interiors" startup="1" protected="0" />
+<resource src="vana-data-shops" startup="1" protected="0" />
+<resource src="vana-data-gym" startup="1" protected="0" />
+<resource src="vana-data-activities" startup="1" protected="0" />
 <resource src="vana-map" startup="1" protected="0" />
 <resource src="vana-paths" startup="1" protected="0" />
 <resource src="vana-lights" startup="1" protected="0" />
@@ -139,6 +145,8 @@ Console self-test commands only run from the server console.
 `sudo apt install lua5.1 lua-check`). It knows MTA's client and server functions
 (`tools/luacheck/mta-*.txt`: the pinned Neon API stubs plus the functions Neon's luadefs register)
 and each resource's own globals, so it reports typos, stray globals and dead code.
+It also fails when a shared library copy (`tools/lib/`, copied into resources by
+`tools/sync-libs.sh`) differs from its source.
 
 ## Re-seeding config (optional)
 
@@ -147,30 +155,10 @@ were taken once (from `main.scm`, the mission scripts or the exe) and are only e
 ones can be regenerated from your game files, which overwrites hand edits. The decompiled `main.scm`
 isn't needed for setup: it's reading material for porting more of vanilla.
 
-Gym equipment comes from `models/gta_int.img`:
-
-```sh
-python3 tools/seed/seed_gym.py "/path/to/GTA San Andreas" "vana-gym/config"
-```
-
-Vending machines and food carts come from the map IPLs and both IMGs:
-
-```sh
-python3 tools/seed/seed_vendors.py "/path/to/GTA San Andreas" "vana-shops/config"
-```
-
-Entrances and shop points come from the map IPLs and `models/gta_int.img`:
-
-```sh
-python3 tools/seed/seed_interiors.py "/path/to/GTA San Andreas" "vana-interiors/config" "vana-shops/config"
-```
-
-Parked car generators come from the binary IPLs in `models/gta3.img` (the script generators,
-taken once from `main.scm`, are canonical and never regenerated):
-
-```sh
-python3 tools/seed/seed_cargens.py "/path/to/GTA San Andreas" "vana-parked/config"
-```
+Placement data (car generators, entrances, shop points, vendors, gym equipment, minigame spots,
+burglary doors) lives in the `[data]/vana-data-*` map resources and is edited in the Map Editor. Its
+seed scripts (`seed_cargens`, `seed_interiors`, `seed_vendors`, `seed_gym`, `seed_minigames`,
+`seed_burglary`) still work, through `tools/convert/to_maps.lua`: see [editor.md](editor.md).
 
 The popcycle group table (`vana-population/config/groups.lua`) comes from the US 1.0 `gta_sa.exe`:
 

@@ -1,15 +1,14 @@
 <meta>
-    <info author="ProjectVana" name="Vana activities" description="Per-player activities: burglary, dating, side jobs, schools, races, minigames" version="0.1.0" type="script" />
+    <info author="ProjectVana" name="Vana activities" description="Per-player activities: burglary, dating, side jobs, schools, races, minigames" version="0.1.0" type="script" edf:definition="edf/vana-activities.edf" />
     <script src="config/activities.lua" type="shared" />
     <script src="config/burglary.lua" type="shared" />
-    <script src="config/burglary_houses.lua" type="shared" />
+    <script src="core/map_data.lua" type="shared" />
+    <script src="config/maps.lua" type="shared" />
     <script src="config/dating.lua" type="shared" />
     <script src="config/jobs.lua" type="shared" />
     <script src="config/schools.lua" type="shared" />
     <script src="config/racing.lua" type="shared" />
     <script src="config/games.lua" type="shared" />
-    <script src="config/minigames.lua" type="shared" />
-    <script src="config/races.lua" type="server" />
     <script src="core/gxt.lua" type="server" />
     <script src="core/map_points.lua" type="server" />
     <script src="core/server.lua" type="server" />

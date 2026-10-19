@@ -1,0 +1,14 @@
+<def name="vana-shops">
+    <element name="shoppoint" friendlyname="Shop point">
+        <data name="position" type="coord3d" default="0,0,0" />
+        <data name="kind" type="string" default="food" required="false" description="shop kind (weapons, food, clothes, hair, tattoo, 247...)" />
+        <data name="style" type="integer" default="" required="false" description="fighting style taught (gym mats only)" />
+        <data name="note" type="string" default="" required="false" description="free-form note" />
+        <marker type="cylinder" size="1" color="#FF780060" />
+    </element>
+    <element name="vendor" friendlyname="Vending machine / food cart">
+        <data name="position" type="coord3d" default="0,0,0" />
+        <data name="kind" type="string" default="soda" required="false" description="what it sells (config/vendorkinds.lua)" />
+        <marker type="corona" size="0.6" color="#FFFF0080" />
+    </element>
+</def>

@@ -1,0 +1,4 @@
+<meta>
+    <info type="map" name="vana-data-gym" author="ProjectVana" description="Placement data for vana-gym: open it in the Map Editor (definitions: vana-gym)" version="1.0.0" edf:definitions="vana-gym" />
+    <map src="gym.map" dimension="0" />
+</meta>

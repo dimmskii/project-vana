@@ -1,0 +1,4 @@
+<meta>
+    <info type="map" name="vana-data-shops" author="ProjectVana" description="Placement data for vana-shops: open it in the Map Editor (definitions: vana-shops)" version="1.0.0" edf:definitions="vana-shops" />
+    <map src="shops.map" dimension="0" />
+</meta>

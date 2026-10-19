@@ -1,7 +1,8 @@
 <meta>
-    <info author="ProjectVana" name="Vana gym" description="Gym equipment workouts: stamina, muscle, fat" version="0.1.0" type="script" />
+    <info author="ProjectVana" name="Vana gym" description="Gym equipment workouts: stamina, muscle, fat" version="0.1.0" type="script" edf:definition="edf/vana-gym.edf" />
     <script src="config/gym.lua" type="shared" />
-    <script src="config/equipment.lua" type="shared" />
+    <script src="map_data.lua" type="shared" />
+    <script src="config/maps.lua" type="shared" />
     <script src="server.lua" type="server" />
     <script src="client.lua" type="client" />
     <script src="props.lua" type="client" />

@@ -4,7 +4,7 @@
 
 MTA disables GTA's own entry/exit manager, so the 370 vanilla entrances are reproduced server-side.
 `tools/seed/seed_interiors.py` seeds them from the map IPLs' `enex` sections into
-`config/entrances.lua`.
+`[data]/vana-data-interiors/entrances.map`.
 
 - **Markers:** each entry is one marker: a yellow arrow over the doorway and a trigger box (the
   IPL's full widths, at least 1.2 m).
@@ -35,7 +35,7 @@ Prices and stock come from the retail `shopping.dat`, and names from the retail 
 - **Names:** each item's nametag in `shopping.dat` is a GXT key (`VESTA` is "Black Tank", `PISTOL`
   is "9mm"). `vana-shops/gxt.lua` reads the GXT's MAIN table, whose keys are JAMCRC32 hashes, so
   menus show exactly the vanilla names.
-- **Prices:** `shopping.dat`'s, overridable per item in `config/shops.lua` (`prices`). Each shop interior has a point where customers stand (`config/points.lua`): walk into
+- **Prices:** `shopping.dat`'s, overridable per item in `config/shops.lua` (`prices`). Each shop interior has a point where customers stand (`[data]/vana-data-shops/shops.map`): walk into
 its orange marker to open the menu.
 
 | Shop | Stock | Effect |
@@ -106,7 +106,7 @@ scripts in `script.img`.
 
 To correct one in game, stand where customers should and use `/shoppoint <NAME>` (restricted:
 `command.shoppoint`). The marker moves at once, and the server log prints the line to paste into
-`config/points.lua`.
+`[data]/vana-data-shops/shops.map`.
 
 `shoptest` (console) checks that every shop has stock, every weapon maps to a game weapon and every
 vendor has a known kind.
@@ -114,7 +114,7 @@ vendor has a known kind.
 ### Vending machines and food carts
 
 `tools/seed/seed_vendors.py` places them from the map IPLs and both IMGs into
-`vana-shops/config/vendors.lua` (104: soda and candy machines, hot dog, noodle and ice cream carts).
+`[data]/vana-data-shops/shops.map` (104: soda and candy machines, hot dog, noodle and ice cream carts).
 Walk up to one and press enter/exit (F) to buy. The server checks the distance and money, then takes
 the money, adds health and fat and plays the vanilla `VENDING` animation. Prices and effects are in
 `config/vendorkinds.lua`; they're ours, since vanilla's are inside the compiled vendor scripts.
@@ -122,7 +122,7 @@ the money, adds health and fat and plays the vanilla `VENDING` animation. Prices
 ## Gym (`vana-gym`)
 
 The equipment is seeded from `gta_int.img` by `tools/seed/seed_gym.py` into
-`vana-gym/config/equipment.lua`: 4 bikes, 4 treadmills, 5 benches and 4 mats in the three public
+`[data]/vana-data-gym/gym.map`: 4 bikes, 4 treadmills, 5 benches and 4 mats in the three public
 gyms and Madd Dogg's home gym. Vanilla's gym scripts (`GYMBIKE`, `GYMBENC`, `GYMTREA`, `GYMDUMB` in
 `main.scm`) are script brains on those objects; the mats are the dumbbell stations.
 
@@ -146,7 +146,7 @@ gyms and Madd Dogg's home gym. Vanilla's gym scripts (`GYMBIKE`, `GYMBENC`, `GYM
 - **Placement:** the player starts in front of the machine (`placement`: the inverse of how far
   each get-on animation carries the root), and the marker sits there.
 - **Fighting styles:** `fighting` shop points at the vanilla trainers' spots (`GYM1`-`3` in
-  `vana-shops/config/points.lua`). Ganton teaches boxing, Cobra in San Fierro kung fu, Below the
+  `[data]/vana-data-shops/shops.map`). Ganton teaches boxing, Cobra in San Fierro kung fu, Below the
   Belt in Las Venturas kickboxing.
   - Learning a style needs 35% muscle (`fightingMinMuscle`).
   - Learned styles are owned for good, and any trainer lets you switch between them or back to the

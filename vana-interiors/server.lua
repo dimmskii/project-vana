@@ -1,6 +1,6 @@
 -- Vanilla entry/exit markers (ENEX): step into a yellow arrow and, after a fade, you're at the
 -- same-named marker in the other area. MTA disables GTA's own entry/exit manager, so this
--- reproduces it server-side from config/entrances.lua.
+-- reproduces it server-side from [data]/vana-data-interiors/entrances.map.
 local CONFIG = {
     fadeMs = 500,
     cooldownMs = 1500,      -- no re-trigger right after arriving

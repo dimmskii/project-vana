@@ -1,0 +1,20 @@
+<map edf:definitions="vana-gym">
+    <!-- Gym equipment -->
+    <gymequipment posX="773.898" posY="1.453" posZ="999.672" rotX="0" rotY="0" rotZ="270" interior="5" kind="bench" />
+    <gymequipment posX="1233.664" posY="-770.258" posZ="1083.023" rotX="0" rotY="0" rotZ="180" interior="5" kind="bench" />
+    <gymequipment posX="766.305" posY="-48.305" posZ="999.672" rotX="0" rotY="0" rotZ="180" interior="6" kind="bench" />
+    <gymequipment posX="764.867" posY="-59.711" posZ="999.672" rotX="0" rotY="0" rotZ="0" interior="7" kind="bench" />
+    <gymequipment posX="768.539" posY="-59.555" posZ="999.672" rotX="0" rotY="0" rotZ="0" interior="7" kind="bench" />
+    <gymequipment posX="772.172" posY="9.414" posZ="999.68" rotX="0" rotY="0" rotZ="270" interior="5" kind="bike" />
+    <gymequipment posX="1242.062" posY="-767.195" posZ="1083.031" rotX="0" rotY="0" rotZ="270" interior="5" kind="bike" />
+    <gymequipment posX="769.242" posY="-47.898" posZ="999.68" rotX="0" rotY="0" rotZ="270" interior="6" kind="bike" />
+    <gymequipment posX="774.625" posY="-68.641" posZ="999.68" rotX="0" rotY="0" rotZ="270" interior="7" kind="bike" />
+    <gymequipment posX="772.992" posY="5.383" posZ="999.727" rotX="0" rotY="0" rotZ="0" interior="5" kind="mat" />
+    <gymequipment posX="1226.617" posY="-754.984" posZ="1083.078" rotX="0" rotY="0" rotZ="270" interior="5" kind="mat" />
+    <gymequipment posX="756.406" posY="-47.922" posZ="999.727" rotX="0" rotY="0" rotZ="270" interior="6" kind="mat" />
+    <gymequipment posX="759.18" posY="-60.062" posZ="999.727" rotX="0" rotY="0" rotZ="270" interior="7" kind="mat" />
+    <gymequipment posX="773.492" posY="-2.602" posZ="999.672" rotX="0" rotY="0" rotZ="180" interior="5" kind="treadmill" />
+    <gymequipment posX="1226.508" posY="-764.109" posZ="1083.023" rotX="0" rotY="0" rotZ="180" interior="5" kind="treadmill" />
+    <gymequipment posX="759.633" posY="-48.125" posZ="999.672" rotX="0" rotY="0" rotZ="180" interior="6" kind="treadmill" />
+    <gymequipment posX="758.383" posY="-65.508" posZ="999.672" rotX="0" rotY="0" rotZ="180" interior="7" kind="treadmill" />
+</map>

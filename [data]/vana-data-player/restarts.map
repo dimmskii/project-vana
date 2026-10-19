@@ -1,0 +1,18 @@
+<map edf:definitions="vana-player">
+    <!-- Restart point -->
+    <restart posX="2027.77" posY="-1420.52" posZ="15.99" rotX="0" rotY="0" rotZ="137" kind="hospital" />
+    <restart posX="1180.85" posY="-1325.57" posZ="12.58" rotX="0" rotY="0" rotZ="271.4" kind="hospital" />
+    <restart posX="1244.44" posY="331.23" posZ="18.55" rotX="0" rotY="0" rotZ="7.5" kind="hospital" />
+    <restart posX="-2199.72" posY="-2308.07" posZ="29.62" rotX="0" rotY="0" rotZ="322.9" kind="hospital" />
+    <restart posX="-2670.29" posY="616.44" posZ="13.45" rotX="0" rotY="0" rotZ="183.1" kind="hospital" />
+    <restart posX="-316.38" posY="1056.05" posZ="18.73" rotX="0" rotY="0" rotZ="1.6" kind="hospital" />
+    <restart posX="-1514.82" posY="2527.12" posZ="54.74" rotX="0" rotY="0" rotZ="2.4" kind="hospital" />
+    <restart posX="1578.45" posY="1770.68" posZ="9.84" rotX="0" rotY="0" rotZ="99.8" kind="hospital" />
+    <restart posX="1550.68" posY="-1675.49" posZ="14.51" rotX="0" rotY="0" rotZ="90" kind="police" />
+    <restart posX="632.23" posY="-571.71" posZ="15.35" rotX="0" rotY="0" rotZ="267.2" kind="police" />
+    <restart posX="-2163.83" posY="-2387.82" posZ="29.62" rotX="0" rotY="0" rotZ="134.2" kind="police" />
+    <restart posX="-1605.79" posY="716.86" posZ="11.02" rotX="0" rotY="0" rotZ="355.3" kind="police" />
+    <restart posX="-212.19" posY="979.42" posZ="18.32" rotX="0" rotY="0" rotZ="278" kind="police" />
+    <restart posX="-1393.07" posY="2633.12" posZ="54.95" rotX="0" rotY="0" rotZ="86" kind="police" />
+    <restart posX="2337.08" posY="2453.8" posZ="13.98" rotX="0" rotY="0" rotZ="90.8" kind="police" />
+</map>
