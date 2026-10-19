@@ -11,7 +11,11 @@ it in its own Lua state. It behaves exactly like a local copy: no per-call cost,
 - **How:** a resource's `lib.lua`, listed first in its `meta.xml`, names the modules it imports on
   each side (`localPlayer and { client modules } or { server modules }`).
 - **Start order:** `vana-lib` starts first (top of the startup list in `mtaserver.conf`). Restarting
-  it reaches importers only when they restart.
+  it reaches importers only when they restart. Never restart `vana-lib` alone on a running server: a
+  player joining later gets resources started in the order the server last started them, so every
+  importer would start before `vana-lib` on their client, fail its imports (`SATxd`, `MenuInput`,
+  map data all nil) and break (no garage icons, menus, vendors). Restart everything in order instead:
+  `tools/srv.sh restartall`.
 - **ACL:** `loadstring` is restricted on the server, so each resource importing on the server asks
   for it (`<aclrequest>` in its meta); approve once from the console (see [setup.md](setup.md)).
   Clients aren't restricted (`vana-lib` serves the module files to them).

@@ -1,5 +1,5 @@
 #!/bin/bash
-# Headless control for the dev server: srv.sh start|stop|status|cmd "<console command>"|log [n]
+# Headless control for the dev server: srv.sh start|stop|status|cmd "<console command>"|log [n]|restartall
 set -euo pipefail
 # Lives in the repo at [vana]/tools/, i.e. <server>/mods/deathmatch/resources/[vana]/tools/.
 HERE="$(cd "$(dirname "$(readlink -f "$0")")" && pwd)"
@@ -53,7 +53,19 @@ case "${1:-}" in
     log)
         tail -n "${2:-40}" "$OUT"
         ;;
+    restartall)
+        # Every vana resource (not the data maps), in mtaserver.conf's startup order. A joining player's
+        # client starts resources in the order the server last started them, so after restarting
+        # vana-lib alone its importers would start before it there and fail (docs/libraries.md).
+        running || { echo "not running"; exit 1; }
+        for res in $(grep -oE 'resource src="vana-[a-z-]+"' "$SRV/mods/deathmatch/mtaserver.conf" | cut -d'"' -f2 | grep -v '^vana-data-'); do
+            before=$(wc -l < "$OUT")
+            echo "restart $res" > "$FIFO"
+            sleep 3
+            tail -n +"$((before + 1))" "$OUT" | grep -E "restarted successfully|ERROR|failed" | grep -v "\[client " || true
+        done
+        ;;
     *)
-        echo "usage: $0 start|stop|status|cmd \"<console command>\"|log [n]"; exit 2
+        echo "usage: $0 start|stop|status|cmd \"<console command>\"|log [n]|restartall"; exit 2
         ;;
 esac
