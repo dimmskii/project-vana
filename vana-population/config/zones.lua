@@ -1,4 +1,4 @@
--- Seeded by tools/seed/seed_population.py from retail game data. Edit freely: this file is ours now.
+-- Origin: main.scm (set_zone_* in INITIAL, LA1FIN2, MANSIO3), extracted 2026-10. Canonical: edit freely; nothing regenerates this file.
 -- Zone population settings keyed by info.zon zone name: main.scm's INITIAL block, the LA1FIN2
 -- ("Home Coming") gang territories, and Grove retaking Grove Street (MANSIO3_6740).
 -- type: popcycle.dat zone type. races: allowed civilian races (nil = all). dealers: dealer strength.

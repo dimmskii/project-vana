@@ -1,4 +1,4 @@
--- Seeded by tools/seed/seed_population.py from retail game data. Edit freely: this file is ours now.
+-- Origin: gta_sa.exe (CPopulation::m_TranslationArray) via tools/seed/seed_population.py; rerunning it overwrites edits.
 -- Popcycle groups in engine order, each with its pedgrp.dat line (0-based, non-comment lines)
 -- for Los Santos, San Fierro and Las Venturas: CPopulation::m_TranslationArray (0x8D2540).
 PopGroups = {

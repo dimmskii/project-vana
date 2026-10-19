@@ -1,4 +1,4 @@
--- Seeded by tools/seed/seed_restarts.py from main.scm. Edit freely: this file is ours now.
+-- Origin: main.scm (add_hospital_restart / add_police_restart), extracted 2026-10. Canonical: edit freely; nothing regenerates this file.
 -- Where players come back after being wasted (hospitals) or busted (police stations): the nearest one.
 Restarts = {
     hospital = {

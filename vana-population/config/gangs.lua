@@ -1,4 +1,4 @@
--- Seeded by tools/seed/seed_population.py from retail game data. Edit freely: this file is ours now.
+-- Origin: CGangs::Initialise (gta_sa.exe) plus main.scm's set_gang_weapons (RYDER2), extracted 2026-10. Canonical: edit freely; nothing regenerates this file.
 -- weapons: weapon IDs a member may carry (CGangs::Initialise defaults; Grove from the RYDER2 mission.
 -- Spraying all 100 tags upgrades Grove to desert eagle, mp5, knife in main.scm's COLLS script).
 -- armedChance: chance a spawned member carries one of them (CPopulation::AddPed: 33%).

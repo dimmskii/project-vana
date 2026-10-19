@@ -34,7 +34,7 @@ Start here:
 | `vana-paths` | Reads the retail `NODES*.DAT` path graph; nearest-node, link and navi queries; traffic light stop rule |
 | `vana-lights` | Runs the traffic lights on the vanilla single-player cycle |
 | `vana-population` | Vanilla population rules: zone/time densities, ped and car groups, gangs, cops, weapons |
-| `vana-parked` | Parked cars from vanilla car generators (map IPLs and `main.scm`) |
+| `vana-parked` | Parked cars from vanilla car generators (map IPLs and the script's generators) |
 | `vana-services` | Wanted levels, police pursuit, ambulances and medics |
 | `vana-interiors` | Vanilla entry/exit markers into interiors |
 | `vana-shops` | Ammu-Nation, fast food, clothes shops, 24/7 counters, gym fighting styles |

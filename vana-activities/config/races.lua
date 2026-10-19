@@ -1,4 +1,4 @@
--- Seeded by tools/seed/seed_races.py from main.scm's CPRACE race table. Edit freely: this file is ours now.
+-- Origin: main.scm's CPRACE race table, extracted 2026-10. Canonical: edit freely; nothing regenerates this file.
 -- index: vanilla's race number (names are GXT RACE00..RACE24). racers: including you. cars: yours first,
 -- then the opponents'. start: where the grid is (the stadiums; street races start at checkpoint 1).
 RaceTable = {

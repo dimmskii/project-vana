@@ -142,6 +142,11 @@ and each resource's own globals, so it reports typos, stray globals and dead cod
 
 ## Re-seeding config (optional)
 
+Every vanilla-derived config says where it came from on its first line (`Origin:`). Canonical ones
+were taken once (from `main.scm`, the mission scripts or the exe) and are only edited by hand; seeded
+ones can be regenerated from your game files, which overwrites hand edits. The decompiled `main.scm`
+isn't needed for setup: it's reading material for porting more of vanilla.
+
 Gym equipment comes from `models/gta_int.img`:
 
 ```sh
@@ -160,22 +165,14 @@ Entrances and shop points come from the map IPLs and `models/gta_int.img`:
 python3 tools/seed/seed_interiors.py "/path/to/GTA San Andreas" "vana-interiors/config" "vana-shops/config"
 ```
 
-Hospital and police restart points come from `main.scm`:
-
-```sh
-python3 tools/seed/seed_restarts.py "/path/to/GTA San Andreas" "vana-player/config"
-```
-
-
-Parked car generators are seeded the same way from `models/gta3.img` and `main.scm`:
+Parked car generators come from the binary IPLs in `models/gta3.img` (the script generators,
+taken once from `main.scm`, are canonical and never regenerated):
 
 ```sh
 python3 tools/seed/seed_cargens.py "/path/to/GTA San Andreas" "vana-parked/config"
 ```
 
-
-`vana-population/config/*.lua` is committed and meant to be edited. To regenerate it from scratch
-from the decompiled `main.scm` (`data/script/main.txt`) and the US 1.0 `gta_sa.exe`:
+The popcycle group table (`vana-population/config/groups.lua`) comes from the US 1.0 `gta_sa.exe`:
 
 ```sh
 python3 tools/seed/seed_population.py "/path/to/GTA San Andreas" "vana-population/config"

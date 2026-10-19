@@ -1,9 +1,9 @@
 #!/usr/bin/env python3
 """Seeds vana-parked's editable car generator list from retail game data.
 
-Reads (never executes):
-  - models/gta3.img: the binary streaming IPLs' parked car sections (CFileCarGenerator, 48 bytes)
-  - data/script/main.txt (decompiled main.scm): create_car_generator / _with_plate calls
+Reads (never executes) models/gta3.img: the binary streaming IPLs' parked car sections
+(CFileCarGenerator, 48 bytes). The script generators (main.scm's create_car_generator calls) were
+extracted once into cargens_script.lua, which is canonical and never regenerated.
 
 The generated config/cargens.lua is ours afterwards: edit freely (toggle `enabled`, change models).
 
@@ -11,13 +11,11 @@ usage: seed_cargens.py <GTA San Andreas dir> <vana-parked/config dir>
 """
 import math
 import os
-import re
 import struct
 import sys
 
 GTA, OUT = sys.argv[1], sys.argv[2]
 IMG = os.path.join(GTA, "models", "gta3.img")
-MAIN = os.path.join(GTA, "data", "script", "main.txt")
 
 gens = []
 
@@ -45,29 +43,7 @@ with open(IMG, "rb") as f:
                          "force": bool(flags & 1), "ignoreLimit": bool(flags & 2), "alarm": alarm, "lock": lock,
                          "delay": (mn, mx), "source": name.lower()})
 
-# --- main.scm script generators --------------------------------------------------------------------
-pattern = re.compile(
-    r"^\s*(\$[\w\[\]]+) = create_car_generator(?:_with_plate)? ([-\d.]+) \{y\} ([-\d.]+) \{z\} ([-\d.]+) \{heading\} ([-\d.]+) "
-    r"\{modelId\} (-?\d+) \{primaryColor\} (-?\d+) \{secondaryColor\} (-?\d+) \{forceSpawn\} (\w+) \{alarmChance\} (\d+) "
-    r"\{doorLockChance\} (\d+) \{minDelay\} (\d+) \{maxDelay\} (\d+)")
-seen = set()
-for line in open(MAIN, encoding="latin-1"):
-    m = pattern.match(line)
-    if not m:
-        continue
-    var, x, y, z = m[1], float(m[2]), float(m[3]), float(m[4])
-    if x == 0 and y == 0:
-        continue  # placeholders whose position a mission sets later (import/export)
-    key = (var, round(x), round(y))
-    if key in seen:
-        continue
-    seen.add(key)
-    gens.append({"x": x, "y": y, "z": z, "heading": float(m[5]), "model": int(m[6]), "colors": (int(m[7]), int(m[8])),
-                 "force": m[9] == "True", "ignoreLimit": False, "alarm": int(m[10]), "lock": int(m[11]),
-                 "delay": (int(m[12]), int(m[13])), "source": "main.scm " + var})
-
-# The script sometimes keeps two generators at one spot (e.g. a girlfriend's car locked and unlocked);
-# one parked car per spot and model.
+# One parked car per spot and model.
 unique, positions = [], set()
 for g in gens:
     key = (round(g["x"]), round(g["y"]), round(g["z"]), g["model"])
@@ -79,8 +55,7 @@ gens = unique
 os.makedirs(OUT, exist_ok=True)
 with open(os.path.join(OUT, "cargens.lua"), "w") as f:
     f.write("-- Seeded by tools/seed/seed_cargens.py from retail game data. Edit freely: this file is ours now.\n")
-    f.write("-- Parked car generators: the streaming IPLs in gta3.img, then main.scm's script generators (rewards,\n")
-    f.write("-- airport aircraft, garages...), all enabled: open-world content is always available.\n")
+    f.write("-- Parked car generators from the streaming IPLs in gta3.img, all enabled (script generators: cargens_script.lua).\n")
     f.write("-- model -1: a car suited to the zone, chosen on first spawn and kept. colors -1: random.\n")
     f.write("-- force: spawns regardless of the parked-car limit. alarm/lock: percent chances. delay: respawn ms range.\n")
     f.write("CarGenerators = {\n")
@@ -92,5 +67,4 @@ with open(os.path.join(OUT, "cargens.lua"), "w") as f:
                    g["delay"][0], g["delay"][1], g["source"]))
     f.write("}\n")
 
-ipl = sum(1 for g in gens if not g["source"].startswith("main.scm"))
-print("car generators: %d from IPLs, %d from main.scm" % (ipl, len(gens) - ipl))
+print("car generators: %d from IPLs" % len(gens))
