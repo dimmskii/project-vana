@@ -52,6 +52,7 @@
     <script src="games/pool.lua" type="server" />
     <script src="games/pool_client.lua" type="client" />
     <script src="games/rhythm_client.lua" type="client" />
+    <file src="data/LD_BEAT.txd" /> <!-- the beat display's sprites: copied from your game at setup -->
     <script src="games/dance.lua" type="server" />
     <script src="games/dance_client.lua" type="client" />
 </meta>

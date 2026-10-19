@@ -289,8 +289,15 @@ All outcomes and money are decided on the server; the client draws the panels.
   (the straightest pot, with a little error), and that the game is judged on your client. Walking out
   forfeits the wager.
 - **Dancing** (`DANCE`): on the Alhambra's floor (vanilla's spot) and in two more bars (ours), a
-  rhythm game: press each arrow as it crosses the line, judged PERFECT / GOOD / BAD with vanilla's
+  rhythm game: press each arrow as it reaches the ring, judged PERFECT / GOOD / BAD with vanilla's
   lines; best scores are kept. Dance dates use it too.
+- **The rhythm game** (`games/rhythm_client.lua`) is drawn as vanilla's beat display (`BDISPLY`):
+  `LD_BEAT`'s arrows (`data/LD_BEAT.txd`, copied from your game at setup and sent to players) scroll
+  along a track from 4.5 s ahead into the target ring, fading in, and out 0.8 s after it; a hit
+  flashes the ring (`CHIT`), brighter and shorter the better. Timing windows are the DANCE script's
+  (35 / 60 / 110 ms). Ours: the beats are generated at a steady tempo (vanilla's come from each
+  music track's beat data, with the track playing: not ported yet), and only the four straight
+  arrows are used (vanilla also has diagonals).
 - **Lowrider contest** (`LOWR`, by the Unity Station car park): drive in with a lowrider with
   hydraulics, choose a wager, and play the rhythm game against a rival; out-bounce them for double.
   Ours: the rival's score.
