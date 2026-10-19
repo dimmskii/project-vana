@@ -7,6 +7,7 @@
     <script src="config/vendorkinds.lua" type="shared" />
     <script src="sa_reader.lua" type="server" />
     <script src="sa_gxt.lua" type="server" />
+    <script src="sa_dat.lua" type="server" />
     <script src="config/keepers.lua" type="server" />
     <script src="server.lua" type="server" />
     <script src="keepers.lua" type="server" />

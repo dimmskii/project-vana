@@ -6,33 +6,23 @@ local stock = {}    -- lowercase shop section -> { type, items = { names } }
 local markers = {}  -- marker -> shop name
 local open = {}     -- player -> shop name
 
-local function readLines(path)
-    local f = fileOpen(path, true)
-    if not f then error("vana-shops: missing " .. path .. " (see docs/setup.md)") end
-    local s = fileRead(f, fileGetSize(f))
-    fileClose(f)
-    return s:gmatch("[^\r\n]+")
-end
-
+-- shopping.dat: "section prices" > one section per kind (weapons, food, clothes...) of item rows,
+-- and "section shops" > one section per shop with its type and items. Read with sa_dat.lua.
 local function loadShoppingDat()
-    local path = {}
-    for line in readLines("data/shopping.dat") do
-        local l = line:gsub("#.*", "")
-        local words = {}
-        for w in l:gmatch("%S+") do words[#words + 1] = w end
-        if words[1] == "section" then
-            path[#path + 1] = words[2]:lower()
-        elseif words[1] == "end" then
-            path[#path] = nil
-        elseif #words > 0 then
-            if path[1] == "prices" and path[2] then
-                prices[path[2]] = prices[path[2]] or {}
-                prices[path[2]][words[1]:lower()] = words
-            elseif path[1] == "shops" and path[2] then
-                local shop = stock[path[2]] or { items = {} }
-                stock[path[2]] = shop
-                if words[1] == "type" then shop.type = words[2] elseif words[1] == "item" then shop.items[#shop.items + 1] = words[2]:lower() end
-            end
+    local text = SA.readFile("data/shopping.dat")
+    if not text then error("vana-shops: missing data/shopping.dat (see docs/setup.md)") end
+    local root = SADat.sections(text)
+    for name, section in pairs(root.sections.prices and root.sections.prices.sections or {}) do
+        for _, words in ipairs(section.rows) do
+            prices[name] = prices[name] or {}
+            prices[name][words[1]:lower()] = words
+        end
+    end
+    for name, section in pairs(root.sections.shops and root.sections.shops.sections or {}) do
+        for _, words in ipairs(section.rows) do
+            local shop = stock[name] or { items = {} }
+            stock[name] = shop
+            if words[1] == "type" then shop.type = words[2] elseif words[1] == "item" then shop.items[#shop.items + 1] = words[2]:lower() end
         end
     end
 end

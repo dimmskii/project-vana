@@ -10,8 +10,10 @@ COPIES=(
     "map_data.lua:vana-player/map_data.lua vana-parked/map_data.lua vana-interiors/map_data.lua vana-shops/map_data.lua vana-gym/map_data.lua vana-activities/core/map_data.lua vana-wildlife/map_data.lua"
     "edf_lines_client.lua:vana-interiors/edf/edf_lines_client.lua vana-activities/edf/edf_lines_client.lua vana-wildlife/edf/edf_lines_client.lua"
     "map_points.lua:vana-map/provider.lua vana-interiors/map_points.lua vana-activities/core/map_points.lua"
-    "sa_reader.lua:vana-shops/sa_reader.lua vana-activities/core/sa_reader.lua"
+    "sa_reader.lua:vana-shops/sa_reader.lua vana-activities/core/sa_reader.lua vana-population/sa_reader.lua"
     "sa_gxt.lua:vana-shops/sa_gxt.lua vana-activities/core/sa_gxt.lua"
+    "sa_ide.lua:vana-population/sa_ide.lua"
+    "sa_dat.lua:vana-population/sa_dat.lua vana-shops/sa_dat.lua"
 )
 status=0
 for entry in "${COPIES[@]}"; do

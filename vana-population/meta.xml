@@ -6,6 +6,9 @@
     <script src="config/personalities.lua" type="server" />
     <script src="config/drops.lua" type="server" />
     <script src="config/companions.lua" type="server" />
+    <script src="sa_reader.lua" type="server" />
+    <script src="sa_ide.lua" type="server" />
+    <script src="sa_dat.lua" type="server" />
     <script src="data.lua" type="server" />
     <script src="population.lua" type="server" />
     <script src="server.lua" type="server" />
