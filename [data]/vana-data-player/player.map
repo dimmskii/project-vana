@@ -15,4 +15,6 @@
     <restart posX="-212.19" posY="979.42" posZ="18.32" rotX="0" rotY="0" rotZ="278" kind="police" />
     <restart posX="-1393.07" posY="2633.12" posZ="54.95" rotX="0" rotY="0" rotZ="86" kind="police" />
     <restart posX="2337.08" posY="2453.8" posZ="13.98" rotX="0" rotY="0" rotZ="90.8" kind="police" />
+    <!-- Spot (a position the activity rules use) -->
+    <spot id="PlayerConfig.start.spawn" posX="2495.3" posY="-1687.4" posZ="13.5" interior="0" shape="named" />
 </map>

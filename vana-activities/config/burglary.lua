@@ -12,9 +12,9 @@ Burglary = {
     vanBack = 6.0, vanReach = 3.5,
     -- Lock-ups: garage ID (setGarageOpen), where it opens for the van, and where the van parks inside.
     lockups = {
-        { garage = 6, x = 2741.0, y = -2006.81, z = 14.0, park = { 2741.24, -2011.27, 13.59 } },     -- BURG_LK (LS)
-        { garage = 20, x = -2102.54, y = -15.59, z = 34.32, park = { -2109.32, -15.80, 34.32 } },   -- BRGSFSE (SF)
-        { garage = 33, x = 2609.25, y = 1439.35, z = 9.82, park = { 2609.01, 1445.94, 9.82 } },     -- VGELOCK (LV)
+        At("Burglary.lockups.1", { garage = 6, park = At("Burglary.lockups.1.park") }),     -- BURG_LK (LS)
+        At("Burglary.lockups.2", { garage = 20, park = At("Burglary.lockups.2.park") }),   -- BRGSFSE (SF)
+        At("Burglary.lockups.3", { garage = 33, park = At("Burglary.lockups.3.park") }),     -- VGELOCK (LV)
     },
     openRadius = 20, parkRadius = 3.2,
     -- Noise (stealth bar): per frame, the engine's noise level at the player * scale, minus floor, adds

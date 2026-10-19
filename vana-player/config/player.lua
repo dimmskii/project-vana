@@ -5,7 +5,7 @@ PlayerConfig = {
         money = 250,
         -- Ped stats (0-1000): 21 fat, 22 stamina, 23 muscle, 24 max health (569 = 100 HP, 1000 = 176 HP).
         stats = { [21] = 200, [22] = 0, [23] = 0, [24] = 569 },
-        spawn = { x = 2495.3, y = -1687.4, z = 13.5, heading = 0 }, -- Grove Street
+        spawn = At("PlayerConfig.start.spawn", { heading = 0 }), -- Grove Street
     },
 
     -- Coming back where you left, rather than at the start spawn.

@@ -1645,4 +1645,579 @@
     <routepoint id="chiliad3p22" posX="-2118.3" posY="-1948.25" posZ="99.07" route="chiliad3" nextid="chiliad3p23" />
     <routepoint id="chiliad3p23" posX="-2233.65" posY="-2117.05" posZ="67.25" route="chiliad3" nextid="chiliad3p24" />
     <routepoint id="chiliad3p24" posX="-2373.89" posY="-2195" posZ="32.38" route="chiliad3" />
+    <!-- Spot (a position the activity rules use) -->
+    <spot id="Jobs.paramedic.hospitals.1" posX="2004.96" posY="-1442.96" posZ="12.56" interior="0" set="Jobs.paramedic.hospitals" index="1" shape="array" />
+    <spot id="Jobs.paramedic.hospitals.2" posX="1180.85" posY="-1325.57" posZ="12.58" interior="0" set="Jobs.paramedic.hospitals" index="2" shape="array" />
+    <spot id="Jobs.paramedic.hospitals.3" posX="1244.44" posY="331.23" posZ="18.55" interior="0" set="Jobs.paramedic.hospitals" index="3" shape="array" />
+    <spot id="Jobs.paramedic.hospitals.4" posX="-2198.69" posY="-2290.11" posZ="29.63" interior="0" set="Jobs.paramedic.hospitals" index="4" shape="array" />
+    <spot id="Jobs.paramedic.hospitals.5" posX="-2670.29" posY="616.44" posZ="13.45" interior="0" set="Jobs.paramedic.hospitals" index="5" shape="array" />
+    <spot id="Jobs.paramedic.hospitals.6" posX="-316.38" posY="1056.05" posZ="18.73" interior="0" set="Jobs.paramedic.hospitals" index="6" shape="array" />
+    <spot id="Jobs.paramedic.hospitals.7" posX="-1514.82" posY="2527.12" posZ="54.74" interior="0" set="Jobs.paramedic.hospitals" index="7" shape="array" />
+    <spot id="Jobs.paramedic.hospitals.8" posX="1578.45" posY="1770.68" posZ="9.84" interior="0" set="Jobs.paramedic.hospitals" index="8" shape="array" />
+    <spot id="Jobs.freight.stations.1" posX="1698.83" posY="-1953.75" posZ="12.55" interior="0" shape="array" />
+    <spot id="Jobs.freight.stations.2" posX="789.5" posY="-1343.8" posZ="-2.58" interior="0" shape="array" />
+    <spot id="Jobs.freight.stations.3" posX="-1943.24" posY="159.59" posZ="24.72" interior="0" shape="array" />
+    <spot id="Jobs.freight.stations.4" posX="1463.36" posY="2632.25" posZ="9.82" interior="0" shape="array" />
+    <spot id="Jobs.freight.stations.5" posX="2864.62" posY="1248.27" posZ="9.82" interior="0" shape="array" />
+    <spot id="Jobs.trucking.start" posX="-77.65" posY="-1136.4" posZ="0.08" interior="0" shape="array" />
+    <spot id="Jobs.trucking.truckSpot" posX="-76.17" posY="-1128.96" posZ="0.08" interior="0" shape="array" w="70" />
+    <spot id="Jobs.trucking.trailerSpot" posX="-60.6" posY="-1136.9" posZ="0.08" interior="0" shape="array" w="70" />
+    <spot id="Jobs.trucking.destinations.1" posX="-187.4" posY="-277.02" posZ="0.42" interior="0" set="Jobs.trucking.destinations" index="1" shape="array" />
+    <spot id="Jobs.trucking.destinations.2" posX="58.04" posY="-256.73" posZ="0.58" interior="0" set="Jobs.trucking.destinations" index="2" shape="array" />
+    <spot id="Jobs.trucking.destinations.3" posX="95.87" posY="-154.36" posZ="1.58" interior="0" set="Jobs.trucking.destinations" index="3" shape="array" />
+    <spot id="Jobs.trucking.destinations.4" posX="809.76" posY="-598" posZ="15.19" interior="0" set="Jobs.trucking.destinations" index="4" shape="array" />
+    <spot id="Jobs.trucking.destinations.5" posX="1403.83" posY="399.43" posZ="18.75" interior="0" set="Jobs.trucking.destinations" index="5" shape="array" />
+    <spot id="Jobs.trucking.destinations.6" posX="1338.29" posY="348.9" posZ="18.41" interior="0" set="Jobs.trucking.destinations" index="6" shape="array" />
+    <spot id="Jobs.trucking.destinations.7" posX="1449.72" posY="2358.85" posZ="9.82" interior="0" set="Jobs.trucking.destinations" index="7" shape="array" />
+    <spot id="Jobs.trucking.destinations.8" posX="1037.48" posY="2131.34" posZ="9.82" interior="0" set="Jobs.trucking.destinations" index="8" shape="array" />
+    <spot id="Jobs.trucking.destinations.9" posX="987.97" posY="2080.39" posZ="9.82" interior="0" set="Jobs.trucking.destinations" index="9" shape="array" />
+    <spot id="Jobs.trucking.destinations.10" posX="1288.67" posY="1195.23" posZ="9.87" interior="0" set="Jobs.trucking.destinations" index="10" shape="array" />
+    <spot id="Jobs.trucking.destinations.11" posX="2467.9" posY="1950.06" posZ="9.24" interior="0" set="Jobs.trucking.destinations" index="11" shape="array" />
+    <spot id="Jobs.trucking.destinations.12" posX="2792.74" posY="2578.34" posZ="9.82" interior="0" set="Jobs.trucking.destinations" index="12" shape="array" />
+    <spot id="Jobs.trucking.destinations.13" posX="2271.48" posY="2791.74" posZ="9.82" interior="0" set="Jobs.trucking.destinations" index="13" shape="array" />
+    <spot id="Jobs.trucking.destinations.14" posX="2596.52" posY="1738.58" posZ="9.83" interior="0" set="Jobs.trucking.destinations" index="14" shape="array" />
+    <spot id="Jobs.trucking.destinations.15" posX="2818.84" posY="912.51" posZ="9.75" interior="0" set="Jobs.trucking.destinations" index="15" shape="array" />
+    <spot id="Jobs.trucking.destinations.16" posX="2706.5" posY="827.32" posZ="9.21" interior="0" set="Jobs.trucking.destinations" index="16" shape="array" />
+    <spot id="Jobs.trucking.destinations.17" posX="1627.72" posY="688.4" posZ="9.83" interior="0" set="Jobs.trucking.destinations" index="17" shape="array" />
+    <spot id="Jobs.trucking.destinations.18" posX="1504.49" posY="981.14" posZ="9.72" interior="0" set="Jobs.trucking.destinations" index="18" shape="array" />
+    <spot id="Jobs.trucking.destinations.19" posX="1724.01" posY="1590.13" posZ="9.26" interior="0" set="Jobs.trucking.destinations" index="19" shape="array" />
+    <spot id="Jobs.trucking.destinations.20" posX="1727.83" posY="2338.02" posZ="9.81" interior="0" set="Jobs.trucking.destinations" index="20" shape="array" />
+    <spot id="Jobs.trucking.destinations.21" posX="2413.68" posY="-2113.67" posZ="12.39" interior="0" set="Jobs.trucking.destinations" index="21" shape="array" />
+    <spot id="Jobs.trucking.destinations.22" posX="2784.97" posY="-2455.44" posZ="12.63" interior="0" set="Jobs.trucking.destinations" index="22" shape="array" />
+    <spot id="Jobs.trucking.destinations.23" posX="2112.66" posY="-2070.38" posZ="12.55" interior="0" set="Jobs.trucking.destinations" index="23" shape="array" />
+    <spot id="Jobs.trucking.destinations.24" posX="1763.64" posY="-2070.37" posZ="12.62" interior="0" set="Jobs.trucking.destinations" index="24" shape="array" />
+    <spot id="Jobs.trucking.destinations.25" posX="-1888.62" posY="-1711.84" posZ="20.77" interior="0" set="Jobs.trucking.destinations" index="25" shape="array" />
+    <spot id="Jobs.trucking.destinations.26" posX="-2117.23" posY="-2380.51" posZ="29.47" interior="0" set="Jobs.trucking.destinations" index="26" shape="array" />
+    <spot id="Jobs.trucking.destinations.27" posX="-1545.44" posY="-2747.03" posZ="47.53" interior="0" set="Jobs.trucking.destinations" index="27" shape="array" />
+    <spot id="Jobs.trucking.destinations.28" posX="-1407.37" posY="2645.96" posZ="54.7" interior="0" set="Jobs.trucking.destinations" index="28" shape="array" />
+    <spot id="Jobs.trucking.destinations.29" posX="-2245.58" posY="2371.69" posZ="3.99" interior="0" set="Jobs.trucking.destinations" index="29" shape="array" />
+    <spot id="Jobs.trucking.destinations.30" posX="-1360.63" posY="2068.09" posZ="51.46" interior="0" set="Jobs.trucking.destinations" index="30" shape="array" />
+    <spot id="Jobs.trucking.destinations.31" posX="274.27" posY="1382.78" posZ="9.6" interior="0" set="Jobs.trucking.destinations" index="31" shape="array" />
+    <spot id="Jobs.trucking.destinations.32" posX="628.86" posY="1714.89" posZ="5.99" interior="0" set="Jobs.trucking.destinations" index="32" shape="array" />
+    <spot id="Jobs.trucking.destinations.33" posX="635" posY="1213.78" posZ="10.72" interior="0" set="Jobs.trucking.destinations" index="33" shape="array" />
+    <spot id="Jobs.trucking.destinations.34" posX="-914.95" posY="2012.14" posZ="59.93" interior="0" set="Jobs.trucking.destinations" index="34" shape="array" />
+    <spot id="Jobs.trucking.destinations.35" posX="385.82" posY="2595.55" posZ="15.48" interior="0" set="Jobs.trucking.destinations" index="35" shape="array" />
+    <spot id="Jobs.trucking.destinations.36" posX="-1556.98" posY="-441.35" posZ="5" interior="0" set="Jobs.trucking.destinations" index="36" shape="array" />
+    <spot id="Jobs.trucking.destinations.37" posX="-2659.63" posY="1380.64" posZ="6.16" interior="0" set="Jobs.trucking.destinations" index="37" shape="array" />
+    <spot id="Jobs.trucking.destinations.38" posX="-1650.93" posY="437.57" posZ="6.18" interior="0" set="Jobs.trucking.destinations" index="38" shape="array" />
+    <spot id="Jobs.trucking.destinations.39" posX="-1745.12" posY="37.88" posZ="2.54" interior="0" set="Jobs.trucking.destinations" index="39" shape="array" />
+    <spot id="Jobs.trucking.income.pickup" posX="-82.27" posY="-1135.53" posZ="0.58" interior="0" shape="array" />
+    <spot id="Jobs.quarry.start" posX="823.68" posY="854.17" posZ="10.79" interior="0" shape="array" />
+    <spot id="Jobs.quarry.entrance" posX="808.41" posY="841.99" posZ="10" interior="0" shape="array" />
+    <spot id="Jobs.quarry.depot" posX="816.48" posY="845.85" posZ="9.49" interior="0" shape="array" w="0" />
+    <spot id="Jobs.quarry.cop.body" posX="606.95" posY="933.09" posZ="-38.53" interior="0" shape="array" />
+    <spot id="Jobs.quarry.cop.bike" posX="560.3" posY="844.94" posZ="-13.03" interior="0" shape="array" />
+    <spot id="Jobs.quarry.cop.dozer" posX="653.16" posY="879.98" posZ="-42.58" interior="0" shape="array" w="0" />
+    <spot id="Jobs.quarry.cop.dumper" posX="717.02" posY="938.37" posZ="-19.73" interior="0" shape="array" w="0" />
+    <spot id="Jobs.quarry.cop.pickup" posX="705.11" posY="916.32" posZ="-19.64" interior="0" shape="array" />
+    <spot id="Jobs.quarry.cop.water" posX="371.55" posY="978.17" posZ="28.52" interior="0" shape="array" />
+    <spot id="Jobs.quarry.rocks.items.1" posX="771.64" posY="836.23" posZ="4.9" interior="0" shape="array" />
+    <spot id="Jobs.quarry.rocks.items.1.target" posX="762.12" posY="836.65" posZ="-3.44" interior="0" shape="array" />
+    <spot id="Jobs.quarry.rocks.items.2" posX="751.67" posY="945" posZ="4.86" interior="0" shape="array" />
+    <spot id="Jobs.quarry.rocks.items.2.target" posX="735.87" posY="933.04" posZ="-4.39" interior="0" shape="array" />
+    <spot id="Jobs.quarry.rocks.items.3" posX="538.91" posY="985.64" posZ="-8.59" interior="0" shape="array" />
+    <spot id="Jobs.quarry.rocks.items.3.target" posX="518.97" posY="967.76" posZ="-25.89" interior="0" shape="array" />
+    <spot id="Jobs.quarry.rocks.items.4" posX="680.53" posY="963.45" posZ="-13.66" interior="0" shape="array" />
+    <spot id="Jobs.quarry.rocks.items.4.target" posX="671.33" posY="941.19" posZ="-29.34" interior="0" shape="array" />
+    <spot id="Jobs.quarry.rocks.items.5" posX="516.84" posY="928.72" posZ="-27.62" interior="0" shape="array" />
+    <spot id="Jobs.quarry.rocks.items.5.target" posX="523.22" posY="907.2" posZ="-43.41" interior="0" shape="array" />
+    <spot id="Jobs.quarry.rocks.items.6" posX="522.62" posY="828.3" posZ="-27.18" interior="0" shape="array" />
+    <spot id="Jobs.quarry.rocks.items.6.target" posX="536.8" posY="838.08" posZ="-38.23" interior="0" shape="array" />
+    <spot id="Jobs.quarry.rocks.items.7" posX="646.72" posY="752.23" posZ="-12.15" interior="0" shape="array" />
+    <spot id="Jobs.quarry.rocks.items.7.target" posX="645.26" posY="773.7" posZ="-28.25" interior="0" shape="array" />
+    <spot id="Jobs.quarry.bombs.items.1" posX="817.07" posY="865.59" posZ="11.05" interior="0" shape="array" />
+    <spot id="Jobs.quarry.bombs.items.1.target" posX="830.43" posY="889.85" posZ="12.35" interior="0" shape="array" />
+    <spot id="Jobs.quarry.bombs.items.2" posX="714.53" posY="920.06" posZ="-19.68" interior="0" shape="array" />
+    <spot id="Jobs.quarry.bombs.items.2.target" posX="678.58" posY="981.43" posZ="-13.75" interior="0" shape="array" />
+    <spot id="Jobs.quarry.bombs.items.3" posX="632.28" posY="895.86" posZ="-43.95" interior="0" shape="array" />
+    <spot id="Jobs.quarry.bombs.items.3.target" posX="660.67" posY="913.72" posZ="-41.41" interior="0" shape="array" />
+    <spot id="Jobs.quarry.bombs.items.4" posX="675.8" posY="841.87" posZ="-43.96" interior="0" shape="array" />
+    <spot id="Jobs.quarry.bombs.items.4.target" posX="632.45" posY="810.32" posZ="-43.96" interior="0" shape="array" />
+    <spot id="Jobs.quarry.bodies.dumper" posX="355.86" posY="895.65" posZ="19.4" interior="0" shape="array" w="0" />
+    <spot id="Jobs.quarry.bodies.fire" posX="469.38" posY="877.28" posZ="-29.04" interior="0" shape="array" />
+    <spot id="Jobs.quarry.explosives.airstrip" posX="-59.31" posY="2502.25" posZ="15.48" interior="0" shape="array" />
+    <spot id="Jobs.quarry.tracks.items.1" posX="744.14" posY="1583.6" posZ="7.54" interior="0" set="Jobs.quarry.tracks.items" index="1" shape="array" />
+    <spot id="Jobs.quarry.tracks.items.2" posX="743.04" posY="1602.77" posZ="7.14" interior="0" set="Jobs.quarry.tracks.items" index="2" shape="array" />
+    <spot id="Jobs.quarry.tracks.items.3" posX="743.58" posY="1616.75" posZ="6.85" interior="0" set="Jobs.quarry.tracks.items" index="3" shape="array" />
+    <spot id="Jobs.quarry.tracks.items.4" posX="742.66" posY="1653.42" posZ="6.16" interior="0" set="Jobs.quarry.tracks.items" index="4" shape="array" />
+    <spot id="Jobs.quarry.tracks.items.5" posX="743.81" posY="1671.52" posZ="5.85" interior="0" set="Jobs.quarry.tracks.items" index="5" shape="array" />
+    <spot id="Jobs.quarry.tracks.items.6" posX="742.58" posY="1700.3" posZ="5.42" interior="0" set="Jobs.quarry.tracks.items" index="6" shape="array" />
+    <spot id="Jobs.quarry.tracks.items.7" posX="743.44" posY="1730.14" posZ="5.07" interior="0" set="Jobs.quarry.tracks.items" index="7" shape="array" />
+    <spot id="Jobs.quarry.tracks.items.8" posX="742.02" posY="1765.32" posZ="4.66" interior="0" set="Jobs.quarry.tracks.items" index="8" shape="array" />
+    <spot id="Jobs.quarry.tracks.items.9" posX="742.18" posY="1812.38" posZ="4.33" interior="0" set="Jobs.quarry.tracks.items" index="9" shape="array" />
+    <spot id="Jobs.quarry.tracks.items.10" posX="742.72" posY="1869.99" posZ="4.33" interior="0" set="Jobs.quarry.tracks.items" index="10" shape="array" />
+    <spot id="Jobs.quarry.thieves.dumper" posX="812.5" posY="1144.57" posZ="27.34" interior="0" shape="array" w="0" />
+    <spot id="Jobs.courier.cities.1.base" posX="1359.45" posY="-1755" posZ="12.85" interior="0" shape="array" />
+    <spot id="Jobs.courier.cities.1.back" posX="1346.02" posY="-1741.78" posZ="12.4" interior="0" shape="array" />
+    <spot id="Jobs.courier.cities.1.drops.1" posX="1286.77" posY="-1676.17" posZ="12.56" interior="0" set="Jobs.courier.cities.1.drops" index="1" shape="array" />
+    <spot id="Jobs.courier.cities.1.drops.2" posX="1544.06" posY="-1675.75" posZ="12.56" interior="0" set="Jobs.courier.cities.1.drops" index="2" shape="array" />
+    <spot id="Jobs.courier.cities.1.drops.3" posX="1320.1" posY="-1795.1" posZ="12.54" interior="0" set="Jobs.courier.cities.1.drops" index="3" shape="array" />
+    <spot id="Jobs.courier.cities.1.drops.4" posX="1614.26" posY="-1885.76" posZ="12.55" interior="0" set="Jobs.courier.cities.1.drops" index="4" shape="array" />
+    <spot id="Jobs.courier.cities.1.drops.5" posX="2009.17" posY="-1716.91" posZ="12.55" interior="0" set="Jobs.courier.cities.1.drops" index="5" shape="array" />
+    <spot id="Jobs.courier.cities.1.drops.6" posX="1256.51" posY="-1010.97" posZ="32.9" interior="0" set="Jobs.courier.cities.1.drops" index="6" shape="array" />
+    <spot id="Jobs.courier.cities.1.drops.7" posX="1016.67" posY="-1508.78" posZ="12.54" interior="0" set="Jobs.courier.cities.1.drops" index="7" shape="array" />
+    <spot id="Jobs.courier.cities.1.drops.8" posX="2865.39" posY="-1438.96" posZ="9.97" interior="0" set="Jobs.courier.cities.1.drops" index="8" shape="array" />
+    <spot id="Jobs.courier.cities.1.drops.9" posX="2740.56" posY="-2103.44" posZ="11.12" interior="0" set="Jobs.courier.cities.1.drops" index="9" shape="array" />
+    <spot id="Jobs.courier.cities.1.drops.10" posX="1346.46" posY="-989.38" posZ="28.03" interior="0" set="Jobs.courier.cities.1.drops" index="10" shape="array" />
+    <spot id="Jobs.courier.cities.1.drops.11" posX="150.49" posY="-1945.38" posZ="2.77" interior="0" set="Jobs.courier.cities.1.drops" index="11" shape="array" />
+    <spot id="Jobs.courier.cities.1.drops.12" posX="378.09" posY="-2053.58" posZ="7.02" interior="0" set="Jobs.courier.cities.1.drops" index="12" shape="array" />
+    <spot id="Jobs.courier.cities.1.drops.13" posX="804.57" posY="-1020.71" posZ="25.68" interior="0" set="Jobs.courier.cities.1.drops" index="13" shape="array" />
+    <spot id="Jobs.courier.cities.2.base" posX="-2590.44" posY="73.21" posZ="3.91" interior="0" shape="array" />
+    <spot id="Jobs.courier.cities.2.back" posX="-2594.82" posY="52.6" posZ="3.34" interior="0" shape="array" />
+    <spot id="Jobs.courier.cities.2.drops.1" posX="-2797.95" posY="209.73" posZ="6.2" interior="0" set="Jobs.courier.cities.2.drops" index="1" shape="array" />
+    <spot id="Jobs.courier.cities.2.drops.2" posX="-2492.77" posY="-196.66" posZ="24.62" interior="0" set="Jobs.courier.cities.2.drops" index="2" shape="array" />
+    <spot id="Jobs.courier.cities.2.drops.3" posX="-2611.99" posY="-110.73" posZ="3.33" interior="0" set="Jobs.courier.cities.2.drops" index="3" shape="array" />
+    <spot id="Jobs.courier.cities.2.drops.4" posX="-2176.39" posY="-41.71" posZ="34.31" interior="0" set="Jobs.courier.cities.2.drops" index="4" shape="array" />
+    <spot id="Jobs.courier.cities.2.drops.5" posX="-2243.9" posY="603.7" posZ="40.12" interior="0" set="Jobs.courier.cities.2.drops" index="5" shape="array" />
+    <spot id="Jobs.courier.cities.2.drops.6" posX="-1569.99" posY="662.33" posZ="6.19" interior="0" set="Jobs.courier.cities.2.drops" index="6" shape="array" />
+    <spot id="Jobs.courier.cities.2.drops.7" posX="-2756.37" posY="379.16" posZ="3.33" interior="0" set="Jobs.courier.cities.2.drops" index="7" shape="array" />
+    <spot id="Jobs.courier.cities.2.drops.8" posX="-2609.9" posY="131.94" posZ="3.33" interior="0" set="Jobs.courier.cities.2.drops" index="8" shape="array" />
+    <spot id="Jobs.courier.cities.2.drops.9" posX="-2743.86" posY="761.41" posZ="53.38" interior="0" set="Jobs.courier.cities.2.drops" index="9" shape="array" />
+    <spot id="Jobs.courier.cities.2.drops.10" posX="-2600.54" posY="980.75" posZ="77.27" interior="0" set="Jobs.courier.cities.2.drops" index="10" shape="array" />
+    <spot id="Jobs.courier.cities.2.drops.11" posX="-2153.96" posY="716.16" posZ="68.55" interior="0" set="Jobs.courier.cities.2.drops" index="11" shape="array" />
+    <spot id="Jobs.courier.cities.2.drops.12" posX="-2153.6" posY="251.92" posZ="34.31" interior="0" set="Jobs.courier.cities.2.drops" index="12" shape="array" />
+    <spot id="Jobs.courier.cities.2.drops.13" posX="-2808.29" posY="-340.24" posZ="6.18" interior="0" set="Jobs.courier.cities.2.drops" index="13" shape="array" />
+    <spot id="Jobs.courier.cities.2.drops.14" posX="-2428.85" posY="-164.12" posZ="34.31" interior="0" set="Jobs.courier.cities.2.drops" index="14" shape="array" />
+    <spot id="Jobs.courier.cities.2.drops.15" posX="-1984.21" posY="128.76" posZ="26.68" interior="0" set="Jobs.courier.cities.2.drops" index="15" shape="array" />
+    <spot id="Jobs.courier.cities.2.drops.16" posX="-1888.46" posY="819.63" posZ="34.18" interior="0" set="Jobs.courier.cities.2.drops" index="16" shape="array" />
+    <spot id="Jobs.courier.cities.2.drops.17" posX="-1503.33" posY="919.93" posZ="6.18" interior="0" set="Jobs.courier.cities.2.drops" index="17" shape="array" />
+    <spot id="Jobs.courier.cities.2.drops.18" posX="-2533.88" posY="987.91" posZ="77.3" interior="0" set="Jobs.courier.cities.2.drops" index="18" shape="array" />
+    <spot id="Jobs.courier.cities.3.base" posX="1887.79" posY="2087.39" posZ="10.05" interior="0" shape="array" />
+    <spot id="Jobs.courier.cities.3.back" posX="1904.68" posY="2096.17" posZ="9.82" interior="0" shape="array" />
+    <spot id="Jobs.courier.cities.3.drops.1" posX="1698.4" posY="2054.9" posZ="9.82" interior="0" set="Jobs.courier.cities.3.drops" index="1" shape="array" />
+    <spot id="Jobs.courier.cities.3.drops.2" posX="2159.83" posY="2066.73" posZ="9.81" interior="0" set="Jobs.courier.cities.3.drops" index="2" shape="array" />
+    <spot id="Jobs.courier.cities.3.drops.3" posX="1935.7" posY="2158.46" posZ="9.82" interior="0" set="Jobs.courier.cities.3.drops" index="3" shape="array" />
+    <spot id="Jobs.courier.cities.3.drops.4" posX="1654.33" posY="1803.81" posZ="9.81" interior="0" set="Jobs.courier.cities.3.drops" index="4" shape="array" />
+    <spot id="Jobs.courier.cities.3.drops.5" posX="2083.32" posY="1503.75" posZ="9.81" interior="0" set="Jobs.courier.cities.3.drops" index="5" shape="array" />
+    <spot id="Jobs.courier.cities.3.drops.6" posX="1720.11" posY="1298.55" posZ="9.82" interior="0" set="Jobs.courier.cities.3.drops" index="6" shape="array" />
+    <spot id="Jobs.courier.cities.3.drops.7" posX="2233.84" posY="1282.19" posZ="9.82" interior="0" set="Jobs.courier.cities.3.drops" index="7" shape="array" />
+    <spot id="Jobs.courier.cities.3.drops.8" posX="1917.76" posY="2768.87" posZ="9.82" interior="0" set="Jobs.courier.cities.3.drops" index="8" shape="array" />
+    <spot id="Jobs.courier.cities.3.drops.9" posX="2344.57" posY="2779.97" posZ="9.82" interior="0" set="Jobs.courier.cities.3.drops" index="9" shape="array" />
+    <spot id="Jobs.courier.cities.3.drops.10" posX="973.12" posY="1782.24" posZ="7.66" interior="0" set="Jobs.courier.cities.3.drops" index="10" shape="array" />
+    <spot id="Jobs.courier.cities.3.drops.11" posX="2346.52" posY="2296.97" posZ="7.15" interior="0" set="Jobs.courier.cities.3.drops" index="11" shape="array" />
+    <spot id="Jobs.courier.cities.3.drops.12" posX="1488.18" posY="2148.47" posZ="9.82" interior="0" set="Jobs.courier.cities.3.drops" index="12" shape="array" />
+    <spot id="Jobs.courier.cities.3.drops.13" posX="1104.7" posY="1648.06" posZ="4.83" interior="0" set="Jobs.courier.cities.3.drops" index="13" shape="array" />
+    <spot id="Racing.entries.1" posX="1766.13" posY="-1704.23" posZ="12.47" interior="0" shape="named" />
+    <spot id="Racing.entries.2" posX="-1922.92" posY="282.72" posZ="40.04" interior="0" shape="named" />
+    <spot id="Racing.entries.3" posX="1636.92" posY="912.95" posZ="9.69" interior="0" shape="named" />
+    <spot id="Racing.entries.4" posX="1701.69" posY="1649.19" posZ="9.63" interior="0" shape="named" />
+    <spot id="Racing.entries.5" posX="2695.62" posY="-1704.69" posZ="10.84" interior="0" shape="named" />
+    <spot id="Racing.entries.6" posX="1099.55" posY="1601.5" posZ="11.55" interior="0" shape="named" />
+    <spot id="Racing.stadiumCars.1" posX="2692.03" posY="-1674.02" posZ="9.47" interior="0" shape="named" />
+    <spot id="Racing.stadiumCars.2" posX="2676.7" posY="-1673.76" posZ="9.4" interior="0" shape="named" />
+    <spot id="Racing.kickstart.start" posX="-1472.38" posY="1563.58" posZ="1051.42" interior="14" shape="array" w="0" />
+    <spot id="Racing.kickstart.exit" posX="1105.21" posY="1604.65" posZ="12.05" interior="0" shape="array" />
+    <spot id="Racing.kickstart.coronas.1" posX="-1376.44" posY="1562.29" posZ="1059" interior="14" set="Racing.kickstart.coronas" index="1" shape="array" w="1" />
+    <spot id="Racing.kickstart.coronas.2" posX="-1354.84" posY="1585.2" posZ="1057.89" interior="14" set="Racing.kickstart.coronas" index="2" shape="array" w="1" />
+    <spot id="Racing.kickstart.coronas.3" posX="-1408.02" posY="1568.74" posZ="1055.84" interior="14" set="Racing.kickstart.coronas" index="3" shape="array" w="1" />
+    <spot id="Racing.kickstart.coronas.4" posX="-1451.73" posY="1571.07" posZ="1059" interior="14" set="Racing.kickstart.coronas" index="4" shape="array" w="2" />
+    <spot id="Racing.kickstart.coronas.5" posX="-1487.55" posY="1564.28" posZ="1056.46" interior="14" set="Racing.kickstart.coronas" index="5" shape="array" w="2" />
+    <spot id="Racing.kickstart.coronas.6" posX="-1466.29" posY="1595.36" posZ="1057.33" interior="14" set="Racing.kickstart.coronas" index="6" shape="array" w="3" />
+    <spot id="Racing.kickstart.coronas.7" posX="-1387.6" posY="1572.13" posZ="1053.93" interior="14" set="Racing.kickstart.coronas" index="7" shape="array" w="1" />
+    <spot id="Racing.kickstart.coronas.8" posX="-1362.58" posY="1614.62" posZ="1055.33" interior="14" set="Racing.kickstart.coronas" index="8" shape="array" w="2" />
+    <spot id="Racing.kickstart.coronas.9" posX="-1359.51" posY="1638.22" posZ="1056.03" interior="14" set="Racing.kickstart.coronas" index="9" shape="array" w="3" />
+    <spot id="Racing.kickstart.coronas.10" posX="-1371.35" posY="1623.27" posZ="1054.66" interior="14" set="Racing.kickstart.coronas" index="10" shape="array" w="2" />
+    <spot id="Racing.kickstart.coronas.11" posX="-1369.52" posY="1634.02" posZ="1055.77" interior="14" set="Racing.kickstart.coronas" index="11" shape="array" w="3" />
+    <spot id="Racing.kickstart.coronas.12" posX="-1384.62" posY="1603.55" posZ="1053.6" interior="14" set="Racing.kickstart.coronas" index="12" shape="array" w="1" />
+    <spot id="Racing.kickstart.coronas.13" posX="-1399" posY="1603.27" posZ="1055.16" interior="14" set="Racing.kickstart.coronas" index="13" shape="array" w="1" />
+    <spot id="Racing.kickstart.coronas.14" posX="-1403.91" posY="1645.16" posZ="1071.46" interior="14" set="Racing.kickstart.coronas" index="14" shape="array" w="2" />
+    <spot id="Racing.kickstart.coronas.15" posX="-1443.39" posY="1648.55" posZ="1054.29" interior="14" set="Racing.kickstart.coronas" index="15" shape="array" w="1" />
+    <spot id="Racing.kickstart.coronas.16" posX="-1457" posY="1648.71" posZ="1054.94" interior="14" set="Racing.kickstart.coronas" index="16" shape="array" w="1" />
+    <spot id="Racing.kickstart.coronas.17" posX="-1486.93" posY="1630.23" posZ="1056.63" interior="14" set="Racing.kickstart.coronas" index="17" shape="array" w="1" />
+    <spot id="Racing.kickstart.coronas.18" posX="-1482.81" posY="1642.21" posZ="1060.7" interior="14" set="Racing.kickstart.coronas" index="18" shape="array" w="3" />
+    <spot id="Racing.kickstart.coronas.19" posX="-1484.81" posY="1597.12" posZ="1061.38" interior="14" set="Racing.kickstart.coronas" index="19" shape="array" w="2" />
+    <spot id="Racing.kickstart.coronas.20" posX="-1431.4" posY="1598.06" posZ="1054.75" interior="14" set="Racing.kickstart.coronas" index="20" shape="array" w="1" />
+    <spot id="Racing.kickstart.coronas.21" posX="-1420.68" posY="1598.27" posZ="1054.96" interior="14" set="Racing.kickstart.coronas" index="21" shape="array" w="1" />
+    <spot id="Racing.kickstart.coronas.22" posX="-1408.11" posY="1585.36" posZ="1055.69" interior="14" set="Racing.kickstart.coronas" index="22" shape="array" w="1" />
+    <spot id="Racing.kickstart.coronas.23" posX="-1408.22" posY="1593.3" posZ="1055.62" interior="14" set="Racing.kickstart.coronas" index="23" shape="array" w="1" />
+    <spot id="Racing.kickstart.coronas.24" posX="-1462.24" posY="1622.42" posZ="1054.31" interior="14" set="Racing.kickstart.coronas" index="24" shape="array" w="2" />
+    <spot id="Racing.kickstart.coronas.25" posX="-1461.74" posY="1635.75" posZ="1054.01" interior="14" set="Racing.kickstart.coronas" index="25" shape="array" w="2" />
+    <spot id="Racing.kickstart.coronas.26" posX="-1453.89" posY="1636.03" posZ="1056.18" interior="14" set="Racing.kickstart.coronas" index="26" shape="array" w="2" />
+    <spot id="Racing.kickstart.coronas.27" posX="-1454.06" posY="1628.6" posZ="1054.3" interior="14" set="Racing.kickstart.coronas" index="27" shape="array" w="3" />
+    <spot id="Racing.kickstart.coronas.28" posX="-1454.07" posY="1617.64" posZ="1056" interior="14" set="Racing.kickstart.coronas" index="28" shape="array" w="3" />
+    <spot id="Racing.kickstart.coronas.29" posX="-1450.03" posY="1620.47" posZ="1056.42" interior="14" set="Racing.kickstart.coronas" index="29" shape="array" w="3" />
+    <spot id="Racing.kickstart.coronas.30" posX="-1407.73" posY="1617.42" posZ="1054.8" interior="14" set="Racing.kickstart.coronas" index="30" shape="array" w="2" />
+    <spot id="Racing.kickstart.coronas.31" posX="-1414.16" posY="1607.16" posZ="1054.84" interior="14" set="Racing.kickstart.coronas" index="31" shape="array" w="2" />
+    <spot id="Racing.kickstart.coronas.32" posX="-1388.31" posY="1620.99" posZ="1054.95" interior="14" set="Racing.kickstart.coronas" index="32" shape="array" w="3" />
+    <spot id="Racing.kickstart.coronas.33" posX="-1431.09" posY="1580.83" posZ="1055.76" interior="14" set="Racing.kickstart.coronas" index="33" shape="array" w="2" />
+    <spot id="Racing.bloodring.entry" posX="-2120.04" posY="-444.28" posZ="34.53" interior="0" shape="named" />
+    <spot id="Racing.bloodring.player" posX="-1398.46" posY="995.64" posZ="1024.46" interior="15" shape="array" w="0" />
+    <spot id="Racing.bloodring.grid.1" posX="-1280.9" posY="994.8" posZ="1037" interior="15" set="Racing.bloodring.grid" index="1" shape="array" />
+    <spot id="Racing.bloodring.grid.2" posX="-1285.77" posY="1014.54" posZ="1036.5" interior="15" set="Racing.bloodring.grid" index="2" shape="array" />
+    <spot id="Racing.bloodring.grid.3" posX="-1299.5" posY="1030.74" posZ="1036.8" interior="15" set="Racing.bloodring.grid" index="3" shape="array" />
+    <spot id="Racing.bloodring.grid.4" posX="-1319.3" posY="1042.82" posZ="1037.1" interior="15" set="Racing.bloodring.grid" index="4" shape="array" />
+    <spot id="Racing.bloodring.grid.5" posX="-1349.33" posY="1054.47" posZ="1037.3" interior="15" set="Racing.bloodring.grid" index="5" shape="array" />
+    <spot id="Racing.bloodring.grid.6" posX="-1384.33" posY="1058.55" posZ="1037.5" interior="15" set="Racing.bloodring.grid" index="6" shape="array" />
+    <spot id="Racing.bloodring.grid.7" posX="-1296.7" posY="960.2" posZ="1035.6" interior="15" set="Racing.bloodring.grid" index="7" shape="array" />
+    <spot id="Racing.bloodring.grid.8" posX="-1418.77" posY="1057.54" posZ="1037.5" interior="15" set="Racing.bloodring.grid" index="8" shape="array" />
+    <spot id="Racing.bloodring.grid.9" posX="-1460.3" posY="1050.3" posZ="1037.5" interior="15" set="Racing.bloodring.grid" index="9" shape="array" />
+    <spot id="Racing.bloodring.grid.10" posX="-1499.77" posY="1029.54" posZ="1037.2" interior="15" set="Racing.bloodring.grid" index="10" shape="array" />
+    <spot id="Racing.bloodring.grid.11" posX="-1513.77" posY="986.54" posZ="1036.5" interior="15" set="Racing.bloodring.grid" index="11" shape="array" />
+    <spot id="Racing.chiliad.entry" posX="-2309.23" posY="-1651.22" posZ="483.09" interior="0" shape="named" />
+    <spot id="Racing.stunts.entries.bmx" posX="1946.09" posY="-1380.72" posZ="18" interior="0" shape="array" />
+    <spot id="Racing.stunts.entries.nrg" posX="-1696.53" posY="77.72" posZ="3.55" interior="0" shape="array" />
+    <spot id="Racing.stunts.bmx.start" posX="1964.75" posY="-1368.36" posZ="29.62" interior="0" shape="array" />
+    <spot id="Racing.stunts.bmx.coronas.1" posX="1955.01" posY="-1367.72" posZ="24.74" interior="0" set="Racing.stunts.bmx.coronas" index="1" shape="array" />
+    <spot id="Racing.stunts.bmx.coronas.2" posX="1954.61" posY="-1376.96" posZ="24.22" interior="0" set="Racing.stunts.bmx.coronas" index="2" shape="array" />
+    <spot id="Racing.stunts.bmx.coronas.3" posX="1887.39" posY="-1362.95" posZ="19.43" interior="0" set="Racing.stunts.bmx.coronas" index="3" shape="array" />
+    <spot id="Racing.stunts.bmx.coronas.4" posX="1914.14" posY="-1427.1" posZ="15.58" interior="0" set="Racing.stunts.bmx.coronas" index="4" shape="array" />
+    <spot id="Racing.stunts.bmx.coronas.5" posX="1908.55" posY="-1388.39" posZ="10.33" interior="0" set="Racing.stunts.bmx.coronas" index="5" shape="array" />
+    <spot id="Racing.stunts.bmx.coronas.6" posX="1882.36" posY="-1427.69" posZ="10.33" interior="0" set="Racing.stunts.bmx.coronas" index="6" shape="array" />
+    <spot id="Racing.stunts.bmx.coronas.7" posX="1953.35" posY="-1426.59" posZ="10.33" interior="0" set="Racing.stunts.bmx.coronas" index="7" shape="array" />
+    <spot id="Racing.stunts.bmx.coronas.8" posX="1878.19" posY="-1388.81" posZ="15.25" interior="0" set="Racing.stunts.bmx.coronas" index="8" shape="array" />
+    <spot id="Racing.stunts.bmx.coronas.9" posX="1878.18" posY="-1388.84" posZ="18.15" interior="0" set="Racing.stunts.bmx.coronas" index="9" shape="array" />
+    <spot id="Racing.stunts.bmx.coronas.10" posX="1872.33" posY="-1451.05" posZ="15.76" interior="0" set="Racing.stunts.bmx.coronas" index="10" shape="array" />
+    <spot id="Racing.stunts.bmx.coronas.11" posX="1905.18" posY="-1413.67" posZ="13.53" interior="0" set="Racing.stunts.bmx.coronas" index="11" shape="array" />
+    <spot id="Racing.stunts.bmx.coronas.12" posX="1949.5" posY="-1411.55" posZ="15.18" interior="0" set="Racing.stunts.bmx.coronas" index="12" shape="array" />
+    <spot id="Racing.stunts.bmx.coronas.13" posX="1867.15" posY="-1410.01" posZ="13.53" interior="0" set="Racing.stunts.bmx.coronas" index="13" shape="array" />
+    <spot id="Racing.stunts.bmx.coronas.14" posX="1909.34" posY="-1369.85" posZ="16.8" interior="0" set="Racing.stunts.bmx.coronas" index="14" shape="array" />
+    <spot id="Racing.stunts.bmx.coronas.15" posX="1939.24" posY="-1388.13" posZ="19.26" interior="0" set="Racing.stunts.bmx.coronas" index="15" shape="array" />
+    <spot id="Racing.stunts.bmx.coronas.16" posX="1904.89" posY="-1360.62" posZ="13.53" interior="0" set="Racing.stunts.bmx.coronas" index="16" shape="array" />
+    <spot id="Racing.stunts.bmx.coronas.17" posX="1930.23" posY="-1398.62" posZ="16.86" interior="0" set="Racing.stunts.bmx.coronas" index="17" shape="array" />
+    <spot id="Racing.stunts.bmx.coronas.18" posX="1888.76" posY="-1399.33" posZ="17.24" interior="0" set="Racing.stunts.bmx.coronas" index="18" shape="array" />
+    <spot id="Racing.stunts.bmx.coronas.19" posX="1900.95" posY="-1397.83" posZ="15.69" interior="0" set="Racing.stunts.bmx.coronas" index="19" shape="array" />
+    <spot id="Racing.stunts.nrg.start" posX="-1681.46" posY="27.21" posZ="9.66" interior="0" shape="array" />
+    <spot id="Racing.stunts.nrg.coronas.1" posX="-1632.06" posY="143.15" posZ="3.41" interior="0" set="Racing.stunts.nrg.coronas" index="1" shape="array" />
+    <spot id="Racing.stunts.nrg.coronas.2" posX="-1632.02" posY="83.04" posZ="7.53" interior="0" set="Racing.stunts.nrg.coronas" index="2" shape="array" />
+    <spot id="Racing.stunts.nrg.coronas.3" posX="-1689.15" posY="53.39" posZ="11.77" interior="0" set="Racing.stunts.nrg.coronas" index="3" shape="array" />
+    <spot id="Racing.stunts.nrg.coronas.4" posX="-1606.42" posY="133.44" posZ="-10.99" interior="0" set="Racing.stunts.nrg.coronas" index="4" shape="array" />
+    <spot id="Racing.stunts.nrg.coronas.5" posX="-1680.39" posY="87.09" posZ="8.23" interior="0" set="Racing.stunts.nrg.coronas" index="5" shape="array" />
+    <spot id="Racing.stunts.nrg.coronas.6" posX="-1666.3" posY="102.05" posZ="-1.5" interior="0" set="Racing.stunts.nrg.coronas" index="6" shape="array" />
+    <spot id="Racing.stunts.nrg.coronas.7" posX="-1654.69" posY="60.78" posZ="7.65" interior="0" set="Racing.stunts.nrg.coronas" index="7" shape="array" />
+    <spot id="Racing.stunts.nrg.coronas.8" posX="-1684.87" posY="74.64" posZ="-7.03" interior="0" set="Racing.stunts.nrg.coronas" index="8" shape="array" />
+    <spot id="Racing.stunts.nrg.coronas.9" posX="-1583.8" posY="126.16" posZ="4.16" interior="0" set="Racing.stunts.nrg.coronas" index="9" shape="array" />
+    <spot id="Racing.stunts.nrg.coronas.10" posX="-1667.71" posY="49.52" posZ="6.56" interior="0" set="Racing.stunts.nrg.coronas" index="10" shape="array" />
+    <spot id="Racing.stunts.nrg.coronas.11" posX="-1611.59" posY="106.31" posZ="-3.65" interior="0" set="Racing.stunts.nrg.coronas" index="11" shape="array" />
+    <spot id="Racing.stunts.nrg.coronas.12" posX="-1590.56" posY="148.97" posZ="4.11" interior="0" set="Racing.stunts.nrg.coronas" index="12" shape="array" />
+    <spot id="Racing.stunts.nrg.coronas.13" posX="-1671.96" posY="98.6" posZ="8.93" interior="0" set="Racing.stunts.nrg.coronas" index="13" shape="array" />
+    <spot id="Racing.stunts.nrg.coronas.14" posX="-1693.32" posY="65.12" posZ="8.8" interior="0" set="Racing.stunts.nrg.coronas" index="14" shape="array" />
+    <spot id="Racing.stunts.nrg.coronas.15" posX="-1660.95" posY="107.67" posZ="-2.15" interior="0" set="Racing.stunts.nrg.coronas" index="15" shape="array" />
+    <spot id="Racing.stunts.nrg.coronas.16" posX="-1654.07" posY="77.26" posZ="-10.29" interior="0" set="Racing.stunts.nrg.coronas" index="16" shape="array" />
+    <spot id="Racing.stunts.nrg.coronas.17" posX="-1645.49" posY="107.25" posZ="-10.66" interior="0" set="Racing.stunts.nrg.coronas" index="17" shape="array" />
+    <spot id="Racing.stunts.nrg.coronas.18" posX="-1673.73" posY="56.93" posZ="-10.67" interior="0" set="Racing.stunts.nrg.coronas" index="18" shape="array" />
+    <spot id="Racing.triathlon.entries.beach" posX="181" posY="-1878" posZ="2" interior="0" shape="array" />
+    <spot id="Racing.triathlon.entries.fleischberg" posX="2135.43" posY="-67.96" posZ="20.8" interior="0" shape="array" />
+    <spot id="Racing.triathlon.beach.checkpoints.1" posX="181.34" posY="-1885.85" posZ="3.52" interior="0" set="Racing.triathlon.beach.checkpoints" index="1" shape="array" path="true" />
+    <spot id="Racing.triathlon.beach.checkpoints.2" posX="187.69" posY="-1915.42" posZ="0" interior="0" set="Racing.triathlon.beach.checkpoints" index="2" shape="array" path="true" />
+    <spot id="Racing.triathlon.beach.checkpoints.3" posX="190.32" posY="-1965.07" posZ="-1.09" interior="0" set="Racing.triathlon.beach.checkpoints" index="3" shape="array" path="true" />
+    <spot id="Racing.triathlon.beach.checkpoints.4" posX="129.48" posY="-2001.43" posZ="-0.56" interior="0" set="Racing.triathlon.beach.checkpoints" index="4" shape="array" path="true" />
+    <spot id="Racing.triathlon.beach.checkpoints.5" posX="24.13" posY="-1872.09" posZ="-0.17" interior="0" set="Racing.triathlon.beach.checkpoints" index="5" shape="array" path="true" />
+    <spot id="Racing.triathlon.beach.checkpoints.6" posX="-38.8" posY="-1799.4" posZ="-0.5" interior="0" set="Racing.triathlon.beach.checkpoints" index="6" shape="array" path="true" />
+    <spot id="Racing.triathlon.beach.checkpoints.7" posX="-132.81" posY="-1809.79" posZ="-1.15" interior="0" set="Racing.triathlon.beach.checkpoints" index="7" shape="array" path="true" />
+    <spot id="Racing.triathlon.beach.checkpoints.8" posX="-228.93" posY="-1726.7" posZ="-0.01" interior="0" set="Racing.triathlon.beach.checkpoints" index="8" shape="array" path="true" />
+    <spot id="Racing.triathlon.beach.checkpoints.9" posX="-248.11" posY="-1716.78" posZ="1.94" interior="0" set="Racing.triathlon.beach.checkpoints" index="9" shape="array" path="true" />
+    <spot id="Racing.triathlon.beach.checkpoints.10" posX="-262.34" posY="-1787.28" posZ="8.77" interior="0" set="Racing.triathlon.beach.checkpoints" index="10" shape="array" path="true" />
+    <spot id="Racing.triathlon.beach.checkpoints.11" posX="-277.35" posY="-1855.1" posZ="21.3" interior="0" set="Racing.triathlon.beach.checkpoints" index="11" shape="array" path="true" />
+    <spot id="Racing.triathlon.beach.checkpoints.12" posX="-280.52" posY="-1887.12" posZ="24.79" interior="0" set="Racing.triathlon.beach.checkpoints" index="12" shape="array" path="true" />
+    <spot id="Racing.triathlon.beach.checkpoints.13" posX="-281.75" posY="-2087.83" posZ="38.44" interior="0" set="Racing.triathlon.beach.checkpoints" index="13" shape="array" path="true" />
+    <spot id="Racing.triathlon.beach.checkpoints.14" posX="-464.77" posY="-2179.82" posZ="58.82" interior="0" set="Racing.triathlon.beach.checkpoints" index="14" shape="array" path="true" />
+    <spot id="Racing.triathlon.beach.checkpoints.15" posX="-641.51" posY="-2196.43" posZ="11.53" interior="0" set="Racing.triathlon.beach.checkpoints" index="15" shape="array" path="true" />
+    <spot id="Racing.triathlon.beach.checkpoints.16" posX="-783.51" posY="-2459.29" posZ="73.75" interior="0" set="Racing.triathlon.beach.checkpoints" index="16" shape="array" path="true" />
+    <spot id="Racing.triathlon.beach.checkpoints.17" posX="-871.39" posY="-2407.99" posZ="54.49" interior="0" set="Racing.triathlon.beach.checkpoints" index="17" shape="array" path="true" />
+    <spot id="Racing.triathlon.beach.checkpoints.18" posX="-942.52" posY="-2368.06" posZ="58.87" interior="0" set="Racing.triathlon.beach.checkpoints" index="18" shape="array" path="true" />
+    <spot id="Racing.triathlon.beach.checkpoints.19" posX="-1056.25" posY="-2378.24" posZ="48.59" interior="0" set="Racing.triathlon.beach.checkpoints" index="19" shape="array" path="true" />
+    <spot id="Racing.triathlon.beach.checkpoints.20" posX="-1238.96" posY="-2327.31" posZ="18.25" interior="0" set="Racing.triathlon.beach.checkpoints" index="20" shape="array" path="true" />
+    <spot id="Racing.triathlon.beach.checkpoints.21" posX="-1403.78" posY="-2165.12" posZ="17.41" interior="0" set="Racing.triathlon.beach.checkpoints" index="21" shape="array" path="true" />
+    <spot id="Racing.triathlon.beach.checkpoints.22" posX="-1659.68" posY="-2190.13" posZ="32.36" interior="0" set="Racing.triathlon.beach.checkpoints" index="22" shape="array" path="true" />
+    <spot id="Racing.triathlon.beach.checkpoints.23" posX="-1732.83" posY="-2312.71" posZ="45.23" interior="0" set="Racing.triathlon.beach.checkpoints" index="23" shape="array" path="true" />
+    <spot id="Racing.triathlon.beach.checkpoints.24" posX="-1826.06" posY="-2340.27" posZ="33.72" interior="0" set="Racing.triathlon.beach.checkpoints" index="24" shape="array" path="true" />
+    <spot id="Racing.triathlon.beach.checkpoints.25" posX="-1917.68" posY="-2432.15" posZ="29.62" interior="0" set="Racing.triathlon.beach.checkpoints" index="25" shape="array" path="true" />
+    <spot id="Racing.triathlon.beach.checkpoints.26" posX="-1972.52" posY="-2478.33" posZ="29.63" interior="0" set="Racing.triathlon.beach.checkpoints" index="26" shape="array" path="true" />
+    <spot id="Racing.triathlon.beach.checkpoints.27" posX="-2025.63" posY="-2500.39" posZ="31.07" interior="0" set="Racing.triathlon.beach.checkpoints" index="27" shape="array" path="true" />
+    <spot id="Racing.triathlon.beach.checkpoints.28" posX="-2119.11" posY="-2431.27" posZ="29.48" interior="0" set="Racing.triathlon.beach.checkpoints" index="28" shape="array" path="true" />
+    <spot id="Racing.triathlon.beach.checkpoints.29" posX="-2188.57" posY="-2377.54" posZ="29.62" interior="0" set="Racing.triathlon.beach.checkpoints" index="29" shape="array" path="true" />
+    <spot id="Racing.triathlon.beach.checkpoints.30" posX="-2215.89" posY="-2352.6" posZ="29.7" interior="0" set="Racing.triathlon.beach.checkpoints" index="30" shape="array" path="true" />
+    <spot id="Racing.triathlon.beach.checkpoints.31" posX="-2341.21" posY="-2256.63" posZ="16.88" interior="0" set="Racing.triathlon.beach.checkpoints" index="31" shape="array" path="true" />
+    <spot id="Racing.triathlon.beach.checkpoints.32" posX="-2430.18" posY="-2278.38" posZ="13.78" interior="0" set="Racing.triathlon.beach.checkpoints" index="32" shape="array" path="true" />
+    <spot id="Racing.triathlon.beach.checkpoints.33" posX="-2498.64" posY="-2208.57" posZ="27.93" interior="0" set="Racing.triathlon.beach.checkpoints" index="33" shape="array" path="true" />
+    <spot id="Racing.triathlon.beach.checkpoints.34" posX="-2867.78" posY="-1824.57" posZ="36.68" interior="0" set="Racing.triathlon.beach.checkpoints" index="34" shape="array" path="true" />
+    <spot id="Racing.triathlon.beach.checkpoints.35" posX="-2923.24" posY="-1561.89" posZ="10" interior="0" set="Racing.triathlon.beach.checkpoints" index="35" shape="array" path="true" />
+    <spot id="Racing.triathlon.beach.checkpoints.36" posX="-2899.03" posY="-1152.58" posZ="8.32" interior="0" set="Racing.triathlon.beach.checkpoints" index="36" shape="array" path="true" />
+    <spot id="Racing.triathlon.beach.checkpoints.37" posX="-2858.13" posY="-835.52" posZ="8.48" interior="0" set="Racing.triathlon.beach.checkpoints" index="37" shape="array" path="true" />
+    <spot id="Racing.triathlon.beach.checkpoints.38" posX="-2814.01" posY="-529.22" posZ="6.19" interior="0" set="Racing.triathlon.beach.checkpoints" index="38" shape="array" path="true" />
+    <spot id="Racing.triathlon.beach.checkpoints.39" posX="-2779.95" posY="-489.85" posZ="6.33" interior="0" set="Racing.triathlon.beach.checkpoints" index="39" shape="array" path="true" />
+    <spot id="Racing.triathlon.beach.checkpoints.40" posX="-2708.98" posY="-529.53" posZ="10.2" interior="0" set="Racing.triathlon.beach.checkpoints" index="40" shape="array" path="true" />
+    <spot id="Racing.triathlon.beach.checkpoints.41" posX="-2670.16" posY="-481.25" posZ="21.31" interior="0" set="Racing.triathlon.beach.checkpoints" index="41" shape="array" path="true" />
+    <spot id="Racing.triathlon.beach.checkpoints.42" posX="-2666.66" posY="-406.04" posZ="31.31" interior="0" set="Racing.triathlon.beach.checkpoints" index="42" shape="array" path="true" />
+    <spot id="Racing.triathlon.beach.checkpoints.43" posX="-2583.74" posY="-369.75" posZ="46.27" interior="0" set="Racing.triathlon.beach.checkpoints" index="43" shape="array" path="true" />
+    <spot id="Racing.triathlon.beach.checkpoints.44" posX="-2411.16" posY="-371.72" posZ="72.3" interior="0" set="Racing.triathlon.beach.checkpoints" index="44" shape="array" path="true" />
+    <spot id="Racing.triathlon.beach.checkpoints.45" posX="-2340.56" posY="-416.5" posZ="78.57" interior="0" set="Racing.triathlon.beach.checkpoints" index="45" shape="array" path="true" />
+    <spot id="Racing.triathlon.beach.checkpoints.46" posX="-2338.82" posY="-463.83" posZ="79.02" interior="0" set="Racing.triathlon.beach.checkpoints" index="46" shape="array" path="true" />
+    <spot id="Racing.triathlon.beach.checkpoints.47" posX="-2387.69" posY="-423.99" posZ="82.43" interior="0" set="Racing.triathlon.beach.checkpoints" index="47" shape="array" path="true" />
+    <spot id="Racing.triathlon.beach.checkpoints.48" posX="-2496.38" posY="-446.11" posZ="75.31" interior="0" set="Racing.triathlon.beach.checkpoints" index="48" shape="array" path="true" />
+    <spot id="Racing.triathlon.beach.checkpoints.49" posX="-2556.85" posY="-466.89" posZ="69.23" interior="0" set="Racing.triathlon.beach.checkpoints" index="49" shape="array" path="true" />
+    <spot id="Racing.triathlon.beach.checkpoints.50" posX="-2580.53" posY="-468.68" posZ="67.38" interior="0" set="Racing.triathlon.beach.checkpoints" index="50" shape="array" path="true" />
+    <spot id="Racing.triathlon.beach.checkpoints.51" posX="-2612.06" posY="-475.2" posZ="67.85" interior="0" set="Racing.triathlon.beach.checkpoints" index="51" shape="array" path="true" />
+    <spot id="Racing.triathlon.beach.checkpoints.52" posX="-2623.11" posY="-500.25" posZ="69.92" interior="0" set="Racing.triathlon.beach.checkpoints" index="52" shape="array" path="true" />
+    <spot id="Racing.triathlon.beach.checkpoints.53" posX="-2613.75" posY="-497.13" posZ="71.93" interior="0" set="Racing.triathlon.beach.checkpoints" index="53" shape="array" path="true" />
+    <spot id="Racing.triathlon.beach.checkpoints.54" posX="-2579.73" posY="-492.63" posZ="75.16" interior="0" set="Racing.triathlon.beach.checkpoints" index="54" shape="array" path="true" />
+    <spot id="Racing.triathlon.beach.checkpoints.55" posX="-2542.8" posY="-490.87" posZ="80.34" interior="0" set="Racing.triathlon.beach.checkpoints" index="55" shape="array" path="true" />
+    <spot id="Racing.triathlon.beach.checkpoints.56" posX="-2497.68" posY="-480.34" posZ="94.02" interior="0" set="Racing.triathlon.beach.checkpoints" index="56" shape="array" path="true" />
+    <spot id="Racing.triathlon.beach.checkpoints.57" posX="-2466.4" posY="-497.26" posZ="104.27" interior="0" set="Racing.triathlon.beach.checkpoints" index="57" shape="array" path="true" />
+    <spot id="Racing.triathlon.beach.checkpoints.58" posX="-2452.08" posY="-544.59" posZ="120.58" interior="0" set="Racing.triathlon.beach.checkpoints" index="58" shape="array" path="true" />
+    <spot id="Racing.triathlon.beach.checkpoints.59" posX="-2469.51" posY="-618.5" posZ="131.38" interior="0" set="Racing.triathlon.beach.checkpoints" index="59" shape="array" path="true" />
+    <spot id="Racing.triathlon.beach.checkpoints.60" posX="-2471.06" posY="-618.73" posZ="131.73" interior="0" set="Racing.triathlon.beach.checkpoints" index="60" shape="array" path="true" />
+    <spot id="Racing.triathlon.beach.checkpoints.61" posX="-2498.37" posY="-618" posZ="131.56" interior="0" set="Racing.triathlon.beach.checkpoints" index="61" shape="array" path="true" />
+    <spot id="Racing.triathlon.beach.checkpoints.62" posX="-2498.98" posY="-653.28" posZ="137.32" interior="0" set="Racing.triathlon.beach.checkpoints" index="62" shape="array" path="true" />
+    <spot id="Racing.triathlon.beach.checkpoints.63" posX="-2501.36" posY="-695.97" posZ="138.32" interior="0" set="Racing.triathlon.beach.checkpoints" index="63" shape="array" path="true" />
+    <spot id="Racing.triathlon.fleischberg.checkpoints.1" posX="2135.43" posY="-67.96" posZ="5.49" interior="0" set="Racing.triathlon.fleischberg.checkpoints" index="1" shape="array" path="true" />
+    <spot id="Racing.triathlon.fleischberg.checkpoints.2" posX="2113.19" posY="-61.77" posZ="-1.63" interior="0" set="Racing.triathlon.fleischberg.checkpoints" index="2" shape="array" path="true" />
+    <spot id="Racing.triathlon.fleischberg.checkpoints.3" posX="2042.62" posY="-68.51" posZ="-1.96" interior="0" set="Racing.triathlon.fleischberg.checkpoints" index="3" shape="array" path="true" />
+    <spot id="Racing.triathlon.fleischberg.checkpoints.4" posX="1914.3" posY="-82.37" posZ="-1.57" interior="0" set="Racing.triathlon.fleischberg.checkpoints" index="4" shape="array" path="true" />
+    <spot id="Racing.triathlon.fleischberg.checkpoints.5" posX="1844.03" posY="-62.27" posZ="-1.61" interior="0" set="Racing.triathlon.fleischberg.checkpoints" index="5" shape="array" path="true" />
+    <spot id="Racing.triathlon.fleischberg.checkpoints.6" posX="1742.24" posY="-20.05" posZ="-1.29" interior="0" set="Racing.triathlon.fleischberg.checkpoints" index="6" shape="array" path="true" />
+    <spot id="Racing.triathlon.fleischberg.checkpoints.7" posX="1618.17" posY="-15.66" posZ="-1.68" interior="0" set="Racing.triathlon.fleischberg.checkpoints" index="7" shape="array" path="true" />
+    <spot id="Racing.triathlon.fleischberg.checkpoints.8" posX="1599.85" posY="-118.74" posZ="-1.41" interior="0" set="Racing.triathlon.fleischberg.checkpoints" index="8" shape="array" path="true" />
+    <spot id="Racing.triathlon.fleischberg.checkpoints.9" posX="1533.97" posY="-213.83" posZ="-1.81" interior="0" set="Racing.triathlon.fleischberg.checkpoints" index="9" shape="array" path="true" />
+    <spot id="Racing.triathlon.fleischberg.checkpoints.10" posX="1426.78" posY="-284.06" posZ="0.44" interior="0" set="Racing.triathlon.fleischberg.checkpoints" index="10" shape="array" path="true" />
+    <spot id="Racing.triathlon.fleischberg.checkpoints.11" posX="1398.96" posY="-320.35" posZ="4.02" interior="0" set="Racing.triathlon.fleischberg.checkpoints" index="11" shape="array" path="true" />
+    <spot id="Racing.triathlon.fleischberg.checkpoints.12" posX="1358.09" posY="-336.84" posZ="1.91" interior="0" set="Racing.triathlon.fleischberg.checkpoints" index="12" shape="array" path="true" />
+    <spot id="Racing.triathlon.fleischberg.checkpoints.13" posX="1289.74" posY="-376.03" posZ="1.86" interior="0" set="Racing.triathlon.fleischberg.checkpoints" index="13" shape="array" path="true" />
+    <spot id="Racing.triathlon.fleischberg.checkpoints.14" posX="1226.15" posY="-418.58" posZ="4.1" interior="0" set="Racing.triathlon.fleischberg.checkpoints" index="14" shape="array" path="true" />
+    <spot id="Racing.triathlon.fleischberg.checkpoints.15" posX="1042.31" posY="-450.29" posZ="50.31" interior="0" set="Racing.triathlon.fleischberg.checkpoints" index="15" shape="array" path="true" />
+    <spot id="Racing.triathlon.fleischberg.checkpoints.16" posX="955.74" posY="-394.13" posZ="62.94" interior="0" set="Racing.triathlon.fleischberg.checkpoints" index="16" shape="array" path="true" />
+    <spot id="Racing.triathlon.fleischberg.checkpoints.17" posX="862.81" posY="-348.28" posZ="35.11" interior="0" set="Racing.triathlon.fleischberg.checkpoints" index="17" shape="array" path="true" />
+    <spot id="Racing.triathlon.fleischberg.checkpoints.18" posX="735.16" posY="-269.19" posZ="8.76" interior="0" set="Racing.triathlon.fleischberg.checkpoints" index="18" shape="array" path="true" />
+    <spot id="Racing.triathlon.fleischberg.checkpoints.19" posX="469.22" posY="-284.21" posZ="9.46" interior="0" set="Racing.triathlon.fleischberg.checkpoints" index="19" shape="array" path="true" />
+    <spot id="Racing.triathlon.fleischberg.checkpoints.20" posX="251.87" posY="-371.74" posZ="7.74" interior="0" set="Racing.triathlon.fleischberg.checkpoints" index="20" shape="array" path="true" />
+    <spot id="Racing.triathlon.fleischberg.checkpoints.21" posX="223.96" posY="-281.34" posZ="0.43" interior="0" set="Racing.triathlon.fleischberg.checkpoints" index="21" shape="array" path="true" />
+    <spot id="Racing.triathlon.fleischberg.checkpoints.22" posX="232.8" posY="-147.8" posZ="0.44" interior="0" set="Racing.triathlon.fleischberg.checkpoints" index="22" shape="array" path="true" />
+    <spot id="Racing.triathlon.fleischberg.checkpoints.23" posX="212.83" posY="51.84" posZ="1.08" interior="0" set="Racing.triathlon.fleischberg.checkpoints" index="23" shape="array" path="true" />
+    <spot id="Racing.triathlon.fleischberg.checkpoints.24" posX="-68.02" posY="199.23" posZ="1.11" interior="0" set="Racing.triathlon.fleischberg.checkpoints" index="24" shape="array" path="true" />
+    <spot id="Racing.triathlon.fleischberg.checkpoints.25" posX="-214.5" posY="242.37" posZ="10.99" interior="0" set="Racing.triathlon.fleischberg.checkpoints" index="25" shape="array" path="true" />
+    <spot id="Racing.triathlon.fleischberg.checkpoints.26" posX="-474.36" posY="283.14" posZ="1.09" interior="0" set="Racing.triathlon.fleischberg.checkpoints" index="26" shape="array" path="true" />
+    <spot id="Racing.triathlon.fleischberg.checkpoints.27" posX="-704.39" posY="237.35" posZ="1.23" interior="0" set="Racing.triathlon.fleischberg.checkpoints" index="27" shape="array" path="true" />
+    <spot id="Racing.triathlon.fleischberg.checkpoints.28" posX="-753.51" posY="113.9" posZ="13.07" interior="0" set="Racing.triathlon.fleischberg.checkpoints" index="28" shape="array" path="true" />
+    <spot id="Racing.triathlon.fleischberg.checkpoints.29" posX="-774.61" posY="19.82" posZ="32.27" interior="0" set="Racing.triathlon.fleischberg.checkpoints" index="29" shape="array" path="true" />
+    <spot id="Racing.triathlon.fleischberg.checkpoints.30" posX="-882.63" posY="-30.08" posZ="32.34" interior="0" set="Racing.triathlon.fleischberg.checkpoints" index="30" shape="array" path="true" />
+    <spot id="Racing.triathlon.fleischberg.checkpoints.31" posX="-693.59" posY="14.12" posZ="64.75" interior="0" set="Racing.triathlon.fleischberg.checkpoints" index="31" shape="array" path="true" />
+    <spot id="Racing.triathlon.fleischberg.checkpoints.32" posX="-747.88" posY="-87.28" posZ="65.67" interior="0" set="Racing.triathlon.fleischberg.checkpoints" index="32" shape="array" path="true" />
+    <spot id="Racing.triathlon.fleischberg.checkpoints.33" posX="-914.71" posY="-149.6" posZ="52.85" interior="0" set="Racing.triathlon.fleischberg.checkpoints" index="33" shape="array" path="true" />
+    <spot id="Racing.triathlon.fleischberg.checkpoints.34" posX="-962.92" posY="-326.81" posZ="35.24" interior="0" set="Racing.triathlon.fleischberg.checkpoints" index="34" shape="array" path="true" />
+    <spot id="Racing.triathlon.fleischberg.checkpoints.35" posX="-1053.01" posY="-459.18" posZ="34.31" interior="0" set="Racing.triathlon.fleischberg.checkpoints" index="35" shape="array" path="true" />
+    <spot id="Racing.triathlon.fleischberg.checkpoints.36" posX="-1192.14" posY="-713.62" posZ="54.6" interior="0" set="Racing.triathlon.fleischberg.checkpoints" index="36" shape="array" path="true" />
+    <spot id="Racing.triathlon.fleischberg.checkpoints.37" posX="-1487.71" posY="-817.68" posZ="64.42" interior="0" set="Racing.triathlon.fleischberg.checkpoints" index="37" shape="array" path="true" />
+    <spot id="Racing.triathlon.fleischberg.checkpoints.38" posX="-1740.78" posY="-724.18" posZ="30.49" interior="0" set="Racing.triathlon.fleischberg.checkpoints" index="38" shape="array" path="true" />
+    <spot id="Racing.triathlon.fleischberg.checkpoints.39" posX="-1781.2" posY="-583.26" posZ="15.34" interior="0" set="Racing.triathlon.fleischberg.checkpoints" index="39" shape="array" path="true" />
+    <spot id="Racing.triathlon.fleischberg.checkpoints.40" posX="-1823.7" posY="-529.55" posZ="13.97" interior="0" set="Racing.triathlon.fleischberg.checkpoints" index="40" shape="array" path="true" />
+    <spot id="Racing.triathlon.fleischberg.checkpoints.41" posX="-1799.02" posY="-273.01" posZ="20.34" interior="0" set="Racing.triathlon.fleischberg.checkpoints" index="41" shape="array" path="true" />
+    <spot id="Racing.triathlon.fleischberg.checkpoints.42" posX="-1800.12" posY="-65.17" posZ="10.94" interior="0" set="Racing.triathlon.fleischberg.checkpoints" index="42" shape="array" path="true" />
+    <spot id="Racing.triathlon.fleischberg.checkpoints.43" posX="-1725.06" posY="327.47" posZ="6.04" interior="0" set="Racing.triathlon.fleischberg.checkpoints" index="43" shape="array" path="true" />
+    <spot id="Racing.triathlon.fleischberg.checkpoints.44" posX="-1557.1" posY="578.61" posZ="6.03" interior="0" set="Racing.triathlon.fleischberg.checkpoints" index="44" shape="array" path="true" />
+    <spot id="Racing.triathlon.fleischberg.checkpoints.45" posX="-1541.11" posY="769.12" posZ="6.04" interior="0" set="Racing.triathlon.fleischberg.checkpoints" index="45" shape="array" path="true" />
+    <spot id="Racing.triathlon.fleischberg.checkpoints.46" posX="-1583.38" posY="1116.99" posZ="6.05" interior="0" set="Racing.triathlon.fleischberg.checkpoints" index="46" shape="array" path="true" />
+    <spot id="Racing.triathlon.fleischberg.checkpoints.47" posX="-1809.28" posY="1378.62" posZ="6.04" interior="0" set="Racing.triathlon.fleischberg.checkpoints" index="47" shape="array" path="true" />
+    <spot id="Racing.triathlon.fleischberg.checkpoints.48" posX="-2100.21" posY="1275.83" posZ="15.13" interior="0" set="Racing.triathlon.fleischberg.checkpoints" index="48" shape="array" path="true" />
+    <spot id="Racing.triathlon.fleischberg.checkpoints.49" posX="-2350.21" posY="1176.57" posZ="41.57" interior="0" set="Racing.triathlon.fleischberg.checkpoints" index="49" shape="array" path="true" />
+    <spot id="Racing.triathlon.fleischberg.checkpoints.50" posX="-2510.88" posY="1187.86" posZ="39.13" interior="0" set="Racing.triathlon.fleischberg.checkpoints" index="50" shape="array" path="true" />
+    <spot id="Racing.triathlon.fleischberg.checkpoints.51" posX="-2669.68" posY="1245.14" posZ="54.43" interior="0" set="Racing.triathlon.fleischberg.checkpoints" index="51" shape="array" path="true" />
+    <spot id="Racing.triathlon.fleischberg.checkpoints.52" posX="-2673.89" posY="1643.35" posZ="65.03" interior="0" set="Racing.triathlon.fleischberg.checkpoints" index="52" shape="array" path="true" />
+    <spot id="Racing.triathlon.fleischberg.checkpoints.53" posX="-2674.05" posY="2075.54" posZ="54.42" interior="0" set="Racing.triathlon.fleischberg.checkpoints" index="53" shape="array" path="true" />
+    <spot id="Racing.triathlon.fleischberg.checkpoints.54" posX="-2738.81" posY="2389.17" posZ="71.78" interior="0" set="Racing.triathlon.fleischberg.checkpoints" index="54" shape="array" path="true" />
+    <spot id="Racing.triathlon.fleischberg.checkpoints.55" posX="-2547.93" posY="2616.46" posZ="59.99" interior="0" set="Racing.triathlon.fleischberg.checkpoints" index="55" shape="array" path="true" />
+    <spot id="Racing.triathlon.fleischberg.checkpoints.56" posX="-2291.89" posY="2639.56" posZ="54.26" interior="0" set="Racing.triathlon.fleischberg.checkpoints" index="56" shape="array" path="true" />
+    <spot id="Racing.triathlon.fleischberg.checkpoints.57" posX="-1943.44" posY="2477.8" posZ="53.99" interior="0" set="Racing.triathlon.fleischberg.checkpoints" index="57" shape="array" path="true" />
+    <spot id="Racing.triathlon.fleischberg.checkpoints.58" posX="-1773.83" posY="2183.41" posZ="15.13" interior="0" set="Racing.triathlon.fleischberg.checkpoints" index="58" shape="array" path="true" />
+    <spot id="Racing.triathlon.fleischberg.checkpoints.59" posX="-1671.43" posY="1994.47" posZ="18.61" interior="0" set="Racing.triathlon.fleischberg.checkpoints" index="59" shape="array" path="true" />
+    <spot id="Racing.triathlon.fleischberg.checkpoints.60" posX="-1665.7" posY="1828.96" posZ="24.84" interior="0" set="Racing.triathlon.fleischberg.checkpoints" index="60" shape="array" path="true" />
+    <spot id="Racing.triathlon.fleischberg.checkpoints.61" posX="-1515.53" posY="1841.55" posZ="28.99" interior="0" set="Racing.triathlon.fleischberg.checkpoints" index="61" shape="array" path="true" />
+    <spot id="Racing.triathlon.fleischberg.checkpoints.62" posX="-1264.99" posY="1827.3" posZ="39.43" interior="0" set="Racing.triathlon.fleischberg.checkpoints" index="62" shape="array" path="true" />
+    <spot id="Racing.triathlon.fleischberg.checkpoints.63" posX="-1121.39" posY="1807.54" posZ="41.26" interior="0" set="Racing.triathlon.fleischberg.checkpoints" index="63" shape="array" path="true" />
+    <spot id="Racing.triathlon.fleischberg.checkpoints.64" posX="-988.98" posY="1847.64" posZ="61.91" interior="0" set="Racing.triathlon.fleischberg.checkpoints" index="64" shape="array" path="true" />
+    <spot id="Racing.triathlon.fleischberg.checkpoints.65" posX="-855.06" posY="1858.9" posZ="59.22" interior="0" set="Racing.triathlon.fleischberg.checkpoints" index="65" shape="array" path="true" />
+    <spot id="Racing.triathlon.fleischberg.checkpoints.66" posX="-827.79" posY="2022.61" posZ="59.19" interior="0" set="Racing.triathlon.fleischberg.checkpoints" index="66" shape="array" path="true" />
+    <spot id="Racing.triathlon.fleischberg.checkpoints.67" posX="-643.98" posY="2054.75" posZ="59.38" interior="0" set="Racing.triathlon.fleischberg.checkpoints" index="67" shape="array" path="true" />
+    <spot id="Racing.triathlon.fleischberg.checkpoints.68" posX="-460.5" posY="2022.14" posZ="59.19" interior="0" set="Racing.triathlon.fleischberg.checkpoints" index="68" shape="array" path="true" />
+    <spot id="Racing.triathlon.fleischberg.checkpoints.69" posX="-385.33" posY="2052.06" posZ="61.11" interior="0" set="Racing.triathlon.fleischberg.checkpoints" index="69" shape="array" path="true" />
+    <spot id="Racing.triathlon.fleischberg.checkpoints.70" posX="-471.2" posY="1868.45" posZ="81.31" interior="0" set="Racing.triathlon.fleischberg.checkpoints" index="70" shape="array" path="true" />
+    <spot id="Racing.triathlon.fleischberg.checkpoints.71" posX="-424.82" posY="1785.55" posZ="69.97" interior="0" set="Racing.triathlon.fleischberg.checkpoints" index="71" shape="array" path="true" />
+    <spot id="Racing.triathlon.fleischberg.checkpoints.72" posX="-392.5" posY="1899.68" posZ="56.31" interior="0" set="Racing.triathlon.fleischberg.checkpoints" index="72" shape="array" path="true" />
+    <spot id="Racing.triathlon.fleischberg.checkpoints.73" posX="-437.57" posY="1639.05" posZ="34.55" interior="0" set="Racing.triathlon.fleischberg.checkpoints" index="73" shape="array" path="true" />
+    <spot id="Racing.triathlon.fleischberg.checkpoints.74" posX="-419.9" posY="1375.71" posZ="29.34" interior="0" set="Racing.triathlon.fleischberg.checkpoints" index="74" shape="array" path="true" />
+    <spot id="Racing.triathlon.fleischberg.checkpoints.75" posX="-254.25" posY="1241.24" posZ="22.91" interior="0" set="Racing.triathlon.fleischberg.checkpoints" index="75" shape="array" path="true" />
+    <spot id="Racing.triathlon.fleischberg.checkpoints.76" posX="-17.31" posY="1266" posZ="7.19" interior="0" set="Racing.triathlon.fleischberg.checkpoints" index="76" shape="array" path="true" />
+    <spot id="Racing.triathlon.fleischberg.checkpoints.77" posX="207.22" posY="1174.19" posZ="14" interior="0" set="Racing.triathlon.fleischberg.checkpoints" index="77" shape="array" path="true" />
+    <spot id="Racing.triathlon.fleischberg.checkpoints.78" posX="339.07" posY="1382.29" posZ="6.18" interior="0" set="Racing.triathlon.fleischberg.checkpoints" index="78" shape="array" path="true" />
+    <spot id="Racing.triathlon.fleischberg.checkpoints.79" posX="388.34" posY="1547.93" posZ="13.85" interior="0" set="Racing.triathlon.fleischberg.checkpoints" index="79" shape="array" path="true" />
+    <spot id="Racing.triathlon.fleischberg.checkpoints.80" posX="633.4" posY="1754.87" posZ="3.96" interior="0" set="Racing.triathlon.fleischberg.checkpoints" index="80" shape="array" path="true" />
+    <spot id="Racing.triathlon.fleischberg.checkpoints.81" posX="669.82" posY="2168.32" posZ="20.51" interior="0" set="Racing.triathlon.fleischberg.checkpoints" index="81" shape="array" path="true" />
+    <spot id="Racing.triathlon.fleischberg.checkpoints.82" posX="689.65" posY="2565.16" posZ="27.23" interior="0" set="Racing.triathlon.fleischberg.checkpoints" index="82" shape="array" path="true" />
+    <spot id="Racing.triathlon.fleischberg.checkpoints.83" posX="891.86" posY="2603.75" posZ="9.6" interior="0" set="Racing.triathlon.fleischberg.checkpoints" index="83" shape="array" path="true" />
+    <spot id="Racing.triathlon.fleischberg.checkpoints.84" posX="1044.02" posY="2515.86" posZ="9.63" interior="0" set="Racing.triathlon.fleischberg.checkpoints" index="84" shape="array" path="true" />
+    <spot id="Racing.triathlon.fleischberg.checkpoints.85" posX="1244.6" posY="2379.12" posZ="12.62" interior="0" set="Racing.triathlon.fleischberg.checkpoints" index="85" shape="array" path="true" />
+    <spot id="Racing.triathlon.fleischberg.checkpoints.86" posX="1443.87" posY="2448.95" posZ="5.75" interior="0" set="Racing.triathlon.fleischberg.checkpoints" index="86" shape="array" path="true" />
+    <spot id="Racing.triathlon.fleischberg.checkpoints.87" posX="1666.89" posY="2445.99" posZ="6.04" interior="0" set="Racing.triathlon.fleischberg.checkpoints" index="87" shape="array" path="true" />
+    <spot id="Racing.triathlon.fleischberg.checkpoints.88" posX="1788.89" posY="2302.64" posZ="4.91" interior="0" set="Racing.triathlon.fleischberg.checkpoints" index="88" shape="array" path="true" />
+    <spot id="Racing.triathlon.fleischberg.checkpoints.89" posX="1787.29" posY="2020.55" posZ="2.98" interior="0" set="Racing.triathlon.fleischberg.checkpoints" index="89" shape="array" path="true" />
+    <spot id="Racing.triathlon.fleischberg.checkpoints.90" posX="1757.57" posY="1803.75" posZ="6.67" interior="0" set="Racing.triathlon.fleischberg.checkpoints" index="90" shape="array" path="true" />
+    <spot id="Racing.triathlon.fleischberg.checkpoints.91" posX="1719.66" posY="1733.2" posZ="9.67" interior="0" set="Racing.triathlon.fleischberg.checkpoints" index="91" shape="array" path="true" />
+    <spot id="Racing.triathlon.fleischberg.checkpoints.92" posX="1647.86" posY="1740.39" posZ="9.67" interior="0" set="Racing.triathlon.fleischberg.checkpoints" index="92" shape="array" path="true" />
+    <spot id="Racing.triathlon.fleischberg.checkpoints.93" posX="1666.32" posY="1871.77" posZ="9.68" interior="0" set="Racing.triathlon.fleischberg.checkpoints" index="93" shape="array" path="true" />
+    <spot id="Racing.triathlon.fleischberg.checkpoints.94" posX="1707.18" posY="1939.95" posZ="9.67" interior="0" set="Racing.triathlon.fleischberg.checkpoints" index="94" shape="array" path="true" />
+    <spot id="Racing.triathlon.fleischberg.checkpoints.95" posX="1736.21" posY="2053.14" posZ="9.68" interior="0" set="Racing.triathlon.fleischberg.checkpoints" index="95" shape="array" path="true" />
+    <spot id="Racing.triathlon.fleischberg.checkpoints.96" posX="1897.32" posY="2044.71" posZ="9.67" interior="0" set="Racing.triathlon.fleischberg.checkpoints" index="96" shape="array" path="true" />
+    <spot id="Racing.triathlon.fleischberg.checkpoints.97" posX="1994.82" posY="2022.87" posZ="9.68" interior="0" set="Racing.triathlon.fleischberg.checkpoints" index="97" shape="array" path="true" />
+    <spot id="Racing.triathlon.fleischberg.checkpoints.98" posX="2126.01" posY="2014.89" posZ="9.67" interior="0" set="Racing.triathlon.fleischberg.checkpoints" index="98" shape="array" path="true" />
+    <spot id="Racing.triathlon.fleischberg.checkpoints.99" posX="2126.8" posY="1885.59" posZ="9.68" interior="0" set="Racing.triathlon.fleischberg.checkpoints" index="99" shape="array" path="true" />
+    <spot id="Racing.triathlon.fleischberg.checkpoints.100" posX="2098.34" posY="1802.86" posZ="9.68" interior="0" set="Racing.triathlon.fleischberg.checkpoints" index="100" shape="array" path="true" />
+    <spot id="Racing.triathlon.fleischberg.checkpoints.101" posX="2056.64" posY="1720.57" posZ="9.67" interior="0" set="Racing.triathlon.fleischberg.checkpoints" index="101" shape="array" path="true" />
+    <spot id="Racing.triathlon.fleischberg.checkpoints.102" posX="2049.26" posY="1554.79" posZ="9.67" interior="0" set="Racing.triathlon.fleischberg.checkpoints" index="102" shape="array" path="true" />
+    <spot id="Racing.triathlon.fleischberg.checkpoints.103" posX="2050.83" posY="1403.36" posZ="9.67" interior="0" set="Racing.triathlon.fleischberg.checkpoints" index="103" shape="array" path="true" />
+    <spot id="Racing.triathlon.fleischberg.checkpoints.104" posX="2048.7" posY="1089.75" posZ="9.66" interior="0" set="Racing.triathlon.fleischberg.checkpoints" index="104" shape="array" path="true" />
+    <spot id="Dating.girls.1.meet" posX="2401.96" posY="-1723.22" posZ="12.6" interior="0" shape="array" w="180" />
+    <spot id="Dating.girls.1.home" posX="2401.96" posY="-1723.22" posZ="12.6" interior="0" shape="array" w="180" />
+    <spot id="Dating.girls.1.car" posX="2408.16" posY="-1719.46" posZ="13.67" interior="0" shape="named" />
+    <spot id="Dating.girls.2.meet" posX="-2027.58" posY="-118.7" posZ="1034" interior="3" shape="array" w="3.4" />
+    <spot id="Dating.girls.2.home" posX="-1799.5" posY="1195.5" posZ="24.11" interior="0" shape="array" w="180" />
+    <spot id="Dating.girls.2.car" posX="-1778.18" posY="1207.07" posZ="25.12" interior="0" shape="named" />
+    <spot id="Dating.girls.3.meet" posX="257.67" posY="-154.75" posZ="4.08" interior="0" shape="array" w="268.8" />
+    <spot id="Dating.girls.3.home" posX="-377.4" posY="-1438.69" posZ="24.72" interior="0" shape="array" w="270" />
+    <spot id="Dating.girls.3.car" posX="-379.5" posY="-1443.12" posZ="25.73" interior="0" shape="named" />
+    <spot id="Dating.girls.4.meet" posX="-1410.1" posY="2648.73" posZ="54.69" interior="0" shape="array" w="130" />
+    <spot id="Dating.girls.4.home" posX="-1398.1" posY="2636.87" posZ="54.7" interior="0" shape="array" w="75" />
+    <spot id="Dating.girls.4.car" posX="-1399.72" posY="2628.59" posZ="55.78" interior="0" shape="named" />
+    <spot id="Dating.girls.5.meet" posX="-2291.71" posY="-233.02" posZ="41.72" interior="0" shape="array" w="360" />
+    <spot id="Dating.girls.5.home" posX="-2576.81" posY="1144.74" posZ="54.74" interior="0" shape="array" w="164" />
+    <spot id="Dating.girls.5.car" posX="-2572.04" posY="1148.56" posZ="55.73" interior="0" shape="named" />
+    <spot id="Dating.girls.6.meet" posX="2035.36" posY="2732.41" posZ="9.82" interior="0" shape="array" w="0" />
+    <spot id="Dating.girls.6.home" posX="2035.36" posY="2732.41" posZ="9.82" interior="0" shape="array" w="0" />
+    <spot id="Dating.girls.6.car" posX="2028.45" posY="2731.1" posZ="10.53" interior="0" shape="named" />
+    <spot id="Dating.venues.diner.1" posX="2862" posY="-1439" posZ="10" interior="0" set="Dating.venues.diner" index="1" shape="array" />
+    <spot id="Dating.venues.diner.2" posX="384.66" posY="-1819.53" posZ="6.84" interior="0" set="Dating.venues.diner" index="2" shape="array" />
+    <spot id="Dating.venues.diner.3" posX="-1699" posY="1380" posZ="6" interior="0" set="Dating.venues.diner" index="3" shape="array" />
+    <spot id="Dating.venues.diner.4" posX="-2524" posY="1216" posZ="37" interior="0" set="Dating.venues.diner" index="4" shape="array" />
+    <spot id="Dating.venues.diner.5" posX="1376.89" posY="2327.79" posZ="9.82" interior="0" set="Dating.venues.diner" index="5" shape="array" />
+    <spot id="Dating.venues.diner.6" posX="2368.06" posY="1983.19" posZ="10" interior="0" set="Dating.venues.diner" index="6" shape="array" />
+    <spot id="Dating.venues.diner.7" posX="681.54" posY="-473.49" posZ="15.59" interior="0" set="Dating.venues.diner" index="7" shape="array" />
+    <spot id="Dating.venues.diner.8" posX="-1941.52" posY="2379.67" posZ="48.49" interior="0" set="Dating.venues.diner" index="8" shape="array" />
+    <spot id="Dating.venues.diner.9" posX="-53.87" posY="1189.3" posZ="18.41" interior="0" set="Dating.venues.diner" index="9" shape="array" />
+    <spot id="Dating.venues.bar.1" posX="2317" posY="-1645" posZ="13" interior="0" set="Dating.venues.bar" index="1" shape="array" />
+    <spot id="Dating.venues.bar.2" posX="1837" posY="-1682" posZ="14" interior="0" set="Dating.venues.bar" index="2" shape="array" />
+    <spot id="Dating.venues.bar.3" posX="-2241" posY="-88" posZ="35" interior="0" set="Dating.venues.bar" index="3" shape="array" />
+    <spot id="Dating.venues.bar.4" posX="-2551.12" posY="193.66" posZ="5.2" interior="0" set="Dating.venues.bar" index="4" shape="array" />
+    <spot id="Dating.venues.bar.5" posX="2441.15" posY="2065.15" posZ="9.85" interior="0" set="Dating.venues.bar" index="5" shape="array" />
+    <spot id="Dating.venues.bar.6" posX="292.87" posY="-195.47" posZ="0.85" interior="0" set="Dating.venues.bar" index="6" shape="array" />
+    <spot id="Dating.venues.bar.7" posX="-85.26" posY="1378.99" posZ="9.28" interior="0" set="Dating.venues.bar" index="7" shape="array" />
+    <spot id="Dating.venues.restaurant.1" posX="415.39" posY="-1431.02" posZ="31.51" interior="0" set="Dating.venues.restaurant" index="1" shape="array" />
+    <spot id="Dating.venues.restaurant.2" posX="-2463" posY="132" posZ="34" interior="0" set="Dating.venues.restaurant" index="2" shape="array" />
+    <spot id="Dating.venues.restaurant.3" posX="-1885" posY="747" posZ="44" interior="0" set="Dating.venues.restaurant" index="3" shape="array" />
+    <spot id="Dating.venues.restaurant.4" posX="1693" posY="2208" posZ="9.8" interior="0" set="Dating.venues.restaurant" index="4" shape="array" />
+    <spot id="Dating.venues.restaurant.5" posX="2490.67" posY="2065.15" posZ="9.85" interior="0" set="Dating.venues.restaurant" index="5" shape="array" />
+    <spot id="Dating.venues.restaurant.6" posX="-857.14" posY="1537.28" posZ="21.59" interior="0" set="Dating.venues.restaurant" index="6" shape="array" />
+    <spot id="Dating.venues.fastfood.1" posX="172.73" posY="1176.68" posZ="13.77" interior="0" set="Dating.venues.fastfood" index="1" shape="array" />
+    <spot id="Dating.venues.fastfood.2" posX="-1213.71" posY="1830.46" posZ="40.93" interior="0" set="Dating.venues.fastfood" index="2" shape="array" />
+    <spot id="Dating.venues.fastfood.3" posX="-2155.03" posY="-2460.28" posZ="29.85" interior="0" set="Dating.venues.fastfood" index="3" shape="array" />
+    <spot id="Dating.venues.fastfood.4" posX="1367.27" posY="248.39" posZ="18.62" interior="0" set="Dating.venues.fastfood" index="4" shape="array" />
+    <spot id="Dating.venues.fastfood.5" posX="2333.43" posY="75.05" posZ="25.73" interior="0" set="Dating.venues.fastfood" index="5" shape="array" />
+    <spot id="Dating.venues.fastfood.6" posX="203.33" posY="-202.53" posZ="0.6" interior="0" set="Dating.venues.fastfood" index="6" shape="array" />
+    <spot id="Dating.venues.fastfood.7" posX="2105.32" posY="-1806.49" posZ="12.69" interior="0" set="Dating.venues.fastfood" index="7" shape="array" />
+    <spot id="Dating.venues.fastfood.8" posX="2419.95" posY="-1509.8" posZ="23.16" interior="0" set="Dating.venues.fastfood" index="8" shape="array" />
+    <spot id="Dating.venues.fastfood.9" posX="2397.83" posY="-1898.65" posZ="12.71" interior="0" set="Dating.venues.fastfood" index="9" shape="array" />
+    <spot id="Dating.venues.fastfood.10" posX="811.98" posY="-1616.02" posZ="12.62" interior="0" set="Dating.venues.fastfood" index="10" shape="array" />
+    <spot id="Dating.venues.fastfood.11" posX="1199.13" posY="-918.07" posZ="42.32" interior="0" set="Dating.venues.fastfood" index="11" shape="array" />
+    <spot id="Dating.venues.fastfood.12" posX="928.53" posY="-1352.77" posZ="12.43" interior="0" set="Dating.venues.fastfood" index="12" shape="array" />
+    <spot id="Dating.venues.fastfood.13" posX="-1808.69" posY="945.86" posZ="23.87" interior="0" set="Dating.venues.fastfood" index="13" shape="array" />
+    <spot id="Dating.venues.fastfood.14" posX="-1721.13" posY="1359.01" posZ="6.2" interior="0" set="Dating.venues.fastfood" index="14" shape="array" />
+    <spot id="Dating.venues.fastfood.15" posX="-1912.27" posY="828.03" posZ="34.56" interior="0" set="Dating.venues.fastfood" index="15" shape="array" />
+    <spot id="Dating.venues.fastfood.16" posX="-1815.84" posY="618.68" posZ="34.3" interior="0" set="Dating.venues.fastfood" index="16" shape="array" />
+    <spot id="Dating.venues.fastfood.17" posX="-2671.53" posY="258.34" posZ="3.65" interior="0" set="Dating.venues.fastfood" index="17" shape="array" />
+    <spot id="Dating.venues.fastfood.18" posX="-2336.95" posY="-166.65" posZ="34.36" interior="0" set="Dating.venues.fastfood" index="18" shape="array" />
+    <spot id="Dating.venues.fastfood.19" posX="-2356.48" posY="1008.01" posZ="49.9" interior="0" set="Dating.venues.fastfood" index="19" shape="array" />
+    <spot id="Dating.venues.fastfood.20" posX="2638.58" posY="1671.18" posZ="10.02" interior="0" set="Dating.venues.fastfood" index="20" shape="array" />
+    <spot id="Dating.venues.fastfood.21" posX="2638.58" posY="1849.97" posZ="10.02" interior="0" set="Dating.venues.fastfood" index="21" shape="array" />
+    <spot id="Dating.venues.fastfood.22" posX="2366.74" posY="2071.02" posZ="9.82" interior="0" set="Dating.venues.fastfood" index="22" shape="array" />
+    <spot id="Dating.venues.fastfood.23" posX="2393.18" posY="2041.66" posZ="9.85" interior="0" set="Dating.venues.fastfood" index="23" shape="array" />
+    <spot id="Dating.venues.fastfood.24" posX="2472.68" posY="2033.88" posZ="9.82" interior="0" set="Dating.venues.fastfood" index="24" shape="array" />
+    <spot id="Dating.venues.fastfood.25" posX="2756.01" posY="2477.05" posZ="10.06" interior="0" set="Dating.venues.fastfood" index="25" shape="array" />
+    <spot id="Dating.venues.fastfood.26" posX="2838.43" posY="2407.26" posZ="10.06" interior="0" set="Dating.venues.fastfood" index="26" shape="array" />
+    <spot id="Dating.venues.fastfood.27" posX="2351.89" posY="2532.19" posZ="9.82" interior="0" set="Dating.venues.fastfood" index="27" shape="array" />
+    <spot id="Dating.venues.fastfood.28" posX="2169.86" posY="2795.79" posZ="9.9" interior="0" set="Dating.venues.fastfood" index="28" shape="array" />
+    <spot id="Dating.venues.fastfood.29" posX="1872.24" posY="2072.07" posZ="9.82" interior="0" set="Dating.venues.fastfood" index="29" shape="array" />
+    <spot id="Dating.venues.fastfood.30" posX="1158.43" posY="2072.02" posZ="9.82" interior="0" set="Dating.venues.fastfood" index="30" shape="array" />
+    <spot id="Dating.venues.fastfood.31" posX="2083.49" posY="2224.2" posZ="10.06" interior="0" set="Dating.venues.fastfood" index="31" shape="array" />
+    <spot id="Dating.venues.fastfood.32" posX="2102.69" posY="2228.76" posZ="10.06" interior="0" set="Dating.venues.fastfood" index="32" shape="array" />
+    <spot id="Dating.venues.disco.1" posX="1837" posY="-1682" posZ="14" interior="0" set="Dating.venues.disco" index="1" shape="array" />
+    <spot id="Dating.venues.disco.2" posX="-2551.12" posY="193.66" posZ="5.2" interior="0" set="Dating.venues.disco" index="2" shape="array" />
+    <spot id="Dating.venues.disco.3" posX="2507.44" posY="1242.31" posZ="9.83" interior="0" set="Dating.venues.disco" index="3" shape="array" />
+    <spot id="Games.range.ranges.1.entry" posX="292.33" posY="-35.39" posZ="1000.5" interior="1" shape="array" />
+    <spot id="Games.range.ranges.1.booth" posX="290.63" posY="-24.55" posZ="1000.52" interior="1" shape="array" />
+    <spot id="Games.range.ranges.2.entry" posX="289.48" posY="-79.66" posZ="1001.73" interior="4" shape="array" />
+    <spot id="Games.range.ranges.2.booth" posX="303.08" posY="-61.23" posZ="1000.52" interior="4" shape="array" />
+    <spot id="Games.range.ranges.3.entry" posX="309.97" posY="-135.39" posZ="1002.83" interior="7" shape="array" />
+    <spot id="Games.range.ranges.3.booth" posX="300.1" posY="-137.04" posZ="1003.05" interior="7" shape="array" />
+    <spot id="Games.range.ranges.4.entry" posX="306.9" posY="-164.99" posZ="1000.26" interior="6" shape="array" />
+    <spot id="Games.range.ranges.4.booth" posX="299.45" posY="-166.35" posZ="998.61" interior="6" shape="array" />
+    <spot id="Games.dance.floors.1" posX="488" posY="-14.08" posZ="999.68" interior="17" shape="named" />
+    <spot id="Games.dance.floors.2" posX="501.98" posY="-72.15" posZ="997.84" interior="11" shape="named" />
+    <spot id="Games.dance.floors.3" posX="-224.03" posY="1404.23" posZ="26.77" interior="18" shape="named" />
+    <spot id="Games.lowrider" posX="2644.44" posY="-2012.56" posZ="12.55" interior="0" shape="named" />
+    <spot id="Burglary.lockups.1" posX="2741" posY="-2006.81" posZ="14" interior="0" shape="named" />
+    <spot id="Burglary.lockups.1.park" posX="2741.24" posY="-2011.27" posZ="13.59" interior="0" shape="array" />
+    <spot id="Burglary.lockups.2" posX="-2102.54" posY="-15.59" posZ="34.32" interior="0" shape="named" />
+    <spot id="Burglary.lockups.2.park" posX="-2109.32" posY="-15.8" posZ="34.32" interior="0" shape="array" />
+    <spot id="Burglary.lockups.3" posX="2609.25" posY="1439.35" posZ="9.82" interior="0" shape="named" />
+    <spot id="Burglary.lockups.3.park" posX="2609.01" posY="1445.94" posZ="9.82" interior="0" shape="array" />
+    <spot id="Schools.driving.menu" posX="-2031.2" posY="-118" posZ="1034.2" interior="3" shape="array" />
+    <spot id="Schools.driving.start" posX="-2050.6" posY="-130" posZ="34.3" interior="0" shape="array" w="180" />
+    <spot id="Schools.driving.rewards.1" posX="-2093.9" posY="-83.7" posZ="33.9" interior="0" shape="named" />
+    <spot id="Schools.driving.rewards.2" posX="-2076.8" posY="-84" posZ="33.7" interior="0" shape="named" />
+    <spot id="Schools.driving.rewards.3" posX="-2064.4" posY="-83.7" posZ="34.1" interior="0" shape="named" />
+    <spot id="Schools.driving.tests.12.from" posX="-2046.7" posY="-90.2" posZ="33.9" interior="0" shape="array" w="180" />
+    <spot id="Schools.driving.tests.12.via" posX="-1724.3" posY="1294" posZ="6" interior="0" shape="array" />
+    <spot id="Schools.bike.menu" posX="1173.93" posY="1351.07" posZ="9.92" interior="0" shape="array" />
+    <spot id="Schools.bike.start" posX="1130.44" posY="1341" posZ="10" interior="0" shape="array" w="180" />
+    <spot id="Schools.bike.rewards.1" posX="1174.76" posY="1364.83" posZ="10.12" interior="0" shape="named" />
+    <spot id="Schools.bike.rewards.2" posX="1175" posY="1366.48" posZ="10.12" interior="0" shape="named" />
+    <spot id="Schools.bike.rewards.3" posX="1174.47" posY="1368.36" posZ="10.12" interior="0" shape="named" />
+    <spot id="Schools.boat.menu" posX="-2187.38" posY="2416.55" posZ="4.17" interior="0" shape="array" />
+    <spot id="Schools.boat.start" posX="-2323.63" posY="2105.29" posZ="0.5" interior="0" shape="array" w="90" />
+    <spot id="Schools.boat.rewards.1" posX="-2227.1" posY="2445.78" posZ="0" interior="0" shape="named" />
+    <spot id="Schools.boat.rewards.2" posX="-2223.87" posY="2409.87" posZ="0" interior="0" shape="named" />
+    <spot id="Schools.boat.rewards.3" posX="-2247.84" posY="2425.68" posZ="0" interior="0" shape="named" />
+    <spot id="Schools.boat.tests.2.from" posX="-2578.67" posY="2050.84" posZ="0.5" interior="0" shape="array" w="0" />
+    <spot id="Schools.boat.tests.3.from" posX="-2124.13" posY="2438.35" posZ="0.5" interior="0" shape="array" w="180" />
+    <spot id="Schools.boat.tests.4.from" posX="-2318.05" posY="2312.3" posZ="1" interior="0" shape="array" w="174.6" />
+    <spot id="Schools.boat.tests.5.from" posX="-2014.27" posY="2365.43" posZ="6.05" interior="0" shape="array" w="111" />
+    <spot id="Schools.flight.menu" posX="415.55" posY="2533.57" posZ="19.18" interior="0" shape="array" />
+    <spot id="Schools.flight.start" posX="321.52" posY="2502.31" posZ="17.16" interior="0" shape="array" w="90" />
+    <spot id="Schools.flight.rewards.1" posX="325.12" posY="2537.1" posZ="17.52" interior="0" shape="named" />
+    <spot id="Schools.flight.rewards.2" posX="348" posY="2537.1" posZ="17.42" interior="0" shape="named" />
+    <spot id="Schools.flight.rewards.3" posX="365.51" posY="2537.1" posZ="17.42" interior="0" shape="named" />
+    <spot id="Schools.flight.tests.1.rings.1" posX="-383.79" posY="2502.31" posZ="147.09" interior="0" set="Schools.flight.tests.1.rings" index="1" shape="array" path="true" />
+    <spot id="Schools.flight.tests.1.rings.2" posX="-683.79" posY="2502.31" posZ="127.09" interior="0" set="Schools.flight.tests.1.rings" index="2" shape="array" path="true" />
+    <spot id="Schools.flight.tests.1.rings.3" posX="-1033.79" posY="2502.31" posZ="157.09" interior="0" set="Schools.flight.tests.1.rings" index="3" shape="array" path="true" />
+    <spot id="Schools.flight.tests.2.from" posX="-383.79" posY="2502.31" posZ="85.09" interior="0" shape="array" w="270" />
+    <spot id="Schools.flight.tests.2.target" posX="177.28" posY="2502.31" posZ="17.2" interior="0" shape="array" />
+    <spot id="Schools.flight.tests.3.from" posX="-383.79" posY="2502.31" posZ="85.09" interior="0" shape="array" w="270" />
+    <spot id="Schools.flight.tests.3.rings.1" posX="-683.79" posY="2502.31" posZ="100" interior="0" set="Schools.flight.tests.3.rings" index="1" shape="array" path="true" />
+    <spot id="Schools.flight.tests.3.rings.2" posX="-783.79" posY="2802.31" posZ="110" interior="0" set="Schools.flight.tests.3.rings" index="2" shape="array" path="true" />
+    <spot id="Schools.flight.tests.3.rings.3" posX="-83.79" posY="2902.31" posZ="110" interior="0" set="Schools.flight.tests.3.rings" index="3" shape="array" path="true" />
+    <spot id="Schools.flight.tests.3.rings.4" posX="635.92" posY="2802.31" posZ="110" interior="0" set="Schools.flight.tests.3.rings" index="4" shape="array" path="true" />
+    <spot id="Schools.flight.tests.3.rings.5" posX="735.92" posY="2502.31" posZ="100" interior="0" set="Schools.flight.tests.3.rings" index="5" shape="array" path="true" />
+    <spot id="Schools.flight.tests.3.rings.6" posX="635.92" posY="2202.31" posZ="110" interior="0" set="Schools.flight.tests.3.rings" index="6" shape="array" path="true" />
+    <spot id="Schools.flight.tests.3.rings.7" posX="-83.79" posY="2102.31" posZ="110" interior="0" set="Schools.flight.tests.3.rings" index="7" shape="array" path="true" />
+    <spot id="Schools.flight.tests.3.rings.8" posX="-383.79" posY="2502.31" posZ="100" interior="0" set="Schools.flight.tests.3.rings" index="8" shape="array" path="true" />
+    <spot id="Schools.flight.tests.4.from" posX="-383.79" posY="2502.31" posZ="85.09" interior="0" shape="array" w="270" />
+    <spot id="Schools.flight.tests.4.rings.1" posX="-683.79" posY="2502.31" posZ="100" interior="0" set="Schools.flight.tests.4.rings" index="1" shape="array" path="true" />
+    <spot id="Schools.flight.tests.4.rings.2" posX="-783.79" posY="2802.31" posZ="110" interior="0" set="Schools.flight.tests.4.rings" index="2" shape="array" path="true" />
+    <spot id="Schools.flight.tests.4.rings.3" posX="-83.79" posY="2902.31" posZ="110" interior="0" set="Schools.flight.tests.4.rings" index="3" shape="array" path="true" />
+    <spot id="Schools.flight.tests.4.rings.4" posX="635.92" posY="2802.31" posZ="110" interior="0" set="Schools.flight.tests.4.rings" index="4" shape="array" path="true" />
+    <spot id="Schools.flight.tests.4.rings.5" posX="735.92" posY="2502.31" posZ="80" interior="0" set="Schools.flight.tests.4.rings" index="5" shape="array" path="true" />
+    <spot id="Schools.flight.tests.4.rings.6" posX="535.92" posY="2502.31" posZ="40" interior="0" set="Schools.flight.tests.4.rings" index="6" shape="array" path="true" />
+    <spot id="Schools.flight.tests.5.from" posX="321.52" posY="2502.31" posZ="15.07" interior="0" shape="array" w="270" />
+    <spot id="Schools.flight.tests.5.rings.1" posX="-178.48" posY="2502.31" posZ="137.16" interior="0" set="Schools.flight.tests.5.rings" index="1" shape="array" path="true" />
+    <spot id="Schools.flight.tests.6.from" posX="-383.79" posY="2502.31" posZ="85.09" interior="0" shape="array" w="270" />
+    <spot id="Schools.flight.tests.6.target" posX="308" posY="2502.31" posZ="17.07" interior="0" shape="array" />
+    <spot id="Schools.flight.tests.7.from" posX="-383.79" posY="2502.31" posZ="85.09" interior="0" shape="array" w="270" />
+    <spot id="Schools.flight.tests.7.trucks.1" posX="418.5" posY="2502.31" posZ="17.1" interior="0" set="Schools.flight.tests.7.trucks" index="1" shape="array" />
+    <spot id="Schools.flight.tests.7.trucks.2" posX="378.5" posY="2502.31" posZ="17.1" interior="0" set="Schools.flight.tests.7.trucks" index="2" shape="array" />
+    <spot id="Schools.flight.tests.7.trucks.3" posX="338.5" posY="2502.31" posZ="17.1" interior="0" set="Schools.flight.tests.7.trucks" index="3" shape="array" />
+    <spot id="Schools.flight.tests.8.from" posX="-383.79" posY="2502.31" posZ="80" interior="0" shape="array" w="270" />
+    <spot id="Schools.flight.tests.8.rings.1" posX="177.28" posY="2502.31" posZ="80" interior="0" set="Schools.flight.tests.8.rings" index="1" shape="array" path="true" />
+    <spot id="Schools.flight.tests.8.rings.2" posX="377.28" posY="2502.31" posZ="80" interior="0" set="Schools.flight.tests.8.rings" index="2" shape="array" path="true" />
+    <spot id="Schools.flight.tests.9.from" posX="-383.79" posY="2502.31" posZ="80" interior="0" shape="array" w="270" />
+    <spot id="Schools.flight.tests.9.rings.1" posX="177.28" posY="2502.31" posZ="80" interior="0" set="Schools.flight.tests.9.rings" index="1" shape="array" path="true" />
+    <spot id="Schools.flight.tests.9.rings.2" posX="377.28" posY="2502.31" posZ="80" interior="0" set="Schools.flight.tests.9.rings" index="2" shape="array" path="true" />
+    <spot id="Schools.flight.tests.10.from" posX="527.28" posY="2502.31" posZ="900" interior="0" shape="array" w="90" />
+    <spot id="Schools.flight.tests.10.target" posX="177.28" posY="2502.31" posZ="15.53" interior="0" shape="array" />
 </map>

@@ -89,6 +89,59 @@ function MapData.follow(records, firstId)
     return list
 end
 
+-- Spots: world positions the rule configs (config/jobs.lua, ...) use, kept as `spot` elements so the
+-- editor can move them, while everything else about them stays in the Lua config:
+--   At("Jobs.trucking.start")                      -> { x, y, z }        (array spots, plus [4] = w if any)
+--   At("Jobs.freight.stations.1", { forward = ... }) -> the given table with the position filled in
+--   At("Dating.girls.1.car", { model = 400, ... })  -> named spots fill x, y, z instead
+--   Spots("Jobs.trucking.destinations")            -> every spot of that set, in index order
+MapData.spotSchema = { element = "spot", friendly = "Spot (a position the activity rules use)", position = true,
+    interior = "interior", id = "id",
+    fields = {
+        { "set", "string", nil, "the list it belongs to (e.g. Jobs.trucking.destinations); empty for a single spot" },
+        { "index", "int", nil, "its place in the set's list" },
+        { "shape", "string", "array", "array: { x, y, z } in Lua; named: x =, y =, z =" },
+        { "w", "number", nil, "a 4th value after x, y, z (a heading, radius or points, as the rules use it)" },
+        { "path", "bool", false, "the set is a route (the editor draws it in index order)" },
+        { "note", "string", nil, "free-form note" },
+    },
+    rep = '<marker type="corona" size="1.2" color="#B060FFA0" />' }
+
+-- The At / Spots functions over a list of spot records.
+function MapData.spotFunctions(records)
+    local byId, sets = {}, {}
+    for _, r in ipairs(records) do
+        byId[r.id] = r
+        if r.set then
+            sets[r.set] = sets[r.set] or {}
+            table.insert(sets[r.set], r)
+        end
+    end
+    for _, list in pairs(sets) do table.sort(list, function(a, b) return (a.index or 0) < (b.index or 0) end) end
+    local function fill(r, t)
+        t = t or {}
+        if r.shape == "named" then
+            t.x, t.y, t.z = r.x, r.y, r.z
+        else
+            t[1], t[2], t[3] = r.x, r.y, r.z
+            if r.w then t[4] = r.w end
+        end
+        return t
+    end
+    local function At(id, extras)
+        local r = byId[id]
+        if not r then error("no spot " .. tostring(id) .. " in the map data", 2) end
+        return fill(r, extras)
+    end
+    local function Spots(set)
+        local out = {}
+        for i, r in ipairs(sets[set] or {}) do out[i] = fill(r) end
+        if #out == 0 then error("no spots in set " .. tostring(set) .. " in the map data", 2) end
+        return out
+    end
+    return At, Spots
+end
+
 -- A dataset (each owning resource's config/maps.lua): its element schemas, where they live, and
 -- the conversion between element records and the tables the code uses:
 --   { resource, file, definition, types = { schema, ... },

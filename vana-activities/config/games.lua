@@ -4,10 +4,10 @@ Games = {
     range = {
         -- The four ranges (vanilla Srange / its range table): entry, interior, booth and facing.
         ranges = {
-            { entry = { 292.33, -35.39, 1000.5 }, interior = 1, booth = { 290.63, -24.55, 1000.52 }, heading = 0 },
-            { entry = { 289.48, -79.66, 1001.73 }, interior = 4, booth = { 303.08, -61.23, 1000.52 }, heading = 270 },
-            { entry = { 309.97, -135.39, 1002.83 }, interior = 7, booth = { 300.10, -137.04, 1003.05 }, heading = 90 },
-            { entry = { 306.90, -164.99, 1000.26 }, interior = 6, booth = { 299.45, -166.35, 998.61 }, heading = 90 },
+            { entry = At("Games.range.ranges.1.entry"), interior = 1, booth = At("Games.range.ranges.1.booth"), heading = 0 },
+            { entry = At("Games.range.ranges.2.entry"), interior = 4, booth = At("Games.range.ranges.2.booth"), heading = 270 },
+            { entry = At("Games.range.ranges.3.entry"), interior = 7, booth = At("Games.range.ranges.3.booth"), heading = 90 },
+            { entry = At("Games.range.ranges.4.entry"), interior = 6, booth = At("Games.range.ranges.4.booth"), heading = 90 },
         },
         -- Weapon challenges in order: weapon, its skill stat, the GXT names of rounds and the pass line.
         weapons = {
@@ -68,12 +68,11 @@ Games = {
     -- Dancing (vanilla DANCE) on club floors, and the lowrider contest (vanilla LOWR): a rhythm game.
     dance = {
         floors = {
-            { interior = 17, x = 488.00, y = -14.08, z = 999.68 },   -- the Alhambra (vanilla's floor)
-            { interior = 11, x = 501.98, y = -72.15, z = 997.84 },   -- ours: inside BAR2
-            { interior = 18, x = -224.03, y = 1404.23, z = 26.77 },  -- ours: inside the Lil' Probe Inn
+            At("Games.dance.floors.1", { interior = 17 }),   -- the Alhambra (vanilla's floor)
+            At("Games.dance.floors.2", { interior = 11 }),   -- ours: inside BAR2
+            At("Games.dance.floors.3", { interior = 18 }),  -- ours: inside the Lil' Probe Inn
         },
         beats = 40, beatMs = 700, anims = { "dnce_M_a", "dnce_M_b", "dnce_M_c", "dnce_M_d", "dnce_M_e" },
     },
-    lowrider = { x = 2644.44, y = -2012.56, z = 12.55, minBet = 50, maxBet = 2000, beats = 30, beatMs = 800,
-                 hydraulics = 1087, rival = { 0.55, 0.85 } },  -- ours: the rival's score share range
+    lowrider = At("Games.lowrider", { minBet = 50, maxBet = 2000, beats = 30, beatMs = 800, hydraulics = 1087, rival = { 0.55, 0.85 } }),  -- ours: the rival's score share range
 }

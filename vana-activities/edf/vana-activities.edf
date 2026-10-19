@@ -53,5 +53,15 @@
         <data name="nextid" type="element:routepoint" default="" required="false" description="the next point (none: the finish)" />
         <marker type="checkpoint" size="6" color="#80FF00A0" />
     </element>
+    <element name="spot" friendlyname="Spot (a position the activity rules use)">
+        <data name="position" type="coord3d" default="0,0,0" />
+        <data name="set" type="string" default="" required="false" description="the list it belongs to (e.g. Jobs.trucking.destinations); empty for a single spot" />
+        <data name="index" type="integer" default="" required="false" description="its place in the set's list" />
+        <data name="shape" type="string" default="array" required="false" description="array: { x, y, z } in Lua; named: x =, y =, z =" />
+        <data name="w" type="number" default="" required="false" description="a 4th value after x, y, z (a heading, radius or points, as the rules use it)" />
+        <data name="path" type="selection:true,false" default="false" required="false" description="the set is a route (the editor draws it in index order)" />
+        <data name="note" type="string" default="" required="false" description="free-form note" />
+        <marker type="corona" size="1.2" color="#B060FFA0" />
+    </element>
     <script src="edf/edf_lines_client.lua" type="client" />
 </def>

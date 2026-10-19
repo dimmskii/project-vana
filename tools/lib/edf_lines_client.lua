@@ -1,6 +1,7 @@
--- Map Editor helper (loaded by our EDF definitions): draws how placed elements connect. Paths
--- (each point's nextid) as arrows, links to another element (a burglary door's house) and exit
--- points (ex, ey, ez: where an entrance or door puts you) as lines. Only near the camera.
+-- Map Editor helper (loaded by our EDF definitions): draws how placed elements connect. Paths (each
+-- point's nextid, and spot sets marked as routes) as arrows; links to another element (a burglary
+-- door's house) and exit points (ex, ey, ez: where an entrance or door puts you) as lines. Only
+-- near the camera.
 -- /vanalines toggles it. Copied into each resource whose EDF links elements (tools/sync-libs.sh).
 local LINKS = { -- element type -> { property, colour, arrow }
     racecheckpoint = { { "nextid", tocolor(255, 210, 0, 230), true } },
@@ -54,6 +55,26 @@ addEventHandler("onClientRender", root, function()
                         if link[3] then arrow(sx, sy, sz, dx, dy, dz, link[2]) else dxDrawLine3D(sx, sy, sz + 1, dx, dy, dz + 1, link[2], 2) end
                     end
                 end
+            end
+        end
+    end
+    -- Spot sets marked as routes (triathlon checkpoints, flight rings): arrows in index order.
+    local routes = {}
+    for _, element in ipairs(getElementsByType("spot")) do
+        local path = edf("edfGetElementProperty", element, "path")
+        if path == true or path == "true" then
+            local set = edf("edfGetElementProperty", element, "set")
+            routes[set] = routes[set] or {}
+            table.insert(routes[set], { element = element, index = tonumber(edf("edfGetElementProperty", element, "index")) or 0 })
+        end
+    end
+    for _, list in pairs(routes) do
+        table.sort(list, function(a, b) return a.index < b.index end)
+        for i = 1, #list - 1 do
+            local sx, sy, sz = positionOf(list[i].element)
+            if near(sx, sy, sz) then
+                local dx, dy, dz = positionOf(list[i + 1].element)
+                arrow(sx, sy, sz, dx, dy, dz, tocolor(176, 96, 255, 230))
             end
         end
     end

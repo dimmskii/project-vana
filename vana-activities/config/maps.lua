@@ -53,6 +53,7 @@ MapDatasets.activities = {
               { "nextid", "ref", "", "the next point (none: the finish)", "routepoint" },
           },
           rep = '<marker type="checkpoint" size="6" color="#80FF00A0" />' },
+        MapData.spotSchema,
     },
 
     toRecords = function(g)
@@ -124,7 +125,8 @@ MapDatasets.activities = {
             for i, p in ipairs(MapData.follow(t.routepoint, r.first)) do list[i] = { p.x, p.y, p.z } end
             routes[r.index] = list
         end
-        return { MinigameSpots = spots, BurglaryHouses = houses, BurglaryDoors = doors, RaceTable = races, ChiliadRoutes = routes }
+        return { MinigameSpots = spots, BurglaryHouses = houses, BurglaryDoors = doors, RaceTable = races, ChiliadRoutes = routes,
+                 SpotRecords = t.spot or {} }
     end,
 }
 
@@ -136,4 +138,6 @@ if MapData.load then
     BurglaryDoors = data.BurglaryDoors
     RaceTable = data.RaceTable
     ChiliadRoutes = data.ChiliadRoutes
+    -- Positions the rule configs (jobs.lua, racing.lua, ...) take from the map: At(id), Spots(set).
+    At, Spots = MapData.spotFunctions(data.SpotRecords)
 end

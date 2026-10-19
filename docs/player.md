@@ -52,7 +52,7 @@ act on you; from the console a name is required. Changes are saved at once.
 
 As in vanilla, both cost the player's weapons and $100. The player comes back at the nearest
 restart point, seeded from `main.scm`'s `add_hospital_restart` / `add_police_restart` (8 hospitals,
-7 police stations) into `[data]/vana-data-player/restarts.map`, without the story's city gating.
+7 police stations) into `[data]/vana-data-player/player.map`, without the story's city gating.
 
 - **Wasted:** "wasted" on screen, then respawn at the nearest hospital at full health.
 - **Busted (`bustPlayer` export, called by `vana-services`):** the player is frozen, "busted"

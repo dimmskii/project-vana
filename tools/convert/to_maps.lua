@@ -56,16 +56,31 @@ end
 
 local function writeMap(dataset, records)
     local out = { '<map edf:definitions="' .. dataset.definition .. '">' }
+    -- Spots (positions the rule configs use) come from no seed: keep the ones the map has.
+    local dir = DATA_DIR .. "/" .. dataset.resource
+    local keep = {}
+    local existing = io.open(dir .. "/" .. dataset.file)
+    if existing then
+        for line in existing:lines() do
+            local tag = line:match("^%s*<([%w_]+)%s")
+            if tag and not records[tag] then
+                for _, schema in ipairs(dataset.types) do
+                    if schema.element == tag then keep[tag] = keep[tag] or {}; table.insert(keep[tag], line) end
+                end
+            end
+        end
+        existing:close()
+    end
     for _, schema in ipairs(dataset.types) do
         out[#out + 1] = ("    <!-- %s -->"):format(schema.friendly)
-        for _, rec in ipairs(records[schema.element]) do
+        for _, line in ipairs(keep[schema.element] or {}) do out[#out + 1] = line end
+        for _, rec in ipairs(records[schema.element] or {}) do
             local attrs = {}
             for _, a in ipairs(MapData.toAttributes(schema, rec)) do attrs[#attrs + 1] = ('%s="%s"'):format(a[1], xml(a[2])) end
             out[#out + 1] = ("    <%s %s />"):format(schema.element, table.concat(attrs, " "))
         end
     end
     out[#out + 1] = "</map>\n"
-    local dir = DATA_DIR .. "/" .. dataset.resource
     writeFile(dir .. "/" .. dataset.file, table.concat(out, "\n"))
     writeFile(dir .. "/meta.xml", ([[
 <meta>
@@ -148,7 +163,18 @@ while arg[i] do
     if arg[i] == "--from" then from, i = arg[i + 1], i + 1 else wanted[arg[i]] = true end
     i = i + 1
 end
-assert(from, "usage: lua5.1 tools/convert/to_maps.lua --from <folder> [dataset ...]")
+if arg[1] == "--edf" then
+    -- Only regenerate the EDFs from the datasets' schemas (after changing a config/maps.lua).
+    local owners = {}
+    for name, d in pairs(DATASETS) do
+        dofile(d.owner .. "/config/maps.lua")
+        owners[d.owner] = owners[d.owner] or {}
+        table.insert(owners[d.owner], MapDatasets[name])
+    end
+    for owner, datasets in pairs(owners) do writeEdf(owner, datasets) print("edf/" .. owner .. ".edf") end
+    os.exit(0)
+end
+assert(from, "usage: lua5.1 tools/convert/to_maps.lua --from <folder> [dataset ...] | --edf")
 local owners, failed = {}, false
 for name, d in pairs(DATASETS) do
     if not next(wanted) or wanted[name] then

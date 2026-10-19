@@ -7,9 +7,9 @@
         <right name="function.aclSave" access="true" />
         <right name="function.aclSetRight" access="true" />
     </aclrequest>
-    <script src="config/player.lua" type="server" />
     <script src="map_data.lua" type="server" />
     <script src="config/maps.lua" type="server" />
+    <script src="config/player.lua" type="server" />
     <script src="server.lua" type="server" />
     <script src="client.lua" type="client" />
     <export function="savePlayer" type="server" />
