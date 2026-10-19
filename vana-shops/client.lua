@@ -139,6 +139,10 @@ end)
 
 addEventHandler("onClientPlayerWasted", localPlayer, close)
 
+-- The shop is being robbed: the server already let us go.
+addEvent("vana-shops:closeMenu", true)
+addEventHandler("vana-shops:closeMenu", resourceRoot, close)
+
 -- Shops with staff frame the service with vanilla's camera; nil hands it back.
 addEvent("vana-shops:camera", true)
 addEventHandler("vana-shops:camera", resourceRoot, function(cam)

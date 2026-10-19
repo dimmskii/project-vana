@@ -5,6 +5,7 @@ local staff = {}    -- shopName -> ped
 local props = {}    -- shopName -> object (tattoo kit, changing room door)
 local serving = {}  -- shopName -> player
 local customers = {} -- player -> { shop, layout, part, token }
+local robberies = {} -- shopName -> robbery in progress (see Robbery, below)
 local meals = {}     -- player -> ticks of food bought (the last game day's)
 
 -- Vanilla junk food: CJ eats on the way out (EAT_Burger/Pizza/Chicken, 5 s), and from the 11th item
@@ -340,6 +341,7 @@ function keeperSeat(player, shopName)
     if serving[shopName] and serving[shopName] ~= player then return false, "You look a bit busy, why don't you come back later." end
     local ped = staff[shopName]
     if not isElement(ped) or isPedDead(ped) then return false, "There's nobody here to serve you." end
+    if robberies[shopName] then return false, "The shop's closed." end
     serving[shopName] = player
     customers[player] = { shop = shopName, layout = k.layout, token = 0 }
     local x, y, z, heading = spot(shopName, KeeperLayouts[k.layout].customer)
@@ -416,3 +418,129 @@ function keeperStatus()
 end
 
 addEventHandler("onPlayerQuit", root, function() meals[source] = nil end)
+
+---------------------------------------------------------------------------------------------------
+-- Robbery (config/shops.lua: robbery). Reported by the clients of players threatening a keeper.
+
+local R = ShopConfig.robbery
+-- robberies: shopName -> { robber, mode = "handsup" | "attack", aimFrom, lastAim, lastNear, cashDone }
+local lastCash = {}  -- shopName -> tick the till was last handed over
+
+local function nearbyPlayer(ped)
+    local x, y, z = getElementPosition(ped)
+    for _, player in ipairs(getElementsByType("player")) do
+        if getElementInterior(player) == getElementInterior(ped) and getElementDimension(player) == getElementDimension(ped) then
+            local px, py, pz = getElementPosition(player)
+            if getDistanceBetweenPoints3D(x, y, z, px, py, pz) < R.resetRadius then return true end
+        end
+    end
+    return false
+end
+
+local function startRobbery(shopName, robber, now)
+    local ped = staff[shopName]
+    local layout = Keepers[shopName].layout
+    local r = { robber = robber, aimFrom = now, lastAim = now, lastNear = now }
+    robberies[shopName] = r
+    if serving[shopName] then interruptCustomer(serving[shopName]) end
+    hold(ped, nil)
+    if layout == "weapons" then
+        -- Vanilla AMUNAT: pistol, pro skill, stays behind the counter and shoots.
+        r.mode = "attack"
+        setPedAnimation(ped)
+        setElementFrozen(ped, false)
+        giveWeapon(ped, R.clerkWeapon, R.clerkAmmo, true)
+        setElementSyncer(ped, robber, true, true)
+        triggerClientEvent(robber, "vana-shops:keeperAttack", resourceRoot, ped, robber)
+    else
+        r.mode = "handsup"
+        setPedAnimation(ped, "ped", "handsup", -1, false, false, false, true)
+    end
+end
+
+local function endRobbery(shopName)
+    robberies[shopName] = nil
+    local ped = staff[shopName]
+    if not isElement(ped) or isPedDead(ped) then
+        if isElement(ped) then destroyElement(ped) end
+        staff[shopName] = nil
+        spawnKeeper(shopName)
+        return
+    end
+    takeAllWeapons(ped)
+    setElementSyncer(ped, true)
+    local k = Keepers[shopName]
+    local x, y, z, heading
+    if k.keeper then x, y, z, heading = unpack(k.keeper) else x, y, z, heading = spot(shopName, KeeperLayouts[k.layout].keeper) end
+    setElementPosition(ped, x, y, z + 1)
+    setElementRotation(ped, 0, 0, heading, "default", true)
+    setElementFrozen(ped, true)
+    setPedAnimation(ped)
+    Flows[k.layout].idle(ped)
+end
+
+function isShopRobbed(shopName)
+    return robberies[shopName] ~= nil
+end
+
+addEvent("vana-shops:threat", true)
+addEventHandler("vana-shops:threat", resourceRoot, function(ped, how)
+    local shopName = isElement(ped) and getElementData(ped, "vana:keeper")
+    if not shopName or staff[shopName] ~= ped or isPedDead(ped) or isPedDead(client) then return end
+    if getElementInterior(client) ~= getElementInterior(ped) then return end
+    local x, y, z = getElementPosition(ped)
+    local px, py, pz = getElementPosition(client)
+    if getDistanceBetweenPoints3D(x, y, z, px, py, pz) > R.resetRadius then return end
+    local now = getTickCount()
+    local r = robberies[shopName]
+    if not r then return startRobbery(shopName, client, now) end
+    if r.robber == client and how == "aim" then
+        if now - r.lastAim > R.aimTimeoutMs then r.aimFrom = now end -- a fresh aim starts the count again
+        r.lastAim = now
+    end
+end)
+
+local function handOverTill(shopName, r, now)
+    r.cashDone = true
+    if lastCash[shopName] and now - lastCash[shopName] < R.cooldownMs then return end
+    lastCash[shopName] = now
+    local ped = staff[shopName]
+    local range = R.cash[Keepers[shopName].layout]
+    if not range then return end
+    local amount = math.random(range[1], range[2])
+    local x, y, z = getElementPosition(ped)
+    local _, _, rz = getElementRotation(ped)
+    local h = math.rad(rz)
+    local pickup = createPickup(x - math.sin(h) * 0.8, y + math.cos(h) * 0.8, z - 0.4, 3, 1212, 3600000)
+    if pickup then
+        setElementInterior(pickup, getElementInterior(ped))
+        addEventHandler("onPickupHit", pickup, function(player)
+            if getElementType(player) ~= "player" or isPedDead(player) then return end
+            givePlayerMoney(player, amount)
+            destroyElement(source)
+        end)
+        setTimer(function() if isElement(pickup) then destroyElement(pickup) end end, 60000, 1)
+    end
+    local res = getResourceFromName("vana-services")
+    if res and getResourceState(res) == "running" and isElement(r.robber) then
+        pcall(function() exports["vana-services"]:reportCrime(r.robber, "holdup", x, y, z) end)
+    end
+end
+
+setTimer(function()
+    local now = getTickCount()
+    for shopName, r in pairs(robberies) do
+        local ped = staff[shopName]
+        if not isElement(ped) then
+            robberies[shopName] = nil
+        else
+            if nearbyPlayer(ped) then r.lastNear = now end
+            if now - r.lastNear > R.resetMs then
+                endRobbery(shopName)
+            elseif r.mode == "handsup" and not r.cashDone and not isPedDead(ped) and isElement(r.robber)
+                and now - r.lastAim < R.aimTimeoutMs and now - r.aimFrom >= R.cashSeconds * 1000 then
+                handOverTill(shopName, r, now)
+            end
+        end
+    end
+end, 500, 0)

@@ -69,4 +69,16 @@ ShopConfig = {
     closetEntrance = "CHANGER",
     -- How close to a shop point you need to be.
     radius = 1.5,
+
+    -- Robbing a staffed shop: aiming at the keeper (or shooting, or hurting them) closes the shop, as
+    -- in vanilla: the Ammu-Nation clerk draws a pistol and shoots from behind the counter, the others
+    -- put their hands up (BARB, TATTO, CLOTH, and the food shops' SKBRAIN). Ours: keep the aim on a
+    -- hands-up keeper for cashSeconds and they hand over the till (a holdup crime), once per shop per
+    -- cooldownMs. The shop reopens once no player has been within resetRadius for resetMs.
+    robbery = {
+        cashSeconds = 3, aimTimeoutMs = 1500,
+        cash = { food = { 80, 300 }, hair = { 60, 250 }, tattoo = { 100, 400 }, clothes = { 150, 600 } },
+        cooldownMs = 600000, resetRadius = 25, resetMs = 8000,
+        clerkWeapon = 22, clerkAmmo = 30000,
+    },
 }

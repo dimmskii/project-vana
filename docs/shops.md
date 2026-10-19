@@ -111,6 +111,23 @@ To correct one in game, stand where customers should and use `/shoppoint <NAME>`
 `shoptest` (console) checks that every shop has stock, every weapon maps to a game weapon and every
 vendor has a known kind.
 
+### Robbery
+
+Threatening a shopkeeper (aiming a gun at them, shooting in the shop, or hurting them) closes the
+shop, as in vanilla: whoever is being served is let go, and nobody is served until no player has
+been near (`resetRadius`) for `resetMs`, when the keeper is back at the counter (or a new one, if
+they died). By shop (vanilla's scripts):
+
+- **Ammu-Nation** (`AMUNAT`): the clerk draws a pistol (vanilla: pro skill, accuracy 80) and shoots
+  from behind the counter (Neon `setPedStayInSamePlace` + `setPedKillOnFoot`).
+- **Barbers, tattoo parlours, clothes shops, fast food** (`BARB`, `TATTO`, `CLOTH`, `SKBRAIN`): the
+  keeper puts their hands up.
+- **Ours:** keep the aim on a hands-up keeper for `cashSeconds` and they hand over the till (cash by
+  shop type, `cash`), a `holdup` crime; once per shop per `cooldownMs`. Vanilla pays nothing.
+
+All of it is `robbery` in `config/shops.lua`. Not yet: vanilla's panicking customers (`FFPNC`: about
+half duck, the rest put their hands up); our shops have no customer peds yet.
+
 ### Vending machines and food carts
 
 `tools/seed/seed_vendors.py` places them from the map IPLs and both IMGs into

@@ -50,3 +50,57 @@ addEventHandler("vana-shops:puke", resourceRoot, function(player, x, y, z)
     local fx = createEffect("puke", x - math.sin(h) * 0.35, y + math.cos(h) * 0.35, z + 0.6, -90, 0, rz)
     if fx then setTimer(function() if isElement(fx) then destroyElement(fx) end end, 4000, 1) end
 end)
+
+-- Robbing a shop: aiming a gun at the keeper, shooting in the shop, or hurting the keeper tells the
+-- server (keepers.lua decides). Aiming is reported twice a second while it lasts.
+local function keeperNear()
+    local x, y, z = getElementPosition(localPlayer)
+    for _, ped in ipairs(getElementsByType("ped", root, true)) do
+        if getElementData(ped, "vana:keeper") and getElementInterior(ped) == getElementInterior(localPlayer) then
+            local px, py, pz = getElementPosition(ped)
+            if getDistanceBetweenPoints3D(x, y, z, px, py, pz) < 25 then return ped end
+        end
+    end
+end
+
+setTimer(function()
+    local slot = getPedWeaponSlot(localPlayer)
+    if slot < 2 or slot > 7 or not getPedControlState(localPlayer, "aim_weapon") then return end
+    local target = getPedTarget(localPlayer)
+    if isElement(target) and getElementType(target) == "ped" and getElementData(target, "vana:keeper") and not isPedDead(target) then
+        triggerServerEvent("vana-shops:threat", resourceRoot, target, "aim")
+    end
+end, 500, 0)
+
+local lastShot = 0
+addEventHandler("onClientPlayerWeaponFire", localPlayer, function(weapon)
+    if weapon < 22 or getElementInterior(localPlayer) == 0 or getTickCount() - lastShot < 1000 then return end
+    local keeper = keeperNear()
+    if keeper then
+        lastShot = getTickCount()
+        triggerServerEvent("vana-shops:threat", resourceRoot, keeper, "shot")
+    end
+end)
+
+addEventHandler("onClientPedDamage", root, function(attacker)
+    if attacker == localPlayer and getElementData(source, "vana:keeper") then
+        triggerServerEvent("vana-shops:threat", resourceRoot, source, "hurt")
+    end
+end)
+
+-- The Ammu-Nation clerk fights back (vanilla AMUNAT): from behind the counter, run by our client.
+addEvent("vana-shops:keeperAttack", true)
+addEventHandler("vana-shops:keeperAttack", resourceRoot, function(ped, target)
+    local tries = 0
+    local function go()
+        tries = tries + 1
+        if not isElement(ped) or isPedDead(ped) or not isElement(target) then return end
+        if not (isElementStreamedIn(ped) and isElementSyncer(ped)) then
+            if tries < 30 then setTimer(go, 200, 1) end
+            return
+        end
+        setPedStayInSamePlace(ped, true)
+        setPedKillOnFoot(ped, target)
+    end
+    go()
+end)

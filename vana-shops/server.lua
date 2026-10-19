@@ -295,6 +295,14 @@ local function closeMenu(player, instant)
     keeperLeave(player, instant)
 end
 
+-- A customer whose shop is being robbed: out of the menu at once (keepers.lua).
+function interruptCustomer(player)
+    if open[player] then
+        closeMenu(player, true)
+        triggerClientEvent(player, "vana-shops:closeMenu", resourceRoot)
+    end
+end
+
 addEvent("vana-shops:preview", true)
 addEventHandler("vana-shops:preview", resourceRoot, function(key)
     local shopName = open[client]
