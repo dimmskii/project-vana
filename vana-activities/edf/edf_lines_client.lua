@@ -8,7 +8,9 @@ local LINKS = { -- element type -> { property, colour, arrow }
     routepoint = { { "nextid", tocolor(128, 255, 0, 230), true } },
     burglarydoor = { { "house", tocolor(255, 170, 0, 140), false } },
 }
-local EXITS = { entrance = tocolor(255, 220, 0, 200), burglarydoor = tocolor(255, 120, 0, 200), burglaryhouse = tocolor(255, 120, 0, 200) }
+-- ex, ey, ez: where an entrance or door puts you, or where a creature walks to.
+local EXITS = { entrance = tocolor(255, 220, 0, 200), burglarydoor = tocolor(255, 120, 0, 200), burglaryhouse = tocolor(255, 120, 0, 200),
+                bigfootspawn = tocolor(150, 100, 60, 220) }
 local RANGE = 300
 local shown = true
 

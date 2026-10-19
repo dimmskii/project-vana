@@ -1,0 +1,4 @@
+<meta>
+    <info type="map" name="vana-data-wildlife" author="ProjectVana" description="Placement data for vana-wildlife: open it in the Map Editor (definitions: vana-wildlife)" version="1.0.0" edf:definitions="vana-wildlife" />
+    <map src="wildlife.map" dimension="0" />
+</meta>

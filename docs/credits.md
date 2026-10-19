@@ -27,6 +27,8 @@
   - `Bigfoot.cs`: the compiled CLEO script; `Bigfoot.txt`: its decompile (Sanny Builder, GTAG opcode
     database, 2013), the reference for our Lua port
   - `readme.txt`, `bigfoot_map.jpg`: the original readme and spawn-area map
+  - Ported in `vana-wildlife` (see [wildlife.md](wildlife.md)); the spawn spots are in
+    `[data]/vana-data-wildlife`
 
 ### Gasoline (fuel gauge and speedometer)
 

@@ -25,6 +25,7 @@ Start here:
 | [docs/traffic.md](docs/traffic.md) | Traffic, pedestrians and the AI actor architecture: Lua decides, the engine executes |
 | [docs/vehicles.md](docs/vehicles.md) | Kept cars (registry and persistence), fuel, live radio |
 | [docs/editor.md](docs/editor.md) | Placement data in MTA map resources (`[data]/vana-data-*`) and editing it in the Map Editor |
+| [docs/wildlife.md](docs/wildlife.md) | Creatures from community mods (Bigfoot) |
 | [docs/credits.md](docs/credits.md) | Third-party mods we use (authors, sources, terms) and how mod content is handled |
 
 ## Resources
@@ -45,6 +46,6 @@ Start here:
 | `vana-map` | Map points and radar blips for every resource (categories, icons, ranges) |
 | `vana-vehicles` | Vehicle registry and exact persistence, fuel, live car radio |
 | `[data]/vana-data-*` | Map resources holding placement data (spots, markers, paths); see docs/editor.md |
-| `vana-wildlife` | Creatures from community mods (Bigfoot); not started yet |
+| `vana-wildlife` | Creatures from community mods: Bigfoot |
 | `vana-traffic` | Road traffic: server-planned routes and light stops, driven by native drive-to tasks |
 | `vana-peds` | Ambient pedestrians: server-planned walks and road crossings, native follow-route tasks and event reactions |

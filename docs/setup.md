@@ -60,6 +60,7 @@ Inside `<config>`, replace the stock `<resource>` lines with:
 <resource src="vana-data-shops" startup="1" protected="0" />
 <resource src="vana-data-gym" startup="1" protected="0" />
 <resource src="vana-data-activities" startup="1" protected="0" />
+<resource src="vana-data-wildlife" startup="1" protected="0" />
 <resource src="vana-map" startup="1" protected="0" />
 <resource src="vana-paths" startup="1" protected="0" />
 <resource src="vana-lights" startup="1" protected="0" />
@@ -73,6 +74,7 @@ Inside `<config>`, replace the stock `<resource>` lines with:
 <resource src="vana-shops" startup="1" protected="0" />
 <resource src="vana-gym" startup="1" protected="0" />
 <resource src="vana-activities" startup="1" protected="0" />
+<resource src="vana-wildlife" startup="1" protected="0" />
 <resource src="vana-player" startup="1" protected="0" />
 <resource src="vana-core" startup="1" protected="0" />
 ```
@@ -100,6 +102,7 @@ on every start (`adminRights` in `vana-player/config/player.lua`; the `Console` 
 <right name="command.addmoney" access="true"></right>
 <right name="command.setstat" access="true"></right>
 <right name="command.event" access="true"></right>
+<right name="command.bigfoot" access="true"></right>
 ```
 
 After editing `acl.xml` on a running server, run `reloadacl` in the console.

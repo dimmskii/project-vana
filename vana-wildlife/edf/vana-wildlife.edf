@@ -1,0 +1,11 @@
+<def name="vana-wildlife">
+    <element name="bigfootspawn" friendlyname="Bigfoot spawn">
+        <data name="position" type="coord3d" default="0,0,0" />
+        <data name="fog" type="selection:true,false" default="false" required="false" description="only in fog (vanilla weather 9); otherwise in any weather" />
+        <data name="ex" type="number" default="" required="false" description="walks to here (x); none: stays where he appears" />
+        <data name="ey" type="number" default="" required="false" description="y" />
+        <data name="ez" type="number" default="" required="false" description="z" />
+        <marker type="cylinder" size="2" color="#6A4A2A90" />
+    </element>
+    <script src="edf/edf_lines_client.lua" type="client" />
+</def>

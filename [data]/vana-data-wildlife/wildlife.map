@@ -1,0 +1,41 @@
+<map edf:definitions="vana-wildlife">
+    <!-- Bigfoot spawn -->
+    <bigfootspawn posX="-451.9473" posY="-2676.257" posZ="155.9322" fog="false" />
+    <bigfootspawn posX="-684.2419" posY="-2166.613" posZ="23.1425" fog="false" />
+    <bigfootspawn posX="-946.9445" posY="-2476.911" posZ="100.3482" fog="false" />
+    <bigfootspawn posX="-469.4297" posY="-2473.622" posZ="114.7853" fog="false" />
+    <bigfootspawn posX="-523.6559" posY="-1997.208" posZ="48.2473" fog="false" />
+    <bigfootspawn posX="-1658.582" posY="-2037.045" posZ="64.1887" fog="false" />
+    <bigfootspawn posX="-1732.982" posY="-2458.473" posZ="26.5202" fog="false" />
+    <bigfootspawn posX="-1467.332" posY="-2374.314" posZ="17.2276" fog="false" />
+    <bigfootspawn posX="-1841.224" posY="-2003.086" posZ="81.8208" fog="false" />
+    <bigfootspawn posX="-1793.087" posY="-2163.001" posZ="70.2564" fog="false" />
+    <bigfootspawn posX="-462.252" posY="-2469.112" posZ="115.4621" fog="true" ex="-304.5569" ey="-2476.047" ez="88.3139" />
+    <bigfootspawn posX="-489.009" posY="-2397.145" posZ="107.8487" fog="true" ex="-520.8712" ey="-2542.476" ez="99.5229" />
+    <bigfootspawn posX="-477.294" posY="-2657.041" posZ="157.0848" fog="true" ex="-459.3889" ey="-2534.601" ez="115.7531" />
+    <bigfootspawn posX="-514.2096" posY="-2742.506" posZ="144.2368" fog="true" ex="-584.1004" ey="-2598.541" ez="135.7093" />
+    <bigfootspawn posX="-663.3182" posY="-2679.168" posZ="103.8967" fog="true" ex="-638.2563" ey="-2544.334" ez="60.3017" />
+    <bigfootspawn posX="-639.6272" posY="-2545.208" posZ="60.2541" fog="true" ex="-564.6138" ey="-2485.32" ez="66.1581" />
+    <bigfootspawn posX="-547.9156" posY="-2517.778" posZ="80.66" fog="true" ex="-610.3633" ey="-2457.7" ez="47.3567" />
+    <bigfootspawn posX="-317.2962" posY="-2440.651" posZ="86.3692" fog="true" ex="-409.4287" ey="-2287.78" ez="62.6925" />
+    <bigfootspawn posX="-679.631" posY="-2159.351" posZ="23.617" fog="true" ex="-574.1" ey="-2057.83" ez="50.7582" />
+    <bigfootspawn posX="-546.8349" posY="-2072.523" posZ="57.1128" fog="true" ex="-401.4994" ey="-1974.099" ez="25.7561" />
+    <bigfootspawn posX="-513.267" posY="-1964.866" posZ="41.362" fog="true" ex="-643.5073" ey="-1940.753" ez="21.4161" />
+    <bigfootspawn posX="-644.1823" posY="-1927.875" posZ="17.6081" fog="true" ex="-553.3032" ey="-2006.096" ez="49.376" />
+    <bigfootspawn posX="-974.3627" posY="-2192.965" posZ="42.1524" fog="true" ex="-797.7552" ey="-2199.637" ez="22.8401" />
+    <bigfootspawn posX="-1038.679" posY="-2527.546" posZ="72.6997" fog="true" ex="-1075.666" ey="-2394.082" ez="49.3458" />
+    <bigfootspawn posX="-589.759" posY="-2463.889" posZ="55.147" fog="true" ex="-494.0003" ey="-2342.486" ez="60.6649" />
+    <bigfootspawn posX="-446.0378" posY="-2382.964" posZ="78.3557" fog="true" ex="-362.6156" ey="-2358.778" ez="86.0646" />
+    <bigfootspawn posX="-918.6938" posY="-2720.578" posZ="118.53" fog="true" ex="-787.1591" ey="-2625.113" ez="84.9529" />
+    <bigfootspawn posX="-641.6958" posY="-1939.308" posZ="21.5011" fog="true" ex="-532.6124" ey="-2009.065" ez="50.1552" />
+    <bigfootspawn posX="-572.2703" posY="-2242.155" posZ="26.8519" fog="true" ex="-640.0417" ey="-2426.291" ez="31.4694" />
+    <bigfootspawn posX="-105.5834" posY="-2599.696" posZ="70.0079" fog="true" ex="-128.5498" ey="-2749.838" ez="64.4832" />
+    <bigfootspawn posX="-87.2885" posY="-2738.594" posZ="70.5429" fog="true" ex="-134.132" ey="-2575.268" ez="57.9698" />
+    <bigfootspawn posX="-1457.527" posY="-2533.345" posZ="60.1635" fog="true" ex="-1375.687" ey="-2379.16" ez="33.8783" />
+    <bigfootspawn posX="-1522.314" posY="-2088.602" posZ="29.8223" fog="true" ex="-1638.745" ey="-2098.836" ez="39.9588" />
+    <bigfootspawn posX="-1795.83" posY="-2227.445" posZ="71.8805" fog="true" ex="-1705.797" ey="-2230.374" ez="44.7832" />
+    <bigfootspawn posX="-1889.474" posY="-2009.915" posZ="80.042" fog="true" ex="-1738.436" ey="-2026.09" ez="69.1133" />
+    <bigfootspawn posX="-1602.242" posY="-2211.599" posZ="23.5317" fog="true" ex="-1570.16" ey="-2370.899" ez="34.3084" />
+    <bigfootspawn posX="-1329.914" posY="-2233.906" posZ="29.6537" fog="true" ex="-1359.687" ey="-2357.69" ez="36.135" />
+    <bigfootspawn posX="-1365.292" posY="-2074.084" posZ="19.0865" fog="true" ex="-1282.466" ey="-2022.393" ez="18.0593" />
+</map>

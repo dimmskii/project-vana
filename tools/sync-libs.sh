@@ -7,8 +7,8 @@ HERE="$(cd "$(dirname "$(readlink -f "$0")")" && pwd)"
 ROOT="$(cd "$HERE/.." && pwd)"
 # source (tools/lib/...) -> copies (relative to the repo root)
 COPIES=(
-    "map_data.lua:vana-player/map_data.lua vana-parked/map_data.lua vana-interiors/map_data.lua vana-shops/map_data.lua vana-gym/map_data.lua vana-activities/core/map_data.lua"
-    "edf_lines_client.lua:vana-interiors/edf/edf_lines_client.lua vana-activities/edf/edf_lines_client.lua"
+    "map_data.lua:vana-player/map_data.lua vana-parked/map_data.lua vana-interiors/map_data.lua vana-shops/map_data.lua vana-gym/map_data.lua vana-activities/core/map_data.lua vana-wildlife/map_data.lua"
+    "edf_lines_client.lua:vana-interiors/edf/edf_lines_client.lua vana-activities/edf/edf_lines_client.lua vana-wildlife/edf/edf_lines_client.lua"
     "map_points.lua:vana-map/provider.lua vana-interiors/map_points.lua vana-activities/core/map_points.lua"
 )
 status=0

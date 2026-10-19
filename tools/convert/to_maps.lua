@@ -13,6 +13,7 @@ local DATASETS = {
     entrances = { owner = "vana-interiors", configs = { "vana-interiors/config/entrances.lua" } },
     shops = { owner = "vana-shops", configs = { "vana-shops/config/points.lua", "vana-shops/config/vendors.lua" }, notes = true },
     gym = { owner = "vana-gym", configs = { "vana-gym/config/equipment.lua" } },
+    wildlife = { owner = "vana-wildlife", configs = { "bigfoot.lua" } },
     activities = { owner = "vana-activities", configs = { "vana-activities/config/minigames.lua",
         "vana-activities/config/burglary_houses.lua", "vana-activities/config/races.lua" }, notes = true },
 }
