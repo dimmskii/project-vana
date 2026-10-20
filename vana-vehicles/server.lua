@@ -491,6 +491,12 @@ addCommandHandler("vehicletest", function(source, _, mode)
         end, 200, 1)
         for _, e in ipairs({ withPed, ped }) do if isElement(e) then destroyElement(e) end end
     end
+    -- Admin spawning's names (spawn.lua): IDs, GTA's names, aliases, unique starts; ambiguity refused.
+    do
+        local cases = { ["411"] = 411, Infernus = 411, inf = 411, ["NRG-500"] = 522, nrg = 522, police = 596, ["police lv"] = 598, hydra = 520 }
+        for what, model in pairs(cases) do check(spawnResolve(what) == model, "spawn name " .. what) end
+        check(not spawnResolve("399") and not spawnResolve("zzz") and not spawnResolve("s"), "spawn names: bad and ambiguous refused")
+    end
     -- Fuel bands (gasoline.cs at 25 fps) and radio picks (peds.ide favourites, model defaults).
     check(fuelRate(0, false) == 0 and fuelRate(0.5, false) == 0 and fuelRate(20, false) == 25 and fuelRate(60, false) == 50
         and fuelRate(150, false) == 125 and fuelRate(20, true) == 25, "fuel bands")

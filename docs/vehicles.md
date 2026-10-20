@@ -131,6 +131,21 @@ never compound and a rebalanced config reaches every car.
   tyres, brakes).
 - `performancetest` (console): a car tuned fully and back gets exactly its model's handling again.
 
+## Admin spawning (`/car`, `/spawncar`)
+
+Admin (`command.car`, `command.spawncar`, granted to `Admin` by vana-player; `spawn.lua`):
+
+- `/car <vehicle> [player]`: a new vehicle where you (or the player) stand, you in the driver's seat,
+  engine on, full tank. It replaces the last one `/car` gave that player; from someone else's car
+  you're taken out and the new one appears alongside. Not kept by the registry (`vana:managed`);
+  it goes when its player leaves (if empty).
+- `/spawncar <vehicle> [player]`: a new vehicle, empty, in front of you or the player (5 m; boats,
+  helicopters and planes further: `spawnAhead`), full tank. An ordinary vehicle: kept once someone
+  drives it, cleaned up if nobody does.
+- The vehicle: a model ID (400-611), GTA's name (`getVehicleNameFromModel`, spaces and punctuation
+  ignored: `nrg500`, `policels`) or an alias (`spawnAliases` in `config/vehicles.lua`: `police`,
+  `tank`, `nrg`, `heli`, `jet`...); a unique start or part of a name is enough, as `/warp`'s places.
+
 ## Cleaning up (`/cleanvehicles`)
 
 Admin (`command.cleanvehicles`, granted to `Admin` by vana-player):

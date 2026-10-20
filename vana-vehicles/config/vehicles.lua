@@ -120,4 +120,17 @@ VehicleConfig = {
     -- Paintjobs by model (the ones with paintjob textures): how many (setVehiclePaintjob 0..n-1).
     paintjobs = { [483] = 1, [534] = 3, [535] = 3, [536] = 3, [558] = 3, [559] = 3, [560] = 3, [561] = 3,
                   [562] = 3, [565] = 3, [567] = 3, [575] = 2, [576] = 3 },
+
+    -- Admin spawning (/car, /spawncar; spawn.lua): names besides GTA's own (any model's name works,
+    -- spaces and punctuation left out: "nrg500", "policels"), for the short ones people type and the
+    -- ones several models share.
+    spawnAliases = {
+        police = 596, cop = 596, copsf = 597, coplv = 598, ranger = 599, copbike = 523, swat = 601, fbi = 490,
+        tank = 432, nrg = 522, pcj = 461, sanchez = 468, quad = 471, bmx = 481, mtb = 510,
+        ambulance = 416, firetruck = 407, taxi = 420, bus = 431, limo = 409, monster = 444,
+        heli = 487, maverick = 487, newsheli = 488, plane = 593, jet = 520, rc = 441,
+        boat = 452, dinghy = 473,
+    },
+    -- Where /spawncar puts it: this far ahead of you, by vehicle type (m); others 5.
+    spawnAhead = { Plane = 14, Helicopter = 10, Boat = 8, Train = 10 },
 }

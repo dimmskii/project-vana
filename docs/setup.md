@@ -135,6 +135,8 @@ on every start (`adminRights` in `vana-player/config/player.lua`; the `Console` 
 <right name="command.vanaset" access="true"></right>
 <right name="command.animal" access="true"></right>
 <right name="command.pos" access="true"></right>
+<right name="command.car" access="true"></right>
+<right name="command.spawncar" access="true"></right>
 ```
 
 After editing `acl.xml` on a running server, run `reloadacl` in the console.

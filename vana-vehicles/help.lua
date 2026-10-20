@@ -22,6 +22,14 @@ They stay with the car like its colours and parts. A turbo also whines on top of
       text = [[The turbo's whine is a looped game sound (GENRL bank 131, sound 10: the Hydra's jet). Give another bank and sound to hear it on turbo cars near you, or off to silence the whine for you. Only you hear the change; the default is in vana-vehicles' config.]] },
     { name = "performancetest", console = true, usage = "performancetest", summary = "Self-test: performance parts",
       text = [[Tunes a car fully and back: the levels multiply as configured, and stock gives back the model's own handling.]] },
+    { name = "car", usage = "/car <vehicle> [player]", right = "command.car", summary = "Put yourself (or a player) in a new vehicle",
+      text = [[A new vehicle where you (or the named player) stand, with you in the driver's seat, engine running and a full tank. It replaces the last one /car gave that player (wherever it is); in someone else's car, you get out and the new one appears alongside. It isn't kept like the cars you drive (the registry), and goes when its player leaves.
+
+The vehicle: a model ID (400-611), its name (Infernus, NRG-500, Police LS...: spaces and dashes don't matter), or a short name (police, cop, tank, nrg, pcj, heli, jet, plane, boat...). A unique start is enough (inf); several matches are listed.]],
+      see = { "spawncar", "cleanvehicles" } },
+    { name = "spawncar", usage = "/spawncar <vehicle> [player]", right = "command.spawncar", summary = "A new vehicle in front of you (or a player)",
+      text = [[A new vehicle, empty, a few metres in front of you or the named player (further for boats and aircraft), with a full tank. An ordinary vehicle: drive it and it's kept like any other; /cleanvehicles takes it away if nobody does. Vehicles are named as for /car.]],
+      see = { "car", "cleanvehicles" } },
     { name = "cleanvehicles", usage = "/cleanvehicles [all | player] [force]", right = "command.cleanvehicles", summary = "Remove empty vehicles",
       text = [[With nothing: every empty vehicle nobody keeps (abandoned traffic, parked cars, dropped cars).
 all: every empty vehicle, kept ones too.

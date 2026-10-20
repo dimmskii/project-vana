@@ -13,6 +13,7 @@
     <script src="tuning.lua" type="server" />
     <script src="performance.lua" type="server" />
     <script src="actions.lua" type="server" />
+    <script src="spawn.lua" type="server" />
     <script src="client.lua" type="client" />
     <script src="dashboard_client.lua" type="client" />
     <script src="turbo_client.lua" type="client" />
