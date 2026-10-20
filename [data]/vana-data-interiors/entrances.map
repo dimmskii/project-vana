@@ -244,10 +244,7 @@
     <entrance posX="315.684" posY="-1769.81" posZ="3.629" interior="0" name="SVLAMD" size="1,1" ex="315.829" ey="-1773.91" ez="3.629" heading="180" flags="4" open="0" close="24" enabled="true" />
     <entrance posX="1315.49" posY="-897.843" posZ="38.571" interior="0" name="X7_11B" size="4,4" ex="1315.49" ey="-900.843" ez="38.571" heading="180" flags="4" open="0" close="24" enabled="true" />
     <entrance posX="1199.13" posY="-918.071" posZ="42.324" interior="0" name="FDBURG" size="4,3" ex="1199.13" ey="-920.571" ez="42.324" heading="180" flags="4" open="0" close="24" enabled="true" />
-    <!-- Not yet: the Flint County "69c" store has no door in vanilla on purpose; doors for the
-         unused 24/7s wait for a custom map (X711S3 keeps its clerk, reachable by /warp x711s3.in).
-    <entrance posX="24.46" posY="-2646.63" posZ="39.46" interior="0" name="X711S3" size="2,2" ex="21.46" ey="-2646.63" ez="39.46" heading="90" flags="4" open="0" close="24" enabled="true" />
-    -->
+    <entrance posX="24.46" posY="-2646.63" posZ="39.46" interior="0" name="X711S3" size="2,2" ex="21.46" ey="-2646.63" ez="39.46" heading="90" flags="4" open="0" close="24" enabled="false" />
     <entrance posX="1000.33" posY="-919.924" posZ="41.237" interior="0" name="X711S2" size="2,2" ex="998.327" ey="-919.924" ez="41.237" heading="97" flags="4" open="0" close="24" enabled="true" />
     <entrance posX="1929.23" posY="-1776.38" posZ="12.55" interior="0" name="X711I1" size="2,2" ex="1929.23" ey="-1779.38" ez="12.55" heading="181" flags="4" open="0" close="24" enabled="true" />
     <entrance posX="-27.312" posY="-31.378" posZ="1002.55" interior="4" name="X711I1" size="3,1" ex="-27.312" ey="-29.278" ez="1002.55" heading="0" flags="1" open="0" close="24" enabled="true" instance="3001" />

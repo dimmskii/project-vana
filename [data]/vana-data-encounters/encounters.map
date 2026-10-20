@@ -1,45 +1,42 @@
 <map edf:definitions="vana-encounters">
     <!-- Encounter -->
-    <encounter id="bigfoot.whetstone" posX="-1360.31" posY="-2313.07" posZ="38.14" rotX="0" rotY="0" rotZ="18" kind="bigfoot" name="Bigfoot" startHour="0" endHour="0" reward="5000" note="first test: all day, from midnight" />
-    <!-- Bigfoot v1.2's own 38 spots (the mod picked one at random; fog ones walk to ex/ey/ez), kept for
-         placing more: to use one, give it an id and kind="bigfoot" name="Bigfoot", hours, and uncomment.
-    <encounter posX="-451.9473" posY="-2676.257" posZ="155.9322" creature="bigfoot" startHour="0" endHour="0" />
-    <encounter posX="-684.2419" posY="-2166.613" posZ="23.1425" creature="bigfoot" startHour="0" endHour="0" />
-    <encounter posX="-946.9445" posY="-2476.911" posZ="100.3482" creature="bigfoot" startHour="0" endHour="0" />
-    <encounter posX="-469.4297" posY="-2473.622" posZ="114.7853" creature="bigfoot" startHour="0" endHour="0" />
-    <encounter posX="-523.6559" posY="-1997.208" posZ="48.2473" creature="bigfoot" startHour="0" endHour="0" />
-    <encounter posX="-1658.582" posY="-2037.045" posZ="64.1887" creature="bigfoot" startHour="0" endHour="0" />
-    <encounter posX="-1732.982" posY="-2458.473" posZ="26.5202" creature="bigfoot" startHour="0" endHour="0" />
-    <encounter posX="-1467.332" posY="-2374.314" posZ="17.2276" creature="bigfoot" startHour="0" endHour="0" />
-    <encounter posX="-1841.224" posY="-2003.086" posZ="81.8208" creature="bigfoot" startHour="0" endHour="0" />
-    <encounter posX="-1793.087" posY="-2163.001" posZ="70.2564" creature="bigfoot" startHour="0" endHour="0" />
-    <encounter posX="-462.252" posY="-2469.112" posZ="115.4621" creature="bigfoot" startHour="0" endHour="0" weather="9" ex="-304.5569" ey="-2476.047" ez="88.3139" />
-    <encounter posX="-489.009" posY="-2397.145" posZ="107.8487" creature="bigfoot" startHour="0" endHour="0" weather="9" ex="-520.8712" ey="-2542.476" ez="99.5229" />
-    <encounter posX="-477.294" posY="-2657.041" posZ="157.0848" creature="bigfoot" startHour="0" endHour="0" weather="9" ex="-459.3889" ey="-2534.601" ez="115.7531" />
-    <encounter posX="-514.2096" posY="-2742.506" posZ="144.2368" creature="bigfoot" startHour="0" endHour="0" weather="9" ex="-584.1004" ey="-2598.541" ez="135.7093" />
-    <encounter posX="-663.3182" posY="-2679.168" posZ="103.8967" creature="bigfoot" startHour="0" endHour="0" weather="9" ex="-638.2563" ey="-2544.334" ez="60.3017" />
-    <encounter posX="-639.6272" posY="-2545.208" posZ="60.2541" creature="bigfoot" startHour="0" endHour="0" weather="9" ex="-564.6138" ey="-2485.32" ez="66.1581" />
-    <encounter posX="-547.9156" posY="-2517.778" posZ="80.66" creature="bigfoot" startHour="0" endHour="0" weather="9" ex="-610.3633" ey="-2457.7" ez="47.3567" />
-    <encounter posX="-317.2962" posY="-2440.651" posZ="86.3692" creature="bigfoot" startHour="0" endHour="0" weather="9" ex="-409.4287" ey="-2287.78" ez="62.6925" />
-    <encounter posX="-679.631" posY="-2159.351" posZ="23.617" creature="bigfoot" startHour="0" endHour="0" weather="9" ex="-574.1" ey="-2057.83" ez="50.7582" />
-    <encounter posX="-546.8349" posY="-2072.523" posZ="57.1128" creature="bigfoot" startHour="0" endHour="0" weather="9" ex="-401.4994" ey="-1974.099" ez="25.7561" />
-    <encounter posX="-513.267" posY="-1964.866" posZ="41.362" creature="bigfoot" startHour="0" endHour="0" weather="9" ex="-643.5073" ey="-1940.753" ez="21.4161" />
-    <encounter posX="-644.1823" posY="-1927.875" posZ="17.6081" creature="bigfoot" startHour="0" endHour="0" weather="9" ex="-553.3032" ey="-2006.096" ez="49.376" />
-    <encounter posX="-974.3627" posY="-2192.965" posZ="42.1524" creature="bigfoot" startHour="0" endHour="0" weather="9" ex="-797.7552" ey="-2199.637" ez="22.8401" />
-    <encounter posX="-1038.679" posY="-2527.546" posZ="72.6997" creature="bigfoot" startHour="0" endHour="0" weather="9" ex="-1075.666" ey="-2394.082" ez="49.3458" />
-    <encounter posX="-589.759" posY="-2463.889" posZ="55.147" creature="bigfoot" startHour="0" endHour="0" weather="9" ex="-494.0003" ey="-2342.486" ez="60.6649" />
-    <encounter posX="-446.0378" posY="-2382.964" posZ="78.3557" creature="bigfoot" startHour="0" endHour="0" weather="9" ex="-362.6156" ey="-2358.778" ez="86.0646" />
-    <encounter posX="-918.6938" posY="-2720.578" posZ="118.53" creature="bigfoot" startHour="0" endHour="0" weather="9" ex="-787.1591" ey="-2625.113" ez="84.9529" />
-    <encounter posX="-641.6958" posY="-1939.308" posZ="21.5011" creature="bigfoot" startHour="0" endHour="0" weather="9" ex="-532.6124" ey="-2009.065" ez="50.1552" />
-    <encounter posX="-572.2703" posY="-2242.155" posZ="26.8519" creature="bigfoot" startHour="0" endHour="0" weather="9" ex="-640.0417" ey="-2426.291" ez="31.4694" />
-    <encounter posX="-105.5834" posY="-2599.696" posZ="70.0079" creature="bigfoot" startHour="0" endHour="0" weather="9" ex="-128.5498" ey="-2749.838" ez="64.4832" />
-    <encounter posX="-87.2885" posY="-2738.594" posZ="70.5429" creature="bigfoot" startHour="0" endHour="0" weather="9" ex="-134.132" ey="-2575.268" ez="57.9698" />
-    <encounter posX="-1457.527" posY="-2533.345" posZ="60.1635" creature="bigfoot" startHour="0" endHour="0" weather="9" ex="-1375.687" ey="-2379.16" ez="33.8783" />
-    <encounter posX="-1522.314" posY="-2088.602" posZ="29.8223" creature="bigfoot" startHour="0" endHour="0" weather="9" ex="-1638.745" ey="-2098.836" ez="39.9588" />
-    <encounter posX="-1795.83" posY="-2227.445" posZ="71.8805" creature="bigfoot" startHour="0" endHour="0" weather="9" ex="-1705.797" ey="-2230.374" ez="44.7832" />
-    <encounter posX="-1889.474" posY="-2009.915" posZ="80.042" creature="bigfoot" startHour="0" endHour="0" weather="9" ex="-1738.436" ey="-2026.09" ez="69.1133" />
-    <encounter posX="-1602.242" posY="-2211.599" posZ="23.5317" creature="bigfoot" startHour="0" endHour="0" weather="9" ex="-1570.16" ey="-2370.899" ez="34.3084" />
-    <encounter posX="-1329.914" posY="-2233.906" posZ="29.6537" creature="bigfoot" startHour="0" endHour="0" weather="9" ex="-1359.687" ey="-2357.69" ez="36.135" />
-    <encounter posX="-1365.292" posY="-2074.084" posZ="19.0865" creature="bigfoot" startHour="0" endHour="0" weather="9" ex="-1282.466" ey="-2022.393" ez="18.0593" />
-    -->
+    <encounter id="bigfoot.whetstone" posX="-1360.31" posY="-2313.07" posZ="38.14" rotX="0" rotY="0" rotZ="18" kind="bigfoot" name="Bigfoot" startHour="0" endHour="0" reward="5000" />
+    <encounter id="bigfoot.mod1" posX="-451.9473" posY="-2676.257" posZ="155.9322" kind="bigfoot" enabled="false" name="Bigfoot" startHour="0" endHour="0" />
+    <encounter id="bigfoot.mod2" posX="-684.2419" posY="-2166.613" posZ="23.1425" kind="bigfoot" enabled="false" name="Bigfoot" startHour="0" endHour="0" />
+    <encounter id="bigfoot.mod3" posX="-946.9445" posY="-2476.911" posZ="100.3482" kind="bigfoot" enabled="false" name="Bigfoot" startHour="0" endHour="0" />
+    <encounter id="bigfoot.mod4" posX="-469.4297" posY="-2473.622" posZ="114.7853" kind="bigfoot" enabled="false" name="Bigfoot" startHour="0" endHour="0" />
+    <encounter id="bigfoot.mod5" posX="-523.6559" posY="-1997.208" posZ="48.2473" kind="bigfoot" enabled="false" name="Bigfoot" startHour="0" endHour="0" />
+    <encounter id="bigfoot.mod6" posX="-1658.582" posY="-2037.045" posZ="64.1887" kind="bigfoot" enabled="false" name="Bigfoot" startHour="0" endHour="0" />
+    <encounter id="bigfoot.mod7" posX="-1732.982" posY="-2458.473" posZ="26.5202" kind="bigfoot" enabled="false" name="Bigfoot" startHour="0" endHour="0" />
+    <encounter id="bigfoot.mod8" posX="-1467.332" posY="-2374.314" posZ="17.2276" kind="bigfoot" enabled="false" name="Bigfoot" startHour="0" endHour="0" />
+    <encounter id="bigfoot.mod9" posX="-1841.224" posY="-2003.086" posZ="81.8208" kind="bigfoot" enabled="false" name="Bigfoot" startHour="0" endHour="0" />
+    <encounter id="bigfoot.mod10" posX="-1793.087" posY="-2163.001" posZ="70.2564" kind="bigfoot" enabled="false" name="Bigfoot" startHour="0" endHour="0" />
+    <encounter id="bigfoot.mod11" posX="-462.252" posY="-2469.112" posZ="115.4621" kind="bigfoot" enabled="false" name="Bigfoot" startHour="0" endHour="0" ex="-304.5569" ey="-2476.047" ez="88.3139" params="weather=9" />
+    <encounter id="bigfoot.mod12" posX="-489.009" posY="-2397.145" posZ="107.8487" kind="bigfoot" enabled="false" name="Bigfoot" startHour="0" endHour="0" ex="-520.8712" ey="-2542.476" ez="99.5229" params="weather=9" />
+    <encounter id="bigfoot.mod13" posX="-477.294" posY="-2657.041" posZ="157.0848" kind="bigfoot" enabled="false" name="Bigfoot" startHour="0" endHour="0" ex="-459.3889" ey="-2534.601" ez="115.7531" params="weather=9" />
+    <encounter id="bigfoot.mod14" posX="-514.2096" posY="-2742.506" posZ="144.2368" kind="bigfoot" enabled="false" name="Bigfoot" startHour="0" endHour="0" ex="-584.1004" ey="-2598.541" ez="135.7093" params="weather=9" />
+    <encounter id="bigfoot.mod15" posX="-663.3182" posY="-2679.168" posZ="103.8967" kind="bigfoot" enabled="false" name="Bigfoot" startHour="0" endHour="0" ex="-638.2563" ey="-2544.334" ez="60.3017" params="weather=9" />
+    <encounter id="bigfoot.mod16" posX="-639.6272" posY="-2545.208" posZ="60.2541" kind="bigfoot" enabled="false" name="Bigfoot" startHour="0" endHour="0" ex="-564.6138" ey="-2485.32" ez="66.1581" params="weather=9" />
+    <encounter id="bigfoot.mod17" posX="-547.9156" posY="-2517.778" posZ="80.66" kind="bigfoot" enabled="false" name="Bigfoot" startHour="0" endHour="0" ex="-610.3633" ey="-2457.7" ez="47.3567" params="weather=9" />
+    <encounter id="bigfoot.mod18" posX="-317.2962" posY="-2440.651" posZ="86.3692" kind="bigfoot" enabled="false" name="Bigfoot" startHour="0" endHour="0" ex="-409.4287" ey="-2287.78" ez="62.6925" params="weather=9" />
+    <encounter id="bigfoot.mod19" posX="-679.631" posY="-2159.351" posZ="23.617" kind="bigfoot" enabled="false" name="Bigfoot" startHour="0" endHour="0" ex="-574.1" ey="-2057.83" ez="50.7582" params="weather=9" />
+    <encounter id="bigfoot.mod20" posX="-546.8349" posY="-2072.523" posZ="57.1128" kind="bigfoot" enabled="false" name="Bigfoot" startHour="0" endHour="0" ex="-401.4994" ey="-1974.099" ez="25.7561" params="weather=9" />
+    <encounter id="bigfoot.mod21" posX="-513.267" posY="-1964.866" posZ="41.362" kind="bigfoot" enabled="false" name="Bigfoot" startHour="0" endHour="0" ex="-643.5073" ey="-1940.753" ez="21.4161" params="weather=9" />
+    <encounter id="bigfoot.mod22" posX="-644.1823" posY="-1927.875" posZ="17.6081" kind="bigfoot" enabled="false" name="Bigfoot" startHour="0" endHour="0" ex="-553.3032" ey="-2006.096" ez="49.376" params="weather=9" />
+    <encounter id="bigfoot.mod23" posX="-974.3627" posY="-2192.965" posZ="42.1524" kind="bigfoot" enabled="false" name="Bigfoot" startHour="0" endHour="0" ex="-797.7552" ey="-2199.637" ez="22.8401" params="weather=9" />
+    <encounter id="bigfoot.mod24" posX="-1038.679" posY="-2527.546" posZ="72.6997" kind="bigfoot" enabled="false" name="Bigfoot" startHour="0" endHour="0" ex="-1075.666" ey="-2394.082" ez="49.3458" params="weather=9" />
+    <encounter id="bigfoot.mod25" posX="-589.759" posY="-2463.889" posZ="55.147" kind="bigfoot" enabled="false" name="Bigfoot" startHour="0" endHour="0" ex="-494.0003" ey="-2342.486" ez="60.6649" params="weather=9" />
+    <encounter id="bigfoot.mod26" posX="-446.0378" posY="-2382.964" posZ="78.3557" kind="bigfoot" enabled="false" name="Bigfoot" startHour="0" endHour="0" ex="-362.6156" ey="-2358.778" ez="86.0646" params="weather=9" />
+    <encounter id="bigfoot.mod27" posX="-918.6938" posY="-2720.578" posZ="118.53" kind="bigfoot" enabled="false" name="Bigfoot" startHour="0" endHour="0" ex="-787.1591" ey="-2625.113" ez="84.9529" params="weather=9" />
+    <encounter id="bigfoot.mod28" posX="-641.6958" posY="-1939.308" posZ="21.5011" kind="bigfoot" enabled="false" name="Bigfoot" startHour="0" endHour="0" ex="-532.6124" ey="-2009.065" ez="50.1552" params="weather=9" />
+    <encounter id="bigfoot.mod29" posX="-572.2703" posY="-2242.155" posZ="26.8519" kind="bigfoot" enabled="false" name="Bigfoot" startHour="0" endHour="0" ex="-640.0417" ey="-2426.291" ez="31.4694" params="weather=9" />
+    <encounter id="bigfoot.mod30" posX="-105.5834" posY="-2599.696" posZ="70.0079" kind="bigfoot" enabled="false" name="Bigfoot" startHour="0" endHour="0" ex="-128.5498" ey="-2749.838" ez="64.4832" params="weather=9" />
+    <encounter id="bigfoot.mod31" posX="-87.2885" posY="-2738.594" posZ="70.5429" kind="bigfoot" enabled="false" name="Bigfoot" startHour="0" endHour="0" ex="-134.132" ey="-2575.268" ez="57.9698" params="weather=9" />
+    <encounter id="bigfoot.mod32" posX="-1457.527" posY="-2533.345" posZ="60.1635" kind="bigfoot" enabled="false" name="Bigfoot" startHour="0" endHour="0" ex="-1375.687" ey="-2379.16" ez="33.8783" params="weather=9" />
+    <encounter id="bigfoot.mod33" posX="-1522.314" posY="-2088.602" posZ="29.8223" kind="bigfoot" enabled="false" name="Bigfoot" startHour="0" endHour="0" ex="-1638.745" ey="-2098.836" ez="39.9588" params="weather=9" />
+    <encounter id="bigfoot.mod34" posX="-1795.83" posY="-2227.445" posZ="71.8805" kind="bigfoot" enabled="false" name="Bigfoot" startHour="0" endHour="0" ex="-1705.797" ey="-2230.374" ez="44.7832" params="weather=9" />
+    <encounter id="bigfoot.mod35" posX="-1889.474" posY="-2009.915" posZ="80.042" kind="bigfoot" enabled="false" name="Bigfoot" startHour="0" endHour="0" ex="-1738.436" ey="-2026.09" ez="69.1133" params="weather=9" />
+    <encounter id="bigfoot.mod36" posX="-1602.242" posY="-2211.599" posZ="23.5317" kind="bigfoot" enabled="false" name="Bigfoot" startHour="0" endHour="0" ex="-1570.16" ey="-2370.899" ez="34.3084" params="weather=9" />
+    <encounter id="bigfoot.mod37" posX="-1329.914" posY="-2233.906" posZ="29.6537" kind="bigfoot" enabled="false" name="Bigfoot" startHour="0" endHour="0" ex="-1359.687" ey="-2357.69" ez="36.135" params="weather=9" />
+    <encounter id="bigfoot.mod38" posX="-1365.292" posY="-2074.084" posZ="19.0865" kind="bigfoot" enabled="false" name="Bigfoot" startHour="0" endHour="0" ex="-1282.466" ey="-2022.393" ez="18.0593" params="weather=9" />
 </map>

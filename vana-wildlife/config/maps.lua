@@ -15,7 +15,6 @@ local FIELDS = {
     { "attacksAnimals", "bool", false, "goes for other animals" },
     { "respawn", "int", 10, "seconds before one that died or left comes back" },
     { "weather", "int", -1, "only in this vanilla weather; -1: any" },
-    { "note", "string", nil, "free-form note (seeded: the pack's folder it came from)" },
 }
 
 MapDatasets.wildlife = {

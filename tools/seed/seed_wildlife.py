@@ -163,9 +163,8 @@ def main():
                         "damage": int(num(attr, "damage")), "attacksPeds": num(misc, "attacks peds") == 1,
                         "attacksAnimals": num(misc, "attacks animals") == 1, "respawn": int(num(time, "respawn time", 10)),
                         # The pack's weather (100, 201, 403, 504...) isn't a vanilla weather ID and its
-                        # script didn't decompile: any weather, the raw value kept in the note.
-                        "weather": -1, "note": "Myths Maker Anim%d%s" % (n, "" if int(num(scen, "weather", -1)) == -1
-                                                                           else " (pack weather %d)" % int(num(scen, "weather"))),
+                        # script didn't decompile: any weather.
+                        "weather": -1,
                     })
                 i += 1
         lines = ["    %s = { name = %s, ownAnims = %s," % (species, lua_value(NAMES[species]), lua_value(own_anims))]

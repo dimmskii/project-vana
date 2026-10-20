@@ -25,7 +25,7 @@ kind.
 | `anim` | Idle animation while it stands, `block/name` |
 | `ex`, `ey`, `ez` | Where it walks after appearing (drawn as a line in the editor) |
 | `params` | Anything else its script reads, free-form (`key=value;...`) |
-| `note` | Free-form |
+| `enabled` | `false`: kept for later, never appears |
 
 Every attribute but `id`, `kind` and the hours falls back to the kind's value.
 
@@ -62,7 +62,8 @@ at one of its 38 spots, out of sight, in fog or not).
 - **Model on clients:** each client requests a ped model of its own (`engineRequestModel`), loads
   the mod's DFF and TXD onto it and shows it on the server's ped (`vana:creature` = `bigfoot`).
 - **Placed:** one, `bigfoot.whetstone` in Shady Creeks (Whetstone), all day from midnight (the first
-  test). The mod's 38 spots are kept, commented out, in `encounters.map` for placing more.
+  test). The mod's own 38 spots are there too, switched off (`bigfoot.mod1`-`38`, `enabled="false"`;
+  its fog-only ones say `weather=9` in `params`, its walk targets kept): switch one on to use it.
 
 ## Not verified in game
 

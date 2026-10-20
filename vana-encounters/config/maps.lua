@@ -7,6 +7,7 @@ MapDatasets.encounters = {
         { element = "encounter", friendly = "Encounter", position = true, rotation = "heading", id = "id",
           fields = {
               { "kind", "string", "bigfoot", "what appears (config/encounters.lua EncounterKinds: bigfoot ...)" },
+              { "enabled", "bool", true, "appears at all (false: kept for later)" },
               { "name", "string", nil, "its name, shown on the map and in messages (none: the kind's)" },
               { "startHour", "int", 0, "it appears at this game hour, every day (0-23), unless killed that day" },
               { "endHour", "int", 0, "and is cleaned up at this one (the same as startHour: a whole day, from that hour)" },
@@ -22,7 +23,6 @@ MapDatasets.encounters = {
               { "ey", "number", nil, "y" },
               { "ez", "number", nil, "z" },
               { "params", "string", nil, "anything else its script reads, free-form (key=value;...)" },
-              { "note", "string", nil, "free-form note" },
           },
           rep = '<marker type="cylinder" size="2" color="#6A4A2A90" />' },
     },

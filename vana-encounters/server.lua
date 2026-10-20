@@ -196,7 +196,9 @@ end)
 
 addEventHandler("onResourceStart", resourceRoot, function()
     for _, e in ipairs(Encounters) do
-        if not EncounterKinds[e.kind] then
+        if e.enabled == false then -- kept for later (the mod's other Bigfoot spots)
+            states[e.id] = nil
+        elseif not EncounterKinds[e.kind] then
             outputDebugString(("[vana-encounters] %s: unknown kind %s"):format(e.id, tostring(e.kind)), 2)
         elseif states[e.id] then
             outputDebugString(("[vana-encounters] two encounters named %s: the second is ignored"):format(e.id), 2)
@@ -218,10 +220,11 @@ end)
 -- Console-only: every encounter has a known kind, a unique id and its files.
 addCommandHandler("encountertest", function(source)
     if getElementType(source) ~= "console" then return end
-    local ok, count, out, problems = true, 0, 0, {}
+    local ok, count, off, out, problems = true, 0, 0, 0, {}
     local seen = {}
     for _, e in ipairs(Encounters) do
         count = count + 1
+        if e.enabled == false then off = off + 1 end
         local kind = EncounterKinds[e.kind]
         if not kind then problems[#problems + 1] = e.id .. ": unknown kind " .. tostring(e.kind) end
         if seen[e.id] then problems[#problems + 1] = "duplicate id " .. e.id end
@@ -236,7 +239,7 @@ addCommandHandler("encountertest", function(source)
         lines[#lines + 1] = ("%s %02d-%02d %s"):format(id, st.e.startHour, st.e.endHour, st.killed and "killed today" or isElement(st.ped) and "out" or "waiting")
     end
     table.sort(lines)
-    outputServerLog(("[encountertest] %d encounters, %d out now: %s"):format(count, out, table.concat(lines, "; ")))
+    outputServerLog(("[encountertest] %d encounters (%d disabled), %d out now: %s"):format(count, off, out, table.concat(lines, "; ")))
     if #problems > 0 then outputServerLog("[encountertest] " .. table.concat(problems, "; ")) end
     outputServerLog("[encountertest] " .. (ok and "PASS" or "FAIL"))
 end)

@@ -3,6 +3,7 @@
         <data name="position" type="coord3d" default="0,0,0" />
         <data name="rotation" type="coord3d" default="0,0,0" />
         <data name="kind" type="string" default="bigfoot" required="false" description="what appears (config/encounters.lua EncounterKinds: bigfoot ...)" />
+        <data name="enabled" type="selection:true,false" default="true" required="false" description="appears at all (false: kept for later)" />
         <data name="name" type="string" default="" required="false" description="its name, shown on the map and in messages (none: the kind's)" />
         <data name="startHour" type="integer" default="0" required="false" description="it appears at this game hour, every day (0-23), unless killed that day" />
         <data name="endHour" type="integer" default="0" required="false" description="and is cleaned up at this one (the same as startHour: a whole day, from that hour)" />
@@ -18,7 +19,6 @@
         <data name="ey" type="number" default="" required="false" description="y" />
         <data name="ez" type="number" default="" required="false" description="z" />
         <data name="params" type="string" default="" required="false" description="anything else its script reads, free-form (key=value;...)" />
-        <data name="note" type="string" default="" required="false" description="free-form note" />
         <marker type="cylinder" size="2" color="#6A4A2A90" />
     </element>
     <script src="edf/edf_lines_client.lua" type="client" />

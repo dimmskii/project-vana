@@ -16,6 +16,11 @@ for lib in $(find vana-* -name lib.lua); do
         grep -q "<file src=\"lib/$m.lua\"" vana-lib/meta.xml || { echo "$lib imports $m on the client, but vana-lib/meta.xml doesn't serve lib/$m.lua"; status=1; }
     done
 done
+# Data maps hold data, no comments: the Map Editor drops them on save. Something kept for later is an
+# element switched off (enabled="false", with a note). Only the converter's one-line type headers.
+for map in "[data]"/*/*.map; do
+    grep -n "<!--" "$map" | grep -vE '^[0-9]+:\s*<!--[^<>]*-->\s*$' | sed "s|^|$map: a comment (the editor drops it; use enabled=\"false\" and a note): |" | grep . && status=1
+done
 resources=("$@")
 [[ ${#resources[@]} -eq 0 ]] && resources=($(ls -d vana-*/ | tr -d /))
 for res in "${resources[@]}"; do

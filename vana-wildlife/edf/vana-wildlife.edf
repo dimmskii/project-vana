@@ -14,7 +14,6 @@
         <data name="attacksAnimals" type="selection:true,false" default="false" required="false" description="goes for other animals" />
         <data name="respawn" type="integer" default="10" required="false" description="seconds before one that died or left comes back" />
         <data name="weather" type="integer" default="-1" required="false" description="only in this vanilla weather; -1: any" />
-        <data name="note" type="string" default="" required="false" description="free-form note (seeded: the pack's folder it came from)" />
         <marker type="cylinder" size="2" color="#4A8A3A80" />
     </element>
 </def>

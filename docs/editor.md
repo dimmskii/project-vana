@@ -40,8 +40,9 @@ MTA's Map Editor like any map.
     routes and are drawn as such.
   The ids are the config paths, so the Lua says where each is used. A spot's `interior` is only
   where the editor shows it; the rules keep their own interior fields.
-- **Notes:** `note` keeps what used to be a comment next to an entry (e.g. which map model a burglary
-  door belongs to).
+- **Notes:** a few types still have a `note` (which map model a burglary door belongs to). Every
+  attribute of a running map's elements goes to every client, so data carries what the game uses,
+  not provenance: where things came from is in [credits.md](credits.md) and these docs.
 
 ## Running the editor
 
@@ -80,9 +81,11 @@ definitions.
 5. Save, then on the game server restart the map and its owner (e.g. `restart vana-data-activities`,
    `restart vana-activities`) to use the changes; commit the `.map`.
 
-Saving rewrites the whole `.map` from its elements: XML comments in it are lost (the commented-out
-Bigfoot spots in `encounters.map`, the Flint County 24/7 door in `entrances.map`). Copy those
-somewhere first if you'll want them.
+**No comments in data.** Saving rewrites the whole `.map` from its elements, so anything kept for
+later is an element switched off, `enabled="false"` (the Flint County 24/7 door in
+`entrances.map`, the mod's other Bigfoot spots in `encounters.map`), never XML commented out;
+`tools/lint.sh` refuses comments in data maps beyond the converter's one-line type headers. Data
+comes from the maps themselves, not from re-running seed scripts.
 
 Admin helpers that move a spot in game print the element to paste instead (e.g. `/shoppoint`).
 

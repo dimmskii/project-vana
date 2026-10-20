@@ -12,9 +12,9 @@ hunter). Encounters with individual creatures (Bigfoot) are [vana-encounters](en
   `wildlifespawner` in `[data]/vana-data-wildlife/wildlife.map` (1454; ours now, edit them in the Map
   Editor): `species`, `angle`, `quantity` (how many at once), `startHour`/`endHour`, `findRadius`
   (a player this close wakes the spot), `spawnRadius`, `health`, `damage`, `attacksPeds`,
-  `attacksAnimals`, `respawn` (s), `weather`, `note` (the pack's folder). The pack's own weather
-  values (100, 201, 403, 504) aren't vanilla weather IDs and its second script doesn't decompile, so
-  every spawner is any-weather, with the raw value in its note.
+  `attacksAnimals`, `respawn` (s), `weather`. The pack's own weather values (100, 201, 403, 504)
+  aren't vanilla weather IDs and its second script doesn't decompile, so every spawner is
+  any-weather.
 - **Files:** each species' models (the base and its variants: `{ dff, txd }` pairs), its own
   animations (IFP and `animgrp.dat`, where it has them) and its sounds (random calls, a hurt sound),
   without the pack's duplicates (276 MB of copies down to 74 MB), in
