@@ -68,7 +68,8 @@ Keep the file names in upper case; the Linux server is case-sensitive. Check the
 
 ## 4. mtaserver.conf
 
-Inside `<config>`, replace the stock `<resource>` lines with:
+Inside `<config>`, replace the stock `<resource>` lines with these, and only these: the Map Editor
+runs as a server of its own with `editor.conf`, never from this list ([editor.md](editor.md)).
 
 ```xml
 <resource src="vana-lib" startup="1" protected="0" />

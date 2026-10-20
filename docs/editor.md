@@ -13,7 +13,7 @@ MTA's Map Editor like any map.
 | `vana-data-interiors` | `entrance` | `vana-interiors` | `Entrances` |
 | `vana-data-shops` | `shoppoint`, `vendor` | `vana-shops` | `ShopPoints`, `Vendors` |
 | `vana-data-gym` | `gymequipment` | `vana-gym` | `GymEquipment` |
-| `vana-data-encounters` | `encounter` | `vana-encounters` | `Encounters` (by `creature`: Bigfoot's spots) |
+| `vana-data-encounters` | `encounter` | `vana-encounters` | `Encounters` (one per encounter, by `kind`: Bigfoot) |
 | `vana-data-wildlife` | `wildlifespawner` | `vana-wildlife` | `WildlifeSpawners` (the animals' spots) |
 | `vana-data-radio` | `speaker` | `vana-radio` | `Speakers` (placed by hand: no seed) |
 | `vana-data-activities` | `minigamespot`, `burglaryhouse`, `burglarydoor`, `race`, `racecheckpoint`, `chiliadroute`, `routepoint`, `spot` | `vana-activities` | `MinigameSpots`, `BurglaryHouses`, `BurglaryDoors`, `RaceTable`, `ChiliadRoutes`; spots for the rule configs |
@@ -43,14 +43,46 @@ MTA's Map Editor like any map.
 - **Notes:** `note` keeps what used to be a comment next to an entry (e.g. which map model a burglary
   door belongs to).
 
+## Running the editor
+
+The Map Editor runs as a server of its own, never inside the game server: on start it (through
+`mapmanager`) stops every running map, and our `vana-data-*` resources are maps, so the game loses
+its data; it also stops the resources whose definitions it loaded when it closes. The game's
+`mtaserver.conf` lists no editor resources (`edf`, `editor*`, `freecam`, `move_*`, `msgbox`,
+`tooltip`, `mapmanager`).
+
+Neon's server comes with the editor's own config: `editor.conf` (port 22010, HTTP 22011, one
+player, its own log `logs/editor_server.log`) and `editor_acl.xml` (the rights the editor needs).
+Use them as they are, in the same `mods/deathmatch` as the game:
+
+1. The editor's resources (from MTA's resource pack: `[editor]` with `edf`, `editor`,
+   `editor_gui`, `editor_main`, `freecam`, `move_cursor`, `move_freecam`, `move_keyboard`, `msgbox`,
+   `tooltip`; `[managers]/mapmanager`; and `freeroam`, which the editor checks for) are in
+   `resources/`, next to `[vana]`.
+2. Stop the game server (they share `settings.xml` and the databases), then start the editor one:
+   `"MTA Server64.exe" --config editor.conf` on Windows, `./mta-server64 --config editor.conf` on
+   Linux.
+3. Connect to `127.0.0.1:22010` (or the client's own *Map Editor* button, if your client's server
+   folder has `[vana]` too).
+
+None of the game's resources run in the editor: opening a `vana-data-*` map loads its owners'
+definitions (`edf:definitions`), and the editor starts those resources with their files only, no
+scripts, so our controls, HUD and spawning stay out of its way. Our line script comes with the
+definitions.
+
 ## Editing
 
-1. Start the Map Editor (`editor` resource) and open one of the `vana-data-*` maps.
+1. In the editor server, open one of the `vana-data-*` maps.
 2. Its definitions (e.g. `vana-activities`) load with it; if not, add them under *Definitions*.
 3. Move, add or delete elements; their fields show in the properties panel with descriptions.
 4. **Lines:** our EDF script draws paths as arrows, door-to-house links and exit points near the
    camera. `/vanalines` toggles them.
-5. Save, then restart the owning resource (e.g. `restart vana-activities`) to use the changes.
+5. Save, then on the game server restart the map and its owner (e.g. `restart vana-data-activities`,
+   `restart vana-activities`) to use the changes; commit the `.map`.
+
+Saving rewrites the whole `.map` from its elements: XML comments in it are lost (the commented-out
+Bigfoot spots in `encounters.map`, the Flint County 24/7 door in `entrances.map`). Copy those
+somewhere first if you'll want them.
 
 Admin helpers that move a spot in game print the element to paste instead (e.g. `/shoppoint`).
 
