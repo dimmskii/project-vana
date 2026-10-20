@@ -22,13 +22,13 @@
 - **Source:** a local copy of the CLEO mod (`gtaref/mta_modded`): `cleo/Bigfoot.cs`,
   `models/Bigfoot.img`, `docs/bigfoot.txt`, `docs/bigfoot map.jpg`. Original download site unknown.
 - **License:** none stated.
-- **In the project:** `vana-wildlife/mods/bigfoot/`
+- **In the project:** `vana-encounters/mods/bigfoot/`
   - `bigfoot.dff`, `bigfoot.txd`: the model, extracted from `Bigfoot.img`
   - `Bigfoot.cs`: the compiled CLEO script; `Bigfoot.txt`: its decompile (Sanny Builder, GTAG opcode
     database, 2013), the reference for our Lua port
   - `readme.txt`, `bigfoot_map.jpg`: the original readme and spawn-area map
-  - Ported in `vana-wildlife` (see [wildlife.md](wildlife.md)); the spawn spots are in
-    `[data]/vana-data-wildlife`
+  - Ported in `vana-encounters` (see [encounters.md](encounters.md)); the spawn spots are
+    `encounter` elements in `[data]/vana-data-encounters`
 
 ### Gasoline (fuel gauge and speedometer)
 
@@ -49,6 +49,20 @@
 
 - **Gas station icons** (`vana-vehicles/icons/`: `radar_gasstn`, `radar_gasair`, `radar_gaswater`,
   PNG with their Paint.NET `.pdn` sources): drawn for ProjectVana by Dimmskii.
+
+### Myths Maker 2.7 ("Animal World")
+
+- **Authors:** a Russian-Brazilian team; the readme (`Files/Описание.txt`, in Russian) names Nadalao
+  for the settings menu and doesn't give the others' names. Models credited inside the pack where
+  they name their own makers (a texture is named `germanshepherdbymcmillan`).
+- **Source:** a local copy (`gtaref/Myths_Maker 2.7 Animal World`): the CLEO scripts
+  (`Myths_Maker.cs` decompiled, `Myths_Maker2.cs` doesn't: "Unknown parameter type 4Dh at offset
+  17868"), and `cleo/Animals/AnimN`: each animal's ini, models, animations and sounds.
+- **License:** none stated.
+- **In the project:** `vana-wildlife/mods/myths_maker/<species>/`: the animals' models, textures,
+  animations and sounds, de-duplicated (`tools/seed/seed_wildlife.py`); their locations and settings
+  became `[data]/vana-data-wildlife`. Not its myths (the hunter) or its menus. See
+  [wildlife.md](wildlife.md).
 
 ## Available, not used yet
 

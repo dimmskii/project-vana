@@ -1,11 +1,20 @@
 <def name="vana-wildlife">
-    <element name="bigfootspawn" friendlyname="Bigfoot spawn">
+    <element name="wildlifespawner" friendlyname="Wildlife spawner">
         <data name="position" type="coord3d" default="0,0,0" />
-        <data name="fog" type="selection:true,false" default="false" required="false" description="only in fog (vanilla weather 9); otherwise in any weather" />
-        <data name="ex" type="number" default="" required="false" description="walks to here (x); none: stays where he appears" />
-        <data name="ey" type="number" default="" required="false" description="y" />
-        <data name="ez" type="number" default="" required="false" description="z" />
-        <marker type="cylinder" size="2" color="#6A4A2A90" />
+        <data name="species" type="string" default="deer" required="false" description="which animal (config/species.lua)" />
+        <data name="angle" type="number" default="0" required="false" description="heading the animals face when they appear (degrees)" />
+        <data name="quantity" type="integer" default="1" required="false" description="how many live here at once" />
+        <data name="startHour" type="integer" default="0" required="false" description="from this game hour (0-23); the same as endHour: any time" />
+        <data name="endHour" type="integer" default="0" required="false" description="until this game hour (exclusive)" />
+        <data name="findRadius" type="number" default="80" required="false" description="a player within this (m) wakes the spot up" />
+        <data name="spawnRadius" type="number" default="10" required="false" description="they appear within this (m) of the spot" />
+        <data name="health" type="integer" default="100" required="false" description="each one's health" />
+        <data name="damage" type="integer" default="0" required="false" description="the damage a bite or blow does (predators)" />
+        <data name="attacksPeds" type="selection:true,false" default="false" required="false" description="goes for people (players and peds) on its own" />
+        <data name="attacksAnimals" type="selection:true,false" default="false" required="false" description="goes for other animals" />
+        <data name="respawn" type="integer" default="10" required="false" description="seconds before one that died or left comes back" />
+        <data name="weather" type="integer" default="-1" required="false" description="only in this vanilla weather; -1: any" />
+        <data name="note" type="string" default="" required="false" description="free-form note (seeded: the pack's folder it came from)" />
+        <marker type="cylinder" size="2" color="#4A8A3A80" />
     </element>
-    <script src="edf/edf_lines_client.lua" type="client" />
 </def>

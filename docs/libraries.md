@@ -48,7 +48,7 @@ retail files and gave identical results.
 
 `edf_lines_client.lua` (Map Editor lines for paths, links and exit points): the editor runs EDF
 scripts from the defining resource's own folder, so `tools/sync-libs.sh` copies it into
-`vana-interiors`, `vana-activities` and `vana-wildlife`; the lint fails if a copy differs.
+`vana-interiors`, `vana-activities` and `vana-encounters`; the lint fails if a copy differs.
 
 ## Game text (`vana-text`)
 

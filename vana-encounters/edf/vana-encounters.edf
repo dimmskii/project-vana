@@ -1,0 +1,16 @@
+<def name="vana-encounters">
+    <element name="encounter" friendlyname="Encounter spawn">
+        <data name="position" type="coord3d" default="0,0,0" />
+        <data name="creature" type="string" default="bigfoot" required="false" description="who appears here (config/encounters.lua: bigfoot ...)" />
+        <data name="startHour" type="integer" default="0" required="false" description="from this game hour (0-23); the same as endHour: any time" />
+        <data name="endHour" type="integer" default="0" required="false" description="until this game hour (exclusive)" />
+        <data name="weather" type="string" default="" required="false" description="only in these vanilla weathers (comma-separated IDs, e.g. 9 for fog); none: the creature's own rule" />
+        <data name="ex" type="number" default="" required="false" description="walks to here (x); none: stays where it appears" />
+        <data name="ey" type="number" default="" required="false" description="y" />
+        <data name="ez" type="number" default="" required="false" description="z" />
+        <data name="params" type="string" default="" required="false" description="anything else this creature reads, free-form (key=value;...)" />
+        <data name="note" type="string" default="" required="false" description="free-form note" />
+        <marker type="cylinder" size="2" color="#6A4A2A90" />
+    </element>
+    <script src="edf/edf_lines_client.lua" type="client" />
+</def>

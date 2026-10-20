@@ -13,7 +13,8 @@ MTA's Map Editor like any map.
 | `vana-data-interiors` | `entrance` | `vana-interiors` | `Entrances` |
 | `vana-data-shops` | `shoppoint`, `vendor` | `vana-shops` | `ShopPoints`, `Vendors` |
 | `vana-data-gym` | `gymequipment` | `vana-gym` | `GymEquipment` |
-| `vana-data-wildlife` | `bigfootspawn` | `vana-wildlife` | `BigfootSpawns` |
+| `vana-data-encounters` | `encounter` | `vana-encounters` | `Encounters` (by `creature`: Bigfoot's spots) |
+| `vana-data-wildlife` | `wildlifespawner` | `vana-wildlife` | `WildlifeSpawners` (the animals' spots) |
 | `vana-data-radio` | `speaker` | `vana-radio` | `Speakers` (placed by hand: no seed) |
 | `vana-data-activities` | `minigamespot`, `burglaryhouse`, `burglarydoor`, `race`, `racecheckpoint`, `chiliadroute`, `routepoint`, `spot` | `vana-activities` | `MinigameSpots`, `BurglaryHouses`, `BurglaryDoors`, `RaceTable`, `ChiliadRoutes`; spots for the rule configs |
 

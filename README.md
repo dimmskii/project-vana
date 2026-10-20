@@ -27,7 +27,8 @@ Start here:
 | [docs/vehicles.md](docs/vehicles.md) | Kept cars (registry and persistence), fuel, each car's radio station |
 | [docs/radio.md](docs/radio.md) | The radio: stations on one server clock, car and outside radios, vanilla's programme and track data |
 | [docs/editor.md](docs/editor.md) | Placement data in MTA map resources (`[data]/vana-data-*`) and editing it in the Map Editor |
-| [docs/wildlife.md](docs/wildlife.md) | Creatures from community mods (Bigfoot) |
+| [docs/encounters.md](docs/encounters.md) | Creatures and NPCs you may run into at their spots (Bigfoot) |
+| [docs/wildlife.md](docs/wildlife.md) | Animals in the countryside (Myths Maker's animal pack): spawners, models |
 | [docs/libraries.md](docs/libraries.md) | Shared code in `vana-lib` (imported at runtime): game-file readers (GXT, IDE, DAT, TXD), map data; `vana-text` |
 | [docs/debug.md](docs/debug.md) | Debug switches (`/vanadebug`): per-resource checks by topic, the stuck-ped detector, players' errors in the server log |
 | [docs/credits.md](docs/credits.md) | Third-party mods we use (authors, sources, terms) and how mod content is handled |
@@ -55,6 +56,7 @@ Start here:
 | `vana-help` | The manual in the chat: `/?` and `/man`, every resource's commands and topics as each player may use them |
 | `vana-radio` | Radio stations on one server clock (vanilla's programme, internet streams), car and outside radios |
 | `[data]/vana-data-*` | Map resources holding placement data (spots, markers, paths); see docs/editor.md |
-| `vana-wildlife` | Creatures from community mods: Bigfoot |
+| `vana-encounters` | Creatures and NPCs you may run into at their spots: Bigfoot |
+| `vana-wildlife` | Animals in the countryside: Myths Maker's animals at its spots |
 | `vana-traffic` | Road traffic: server-planned routes and light stops, driven by native drive-to tasks |
 | `vana-peds` | Ambient pedestrians: server-planned walks and road crossings, native follow-route tasks and event reactions |

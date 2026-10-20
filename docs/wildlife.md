@@ -1,35 +1,62 @@
 # Wildlife (`vana-wildlife`)
 
-Creatures from community mods (credits in [credits.md](credits.md)), ported to Lua from their
-decompiled scripts; their assets are in `vana-wildlife/mods/`.
+Animals at their places in the countryside (and strays in town), from Myths Maker 2.7's animal pack
+("Animal World", credits in [credits.md](credits.md)): its animals only, never its myths (the
+hunter). Encounters with individual creatures (Bigfoot) are [vana-encounters](encounters.md).
 
-## Bigfoot
+## The data
 
-From Bigfoot v1.2 by Tysman (`mods/bigfoot/Bigfoot.txt` is the decompiled script the port follows):
+`tools/seed/seed_wildlife.py` read the pack once (each animal folder, `cleo/Animals/AnimN`):
 
-- **Where:** a player on foot or driving in the south-west countryside (Back o' Beyond, Whetstone:
-  the mod's rectangle, `area`) may meet him, at one of the mod's 38 spots more than `spawnAway`
-  (160 m) from every player, so he's never seen appearing.
-- **Weather:** in fog (vanilla weather 9) one of the 28 fog spots, from where he walks to a point and
-  stands; otherwise one of the 10 others, where he stands. (The mod's script gives those 10 no walk
-  target and reuses stale values; standing is what its readme describes.)
-- **Him:** the mod's model, the old man's walk, boxing; vanilla 1000 health (our clients scale damage
-  to him down, as MTA peds have 100). Gunfire doesn't scare him.
-- **Hurt him** and he goes for you (the mod's kill task, run by your client).
-- **Gone** (fading out) once he's `despawnFromSpawn` (400 m) from where he appeared or
-  `despawnFromPlayer` (350 m) from every player. One at a time, server-wide; after he dies or fades,
-  the next chance is `respawnMs` away. Ours: each check (`checkMs`) has a `chance` of him appearing
-  (the mod spawns him whenever it can).
-- **Model on clients:** each client requests a ped model of its own (`engineRequestModel`), loads
-  the mod's DFF and TXD onto it and shows it on the server's ped (`vana:creature` = `bigfoot`).
+- **Spawners:** every location in each folder's ini, with the folder's settings, became a
+  `wildlifespawner` in `[data]/vana-data-wildlife/wildlife.map` (1454; ours now, edit them in the Map
+  Editor): `species`, `angle`, `quantity` (how many at once), `startHour`/`endHour`, `findRadius`
+  (a player this close wakes the spot), `spawnRadius`, `health`, `damage`, `attacksPeds`,
+  `attacksAnimals`, `respawn` (s), `weather`, `note` (the pack's folder). The pack's own weather
+  values (100, 201, 403, 504) aren't vanilla weather IDs and its second script doesn't decompile, so
+  every spawner is any-weather, with the raw value in its note.
+- **Files:** each species' models (the base and its variants: `{ dff, txd }` pairs), its own
+  animations (IFP and `animgrp.dat`, where it has them) and its sounds (random calls, a hurt sound),
+  without the pack's duplicates (276 MB of copies down to 74 MB), in
+  `vana-wildlife/mods/myths_maker/<species>/`, listed in `config/species.lua` (generated).
 
-Spawn spots: `bigfootspawn` elements in `[data]/vana-data-wildlife` (editable in the Map Editor; the
-walk target is `ex`, `ey`, `ez`, drawn as a line). Rules: `config/wildlife.lua`.
+| Species | Spawners | Own animations |
+| --- | --- | --- |
+| Dog | 347 | yes |
+| Hare | 344 | yes |
+| Cat | 257 | yes |
+| Boar | 119 | yes |
+| Deer | 103 | yes |
+| Bird | 54 | no |
+| Cow | 39 | no |
+| Puma | 38 | yes |
+| Fox | 32 | no |
+| Pig | 26 | no |
+| Capybara | 20 | no |
+| Sheep | 19 | no |
+| Wolf | 19 | yes |
+| Chicken | 13 | no |
+| Leopard / panther | 8 | yes |
+| Brown bear | 6 | yes |
+| Black bear | 5 | yes |
+| Gorilla | 3 | no |
+| Ostrich | 2 | no |
+| Lioness | 0 (models only) | yes |
 
-`/bigfoot` (restricted: `command.bigfoot`) puts him 20 m in front of you; `wildlifetest` checks the
-spots and files.
+`wildlifetest` (console): every spawner's species is known and every listed file is here.
 
-## Not verified in game
+## Peds, not objects
 
-The model on the ped (a 2009 special-actor DFF on a requested ped model), his walk, the attack, and
-the damage scaling.
+Every model in the pack is skinned to GTA's own ped skeleton (`Root`, `Bip01 ...`, even the finger
+and breast bones), re-weighted for four legs, and moves by the pack's IFP animations. Objects can't
+play skeletal animations, so they have to be peds: a `wildlife` ped per animal, its model a requested
+ped model with the species' DFF and TXD (as Bigfoot's), its walk, run and idle replaced by the
+species' own animations (`engineLoadIFP` + `engineReplaceAnimation`, per ped). "Dumb" is the
+behaviour, not the element: no paths, no traffic rules, a small brain run by the server.
+
+## Not yet
+
+The spawning itself: waking spawners near players, the animals wandering round their spot, idling and
+calling (the sounds), fleeing, and predators (bears, wolves, big cats) going for people when their
+spawner says so; downloading a species' files only when one is near (they're 74 MB). Species without
+their own animations stand wrong on GTA's human ones (the pack says as much).
