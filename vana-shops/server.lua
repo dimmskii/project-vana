@@ -45,6 +45,12 @@ end
 -- plus a "take off" entry per category.
 local closetPoint = { kind = "closet" }
 
+-- A misc counter's stock: its own (config/shops.lua stocks) or the 24/7's.
+local function miscStock(shopName)
+    local own = ShopConfig.stocks[shopName]
+    return own and own.items or ShopConfig.misc
+end
+
 local function catalogue(shopName, player)
     local point = shopName == "CLOSET" and closetPoint or ShopPoints[shopName]
     local items = {}
@@ -81,7 +87,7 @@ local function catalogue(shopName, player)
         return items
     end
     if point.kind == "misc" then
-        for i, item in ipairs(ShopConfig.misc) do items[#items + 1] = { key = "misc" .. i, label = item.name, price = item.price } end
+        for i, item in ipairs(miscStock(shopName)) do items[#items + 1] = { key = "misc" .. i, label = item.name, price = item.price } end
         return items
     end
     local shop = stock[shopName:lower()]
@@ -137,9 +143,9 @@ local function maxHealth(player)
 end
 
 -- Applies one purchase; returns false and a reason if it can't be done.
-local function deliver(player, kind, key)
+local function deliver(player, kind, key, shopName)
     if kind == "misc" then
-        local item = ShopConfig.misc[tonumber(key:match("%d+"))]
+        local item = miscStock(shopName)[tonumber(key:match("%d+"))]
         if not item then return false, "Not sold here." end
         giveWeapon(player, item.weapon, item.ammo, true)
     elseif kind == "weapons" then
@@ -277,7 +283,8 @@ local function openMenu(player, shopName, kind, categories)
     if not seated then return false, why end
     open[player] = shopName
     if WEARABLE[kind] and getElementModel(player) == 0 then snapshotClothes(player) else outfits[player] = nil end
-    triggerClientEvent(player, "vana-shops:open", resourceRoot, shopName, kind, catalogue(shopName, player), categories)
+    local own = ShopConfig.stocks[shopName]
+    triggerClientEvent(player, "vana-shops:open", resourceRoot, shopName, kind, catalogue(shopName, player), categories, own and own.title)
     return true
 end
 
@@ -307,7 +314,7 @@ addEventHandler("vana-shops:preview", resourceRoot, function(key)
     keeperBrowse(client, item)
     if not outfits[client] then return end
     restoreClothes(client)
-    if item then deliver(client, point.kind, key) end
+    if item then deliver(client, point.kind, key, shopName) end
 end)
 
 addEventHandler("onPlayerUseEntrance", root, function(name, _, toInterior, atHub)
@@ -323,7 +330,8 @@ addEvent("vana-shops:buy", true)
 addEventHandler("vana-shops:buy", resourceRoot, function(key)
     local shopName = open[client]
     local point = shopName == "CLOSET" and closets[client] or shopName and ShopPoints[shopName]
-    if not point or type(key) ~= "string" or not nearPoint(client, point) then return end
+    -- At the counter, or served by its keeper (a 24/7 clerk serves you from across the shop).
+    if not point or type(key) ~= "string" or not (nearPoint(client, point) or keeperServes(shopName, client)) then return end
     local item
     for _, entry in ipairs(catalogue(shopName, client)) do
         if entry.key == key then item = entry break end
@@ -334,7 +342,7 @@ addEventHandler("vana-shops:buy", resourceRoot, function(key)
     if getPlayerMoney(client) < price then
         return triggerClientEvent(client, "vana-shops:result", resourceRoot, false, "Not enough money.")
     end
-    local ok, reason = deliver(client, point.kind, key)
+    local ok, reason = deliver(client, point.kind, key, shopName)
     if not ok then return triggerClientEvent(client, "vana-shops:result", resourceRoot, false, reason) end
     if price > 0 then takePlayerMoney(client, price) end
     if point.kind == "clothes" and not item.owned then playerCall("grantOwned", client, "clothes", key) end

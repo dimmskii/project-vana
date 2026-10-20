@@ -258,7 +258,9 @@ gyms and Madd Dogg's home gym. Vanilla's gym scripts (`GYMBIKE`, `GYMBENC`, `GYM
 - **Placement to check in game:** keepers and seated customers stand at the script's ground z + 1
   (vanilla's convention); held items sit exactly on the hand bone with no offset. The food tray
   preview is rotated 90 degrees for at least the Well Stacked Pizza meals.
-- **24/7 stores:** `X7_11C` (clerk placed), `X7_11D` and `X711S3` (no clerk) have no street door.
+- **24/7 stores:** `X7_11C`, `X7_11D` (clerks placed) and `X711S3` (no clerk) have no street door.
+- **The LV sex shop** (`SEXSHOP`, ours): a misc counter with a clerk (246, VHFYST3) and its own stock
+  (`stocks` in `config/shops.lua`: a dildo and flowers).
 - **Wardrobe:** vanilla's safehouse wardrobe script (`WARROBE`) isn't ported; our closet is the
   menu in the shared changing room.
 - **Hostile keepers:** keepers can be killed (back after a minute) but don't react; vanilla's react

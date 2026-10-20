@@ -25,6 +25,13 @@ ShopConfig = {
         { name = "Fire Extinguisher", weapon = 42, ammo = 500, price = 200 },
         { name = "Parachute", weapon = 46, ammo = 1, price = 500 },
     },
+    -- Ours: a misc counter's own stock and menu title in place of the 24/7's, by shop point name.
+    stocks = {
+        SEXSHOP = { title = "Sex Shop", items = {
+            { name = "Dildo", weapon = 10, ammo = 1, price = 50 },
+            { name = "Flowers", weapon = 14, ammo = 1, price = 20 },
+        } },
+    },
     -- Our prices, overriding shopping.dat by item name (e.g. vest = 15, pistol = 250). Names are the
     -- first column of shopping.dat's price sections (clothes: the texture name).
     prices = {

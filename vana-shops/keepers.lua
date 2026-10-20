@@ -353,6 +353,15 @@ local function spawnKeeper(shopName)
     end
 end
 
+-- The shop's keeper is serving this player now (its menu open, in the same room and close).
+function keeperServes(shopName, player)
+    local ped = staff[shopName]
+    if serving[shopName] ~= player or not isElement(ped) or getElementInterior(ped) ~= getElementInterior(player)
+        or getElementDimension(ped) ~= getElementDimension(player) then return false end
+    local x, y, z = getElementPosition(ped)
+    return getDistanceBetweenPoints3D(x, y, z, getElementPosition(player)) < 12
+end
+
 -- Seats the customer and starts the service. False (and why) if the shop is busy.
 function keeperSeat(player, shopName)
     local k = Keepers[shopName]

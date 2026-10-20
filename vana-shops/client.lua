@@ -83,9 +83,9 @@ list = MenuList.new{ x = 40, y = 120, width = 360, rows = 12,
 }
 
 addEvent("vana-shops:open", true)
-addEventHandler("vana-shops:open", resourceRoot, function(shopName, kind, items, categories)
+addEventHandler("vana-shops:open", resourceRoot, function(shopName, kind, items, categories, title)
     local grouped = kind == "clothes" or kind == "closet" or kind == "tattoo"
-    menu = { title = TITLES[kind] or shopName, items = items, categories = grouped and categories or nil }
+    menu = { title = title or TITLES[kind] or shopName, items = items, categories = grouped and categories or nil }
     rebuild(1)
     list:open()
 end)
