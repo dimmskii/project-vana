@@ -65,6 +65,7 @@ local function dress(e)
     local id = modelFor(key, species, variant, kind.driver)
     if id and getElementModel(e) ~= id then setElementModel(e, id) end
     if kind.driver ~= "ped" then return end
+    setPedVoice(e, "PED_TYPE_DISABLED") -- no human pain cries or chatter (its own sounds are ours)
     place(e, 0)
     if not kind.walk then return end
     local block = blockFor(kind.walk.ifp)

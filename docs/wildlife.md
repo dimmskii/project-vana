@@ -81,7 +81,7 @@ would stand on GTA's human animations.
   checked by the server. A chase gives up after 25 s, or 50 m away.
 - **Toughness:** the spawner's `health` (a hare 60, a bear 650) on MTA's 100-health peds: damage is
   scaled down where the animal is simulated, as Bigfoot's.
-- **Sounds:** a call now and then from each animal streamed in within 70 m, a cry when hurt.
+- **Sounds:** a call now and then from each animal streamed in within 70 m, a cry when hurt; GTA's own ped voice (human pain cries on a fall) is off on them.
 - **Who runs them:** the nearest player's client (the syncer) runs the orders, the chased player's
   during an attack. Killing one is no crime and calls no ambulance (`vana:fairGame`).
 - **Files:** downloaded at connect (`<file>` in meta.xml, only the species `config/wildlife.lua`
