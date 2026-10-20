@@ -2,6 +2,8 @@
 --   /warp <where> [player]   you (or the player) to a place, a player, or x y z [interior]
 --   /warphere <player>       the player to you
 --   /warps [filter]          the place names
+--   /pos [player]            where you (or the player) are: coordinates, interior, dimension, zone,
+--                            the nearest warp place
 -- Places (names are case-insensitive; a unique start or part of a name is enough):
 --   spots by id (playerconfig.start.spawn, games.dance.floors.1, jobs.trucking.start ...)
 --   hospital.1-8 / police.1-7, also by zone (hospital.jefferson); hospital or police alone: the nearest
@@ -266,6 +268,35 @@ addCommandHandler("warps", function(source, _, filter)
     end
     reply(source, ("%d places%s. Try /warps <part of a name>: hospital, police, carls, games., jobs. ..."):format(#names,
         shown < #names and (", " .. shown .. " shown") or ""))
+end, true)
+
+addCommandHandler("pos", function(source, _, name)
+    local subject = getElementType(source) == "player" and source or nil
+    if name then
+        local p, many = findPlayer(name, source)
+        if not p then return reply(source, many and ("Several players match: " .. table.concat(many, ", ")) or ("No player called " .. name .. ".")) end
+        subject = p
+    end
+    if not subject then return reply(source, "From the console, name a player: pos <player>.") end
+    local x, y, z = getElementPosition(subject)
+    local _, _, rz = getElementRotation(subject)
+    local interior, dimension = getElementInterior(subject), getElementDimension(subject)
+    -- The nearest warp place in the same interior (names sharing a place: the shortest).
+    local best, bestD
+    for placeName, p in pairs(allPlaces()) do
+        if p.interior == interior then
+            local d = getDistanceBetweenPoints3D(x, y, z, p.x, p.y, p.z)
+            if not bestD or d < bestD - 0.01 or (math.abs(d - bestD) <= 0.01 and #placeName < #best) then best, bestD = placeName, d end
+        end
+    end
+    local vehicle = getPedOccupiedVehicle(subject)
+    reply(source, ("%s: %.2f, %.2f, %.2f  rot %.0f | interior %d, dimension %d | %s, %s%s"):format(
+        subject == source and "You" or getPlayerName(subject), x, y, z, rz, interior, dimension,
+        interior == 0 and getZoneName(x, y, z) or "inside", interior == 0 and getZoneName(x, y, z, true) or ("interior " .. interior),
+        vehicle and (" | in a " .. getVehicleName(vehicle) .. " (" .. getElementModel(vehicle) .. ")") or ""))
+    reply(source, ("Nearest warp: %s | /warp %.2f %.2f %.2f%s"):format(
+        best and ("%s, %.0f m (%s)"):format(best, bestD, places[best].label) or "none in this interior",
+        x, y, z, interior ~= 0 and (" " .. interior) or ""))
 end, true)
 
 -- Console-only: the place list builds and every config name resolves.

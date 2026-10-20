@@ -55,6 +55,7 @@ act on you; from the console a name is required. Changes are saved at once.
   them, in their interior and dimension.
 - `/warphere <player>`: the player to you.
 - `/warps [filter]`: the place names containing the filter (chat shows 30; the console all).
+- `/pos [player]`: where you (or the player) are: coordinates and heading, interior, dimension, zone and city, the car, the nearest place in the same interior and a `/warp` line back to the exact spot (restricted, `command.pos`).
 
 Names are case-insensitive, and a unique start of one is enough (`/warp hospital.jef`). Players
 are matched the same way (or `me`); an exact player name wins over a place, a place over a partial
