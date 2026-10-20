@@ -26,7 +26,7 @@
     <shoppoint id="X711I1" posX="-30.99" posY="-28.93" posZ="1002.56" interior="4" kind="misc" note="Idlewood (Xoomer), a copy of the Vinewood store" instance="3001" />
     <shoppoint id="X711I2" posX="-30.99" posY="-28.93" posZ="1002.56" interior="4" kind="misc" note="Idlewood, a copy of the Vinewood store" instance="3002" />
     <shoppoint id="X711S2" posX="-30.99" posY="-28.93" posZ="1002.56" interior="4" kind="misc" note="Vinewood: at the counter (in game)" />
-    <shoppoint id="X711S3" posX="2.12" posY="-27.87" posZ="1002.55" interior="10" kind="misc" note="Flint County: at the counter (in game)" />
+    <shoppoint id="X711S3" posX="2.12" posY="-27.87" posZ="1002.55" interior="10" kind="misc" note="at the counter (in game); no street door (see entrances.map)" />
     <shoppoint id="X7_11B" posX="-28.06" posY="-89.95" posZ="1002.55" interior="18" kind="misc" note="El Corona / Mulholland / LV: at the counter (in game)" />
     <shoppoint id="X7_11C" posX="-22.15" posY="-138.46" posZ="1002.55" interior="16" kind="misc" note="at the counter (in game); no street door" />
     <shoppoint id="X7_11D" posX="-29.02" posY="-184.28" posZ="1002.55" interior="17" kind="misc" note="at the counter (in game); no street door" />

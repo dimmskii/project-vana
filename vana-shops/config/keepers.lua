@@ -96,7 +96,7 @@ Keepers = {
     X711AP = { layout = "convenience", models = ClerkModels.country, keeper = { -23.67, -57.31, 1002.55, 359 } },
     X7_11C = { layout = "convenience", models = ClerkModels.city, keeper = { -22.21, -140.42, 1002.55, 0 } }, -- no street door yet
     X7_11D = { layout = "convenience", models = ClerkModels.city, keeper = { -29.12, -186.85, 1002.55, 1 } }, -- no street door yet
-    X711S3 = { layout = "convenience", models = ClerkModels.country, keeper = { 2.12, -30.70, 1002.55, 2 } }, -- Flint County
+    X711S3 = { layout = "convenience", models = ClerkModels.country, keeper = { 2.12, -30.70, 1002.55, 2 } }, -- no street door (a country store, when it gets one)
     SEXSHOP = { layout = "convenience", model = 246, keeper = { -103.80, -24.21, 999.72, 1 } }, -- VHFYST3, the LV sex shop's
     CSEXL = { layout = "clothes", model = 217, offset = { 1.2, -114.524, -1.51 }, keeper = { 204.366, -157.789, 999.563, 180 }, door = 2879 },
 }

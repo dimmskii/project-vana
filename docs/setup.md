@@ -26,6 +26,17 @@ after a rebuild copy only `mta-server64` and `x64/*.so` back over.
 2. Put this `[vana]` folder inside it.
 3. Copy the game files listed below.
 
+On Windows, a clone shows no changes it didn't make: `.gitattributes` keeps text LF and the mod
+files (`mods/`) byte-for-byte, and only `tools/*.sh` are executable. Git for Windows ignores file
+modes already; a clone made from WSL or Git Bash on an NTFS drive may not, so set it there:
+
+```sh
+git config core.fileMode false
+```
+
+A clone from before `.gitattributes` (files that stay "modified" and can't be stashed or
+discarded): commit or copy away your own work, then `git rm -r --cached -q . && git reset --hard`.
+
 ## 3. Game files you must copy
 
 Rockstar's data files are not in this repository and must never be committed (see `.gitignore`).
