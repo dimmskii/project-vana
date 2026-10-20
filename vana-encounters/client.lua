@@ -60,6 +60,7 @@ addEventHandler("onClientPedDamage", root, function(attacker, _, _, loss)
     cancelEvent()
     if isElementSyncer(source) and loss then
         local health = getElementHealth(source) - loss * 100 / B.health
-        if health <= 0 then killPed(source, attacker) else setElementHealth(source, health) end
+        -- A server ped is killed by the server (killPed here only works on our own peds).
+        if health <= 0 then triggerServerEvent("vana-encounters:killed", resourceRoot, source, attacker) else setElementHealth(source, health) end
     end
 end)

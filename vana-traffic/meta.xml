@@ -3,7 +3,15 @@
     <include resource="vana-paths" />
     <include resource="vana-lights" />
     <include resource="vana-population" />
-    <script src="lib.lua" type="client" />
+    <aclrequest>
+        <right name="function.loadstring" access="true" /> <!-- importing shared code from vana-lib -->
+    </aclrequest>
+    <!-- The levers: /vanaset traffic <name> <value> (or /traffic density), or the admin panel. -->
+    <settings>
+        <setting name="@density" value="1" desc="Multiplies vanilla's popcycle targets (1 = vanilla)" accept="0-3" />
+        <setting name="@maxPerPlayer" value="30" desc="Hard cap on traffic around one player" accept="0-200" />
+    </settings>
+    <script src="lib.lua" type="shared" />
     <script src="planner.lua" type="server" />
     <script src="server.lua" type="server" />
     <script src="test.lua" type="server" />
@@ -13,4 +21,6 @@
     <export function="panicUnit" type="server" />
     <script src="help.lua" type="server" />
     <export function="getHelpPages" type="server" />
+    <export function="getSettings" type="server" />
+    <export function="setSetting" type="server" />
 </meta>

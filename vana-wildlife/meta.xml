@@ -1,12 +1,240 @@
 <meta>
-    <info author="ProjectVana" name="Vana wildlife" description="Animals at their places in the countryside (Myths Maker 2.7's animal pack)" version="0.1.0" type="script" edf:definition="edf/vana-wildlife.edf" />
+    <info author="ProjectVana" name="Vana wildlife" description="Animals at their places in the countryside (Myths Maker 2.7's animal pack)" version="0.2.0" type="script" edf:definition="edf/vana-wildlife.edf" />
     <aclrequest>
         <right name="function.loadstring" access="true" /> <!-- importing shared code from vana-lib -->
     </aclrequest>
-    <script src="lib.lua" type="server" />
+    <!-- The levers (docs/wildlife.md): change them with /vanaset wildlife <name> <value> or the admin panel. -->
+    <settings>
+        <setting name="@enabled" value="true" desc="Animals spawn at all" accept="true,false" />
+        <setting name="@species" value="hare,deer,boar,cat,dog,wolf,brownbear,blackbear,puma,leopard" desc="Species that spawn (of those config/wildlife.lua knows), comma-separated" />
+        <setting name="@density" value="1" desc="Scales each spawner's quantity" accept="0-10" />
+        <setting name="@maxPerPlayer" value="12" desc="Animals within 200 m of a player, at most" accept="0-100" />
+        <setting name="@maxTotal" value="60" desc="Animals on the server, at most" accept="0-500" />
+        <setting name="@minSpawnDistance" value="30" desc="No animal appears closer than this to a player (m)" />
+        <setting name="@despawnMargin" value="60" desc="Gone this far beyond its spawner's find radius from every player (m)" />
+        <setting name="@aggroChance" value="0.5" desc="Chance a predator goes for a player it sees, each check (0-1)" accept="0-1" />
+        <setting name="@aggroCheckMs" value="5000" desc="How often a predator may decide to attack (ms)" />
+        <setting name="@aggroRange" value="25" desc="How far a predator sees a player (m)" />
+        <setting name="@fleeRange" value="14" desc="Prey runs from a player this close (m)" />
+        <setting name="@leash" value="60" desc="An animal walks back home from this far (m)" />
+        <setting name="@damageScale" value="0.5" desc="Scales the pack's bite damage on players" accept="0-10" />
+    </settings>
+    <script src="lib.lua" type="shared" />
     <script src="config/species.lua" type="shared" />
+    <script src="config/wildlife.lua" type="shared" />
     <script src="config/maps.lua" type="server" />
     <script src="server.lua" type="server" />
+    <script src="client.lua" type="client" />
     <script src="help.lua" type="server" />
     <export function="getHelpPages" type="server" />
+    <export function="getSettings" type="server" />
+    <export function="setSetting" type="server" />
+    <!-- Myths Maker 2.7 (docs/credits.md), downloaded at connect: tools/seed/wildlife_files.py -->
+    <!-- files -->
+    <file src="mods/myths_maker/hare/hare_1.dff" />
+    <file src="mods/myths_maker/hare/hare_1.txd" />
+    <file src="mods/myths_maker/hare/hare_2.txd" />
+    <file src="mods/myths_maker/hare/hare_3.txd" />
+    <file src="mods/myths_maker/hare/hare_anim1.ifp" />
+    <file src="mods/myths_maker/hare/hare_random1.mp3" />
+    <file src="mods/myths_maker/hare/hare_random2.mp3" />
+    <file src="mods/myths_maker/hare/hare_random3.mp3" />
+    <file src="mods/myths_maker/hare/hare_random4.mp3" />
+    <file src="mods/myths_maker/hare/hare_random5.mp3" />
+    <file src="mods/myths_maker/hare/hare_random6.mp3" />
+    <file src="mods/myths_maker/hare/hare_random7.mp3" />
+    <file src="mods/myths_maker/hare/hare_random8.mp3" />
+    <file src="mods/myths_maker/hare/hare_random9.mp3" />
+    <file src="mods/myths_maker/hare/hare_random10.mp3" />
+    <file src="mods/myths_maker/hare/hare_random11.mp3" />
+    <file src="mods/myths_maker/hare/hare_damage1.mp3" />
+    <file src="mods/myths_maker/hare/hare_damage2.mp3" />
+    <file src="mods/myths_maker/hare/hare_damage3.mp3" />
+    <file src="mods/myths_maker/deer/deer_1.dff" />
+    <file src="mods/myths_maker/deer/deer_1.txd" />
+    <file src="mods/myths_maker/deer/deer_2.txd" />
+    <file src="mods/myths_maker/deer/deer_3.txd" />
+    <file src="mods/myths_maker/deer/deer_2.dff" />
+    <file src="mods/myths_maker/deer/deer_4.txd" />
+    <file src="mods/myths_maker/deer/deer_anim1.ifp" />
+    <file src="mods/myths_maker/deer/deer_random1.mp3" />
+    <file src="mods/myths_maker/deer/deer_random2.mp3" />
+    <file src="mods/myths_maker/deer/deer_random3.mp3" />
+    <file src="mods/myths_maker/deer/deer_random4.mp3" />
+    <file src="mods/myths_maker/deer/deer_random5.mp3" />
+    <file src="mods/myths_maker/deer/deer_random6.mp3" />
+    <file src="mods/myths_maker/deer/deer_random7.mp3" />
+    <file src="mods/myths_maker/deer/deer_random8.mp3" />
+    <file src="mods/myths_maker/deer/deer_random9.mp3" />
+    <file src="mods/myths_maker/deer/deer_random10.mp3" />
+    <file src="mods/myths_maker/deer/deer_random11.mp3" />
+    <file src="mods/myths_maker/deer/deer_random12.mp3" />
+    <file src="mods/myths_maker/deer/deer_damage1.mp3" />
+    <file src="mods/myths_maker/deer/deer_damage2.mp3" />
+    <file src="mods/myths_maker/boar/boar_1.dff" />
+    <file src="mods/myths_maker/boar/boar_1.txd" />
+    <file src="mods/myths_maker/boar/boar_2.txd" />
+    <file src="mods/myths_maker/boar/boar_3.txd" />
+    <file src="mods/myths_maker/boar/boar_4.txd" />
+    <file src="mods/myths_maker/boar/boar_5.txd" />
+    <file src="mods/myths_maker/boar/boar_anim1.ifp" />
+    <file src="mods/myths_maker/boar/boar_anim2.ifp" />
+    <file src="mods/myths_maker/boar/boar_anim3.ifp" />
+    <file src="mods/myths_maker/boar/boar_anim4.ifp" />
+    <file src="mods/myths_maker/boar/boar_anim5.ifp" />
+    <file src="mods/myths_maker/boar/boar_anim6.ifp" />
+    <file src="mods/myths_maker/boar/boar_random1.mp3" />
+    <file src="mods/myths_maker/boar/boar_random2.mp3" />
+    <file src="mods/myths_maker/boar/boar_random3.mp3" />
+    <file src="mods/myths_maker/boar/boar_random4.mp3" />
+    <file src="mods/myths_maker/boar/boar_random5.mp3" />
+    <file src="mods/myths_maker/boar/boar_random6.mp3" />
+    <file src="mods/myths_maker/boar/boar_random7.mp3" />
+    <file src="mods/myths_maker/boar/boar_random8.mp3" />
+    <file src="mods/myths_maker/boar/boar_random9.mp3" />
+    <file src="mods/myths_maker/boar/boar_random10.mp3" />
+    <file src="mods/myths_maker/boar/boar_random11.mp3" />
+    <file src="mods/myths_maker/boar/boar_damage1.mp3" />
+    <file src="mods/myths_maker/cat/cat_1.dff" />
+    <file src="mods/myths_maker/cat/cat_1.txd" />
+    <file src="mods/myths_maker/cat/cat_2.txd" />
+    <file src="mods/myths_maker/cat/cat_3.txd" />
+    <file src="mods/myths_maker/cat/cat_4.txd" />
+    <file src="mods/myths_maker/cat/cat_5.txd" />
+    <file src="mods/myths_maker/cat/cat_anim1.ifp" />
+    <file src="mods/myths_maker/cat/cat_random1.mp3" />
+    <file src="mods/myths_maker/cat/cat_random2.mp3" />
+    <file src="mods/myths_maker/cat/cat_random3.mp3" />
+    <file src="mods/myths_maker/cat/cat_random4.mp3" />
+    <file src="mods/myths_maker/cat/cat_random5.mp3" />
+    <file src="mods/myths_maker/cat/cat_random6.mp3" />
+    <file src="mods/myths_maker/cat/cat_random7.mp3" />
+    <file src="mods/myths_maker/cat/cat_random8.mp3" />
+    <file src="mods/myths_maker/cat/cat_random9.mp3" />
+    <file src="mods/myths_maker/cat/cat_random10.mp3" />
+    <file src="mods/myths_maker/cat/cat_random11.mp3" />
+    <file src="mods/myths_maker/cat/cat_random12.mp3" />
+    <file src="mods/myths_maker/cat/cat_damage1.mp3" />
+    <file src="mods/myths_maker/dog/dog_1.dff" />
+    <file src="mods/myths_maker/dog/dog_1.txd" />
+    <file src="mods/myths_maker/dog/dog_2.dff" />
+    <file src="mods/myths_maker/dog/dog_2.txd" />
+    <file src="mods/myths_maker/dog/dog_anim1.ifp" />
+    <file src="mods/myths_maker/dog/dog_anim2.ifp" />
+    <file src="mods/myths_maker/dog/dog_anim3.ifp" />
+    <file src="mods/myths_maker/dog/dog_anim4.ifp" />
+    <file src="mods/myths_maker/dog/dog_anim5.ifp" />
+    <file src="mods/myths_maker/dog/dog_anim6.ifp" />
+    <file src="mods/myths_maker/dog/dog_anim7.ifp" />
+    <file src="mods/myths_maker/dog/dog_anim8.ifp" />
+    <file src="mods/myths_maker/dog/dog_random1.mp3" />
+    <file src="mods/myths_maker/dog/dog_random2.mp3" />
+    <file src="mods/myths_maker/dog/dog_random3.mp3" />
+    <file src="mods/myths_maker/dog/dog_random4.mp3" />
+    <file src="mods/myths_maker/dog/dog_random5.mp3" />
+    <file src="mods/myths_maker/dog/dog_random6.mp3" />
+    <file src="mods/myths_maker/dog/dog_random7.mp3" />
+    <file src="mods/myths_maker/dog/dog_random8.mp3" />
+    <file src="mods/myths_maker/dog/dog_random9.mp3" />
+    <file src="mods/myths_maker/dog/dog_random10.mp3" />
+    <file src="mods/myths_maker/dog/dog_random11.mp3" />
+    <file src="mods/myths_maker/dog/dog_damage1.mp3" />
+    <file src="mods/myths_maker/wolf/wolf_1.dff" />
+    <file src="mods/myths_maker/wolf/wolf_1.txd" />
+    <file src="mods/myths_maker/wolf/wolf_2.txd" />
+    <file src="mods/myths_maker/wolf/wolf_3.txd" />
+    <file src="mods/myths_maker/wolf/wolf_anim1.ifp" />
+    <file src="mods/myths_maker/wolf/wolf_anim2.ifp" />
+    <file src="mods/myths_maker/wolf/wolf_anim3.ifp" />
+    <file src="mods/myths_maker/wolf/wolf_anim4.ifp" />
+    <file src="mods/myths_maker/wolf/wolf_anim5.ifp" />
+    <file src="mods/myths_maker/wolf/wolf_random1.mp3" />
+    <file src="mods/myths_maker/wolf/wolf_random2.mp3" />
+    <file src="mods/myths_maker/wolf/wolf_random3.mp3" />
+    <file src="mods/myths_maker/wolf/wolf_random4.mp3" />
+    <file src="mods/myths_maker/wolf/wolf_random5.mp3" />
+    <file src="mods/myths_maker/wolf/wolf_random6.mp3" />
+    <file src="mods/myths_maker/wolf/wolf_random7.mp3" />
+    <file src="mods/myths_maker/wolf/wolf_random8.mp3" />
+    <file src="mods/myths_maker/wolf/wolf_random9.mp3" />
+    <file src="mods/myths_maker/wolf/wolf_random10.mp3" />
+    <file src="mods/myths_maker/wolf/wolf_random11.mp3" />
+    <file src="mods/myths_maker/wolf/wolf_random12.mp3" />
+    <file src="mods/myths_maker/wolf/wolf_random13.mp3" />
+    <file src="mods/myths_maker/wolf/wolf_random14.mp3" />
+    <file src="mods/myths_maker/wolf/wolf_random15.mp3" />
+    <file src="mods/myths_maker/wolf/wolf_random16.mp3" />
+    <file src="mods/myths_maker/wolf/wolf_random17.mp3" />
+    <file src="mods/myths_maker/wolf/wolf_random18.mp3" />
+    <file src="mods/myths_maker/wolf/wolf_damage1.mp3" />
+    <file src="mods/myths_maker/brownbear/brownbear_1.dff" />
+    <file src="mods/myths_maker/brownbear/brownbear_1.txd" />
+    <file src="mods/myths_maker/brownbear/brownbear_2.txd" />
+    <file src="mods/myths_maker/brownbear/brownbear_anim1.ifp" />
+    <file src="mods/myths_maker/brownbear/brownbear_random1.mp3" />
+    <file src="mods/myths_maker/brownbear/brownbear_random2.mp3" />
+    <file src="mods/myths_maker/brownbear/brownbear_random3.mp3" />
+    <file src="mods/myths_maker/brownbear/brownbear_random4.mp3" />
+    <file src="mods/myths_maker/brownbear/brownbear_random5.mp3" />
+    <file src="mods/myths_maker/brownbear/brownbear_random6.mp3" />
+    <file src="mods/myths_maker/brownbear/brownbear_random7.mp3" />
+    <file src="mods/myths_maker/brownbear/brownbear_random8.mp3" />
+    <file src="mods/myths_maker/brownbear/brownbear_random9.mp3" />
+    <file src="mods/myths_maker/brownbear/brownbear_random10.mp3" />
+    <file src="mods/myths_maker/brownbear/brownbear_random11.mp3" />
+    <file src="mods/myths_maker/brownbear/brownbear_random12.mp3" />
+    <file src="mods/myths_maker/brownbear/brownbear_random13.mp3" />
+    <file src="mods/myths_maker/brownbear/brownbear_random14.mp3" />
+    <file src="mods/myths_maker/brownbear/brownbear_damage1.mp3" />
+    <file src="mods/myths_maker/blackbear/blackbear_1.dff" />
+    <file src="mods/myths_maker/blackbear/blackbear_1.txd" />
+    <file src="mods/myths_maker/blackbear/blackbear_random1.mp3" />
+    <file src="mods/myths_maker/blackbear/blackbear_random2.mp3" />
+    <file src="mods/myths_maker/blackbear/blackbear_random3.mp3" />
+    <file src="mods/myths_maker/blackbear/blackbear_random4.mp3" />
+    <file src="mods/myths_maker/blackbear/blackbear_random5.mp3" />
+    <file src="mods/myths_maker/blackbear/blackbear_random6.mp3" />
+    <file src="mods/myths_maker/blackbear/blackbear_random7.mp3" />
+    <file src="mods/myths_maker/blackbear/blackbear_random8.mp3" />
+    <file src="mods/myths_maker/blackbear/blackbear_random9.mp3" />
+    <file src="mods/myths_maker/blackbear/blackbear_random10.mp3" />
+    <file src="mods/myths_maker/blackbear/blackbear_random11.mp3" />
+    <file src="mods/myths_maker/blackbear/blackbear_random12.mp3" />
+    <file src="mods/myths_maker/blackbear/blackbear_random13.mp3" />
+    <file src="mods/myths_maker/blackbear/blackbear_random14.mp3" />
+    <file src="mods/myths_maker/blackbear/blackbear_damage1.mp3" />
+    <file src="mods/myths_maker/puma/puma_1.dff" />
+    <file src="mods/myths_maker/puma/puma_1.txd" />
+    <file src="mods/myths_maker/puma/puma_2.txd" />
+    <file src="mods/myths_maker/puma/puma_random1.mp3" />
+    <file src="mods/myths_maker/puma/puma_random2.mp3" />
+    <file src="mods/myths_maker/puma/puma_random3.mp3" />
+    <file src="mods/myths_maker/puma/puma_random4.mp3" />
+    <file src="mods/myths_maker/puma/puma_random5.mp3" />
+    <file src="mods/myths_maker/puma/puma_random6.mp3" />
+    <file src="mods/myths_maker/puma/puma_random7.mp3" />
+    <file src="mods/myths_maker/puma/puma_random8.mp3" />
+    <file src="mods/myths_maker/puma/puma_random9.mp3" />
+    <file src="mods/myths_maker/puma/puma_random10.mp3" />
+    <file src="mods/myths_maker/puma/puma_random11.mp3" />
+    <file src="mods/myths_maker/puma/puma_random12.mp3" />
+    <file src="mods/myths_maker/puma/puma_damage1.mp3" />
+    <file src="mods/myths_maker/lioness/lioness_anim1.ifp" />
+    <file src="mods/myths_maker/leopard/leopard_1.dff" />
+    <file src="mods/myths_maker/leopard/leopard_1.txd" />
+    <file src="mods/myths_maker/leopard/leopard_2.txd" />
+    <file src="mods/myths_maker/leopard/leopard_random1.mp3" />
+    <file src="mods/myths_maker/leopard/leopard_random2.mp3" />
+    <file src="mods/myths_maker/leopard/leopard_random3.mp3" />
+    <file src="mods/myths_maker/leopard/leopard_random4.mp3" />
+    <file src="mods/myths_maker/leopard/leopard_random5.mp3" />
+    <file src="mods/myths_maker/leopard/leopard_random6.mp3" />
+    <file src="mods/myths_maker/leopard/leopard_random7.mp3" />
+    <file src="mods/myths_maker/leopard/leopard_random8.mp3" />
+    <file src="mods/myths_maker/leopard/leopard_random9.mp3" />
+    <file src="mods/myths_maker/leopard/leopard_random10.mp3" />
+    <file src="mods/myths_maker/leopard/leopard_random11.mp3" />
+    <file src="mods/myths_maker/leopard/leopard_random12.mp3" />
+    <file src="mods/myths_maker/leopard/leopard_damage1.mp3" />
+    <!-- /files -->
 </meta>

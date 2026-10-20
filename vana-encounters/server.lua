@@ -117,6 +117,13 @@ addEventHandler("vana-encounters:hurt", resourceRoot, function(ped)
     triggerClientEvent(client, "vana-encounters:attack", resourceRoot, ped, client)
 end)
 
+-- Killed where he's simulated (his toughness is applied there): only his syncer says so.
+addEvent("vana-encounters:killed", true)
+addEventHandler("vana-encounters:killed", resourceRoot, function(ped, attacker)
+    if not current or current.ped ~= ped or isPedDead(ped) or getElementSyncer(ped) ~= client then return end
+    killPed(ped, isElement(attacker) and attacker or nil)
+end)
+
 addEventHandler("onPlayerQuit", root, function()
     if current and current.attacking == source then current.attacking = nil end
 end)

@@ -122,6 +122,8 @@ on every start (`adminRights` in `vana-player/config/player.lua`; the `Console` 
 <right name="command.warps" access="true"></right>
 <right name="command.cleanvehicles" access="true"></right>
 <right name="command.vanadebug" access="true"></right>
+<right name="command.vanaset" access="true"></right>
+<right name="command.animal" access="true"></right>
 ```
 
 After editing `acl.xml` on a running server, run `reloadacl` in the console.
@@ -137,6 +139,8 @@ aclrequest allow vana-text all
 aclrequest allow vana-controls all
 aclrequest allow vana-vehicles all
 aclrequest allow vana-population all
+aclrequest allow vana-traffic all
+aclrequest allow vana-peds all
 aclrequest allow vana-player all
 aclrequest allow vana-parked all
 aclrequest allow vana-interiors all
@@ -149,6 +153,24 @@ aclrequest allow vana-radio all
 ```
 
 Then restart them (or the server).
+
+### Resource settings
+
+A resource's levers (densities, caps, aggression) are MTA's own resource settings: the `<settings>` in
+its `meta.xml` hold the defaults, each public (`@name`), and a changed value is kept in the server's
+`settings.xml` (`mods/deathmatch/settings.xml`), so it survives restarts and updates. Change them in
+game or at the console with `/vanaset` (vana-core, restricted: `command.vanaset`), or in the admin
+panel's resource settings:
+
+```text
+/vanaset                         the resources with settings
+/vanaset wildlife                its settings and values ("vana-" can be left out)
+/vanaset peds density 0.6        change one, at once
+```
+
+So far: vana-wildlife ([wildlife.md](wildlife.md)), vana-peds and vana-traffic (`density`, which
+`/peds density` and `/traffic density` also set, and `maxPerPlayer`). A script binds its own with
+vana-lib's `settings` module (server) and exports `getSettings`/`setSetting` for `/vanaset`.
 
 Admins are listed by serial in `vana-player/config/player.lua` (`groups.Admin`), not in
 `acl.xml`. Find a player's serial in the server log's CONNECT line.
@@ -172,6 +194,7 @@ tools/srv.sh cmd "interiortest"    # entrances pair up
 tools/srv.sh cmd "shoptest"        # shop stock and prices
 tools/srv.sh cmd "gymtest"         # gym equipment and the hourly cap
 tools/srv.sh cmd "vehicletest"     # kept cars: snapshots, lists, persistence, fuel, radio
+tools/srv.sh cmd "wildlifetest"    # wildlife spawners, species files, the settings in force
 tools/srv.sh log 50
 tools/srv.sh stop
 ```

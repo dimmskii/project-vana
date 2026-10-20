@@ -20,6 +20,7 @@ local CONFIG = {
     maxHoldMs = 60000,  -- the longest a ped waits at a kerb before walking somewhere else
     followLost = 25,    -- a follower this far (m) from its slot leaves the group and walks on alone
 }
+Settings.bind(CONFIG, { density = "number", maxPerPlayer = "number" }) -- meta.xml settings (/vanaset)
 
 local walkers = {}    -- ped -> walker
 local released = {}
@@ -457,7 +458,7 @@ addCommandHandler("peds", function(source, _, action, value)
         for _, walker in pairs(walkers) do removeWalker(walker) end
         reply(("Removed %d pedestrians."):format(count))
     elseif action == "density" and tonumber(value) then
-        CONFIG.density = math.max(0, math.min(300, tonumber(value))) / 100
+        Settings.set("density", math.max(0, math.min(300, tonumber(value))) / 100) -- kept across restarts
         reply(("Pedestrian density set to %d%% of vanilla."):format(CONFIG.density * 100))
     else
         reply(("Pedestrians are %s: %d walking, density %d%% of vanilla. Usage: /peds on|off|clear|density <percent>")

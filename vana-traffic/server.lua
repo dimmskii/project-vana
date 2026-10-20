@@ -16,6 +16,7 @@ local CONFIG = {
     cruise = 15, cruiseHighway = 22, -- native autopilot cruise speeds
     panicCruise = 30,
 }
+Settings.bind(CONFIG, { density = "number", maxPerPlayer = "number" }) -- meta.xml settings (/vanaset)
 
 local units = {}      -- vehicle -> unit
 local released = {}   -- elements no longer driven by us: peds -> spec (+ encounter), vehicles -> true
@@ -534,7 +535,7 @@ addCommandHandler("traffic", function(source, _, action, value)
         exports["vana-core"]:setDebug("vana-traffic", value == "on" and "telemetry" or nil)
         reply("Traffic debug telemetry " .. (value == "on" and "on: slow units are logged to the server log." or "off.") .. " (as /vanadebug traffic)")
     elseif action == "density" and tonumber(value) then
-        CONFIG.density = math.max(0, math.min(300, tonumber(value))) / 100
+        Settings.set("density", math.max(0, math.min(300, tonumber(value))) / 100) -- kept across restarts
         reply(("Traffic density set to %d%% of vanilla."):format(CONFIG.density * 100))
     else
         reply(("Traffic is %s: %d vehicles, density %d%% of vanilla. Usage: /traffic on|off|clear|density <percent>|debug on|off")

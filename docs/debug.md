@@ -43,6 +43,7 @@ Restricted (`command.vanadebug`; vana-player grants it to `Admin`). Works at the
 | `vana-peds:orders` | A walk or encounter order the client couldn't give: why it might be (target not streamed, the task the ped is in, mission actor, frozen, how full GTA's route pools are). Off, these are silent (they used to be a warning each time). Also every recovery ([traffic.md](traffic.md), "Keeping them walking"): a lost syncer pinned back, a walk given again, a fresh route after a stuck walk or a long wait at a kerb, a follower sent back to its slot, a hanging ped put back down or removed. |
 | `vana-controls:targets` | For each action run: the target named, or every candidate it tried (clicked, the car you sit in, what you can see) and why each was taken or passed over. |
 | `vana-traffic:telemetry` | Slow traffic units and their native autopilot state; `/traffic debug on|off` sets the same switch. |
+| `vana-wildlife:brains` | What animals decide (a predator going for someone, a chase given up) and orders a client couldn't give ([wildlife.md](wildlife.md)). Animals standing still are left out of `vana-core:stuck`. |
 
 Reading a stuck ped's line: `mine false` with `syncer none` means nobody simulates it (it freezes in
 its pose); `ground not loaded` with `HANGING` means no collision under it; `mine true` with an idle task

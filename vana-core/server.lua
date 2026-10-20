@@ -24,6 +24,7 @@ local TOPICS = { -- resource -> { topic = what it checks }
     ["vana-peds"] = { orders = "every walk or encounter order a client couldn't give, with the ped's state" },
     ["vana-controls"] = { targets = "how each action found its target, or why it found none" },
     ["vana-traffic"] = { telemetry = "slow traffic units and their native autopilot state (as /traffic debug)" },
+    ["vana-wildlife"] = { brains = "what animals decide (chases, giving up) and orders a client couldn't give" },
 }
 local switches = {} -- resource name -> "all" | "topic,topic"
 
@@ -102,6 +103,49 @@ addCommandHandler("vanadebug", function(source, _, target, value)
     end
     setDebug(target, setTo)
     reply(("%s debug: %s"):format(target, setTo or "off"))
+end, true)
+
+-- /vanaset [resource] [name value]: our resources' levers (their meta.xml settings, through
+-- vana-lib's settings: the ones exporting getSettings), kept in settings.xml. Restricted: command.vanaset.
+local function settingsOf(res)
+    if getResourceState(res) ~= "running" then return end
+    for _, fn in ipairs(getResourceExportedFunctions(res)) do
+        if fn == "getSettings" then
+            local ok, list = pcall(call, res, "getSettings")
+            return ok and type(list) == "table" and list or nil
+        end
+    end
+end
+
+addCommandHandler("vanaset", function(source, _, target, name, value)
+    local function reply(msg)
+        if getElementType(source) == "console" then outputServerLog("[vanaset] " .. msg) else outputChatBox(msg, source, 200, 200, 255) end
+    end
+    if not target then
+        local names = {}
+        for _, res in ipairs(getResources()) do
+            if getResourceName(res):find("^vana%-") and settingsOf(res) then names[#names + 1] = getResourceName(res) end
+        end
+        table.sort(names)
+        reply("With settings: " .. (#names > 0 and table.concat(names, ", ") or "none running"))
+        return reply("Usage: /vanaset <resource> [<name> <value>]")
+    end
+    if not target:find("^vana%-") then target = "vana-" .. target end
+    local res = getResourceFromName(target)
+    local list = res and settingsOf(res)
+    if not list then return reply(target .. " isn't running, or has no settings.") end
+    if not name then
+        local keys = {}
+        for k in pairs(list) do keys[#keys + 1] = k end
+        table.sort(keys)
+        for i, k in ipairs(keys) do keys[i] = k .. " = " .. tostring(list[k]) end
+        return reply(target .. ": " .. table.concat(keys, ", "))
+    end
+    if list[name] == nil then return reply(("%s has no setting %s."):format(target, name)) end
+    if not value then return reply(("%s %s = %s"):format(target, name, tostring(list[name]))) end
+    local ok, saved, now = pcall(call, res, "setSetting", name, value)
+    if not ok or not saved then return reply(("Couldn't set %s %s."):format(target, name)) end
+    reply(("%s %s = %s (saved)"):format(target, name, tostring(now)))
 end, true)
 
 -- Debug lines from clients (vana-lib's debug, Debug.log), while their switch is on: 60 a minute each.
