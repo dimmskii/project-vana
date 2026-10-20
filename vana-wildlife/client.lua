@@ -38,12 +38,35 @@ local function blockFor(path)
     return blocks[path]
 end
 
+-- Put down on the ground where we simulate it: the server only knows its spot's height, and the pack
+-- scatters animals up to 100 m round it (under a hill they'd fall through the world). Held still until
+-- the collision there has loaded.
+local placed = {} -- ped -> true
+local function place(ped, tries)
+    if not isElement(ped) or placed[ped] then return end
+    if not (isElementStreamedIn(ped) and isElementSyncer(ped)) then
+        if tries < 40 then setTimer(place, 250, 1, ped, tries + 1) end
+        return
+    end
+    local x, y, z = getElementPosition(ped)
+    local gz = getGroundPosition(x, y, z + 40)
+    if (not gz or gz == 0) and tries < 40 then
+        setElementFrozen(ped, true)
+        return setTimer(place, 250, 1, ped, tries + 1)
+    end
+    placed[ped] = true
+    if gz and gz ~= 0 and math.abs(gz - z) > 1.2 then setElementPosition(ped, x, y, gz + 1) end
+    setElementFrozen(ped, false)
+end
+
 local function dress(e)
     local species, kind, variant, key = animalOf(e)
     if not species then return end
     local id = modelFor(key, species, variant, kind.driver)
     if id and getElementModel(e) ~= id then setElementModel(e, id) end
-    if kind.driver ~= "ped" or not kind.walk then return end
+    if kind.driver ~= "ped" then return end
+    place(e, 0)
+    if not kind.walk then return end
     local block = blockFor(kind.walk.ifp)
     if not block then return end
     for gta, suffix in pairs(WildlifeWalkcycle) do engineReplaceAnimation(e, "ped", gta, block, kind.walk.prefix .. "_" .. suffix) end
@@ -173,4 +196,4 @@ addEventHandler("onClientPedDamage", root, function(attacker, _, _, loss)
         if health <= 0 then triggerServerEvent("vana-wildlife:killed", resourceRoot, source, attacker) else setElementHealth(source, health) end
     end
 end)
-addEventHandler("onClientElementDestroy", root, function() orders[source], reported[source] = nil, nil end)
+addEventHandler("onClientElementDestroy", root, function() orders[source], reported[source], placed[source] = nil, nil, nil end)

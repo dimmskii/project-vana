@@ -35,10 +35,12 @@ Wildlife.readSpecies()
 
 local function debugLog(text) if Debug.on("brains") then Debug.log("brains", text) end end
 
-local function outdoorPlayers()
+-- Players outdoors: alive ones wake spawners and draw animals' attention; dead ones (waiting to
+-- respawn) still keep the animals round them.
+local function outdoorPlayers(withDead)
     local list = {}
     for _, p in ipairs(getElementsByType("player")) do
-        if getElementInterior(p) == 0 and getElementDimension(p) == 0 and not isPedDead(p) then list[#list + 1] = p end
+        if getElementInterior(p) == 0 and getElementDimension(p) == 0 and (withDead or not isPedDead(p)) then list[#list + 1] = p end
     end
     return list
 end
@@ -110,20 +112,24 @@ local function spawn(index, s, owner)
     setElementData(element, "vana:animal", s.species .. "|" .. variant)
     setElementData(element, "vana:animalHealth", s.health or 100)
     setElementData(element, "vana:fairGame", true) -- no crime for killing one, no ambulance for the body
-    local a = { element = element, spawner = index, species = s.species, kind = kind, home = { s[1], s[2], s[3] },
-                wander = math.max(8, (s.spawnRadius or 10) * 1.5), mode = nil, nextAt = getTickCount() + math.random(2000, 8000) }
+    -- Home is where it appeared (the pack scatters them up to spawnRadius, often 100 m, round the spot).
+    local a = { element = element, spawner = index, species = s.species, kind = kind, home = { x, y, z },
+                wander = math.max(8, math.min(30, (s.spawnRadius or 10) * 1.5)), mode = nil, nextAt = getTickCount() + math.random(2000, 8000) }
     Wildlife.animals[element] = a
     count = count + 1
     spawners[index].alive = spawners[index].alive + 1
     setOwner(a, owner)
     order(a, "idle")
+    debugLog(("%s spawned at %.0f, %.0f, %.0f (spot %d, %d/%d there; %s simulates)"):format(s.species, x, y, z, index,
+        spawners[index].alive, math.ceil((s.quantity or 1) * CONFIG.density), isElement(owner) and getPlayerName(owner) or "nobody"))
 end
 
 -- The brain, once a tick.
-local function think(a, players, now)
+local function think(a, players, everyone, now)
     local e = a.element
     local x, y, z = getElementPosition(e)
     if a.kind.driver == "ped" and isPedDead(e) then
+        if not a.deadSince then debugLog(("%s died"):format(a.species)) end
         a.deadSince = a.deadSince or now
         if now - a.deadSince > 20000 then
             local sp = spawners[a.spawner]
@@ -134,7 +140,12 @@ local function think(a, players, now)
     end
     local dist, who = nearest(x, y, z, players)
     local s = WildlifeSpawners[a.spawner]
-    if dist > (s.findRadius or 80) + CONFIG.despawnMargin then return Wildlife.remove(a) end
+    -- Gone once nobody is near its spot (as it woke), or far from the animal itself.
+    local fromSpot = nearest(s[1], s[2], s[3], everyone)
+    if fromSpot > (s.findRadius or 80) + CONFIG.despawnMargin or nearest(x, y, z, everyone) > 250 then
+        debugLog(("%s despawned (nearest player %.0f m from its spot, %.0f m from it)"):format(a.species, fromSpot, dist))
+        return Wildlife.remove(a)
+    end
     -- Simulated by the nearest player, unless it's going for someone.
     if a.mode ~= "attack" and who and getElementSyncer(e) ~= who then setOwner(a, who) end
 
@@ -155,6 +166,7 @@ local function think(a, players, now)
         local dx, dy = x - px, y - py
         local len = math.max(0.1, math.sqrt(dx * dx + dy * dy))
         a.tx, a.ty, a.tz, a.untilTick = x + dx / len * 35, y + dy / len * 35, z, now + 8000
+        debugLog(("%s flees from %s (%.0f m)"):format(a.species, getPlayerName(who), dist))
         order(a, "flee", a.tx, a.ty, a.tz)
         return
     end
@@ -196,6 +208,7 @@ addEventHandler("vana-wildlife:hurt", resourceRoot, function(element)
     local a = Wildlife.animals[element]
     if not a or a.kind.driver ~= "ped" or isPedDead(element) or a.target == client then return end
     local now = getTickCount()
+    debugLog(("%s hurt by %s: %s"):format(a.species, getPlayerName(client), a.kind.behaviour == "prey" and "flees" or "fights back"))
     if a.kind.behaviour == "prey" then
         local x, y, z = getElementPosition(element)
         local px, py = getElementPosition(client)
@@ -236,9 +249,9 @@ end)
 
 setTimer(function()
     if not CONFIG.enabled then return end
-    local players, now, hour = outdoorPlayers(), getTickCount(), getTime()
+    local players, everyone, now, hour = outdoorPlayers(), outdoorPlayers(true), getTickCount(), getTime()
     for _, a in pairs(Wildlife.animals) do
-        if isElement(a.element) then think(a, players, now) else Wildlife.remove(a) end
+        if isElement(a.element) then think(a, players, everyone, now) else Wildlife.remove(a) end
     end
     -- Spawning, near each player, within the caps.
     for _, player in ipairs(players) do

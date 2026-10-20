@@ -69,13 +69,13 @@ would stand on GTA's human animations.
 - **Waking:** each second, near each player outdoors: a spawner within its `findRadius`, at its
   hours, keeps up to `quantity` times `density` alive, one every 3 s, never within
   `minSpawnDistance` of a player, within the caps (`maxPerPlayer` within 200 m, `maxTotal`). Gone
-  once every player is `findRadius + despawnMargin` away; a body is removed after 20 s and its spawner
+  once every player is `findRadius + despawnMargin` from its spot (or 250 m from the animal); a body is removed after 20 s and its spawner
   waits its `respawn`.
 - **Behaviour** (per species): **prey** (hare, deer, cat) runs from anyone within `fleeRange`;
   **neutral** (boar, dog) ignores people; **predators** (wolf, bears, puma, leopard) see a player
   within `aggroRange` and go for them with `aggroChance` every `aggroCheckMs` (50% every 5 s by
   default). Hurt, prey runs and the rest go for whoever hurt them. Otherwise an animal idles and
-  wanders round its spot, and walks home from `leash` away.
+  wanders round where it appeared (the pack scatters them up to `spawnRadius` round the spot), and walks back from `leash` away.
 - **Attacks:** a chase and a bite (the pack has no attack animations; GTA's fist fight would be a bear
   throwing punches): within 2 m, a bite every 1.4 s of the spawner's `damage` times `damageScale`,
   checked by the server. A chase gives up after 25 s, or 50 m away.
