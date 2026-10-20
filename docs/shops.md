@@ -45,10 +45,12 @@ its orange marker opens the menu, as vanilla's counters do, and `/use` (F) there
 - **24/7 clerks (ours):** vanilla has nobody behind these counters. A store with a clerk
   (`config/keepers.lua`, layout `convenience`: you shop standing, the clerk rings it up and can be
   held up) has its counter point and clerk position from in game; the clerk's model is picked from
-  the store's pool (`ClerkModels`: the locals of its area, 229 in the cities). So far Vinewood
-  (`X711S2`), the El Corona / Mulholland / LV store (`X7_11B`) and two Idlewood copies of the
-  Vinewood one (`X711I1` at the Xoomer, `X711I2`), each in a dimension of its own (`instance`
-  3001, 3002 on their entrances and shop points: one interior, separate stores).
+  the store's pool (`ClerkModels`: the locals of its area, 229 in the cities, farmers in the
+  country). So far Vinewood (`X711S2`), the El Corona / Mulholland / LV store (`X7_11B`), Commerce
+  and LV (`X7_11S`), and copies, each in a dimension of its own (`instance` on their entrances and
+  shop points: one interior, separate stores): Idlewood `X711I1` (the Xoomer, 3001) and `X711I2`
+  (3002) of the Vinewood one, Fort Carson `X711FC` (3003) and Angel Pine `X711AP` (3004) of
+  `X7_11S`, with country clerks.
 
 | Shop | Stock | Effect |
 | --- | --- | --- |
@@ -256,9 +258,7 @@ gyms and Madd Dogg's home gym. Vanilla's gym scripts (`GYMBIKE`, `GYMBENC`, `GYM
 - **Placement to check in game:** keepers and seated customers stand at the script's ground z + 1
   (vanilla's convention); held items sit exactly on the hand bone with no offset. The food tray
   preview is rotated 90 degrees for at least the Well Stacked Pizza meals.
-- **24/7 stores:** `X7_11S` (Commerce, Fort Carson, Angel Pine, LV) has no clerk yet, its marker
-  still 4 m inside the door; `X7_11C`, `X7_11D` and `X711S3` have no street door. The clerk pools by
-  area (country stores) aren't used yet.
+- **24/7 stores:** `X7_11C`, `X7_11D` and `X711S3` have no street door (and no clerk).
 - **Wardrobe:** vanilla's safehouse wardrobe script (`WARROBE`) isn't ported; our closet is the
   menu in the shared changing room.
 - **Hostile keepers:** keepers can be killed (back after a minute) but don't react; vanilla's react

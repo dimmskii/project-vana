@@ -58,7 +58,8 @@ KeeperLayouts = {
 -- 24/7 clerks (ours), by where the store is: the locals you see on its streets. A store's `models`
 -- is one of these (or its own list); one is picked each time a clerk is spawned.
 ClerkModels = {
-    city = { 229 },
+    city = { 229 },                 -- SOMOST
+    country = { 158, 161, 196, 198 }, -- CWMOFR, CWMYFR, CWFOFR, CWFYFR1: the farmers you see out of town
 }
 
 -- Shops with staff: layout, keeper model (vanilla's) and the shop's offset from the layout. A `keeper`
@@ -84,10 +85,14 @@ Keepers = {
     CLOTHGP = { layout = "clothes", model = 211, offset = { -33.204, -46.245, 0 }, keeper = { 161.56, -81.369, 1000.859, 180 }, door = 2875 },
     CSDESGN = { layout = "clothes", model = 211, offset = { -5.806, 36.733, -0.815 }, keeper = { 204.836, -7.328, 1000.258, 270 }, door = 2878 },
     -- 24/7s (ours): the clerk's point is where the store's counter is (in-game positions). X711I1 and
-    -- X711I2 are Idlewood copies of the Vinewood store (X711S2) in dimensions of their own.
+    -- X711I2 are Idlewood copies of the Vinewood store (X711S2) in dimensions of their own; X711FC
+    -- (Fort Carson) and X711AP (Angel Pine) country copies of X7_11S (Commerce and LV).
     X711S2 = { layout = "convenience", models = ClerkModels.city, keeper = { -30.54, -30.78, 1002.56, 8 } },
     X7_11B = { layout = "convenience", models = ClerkModels.city, keeper = { -28.19, -91.64, 1002.55, 5 } },
     X711I1 = { layout = "convenience", models = ClerkModels.city, keeper = { -30.54, -30.78, 1002.56, 8 } },
     X711I2 = { layout = "convenience", models = ClerkModels.city, keeper = { -30.54, -30.78, 1002.56, 8 } },
+    X7_11S = { layout = "convenience", models = ClerkModels.city, keeper = { -23.67, -57.31, 1002.55, 359 } },
+    X711FC = { layout = "convenience", models = ClerkModels.country, keeper = { -23.67, -57.31, 1002.55, 359 } },
+    X711AP = { layout = "convenience", models = ClerkModels.country, keeper = { -23.67, -57.31, 1002.55, 359 } },
     CSEXL = { layout = "clothes", model = 217, offset = { 1.2, -114.524, -1.51 }, keeper = { 204.366, -157.789, 999.563, 180 }, door = 2879 },
 }

@@ -10,7 +10,7 @@
     <entrance posX="423.985" posY="2536.49" posZ="15.19" interior="10" name="DESHOUS" size="2,1.5" ex="420.485" ey="2535.59" ez="9.02" heading="35" flags="4" open="0" close="24" enabled="true" />
     <entrance posX="693.632" posY="1966.4" posZ="4.56" interior="0" name="STRIP2" size="3,3.12" ex="693.632" ey="1961.4" ez="4.56" heading="198.4" flags="4" open="0" close="24" enabled="true" />
     <entrance posX="-206" posY="1062.21" posZ="18.83" interior="0" name="DINER2" size="1.4,1.49" ex="-203.993" ey="1064.08" ez="18.83" heading="308.6" flags="4" open="0" close="0" enabled="true" />
-    <entrance posX="-181.004" posY="1034.83" posZ="18.83" interior="0" name="X7_11S" size="1.4,1.49" ex="-182.997" ey="1033.69" ez="18.83" heading="21.6" flags="4" open="8" close="22" enabled="true" />
+    <entrance posX="-181.004" posY="1034.83" posZ="18.83" interior="0" name="X711FC" size="1.4,1.49" ex="-182.997" ey="1033.69" ez="18.83" heading="21.6" flags="4" open="8" close="22" enabled="true" />
     <entrance posX="-369.456" posY="1169.14" posZ="19.398" interior="0" name="SVCUNT" size="1.69,1.72" ex="-366.422" ey="1166.54" ez="18.898" heading="203.2" flags="4" open="0" close="24" enabled="true" />
     <entrance posX="-315.676" posY="829.868" posZ="13.427" interior="0" name="AMMUN3" size="1.5,1.4" ex="-313.98" ey="832.729" ez="13.427" heading="301" flags="4" open="0" close="24" enabled="true" />
     <entrance posX="172.727" posY="1176.68" posZ="13.773" interior="0" name="FDCHICK" size="1.69,3" ex="173.761" ey="1174.07" ez="13.773" heading="190.2" flags="4" open="6" close="24" enabled="true" />
@@ -24,7 +24,7 @@
     <entrance posX="-1213.71" posY="1830.46" posZ="40.934" interior="0" name="FDCHICK" size="1.5,1" ex="-1211.81" ey="1832.46" ez="40.934" heading="312" flags="4" open="0" close="24" enabled="true" />
     <entrance posX="-2155.03" posY="-2460.28" posZ="29.848" interior="0" name="FDCHICK" size="2,1" ex="-2154.03" ey="-2461.28" ez="29.848" heading="229" flags="4" open="0" close="24" enabled="true" />
     <entrance posX="-2093.51" posY="-2464.79" posZ="29.64" interior="0" name="AMMUN3" size="1.6,1" ex="-2092.71" ey="-2463.81" ez="29.64" heading="319" flags="4" open="0" close="24" enabled="true" />
-    <entrance posX="-1562.63" posY="-2732.98" posZ="47.743" interior="0" name="X7_11S" size="0.84,2.2" ex="-1560.63" ey="-2734.98" ez="47.743" heading="237" flags="4" open="0" close="24" enabled="true" />
+    <entrance posX="-1562.63" posY="-2732.98" posZ="47.743" interior="0" name="X711AP" size="0.84,2.2" ex="-1560.63" ey="-2734.98" ez="47.743" heading="237" flags="4" open="0" close="24" enabled="true" />
     <entrance posX="-2075.91" posY="-2312.55" posZ="30.131" interior="0" name="SVCUNT" size="1.5,1.5" ex="-2079.91" ey="-2309.55" ez="29.731" heading="57" flags="4" open="0" close="24" enabled="true" />
     <entrance posX="1288.8" posY="271.002" posZ="18.555" interior="0" name="GENOTB" size="1,2.28" ex="1291.9" ey="269.445" ez="19" heading="234.8" flags="4" open="0" close="24" enabled="true" />
     <entrance posX="794.884" posY="-506.702" posZ="17.124" interior="0" name="SVCUNT" size="1,2.28" ex="793.991" ey="-514.26" ez="16.568" heading="179.8" flags="4" open="0" close="24" enabled="true" />
@@ -42,6 +42,8 @@
     <entrance posX="-1438.72" posY="-1544.58" posZ="100.713" interior="0" name="SVCUNT" size="1.4,1" ex="-1438.72" ey="-1542.58" ez="100.713" heading="0" flags="4" open="0" close="24" enabled="true" />
     <entrance posX="-204.44" posY="-27.154" posZ="1001.3" interior="16" name="TATTOO" size="1.6,1" ex="-204.44" ey="-26.454" ez="1001.3" heading="0" flags="8" open="0" close="24" enabled="true" />
     <entrance posX="-26.692" posY="-57.815" posZ="1002.55" interior="6" name="X7_11S" size="2,1.4" ex="-26.692" ey="-55.715" ez="1002.55" heading="0" flags="1" open="0" close="24" enabled="true" />
+    <entrance posX="-26.692" posY="-57.815" posZ="1002.55" interior="6" name="X711FC" size="2,1.4" ex="-26.692" ey="-55.715" ez="1002.55" heading="0" flags="1" open="0" close="24" enabled="true" instance="3003" />
+    <entrance posX="-26.692" posY="-57.815" posZ="1002.55" interior="6" name="X711AP" size="2,1.4" ex="-26.692" ey="-55.715" ez="1002.55" heading="0" flags="1" open="0" close="24" enabled="true" instance="3004" />
     <entrance posX="-30.947" posY="-91.71" posZ="1002.55" interior="18" name="X7_11B" size="2.13,1" ex="-30.947" ey="-89.61" ez="1002.55" heading="0" flags="1" open="0" close="24" enabled="true" />
     <entrance posX="-25.133" posY="-141.167" posZ="1002.55" interior="16" name="X7_11C" size="3,1" ex="-25.133" ey="-139.067" ez="1002.55" heading="0" flags="1" open="0" close="24" enabled="true" />
     <entrance posX="-25.884" posY="-187.969" posZ="1002.55" interior="17" name="X7_11D" size="3,1" ex="-25.884" ey="-185.869" ez="1002.55" heading="0" flags="1" open="0" close="24" enabled="true" />
