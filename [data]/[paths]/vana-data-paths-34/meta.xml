@@ -1,0 +1,4 @@
+<meta>
+    <info type="map" name="vana-data-paths-34" author="ProjectVana" description="Path graph, area 34 (GTA:SA's NODES34): open it in the Map Editor (definitions: vana-paths)" version="1.0.0" edf:definitions="vana-paths" />
+    <map src="paths.map" dimension="0" />
+</meta>

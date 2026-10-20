@@ -16,6 +16,7 @@ local DATASETS = {
     encounters = { owner = "vana-encounters", configs = { "bigfoot.lua" } },
     wildlife = { owner = "vana-wildlife", configs = { "wildlife_spawners.lua" } },
     radio = { owner = "vana-radio", configs = {}, hand = true }, -- placed by hand: no seed to convert
+    paths = { owner = "vana-paths", configs = {}, hand = true }, -- converted by tools/convert/paths_to_maps.lua (per area)
     activities = { owner = "vana-activities", configs = { "vana-activities/config/minigames.lua",
         "vana-activities/config/burglary_houses.lua", "vana-activities/config/races.lua" }, notes = true },
 }

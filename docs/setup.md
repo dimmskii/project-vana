@@ -44,7 +44,6 @@ Copy them from your own retail GTA:SA install (PC v1.0):
 
 | From your GTA:SA folder | To | Used by |
 | --- | --- | --- |
-| `data/Paths/NODES0.DAT` … `NODES63.DAT` (64 files) | `[vana]/vana-paths/data/` | Path graph: ped and traffic routing, traffic lights |
 | `data/shopping.dat` | `[vana]/vana-shops/data/` | Shop prices and stock |
 | `models/txd/LD_BEAT.txd` | `[vana]/vana-activities/data/` | The dance and lowrider beat display's arrows (sent to players) |
 | `models/hud.txd` | `[vana]/vana-shops/data/` | The radar icons drawn in the mod garages' and Pay 'n' Sprays' markers (sent to players) |
@@ -55,7 +54,6 @@ Copy them from your own retail GTA:SA install (PC v1.0):
 Example on Linux:
 
 ```sh
-cp "/path/to/GTA San Andreas/data/Paths/"NODES*.DAT "vana-paths/data/"
 cp "/path/to/GTA San Andreas/models/txd/LD_BEAT.txd" "vana-activities/data/"
 cp "/path/to/GTA San Andreas/models/hud.txd" "vana-shops/data/"
 python3 tools/seed/extract_radar.py "/path/to/GTA San Andreas"   # vana-map/data: radar tiles and hud.txd
@@ -63,8 +61,12 @@ python3 tools/seed/extract_radar.py "/path/to/GTA San Andreas"   # vana-map/data
    "/path/to/server/mods/deathmatch/resources/[vana]/vana-population/data/")
 ```
 
-Keep the file names in upper case; the Linux server is case-sensitive. Check the copy with the
-`pathstest` console command (step 5). It must print `PASS`.
+Keep the file names in upper case; the Linux server is case-sensitive.
+
+The path graph (roads, footpaths, traffic lights) ships converted, as map data in
+`[data]/[paths]` ([paths-and-lights.md](paths-and-lights.md)); nothing to copy. Only to convert it
+again (`tools/convert/paths_to_maps.lua`) copy `data/Paths/NODES0.DAT` … `NODES63.DAT` into
+`[vana]/vana-paths/data/`. `pathstest` (step 6) checks the graph; it must print `PASS`.
 
 ## 4. mtaserver.conf
 
@@ -147,6 +149,7 @@ code from `vana-lib` on the server needs `loadstring` (see [libraries.md](librar
 
 ```text
 aclrequest allow vana-lib all
+aclrequest allow vana-paths all
 aclrequest allow vana-text all
 aclrequest allow vana-controls all
 aclrequest allow vana-vehicles all

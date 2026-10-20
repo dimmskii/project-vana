@@ -1,6 +1,12 @@
 <meta>
-    <info author="ProjectVana" name="Vana paths" description="Retail NODES*.DAT path graph reader" version="0.1.0" type="script" />
-    <script src="paths_format.lua" type="server" />
+    <info author="ProjectVana" name="Vana paths" description="The path graph (GTA:SA's, as map data in [data]/[paths]): nodes, links, routes, lights" version="0.2.0" type="script" edf:definition="edf/vana-paths.edf" />
+    <aclrequest>
+        <right name="function.loadstring" access="true" /> <!-- importing shared code from vana-lib -->
+    </aclrequest>
+    <script src="lib.lua" type="server" />
+    <script src="paths_data.lua" type="server" />
+    <script src="config/maps.lua" type="server" />
+    <script src="paths_format.lua" type="server" /> <!-- the converter's DAT reader (tools/convert/paths_to_maps.lua) -->
     <script src="paths.lua" type="server" />
     <script src="lights.lua" type="server" />
     <script src="route.lua" type="server" />

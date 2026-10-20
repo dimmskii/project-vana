@@ -1,6 +1,34 @@
 # Paths and traffic lights
 
-## NODES*.DAT
+## The path graph as map data
+
+The game reads the path graph from map data: one map resource per area,
+`[data]/[paths]/vana-data-paths-00` … `-63` (editable in the Map Editor with the `vana-paths`
+definitions), never started, read by the server from its files (vana-lib's `map_data`).
+`vana-paths/paths_data.lua` says what each element holds and builds each area's tables from them,
+the same tables the DAT reader gave, so routing, lights, traffic and peds are as before:
+
+| Element | Count | What |
+| --- | --- | --- |
+| `pathnode` | 68,237 | A node, id `area.index` (the game's own): position, `kind` (vehicle or ped), `width`, `flood` (which connected network), `traffic`, `spawn`, `roadblocks`, `boats`, `emergency`, `highway`, `notHighway`, `parking`, `extraFlags` (bits of unknown use, as the game had them) |
+| `pathlink` | 71,811 | A connection, once (the game lists it in both nodes): `a`, `b`. A vehicle link carries its navi node (it stands at it): `dir`, `width`, `lanesLeft`, `lanesRight`, `lightDir`, `light`, `train`; `naviNode` for the 4 whose navi node belongs to neither end. `crossingA`/`crossingB` per side; `length` only for the 1,290 that aren't the distance rounded down. A ped link stands at its middle |
+| `patharea` | 64 | The 384-byte trailer, as `index:value` pairs (a few 1s and 3s in 21 areas) |
+
+Left out: the filler block (always `0000FFFF`), each node's runtime pointer, constant cost and
+stored link start and count, and the order within each node's link list. The two navi nodes the game
+shares between two links each are one per link (31,468). A field at its default isn't written:
+14 MB for the 64 areas.
+
+- **Converting:** `lua5.1 tools/convert/paths_to_maps.lua [folder with NODES*.DAT]` (from
+  `vana-paths/data/` by default) writes the 64 resources, then reads them back the way the game
+  does and checks every node and link against the DAT files.
+- **Loading:** an area loads when first asked for, and every area in the background after start
+  (about 8 s in all); a missing area is a warning in the server log.
+- **Rebuilt, not trusted:** each node's link count and list, vehicle nodes before ped nodes (an
+  added node gets the next index), and each link's length. A link crossing areas lives in its navi
+  node's area (a ped link: its `a`'s); the areas around one are searched for it.
+
+## NODES*.DAT (the converter's source)
 
 There are 64 files, one per 750 × 750 area. The areas form an 8 × 8 grid starting at
 (-3000, -3000):

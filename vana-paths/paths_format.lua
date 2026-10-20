@@ -1,4 +1,5 @@
--- Reader for retail GTA:SA data/Paths/NODES<area>.DAT.
+-- Reader for retail GTA:SA data/Paths/NODES<area>.DAT: the converter's (tools/convert/paths_to_maps.lua);
+-- the game reads the graph from map data (paths_data.lua).
 -- Layout checked against all 64 retail files: sections 5-7 are each one entry per link,
 -- followed by a 384-byte trailer.
 PathsFormat = {}
@@ -57,6 +58,7 @@ function PathsFormat.parse(areaId, s)
         area.linkFlags[i] = byte(s, s7 + i)
     end
 
+    area.trailer = s:sub(s7 + linkCount, s7 + linkCount + 383) -- 384 bytes, mostly zero (kept by the converter)
     return area
 end
 

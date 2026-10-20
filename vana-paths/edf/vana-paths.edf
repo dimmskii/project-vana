@@ -1,0 +1,41 @@
+<def name="vana-paths">
+    <element name="pathnode" friendlyname="Path node">
+        <data name="position" type="coord3d" default="0,0,0" />
+        <data name="kind" type="string" default="ped" required="false" description="vehicle or ped (a vehicle node is a road, boat or emergency path)" />
+        <data name="width" type="number" default="2" required="false" description="path width (m, in eighths)" />
+        <data name="flood" type="integer" default="1" required="false" description="flood fill: which connected network it belongs to (routing only joins nodes of one)" />
+        <data name="traffic" type="integer" default="0" required="false" description="traffic level, 0 (full) to 3 (none)" />
+        <data name="spawn" type="integer" default="15" required="false" description="spawn probability, 0-15" />
+        <data name="roadblocks" type="selection:true,false" default="false" required="false" description="police roadblocks can be set up here" />
+        <data name="boats" type="selection:true,false" default="false" required="false" description="a boat path" />
+        <data name="emergency" type="selection:true,false" default="false" required="false" description="emergency vehicles only" />
+        <data name="highway" type="selection:true,false" default="false" required="false" description="a highway" />
+        <data name="notHighway" type="selection:true,false" default="false" required="false" description="explicitly not a highway" />
+        <data name="parking" type="selection:true,false" default="false" required="false" description="a parking spot" />
+        <data name="extraFlags" type="integer" default="0" required="false" description="flag bits with no known meaning, kept as the game had them" />
+        <marker type="corona" size="0.6" color="#40C0FF90" />
+    </element>
+    <element name="pathlink" friendlyname="Path link">
+        <data name="position" type="coord3d" default="0,0,0" />
+        <data name="a" type="string" default="" required="false" description="one end: a pathnode id (area.index); a vehicle link's navi node is a's unless naviNode says" />
+        <data name="b" type="string" default="" required="false" description="the other end" />
+        <data name="naviNode" type="string" default="" required="false" description="the node this link's navi node belongs to, when it isn't a" />
+        <data name="dir" type="string" default="" required="false" description="vehicle link: the lane direction at its navi node (x,y, hundredths)" />
+        <data name="width" type="number" default="0" required="false" description="vehicle link: the lane width at its navi node (m, in eighths)" />
+        <data name="lanesLeft" type="integer" default="1" required="false" description="vehicle link: lanes one way" />
+        <data name="lanesRight" type="integer" default="1" required="false" description="vehicle link: lanes the other way" />
+        <data name="lightDir" type="selection:true,false" default="false" required="false" description="vehicle link: the traffic light governs traffic heading to the navi node's node" />
+        <data name="light" type="integer" default="0" required="false" description="vehicle link: traffic light, 0 none, 1 north-south, 2 west-east" />
+        <data name="train" type="selection:true,false" default="false" required="false" description="vehicle link: a train crossing" />
+        <data name="extraFlags" type="integer" default="0" required="false" description="vehicle link: navi flag bits with no known meaning" />
+        <data name="crossingA" type="integer" default="0" required="false" description="flags on a's side: 1 a road crossing, 2 a ped traffic light (3 both)" />
+        <data name="crossingB" type="integer" default="0" required="false" description="flags on b's side" />
+        <data name="length" type="integer" default="" required="false" description="its length when it isn't the distance rounded down" />
+        <marker type="corona" size="0.4" color="#FFD04090" />
+    </element>
+    <element name="patharea" friendlyname="Path area">
+        <data name="position" type="coord3d" default="0,0,0" />
+        <data name="trailer" type="string" default="" required="false" description="the 384 bytes after its links: index:value pairs of the non-zero ones" />
+        <marker type="corona" size="2" color="#FFFFFF40" />
+    </element>
+</def>

@@ -42,7 +42,7 @@ Start here:
 | `vana-controls` | `/use` and `/interact`, every resource's actions as commands, the status line (the game's help box) |
 | `vana-core` | Players' script errors in the server log; debug switches (`/vanadebug`) and the stuck-ped detector |
 | `vana-player` | Player persistence, spawning, wasted/busted restarts |
-| `vana-paths` | Reads the retail `NODES*.DAT` path graph; nearest-node, link and navi queries; traffic light stop rule |
+| `vana-paths` | The path graph (GTA:SA's, converted to map data in `[data]/[paths]`); nearest-node, link and navi queries; traffic light stop rule |
 | `vana-lights` | Runs the traffic lights on the vanilla single-player cycle |
 | `vana-population` | Vanilla population rules: zone/time densities, ped and car groups, gangs, cops, weapons |
 | `vana-parked` | Parked cars from vanilla car generators (map IPLs and the script's generators) |

@@ -1,0 +1,460 @@
+<map edf:definitions="vana-paths">
+    <pathnode id="60.0" posX="555.625" posY="2310" posZ="32.625" kind="vehicle" width="0" notHighway="true" />
+    <pathnode id="60.1" posX="565.625" posY="2255" posZ="33.5" kind="vehicle" width="0" notHighway="true" />
+    <pathnode id="60.2" posX="561.625" posY="2270.25" posZ="33.25" kind="vehicle" width="0" notHighway="true" />
+    <pathnode id="60.3" posX="557.75" posY="2299.375" posZ="33" kind="vehicle" width="0" notHighway="true" />
+    <pathnode id="60.4" posX="553" posY="2318.25" posZ="32.25" kind="vehicle" width="0" notHighway="true" />
+    <pathnode id="60.5" posX="545.125" posY="2329.75" posZ="31.125" kind="vehicle" width="0" notHighway="true" />
+    <pathnode id="60.6" posX="549.5" posY="2324.5" posZ="31.625" kind="vehicle" width="0" notHighway="true" />
+    <pathnode id="60.7" posX="304" posY="2288.25" posZ="24.125" kind="vehicle" width="0" notHighway="true" />
+    <pathnode id="60.8" posX="375" posY="2342.875" posZ="24.25" kind="vehicle" width="0" notHighway="true" />
+    <pathnode id="60.9" posX="365.125" posY="2332.25" posZ="24.125" kind="vehicle" width="0" notHighway="true" />
+    <pathnode id="60.10" posX="318" posY="2293.5" posZ="24.125" kind="vehicle" width="0" notHighway="true" />
+    <pathnode id="60.11" posX="331" posY="2301.25" posZ="24.125" kind="vehicle" width="0" notHighway="true" />
+    <pathnode id="60.12" posX="343.125" posY="2310.625" posZ="24.125" kind="vehicle" width="0" notHighway="true" />
+    <pathnode id="60.13" posX="354.5" posY="2321.25" posZ="24.125" kind="vehicle" width="0" notHighway="true" />
+    <pathnode id="60.14" posX="83" posY="2302.5" posZ="19.5" kind="vehicle" width="0" notHighway="true" />
+    <pathnode id="60.15" posX="251.75" posY="2284.125" posZ="23.5" kind="vehicle" width="0" notHighway="true" />
+    <pathnode id="60.16" posX="208.375" posY="2282.875" posZ="22.25" kind="vehicle" width="0" notHighway="true" />
+    <pathnode id="60.17" posX="165.125" posY="2283.5" posZ="20.75" kind="vehicle" width="0" notHighway="true" />
+    <pathnode id="60.18" posX="128.375" posY="2287.25" posZ="19.5" kind="vehicle" width="0" notHighway="true" />
+    <pathnode id="60.19" posX="114.25" posY="2291" posZ="19.125" kind="vehicle" width="0" notHighway="true" />
+    <pathnode id="60.20" posX="104.375" posY="2295.875" posZ="19" kind="vehicle" width="0" notHighway="true" />
+    <pathnode id="60.21" posX="95.125" posY="2300.375" posZ="19.125" kind="vehicle" width="0" notHighway="true" />
+    <pathnode id="60.22" posX="35.875" posY="2300.75" posZ="21.625" kind="vehicle" width="0" notHighway="true" />
+    <pathnode id="60.23" posX="1.75" posY="2298.5" posZ="23.25" kind="vehicle" width="0" notHighway="true" />
+    <pathnode id="60.24" posX="749.5" posY="2327.25" posZ="10.75" kind="vehicle" width="0" highway="true" />
+    <pathnode id="60.25" posX="741.875" posY="2375.375" posZ="14" kind="vehicle" width="0" highway="true" />
+    <pathnode id="60.26" posX="743.125" posY="2399.25" posZ="16" kind="vehicle" width="0" highway="true" />
+    <pathnode id="60.27" posX="746.375" posY="2415" posZ="17.75" kind="vehicle" width="0" highway="true" />
+    <pathnode id="60.28" posX="668" posY="2479.75" posZ="30.375" kind="vehicle" width="0" notHighway="true" />
+    <pathnode id="60.29" posX="671.625" posY="2500.125" posZ="30.25" kind="vehicle" width="0" notHighway="true" />
+    <pathnode id="60.30" posX="677.5" posY="2519.625" posZ="29.75" kind="vehicle" width="0" notHighway="true" />
+    <pathnode id="60.31" posX="685.5" posY="2538" posZ="29" kind="vehicle" width="0" notHighway="true" />
+    <pathnode id="60.32" posX="695.375" posY="2555.25" posZ="27.5" kind="vehicle" width="0" notHighway="true" />
+    <pathnode id="60.33" posX="602.625" posY="2657.5" posZ="36.25" kind="vehicle" width="0" highway="true" />
+    <pathnode id="60.34" posX="737.25" posY="2658.625" posZ="17.25" kind="vehicle" width="0" highway="true" />
+    <pathnode id="60.35" posX="705" posY="2659.875" posZ="20.5" kind="vehicle" width="0" highway="true" />
+    <pathnode id="60.36" posX="684.75" posY="2660" posZ="23.125" kind="vehicle" width="0" highway="true" />
+    <pathnode id="60.37" posX="660.5" posY="2659.5" posZ="26.75" kind="vehicle" width="0" highway="true" />
+    <pathnode id="60.38" posX="631.5" posY="2658.5" posZ="31.5" kind="vehicle" width="0" highway="true" />
+    <pathnode id="60.39" posX="426.75" posY="2682" posZ="59" kind="vehicle" width="0" notHighway="true" />
+    <pathnode id="60.40" posX="556.25" posY="2656.75" posZ="43.5" kind="vehicle" width="0" notHighway="true" />
+    <pathnode id="60.41" posX="514.75" posY="2657.375" posZ="48.75" kind="vehicle" width="0" notHighway="true" />
+    <pathnode id="60.42" posX="470.875" posY="2659.25" posZ="52.75" kind="vehicle" width="0" notHighway="true" />
+    <pathnode id="60.43" posX="456.25" posY="2661" posZ="54.5" kind="vehicle" width="0" notHighway="true" />
+    <pathnode id="60.44" posX="446.625" posY="2663" posZ="56" kind="vehicle" width="0" notHighway="true" />
+    <pathnode id="60.45" posX="440.75" posY="2665.25" posZ="57.125" kind="vehicle" width="0" notHighway="true" />
+    <pathnode id="60.46" posX="434.625" posY="2670" posZ="58.5" kind="vehicle" width="0" notHighway="true" />
+    <pathnode id="60.47" posX="431.125" posY="2674.625" posZ="58.75" kind="vehicle" width="0" notHighway="true" />
+    <pathnode id="60.48" posX="559.125" posY="2721.875" posZ="60.75" kind="vehicle" width="0" notHighway="true" />
+    <pathnode id="60.49" posX="746.375" posY="2706" posZ="49.25" kind="vehicle" width="0" notHighway="true" />
+    <pathnode id="60.50" posX="712" posY="2707.5" posZ="53.5" kind="vehicle" width="0" notHighway="true" />
+    <pathnode id="60.51" posX="673.625" posY="2709" posZ="58.5" kind="vehicle" width="0" notHighway="true" />
+    <pathnode id="60.52" posX="652.875" posY="2710.125" posZ="59.75" kind="vehicle" width="0" notHighway="true" />
+    <pathnode id="60.53" posX="633.75" posY="2711.75" posZ="59.25" kind="vehicle" width="0" notHighway="true" />
+    <pathnode id="60.54" posX="613.375" posY="2714.125" posZ="58.25" kind="vehicle" width="0" notHighway="true" />
+    <pathnode id="60.55" posX="589.5" posY="2717.5" posZ="58.25" kind="vehicle" width="0" notHighway="true" />
+    <pathnode id="60.56" posX="436.125" posY="2702.5" posZ="60.75" kind="vehicle" width="0" notHighway="true" />
+    <pathnode id="60.57" posX="529.5" posY="2725" posZ="65" kind="vehicle" width="0" notHighway="true" />
+    <pathnode id="60.58" posX="517.25" posY="2723.75" posZ="65.625" kind="vehicle" width="0" notHighway="true" />
+    <pathnode id="60.59" posX="504.25" posY="2721.25" posZ="65.5" kind="vehicle" width="0" notHighway="true" />
+    <pathnode id="60.60" posX="476.875" posY="2713.75" posZ="64" kind="vehicle" width="0" notHighway="true" />
+    <pathnode id="60.61" posX="449.25" posY="2705.625" posZ="61.75" kind="vehicle" width="0" notHighway="true" />
+    <pathnode id="60.62" posX="171.875" posY="2751.375" posZ="55.625" kind="vehicle" width="0" notHighway="true" />
+    <pathnode id="60.63" posX="401.75" posY="2701" posZ="59.625" kind="vehicle" width="0" notHighway="true" />
+    <pathnode id="60.64" posX="386.125" posY="2704.75" posZ="59.625" kind="vehicle" width="0" notHighway="true" />
+    <pathnode id="60.65" posX="370.125" posY="2709" posZ="59.5" kind="vehicle" width="0" notHighway="true" />
+    <pathnode id="60.66" posX="353.875" posY="2713.25" posZ="59.5" kind="vehicle" width="0" notHighway="true" />
+    <pathnode id="60.67" posX="321.125" posY="2722.5" posZ="58.75" kind="vehicle" width="0" notHighway="true" />
+    <pathnode id="60.68" posX="288.5" posY="2732" posZ="58.75" kind="vehicle" width="0" notHighway="true" />
+    <pathnode id="60.69" posX="256.625" posY="2741.375" posZ="58.75" kind="vehicle" width="0" notHighway="true" />
+    <pathnode id="60.70" posX="226.25" posY="2750.375" posZ="58.75" kind="vehicle" width="0" notHighway="true" />
+    <pathnode id="60.71" posX="196.125" posY="2753.75" posZ="57.375" kind="vehicle" width="0" notHighway="true" />
+    <pathnode id="60.72" posX="418.25" posY="2700.125" posZ="59.75" kind="vehicle" width="0" notHighway="true" />
+    <pathnode id="60.73" posX="135.625" posY="2733.375" posZ="52.75" kind="vehicle" width="0" notHighway="true" />
+    <pathnode id="60.74" posX="121" posY="2719.75" posZ="51.75" kind="vehicle" width="0" notHighway="true" />
+    <pathnode id="60.75" posX="91.375" posY="2688.625" posZ="51.25" kind="vehicle" width="0" notHighway="true" />
+    <pathnode id="60.76" posX="73.75" posY="2673.25" posZ="52.25" kind="vehicle" width="0" notHighway="true" />
+    <pathnode id="60.77" posX="52.5" posY="2659.25" posZ="54" kind="vehicle" width="0" notHighway="true" />
+    <pathnode id="60.78" posX="26.125" posY="2647.625" posZ="57" kind="vehicle" width="0" notHighway="true" />
+    <pathnode id="60.79" posX="670.875" posY="2573.125" posZ="27.875" kind="vehicle" width="0" notHighway="true" />
+    <pathnode id="60.80" posX="748.625" posY="2632.5" posZ="17.75" kind="vehicle" width="0" notHighway="true" />
+    <pathnode id="60.81" posX="736" posY="2625.25" posZ="19.25" kind="vehicle" width="0" notHighway="true" />
+    <pathnode id="60.82" posX="724.5" posY="2618.5" posZ="20.75" kind="vehicle" width="0" notHighway="true" />
+    <pathnode id="60.83" posX="712.75" posY="2609.75" posZ="22.5" kind="vehicle" width="0" notHighway="true" />
+    <pathnode id="60.84" posX="703.5" posY="2602.875" posZ="23.75" kind="vehicle" width="0" notHighway="true" />
+    <pathnode id="60.85" posX="685.875" posY="2587.875" posZ="26.125" kind="vehicle" width="0" notHighway="true" />
+    <pathnode id="60.86" posX="725.25" posY="2594.5" posZ="22.25" kind="vehicle" width="0" highway="true" />
+    <pathnode id="60.87" posX="735.75" posY="2602.125" posZ="20.75" kind="vehicle" width="0" highway="true" />
+    <pathnode id="60.88" posX="708.375" posY="2580.625" posZ="24.75" kind="vehicle" width="0" highway="true" />
+    <pathnode id="60.89" posX="643.5" posY="2475.125" posZ="30" kind="vehicle" width="0" highway="true" />
+    <pathnode id="60.90" posX="692.5" posY="2566.375" posZ="26.875" kind="vehicle" width="0" highway="true" />
+    <pathnode id="60.91" posX="685.5" posY="2559.25" posZ="27.75" kind="vehicle" width="0" highway="true" />
+    <pathnode id="60.92" posX="674.25" posY="2546" posZ="29" kind="vehicle" width="0" highway="true" />
+    <pathnode id="60.93" posX="665.25" posY="2533.375" posZ="29.75" kind="vehicle" width="0" highway="true" />
+    <pathnode id="60.94" posX="658.125" posY="2521.75" posZ="30.125" kind="vehicle" width="0" highway="true" />
+    <pathnode id="60.95" posX="652.75" posY="2509.625" posZ="30.375" kind="vehicle" width="0" highway="true" />
+    <pathnode id="60.96" posX="648.875" posY="2498.5" posZ="30.25" kind="vehicle" width="0" highway="true" />
+    <pathnode id="60.97" posX="645.875" posY="2487.125" posZ="30.125" kind="vehicle" width="0" highway="true" />
+    <pathnode id="60.98" posX="666.375" posY="2296.875" posZ="25.375" kind="vehicle" width="0" highway="true" />
+    <pathnode id="60.99" posX="641.5" posY="2438.25" posZ="29.375" kind="vehicle" width="0" highway="true" />
+    <pathnode id="60.100" posX="643.375" posY="2423.75" posZ="28.875" kind="vehicle" width="0" highway="true" />
+    <pathnode id="60.101" posX="646.5" posY="2407.625" posZ="28.25" kind="vehicle" width="0" highway="true" />
+    <pathnode id="60.102" posX="650.125" posY="2389.5" posZ="27.5" kind="vehicle" width="0" highway="true" />
+    <pathnode id="60.103" posX="654.375" posY="2369.5" posZ="26.875" kind="vehicle" width="0" highway="true" />
+    <pathnode id="60.104" posX="658.375" posY="2347.5" posZ="26.25" kind="vehicle" width="0" highway="true" />
+    <pathnode id="60.105" posX="662.625" posY="2324.125" posZ="25.75" kind="vehicle" width="0" highway="true" />
+    <pathnode id="60.106" posX="621.375" posY="2436.75" posZ="29.5" kind="vehicle" width="0" notHighway="true" />
+    <pathnode id="60.107" posX="654.125" posY="2552.5" posZ="29.5" kind="vehicle" width="0" notHighway="true" />
+    <pathnode id="60.108" posX="648.75" posY="2545" posZ="29.875" kind="vehicle" width="0" notHighway="true" />
+    <pathnode id="60.109" posX="640.75" posY="2531.375" posZ="30.25" kind="vehicle" width="0" notHighway="true" />
+    <pathnode id="60.110" posX="634.625" posY="2518" posZ="30.375" kind="vehicle" width="0" notHighway="true" />
+    <pathnode id="60.111" posX="630.125" posY="2504.875" posZ="30.375" kind="vehicle" width="0" notHighway="true" />
+    <pathnode id="60.112" posX="626.375" posY="2491.875" posZ="30.25" kind="vehicle" width="0" notHighway="true" />
+    <pathnode id="60.113" posX="624" posY="2479.25" posZ="30.125" kind="vehicle" width="0" notHighway="true" />
+    <pathnode id="60.114" posX="621.75" posY="2466.25" posZ="30" kind="vehicle" width="0" notHighway="true" />
+    <pathnode id="60.115" posX="620.75" posY="2452.25" posZ="29.875" kind="vehicle" width="0" notHighway="true" />
+    <pathnode id="60.116" posX="646.625" posY="2296.375" posZ="25.5" kind="vehicle" width="0" notHighway="true" />
+    <pathnode id="60.117" posX="626.625" posY="2404.375" posZ="28.375" kind="vehicle" width="0" notHighway="true" />
+    <pathnode id="60.118" posX="630.125" posY="2386.125" posZ="27.625" kind="vehicle" width="0" notHighway="true" />
+    <pathnode id="60.119" posX="634.625" posY="2365.75" posZ="27" kind="vehicle" width="0" notHighway="true" />
+    <pathnode id="60.120" posX="639.125" posY="2344.5" posZ="26.375" kind="vehicle" width="0" notHighway="true" />
+    <pathnode id="60.121" posX="642.625" posY="2321.375" posZ="25.875" kind="vehicle" width="0" notHighway="true" />
+    <pathnode id="60.122" posX="649.25" posY="2268" posZ="24.875" kind="vehicle" width="0" notHighway="true" />
+    <pathnode id="60.123" posX="650.125" posY="2254" posZ="24.5" kind="vehicle" width="0" notHighway="true" />
+    <pathnode id="60.124" posX="669" posY="2271" posZ="24.875" kind="vehicle" width="0" highway="true" />
+    <pathnode id="60.125" posX="670.125" posY="2251.375" posZ="24.375" kind="vehicle" width="0" highway="true" />
+    <pathnode id="60.126" posX="669.5" posY="2263.625" posZ="24.625" kind="vehicle" width="0" highway="true" />
+    <pathnode id="60.127" posX="641.5" posY="2463.125" posZ="30" kind="vehicle" width="0" highway="true" />
+    <pathnode id="60.128" posX="640.75" posY="2451.375" posZ="29.75" kind="vehicle" width="0" highway="true" />
+    <pathnode id="60.129" posX="641.25" posY="2458.75" posZ="29.875" kind="vehicle" width="0" highway="true" />
+    <pathnode id="60.130" posX="728.5" posY="2347.875" posZ="28.5" kind="vehicle" width="0" notHighway="true" />
+    <pathnode id="60.131" posX="740.75" posY="2344" posZ="28" kind="vehicle" width="0" notHighway="true" />
+    <pathnode id="60.132" posX="666.875" posY="2458.75" posZ="30.625" kind="vehicle" width="0" notHighway="true" />
+    <pathnode id="60.133" posX="717" posY="2353.5" posZ="29" kind="vehicle" width="0" notHighway="true" />
+    <pathnode id="60.134" posX="706.125" posY="2361.5" posZ="29.5" kind="vehicle" width="0" notHighway="true" />
+    <pathnode id="60.135" posX="695.75" posY="2371.75" posZ="29.875" kind="vehicle" width="0" notHighway="true" />
+    <pathnode id="60.136" posX="686.875" posY="2384.25" posZ="30.25" kind="vehicle" width="0" notHighway="true" />
+    <pathnode id="60.137" posX="679.125" posY="2399.25" posZ="30.625" kind="vehicle" width="0" notHighway="true" />
+    <pathnode id="60.138" posX="673" posY="2416.875" posZ="30.75" kind="vehicle" width="0" notHighway="true" />
+    <pathnode id="60.139" posX="668.75" posY="2436.875" posZ="30.875" kind="vehicle" width="0" notHighway="true" />
+    <pathnode id="60.140" posX="667.75" posY="2449.75" posZ="30.75" kind="vehicle" width="0" notHighway="true" />
+    <pathnode id="60.141" posX="70" posY="2560.25" posZ="15.25" kind="vehicle" width="0" traffic="2" emergency="true" notHighway="true" />
+    <pathnode id="60.142" posX="12.5" posY="2560.625" posZ="15.25" kind="vehicle" width="0" traffic="2" emergency="true" notHighway="true" />
+    <pathnode id="60.143" posX="30.375" posY="2560.375" posZ="15.25" kind="vehicle" width="0" traffic="2" emergency="true" notHighway="true" />
+    <pathnode id="60.144" posX="47" posY="2560.375" posZ="15.25" kind="vehicle" width="0" traffic="2" emergency="true" notHighway="true" />
+    <pathnode id="60.145" posX="249.375" posY="2560" posZ="15.25" kind="vehicle" width="0" traffic="2" emergency="true" notHighway="true" />
+    <pathnode id="60.146" posX="88.5" posY="2560" posZ="15.25" kind="vehicle" width="0" traffic="2" emergency="true" notHighway="true" />
+    <pathnode id="60.147" posX="102.125" posY="2560.125" posZ="15.25" kind="vehicle" width="0" traffic="2" emergency="true" notHighway="true" />
+    <pathnode id="60.148" posX="115.125" posY="2560.25" posZ="15.25" kind="vehicle" width="0" traffic="2" emergency="true" notHighway="true" />
+    <pathnode id="60.149" posX="132.375" posY="2560.25" posZ="15.25" kind="vehicle" width="0" traffic="2" emergency="true" notHighway="true" />
+    <pathnode id="60.150" posX="155.625" posY="2560" posZ="15.25" kind="vehicle" width="0" traffic="2" emergency="true" notHighway="true" />
+    <pathnode id="60.151" posX="171.875" posY="2560.625" posZ="15.25" kind="vehicle" width="0" traffic="2" emergency="true" notHighway="true" />
+    <pathnode id="60.152" posX="192.375" posY="2560.625" posZ="15.25" kind="vehicle" width="0" traffic="2" emergency="true" notHighway="true" />
+    <pathnode id="60.153" posX="213.875" posY="2561" posZ="15.25" kind="vehicle" width="0" traffic="2" emergency="true" notHighway="true" />
+    <pathnode id="60.154" posX="231" posY="2560.5" posZ="15.25" kind="vehicle" width="0" traffic="2" emergency="true" notHighway="true" />
+    <pathnode id="60.155" posX="384.625" posY="2566.5" posZ="15.25" kind="vehicle" width="0" traffic="2" emergency="true" notHighway="true" />
+    <pathnode id="60.156" posX="278.375" posY="2560.375" posZ="15.25" kind="vehicle" width="0" traffic="2" emergency="true" notHighway="true" />
+    <pathnode id="60.157" posX="289.125" posY="2560.5" posZ="15.25" kind="vehicle" width="0" traffic="2" emergency="true" notHighway="true" />
+    <pathnode id="60.158" posX="304.75" posY="2560.5" posZ="15.25" kind="vehicle" width="0" traffic="2" emergency="true" notHighway="true" />
+    <pathnode id="60.159" posX="318.625" posY="2560.5" posZ="15.25" kind="vehicle" width="0" traffic="2" emergency="true" notHighway="true" />
+    <pathnode id="60.160" posX="332.125" posY="2560.625" posZ="15.25" kind="vehicle" width="0" traffic="2" emergency="true" notHighway="true" />
+    <pathnode id="60.161" posX="347" posY="2560.5" posZ="15.25" kind="vehicle" width="0" traffic="2" emergency="true" notHighway="true" />
+    <pathnode id="60.162" posX="354.375" posY="2560.375" posZ="15.25" kind="vehicle" width="0" traffic="2" emergency="true" notHighway="true" />
+    <pathnode id="60.163" posX="363.75" posY="2561.25" posZ="15.25" kind="vehicle" width="0" traffic="2" emergency="true" notHighway="true" />
+    <pathnode id="60.164" posX="373.75" posY="2563.875" posZ="15.25" kind="vehicle" width="0" traffic="2" emergency="true" notHighway="true" />
+    <pathnode id="60.165" posX="391.75" posY="2568.875" posZ="15.25" kind="vehicle" width="0" traffic="2" emergency="true" notHighway="true" />
+    <pathnode id="60.166" posX="387.875" posY="2591" posZ="15.375" kind="vehicle" width="0" traffic="3" emergency="true" notHighway="true" />
+    <pathnode id="60.167" posX="389.25" posY="2578.375" posZ="15.375" kind="vehicle" width="0" traffic="3" emergency="true" notHighway="true" />
+    <pathnode id="60.168" posX="388.75" posY="2586.125" posZ="15.375" kind="vehicle" width="0" traffic="3" emergency="true" notHighway="true" />
+    <pathnode id="60.169" posX="394.25" posY="2560.75" posZ="15.5" kind="vehicle" width="0" traffic="3" emergency="true" notHighway="true" />
+    <pathnode id="60.170" posX="395.5" posY="2550.625" posZ="15.375" kind="vehicle" width="0" traffic="3" emergency="true" notHighway="true" />
+    <pathnode id="60.171" posX="395.125" posY="2555.75" posZ="15.5" kind="vehicle" width="0" traffic="3" emergency="true" notHighway="true" />
+    <pathnode id="60.172" posX="456.125" posY="2555.25" posZ="15.625" kind="vehicle" width="0" traffic="2" emergency="true" notHighway="true" />
+    <pathnode id="60.173" posX="399" posY="2571.375" posZ="15.25" kind="vehicle" width="0" traffic="2" emergency="true" notHighway="true" />
+    <pathnode id="60.174" posX="402.625" posY="2572.875" posZ="15.25" kind="vehicle" width="0" traffic="2" emergency="true" notHighway="true" />
+    <pathnode id="60.175" posX="408.875" posY="2574.375" posZ="15.25" kind="vehicle" width="0" traffic="2" emergency="true" notHighway="true" />
+    <pathnode id="60.176" posX="413.625" posY="2574.375" posZ="15.25" kind="vehicle" width="0" traffic="2" emergency="true" notHighway="true" />
+    <pathnode id="60.177" posX="419.25" posY="2572.625" posZ="15.25" kind="vehicle" width="0" traffic="2" emergency="true" notHighway="true" />
+    <pathnode id="60.178" posX="425.625" posY="2569.75" posZ="15.25" kind="vehicle" width="0" traffic="2" emergency="true" notHighway="true" />
+    <pathnode id="60.179" posX="432.5" posY="2566.75" posZ="15.25" kind="vehicle" width="0" traffic="2" emergency="true" notHighway="true" />
+    <pathnode id="60.180" posX="440" posY="2563" posZ="15.25" kind="vehicle" width="0" traffic="2" emergency="true" notHighway="true" />
+    <pathnode id="60.181" posX="448.875" posY="2559" posZ="15.375" kind="vehicle" width="0" traffic="2" emergency="true" notHighway="true" />
+    <pathnode id="60.182" posX="472.125" posY="2470.625" posZ="23.625" kind="vehicle" width="0" traffic="2" emergency="true" notHighway="true" />
+    <pathnode id="60.183" posX="463" posY="2547.75" posZ="16.75" kind="vehicle" width="0" traffic="2" emergency="true" notHighway="true" />
+    <pathnode id="60.184" posX="464.625" posY="2543.875" posZ="17.5" kind="vehicle" width="0" traffic="2" emergency="true" notHighway="true" />
+    <pathnode id="60.185" posX="466.875" posY="2537.5" posZ="18.625" kind="vehicle" width="0" traffic="2" emergency="true" notHighway="true" />
+    <pathnode id="60.186" posX="468.75" posY="2529.25" posZ="19.625" kind="vehicle" width="0" traffic="2" emergency="true" notHighway="true" />
+    <pathnode id="60.187" posX="469.875" posY="2519.25" posZ="20.5" kind="vehicle" width="0" traffic="2" emergency="true" notHighway="true" />
+    <pathnode id="60.188" posX="471.125" posY="2508.375" posZ="21.25" kind="vehicle" width="0" traffic="2" emergency="true" notHighway="true" />
+    <pathnode id="60.189" posX="471.875" posY="2497.875" posZ="21.75" kind="vehicle" width="0" traffic="2" emergency="true" notHighway="true" />
+    <pathnode id="60.190" posX="471.5" posY="2488.125" posZ="22.375" kind="vehicle" width="0" traffic="2" emergency="true" notHighway="true" />
+    <pathnode id="60.191" posX="471.875" posY="2479.25" posZ="22.875" kind="vehicle" width="0" traffic="2" emergency="true" notHighway="true" />
+    <pathnode id="60.192" posX="478.75" posY="2373.625" posZ="28.125" kind="vehicle" width="0" notHighway="true" />
+    <pathnode id="60.193" posX="469.375" posY="2376.75" posZ="27.75" kind="vehicle" width="0" notHighway="true" />
+    <pathnode id="60.194" posX="387.25" posY="2355.375" posZ="24.25" kind="vehicle" width="0" notHighway="true" />
+    <pathnode id="60.195" posX="393.875" posY="2361.5" posZ="24.25" kind="vehicle" width="0" notHighway="true" />
+    <pathnode id="60.196" posX="402.875" posY="2368.125" posZ="24.25" kind="vehicle" width="0" notHighway="true" />
+    <pathnode id="60.197" posX="412.125" posY="2373" posZ="24.375" kind="vehicle" width="0" notHighway="true" />
+    <pathnode id="60.198" posX="421.75" posY="2376.5" posZ="24.75" kind="vehicle" width="0" notHighway="true" />
+    <pathnode id="60.199" posX="431.75" posY="2379" posZ="25.25" kind="vehicle" width="0" notHighway="true" />
+    <pathnode id="60.200" posX="442.125" posY="2380.125" posZ="25.875" kind="vehicle" width="0" notHighway="true" />
+    <pathnode id="60.201" posX="452.625" posY="2380" posZ="26.625" kind="vehicle" width="0" notHighway="true" />
+    <pathnode id="60.202" posX="463.375" posY="2378.5" posZ="27.375" kind="vehicle" width="0" notHighway="true" />
+    <pathnode id="60.203" posX="485.125" posY="2371" posZ="28.5" kind="vehicle" width="0" notHighway="true" />
+    <pathnode id="60.204" posX="536.125" posY="2336.75" posZ="30.125" kind="vehicle" width="0" notHighway="true" />
+    <pathnode id="60.205" posX="533.25" posY="2338.75" posZ="29.875" kind="vehicle" width="0" notHighway="true" />
+    <pathnode id="60.206" posX="525.75" posY="2343.625" posZ="29.5" kind="vehicle" width="0" notHighway="true" />
+    <pathnode id="60.207" posX="519.75" posY="2347.75" posZ="29.25" kind="vehicle" width="0" notHighway="true" />
+    <pathnode id="60.208" posX="517" posY="2349.5" posZ="29.125" kind="vehicle" width="0" notHighway="true" />
+    <pathnode id="60.209" posX="514.25" posY="2351.625" posZ="29.125" kind="vehicle" width="0" notHighway="true" />
+    <pathnode id="60.210" posX="506.875" posY="2357.25" posZ="29" kind="vehicle" width="0" notHighway="true" />
+    <pathnode id="60.211" posX="496.125" posY="2364.875" posZ="28.875" kind="vehicle" width="0" notHighway="true" />
+    <pathnode id="60.212" posX="489.25" posY="2368.75" posZ="28.625" kind="vehicle" width="0" notHighway="true" />
+    <pathnode id="60.213" posX="485.5" posY="2433.375" posZ="27.75" kind="vehicle" width="0" traffic="2" emergency="true" notHighway="true" />
+    <pathnode id="60.214" posX="483" posY="2385.5" posZ="28" kind="vehicle" width="0" traffic="2" emergency="true" notHighway="true" />
+    <pathnode id="60.215" posX="485" posY="2390.75" posZ="27.875" kind="vehicle" width="0" traffic="2" emergency="true" notHighway="true" />
+    <pathnode id="60.216" posX="487.125" posY="2395.25" posZ="27.875" kind="vehicle" width="0" traffic="2" emergency="true" notHighway="true" />
+    <pathnode id="60.217" posX="488.75" posY="2401" posZ="27.875" kind="vehicle" width="0" traffic="2" emergency="true" notHighway="true" />
+    <pathnode id="60.218" posX="490.625" posY="2406.5" posZ="27.875" kind="vehicle" width="0" traffic="2" emergency="true" notHighway="true" />
+    <pathnode id="60.219" posX="491.25" posY="2412" posZ="27.875" kind="vehicle" width="0" traffic="2" emergency="true" notHighway="true" />
+    <pathnode id="60.220" posX="491.625" posY="2417.5" posZ="27.875" kind="vehicle" width="0" traffic="2" emergency="true" notHighway="true" />
+    <pathnode id="60.221" posX="490.625" posY="2422.875" posZ="27.875" kind="vehicle" width="0" traffic="2" emergency="true" notHighway="true" />
+    <pathnode id="60.222" posX="488.375" posY="2428.375" posZ="27.875" kind="vehicle" width="0" traffic="2" emergency="true" notHighway="true" />
+    <pathnode id="60.223" posX="472.875" posY="2462.625" posZ="24.375" kind="vehicle" width="0" traffic="2" emergency="true" notHighway="true" />
+    <pathnode id="60.224" posX="481" posY="2441.25" posZ="27" kind="vehicle" width="0" traffic="2" emergency="true" notHighway="true" />
+    <pathnode id="60.225" posX="478.75" posY="2445.25" posZ="26.625" kind="vehicle" width="0" traffic="2" emergency="true" notHighway="true" />
+    <pathnode id="60.226" posX="476.375" posY="2450.125" posZ="26" kind="vehicle" width="0" traffic="2" emergency="true" notHighway="true" />
+    <pathnode id="60.227" posX="474.375" posY="2456.125" posZ="25.25" kind="vehicle" width="0" traffic="2" emergency="true" notHighway="true" />
+    <pathnode id="60.228" posX="473.125" posY="2460.625" posZ="24.625" kind="vehicle" width="0" traffic="2" emergency="true" notHighway="true" />
+    <pathlink posX="9.75" posY="2643.5" posZ="59.125" a="59.313" b="60.78" dir="-0.97,-0.24" />
+    <pathlink posX="1.75" posY="2560.375" posZ="15.25" a="59.369" b="60.142" dir="-0.99,-0.01" />
+    <pathlink posX="556.625" posY="2304.625" posZ="32.8125" a="60.0" b="60.3" dir="-0.19,0.98" />
+    <pathlink posX="554.25" posY="2314" posZ="32.4375" a="60.0" b="60.4" dir="0.3,-0.95" />
+    <pathlink posX="563.5" posY="2262.5" posZ="33.375" a="60.1" b="60.2" dir="0.25,-0.96" />
+    <pathlink posX="559.625" posY="2284.75" posZ="33.125" a="60.2" b="60.3" dir="0.13,-0.99" />
+    <pathlink posX="551.125" posY="2321.25" posZ="31.9375" a="60.4" b="60.6" dir="0.48,-0.87" />
+    <pathlink posX="539.625" posY="2334.375" posZ="30.625" a="60.5" b="60.204" dir="0.78,-0.61" />
+    <pathlink posX="547.25" posY="2327" posZ="31.375" a="60.5" b="60.6" dir="-0.64,0.76" />
+    <pathlink posX="288.75" posY="2285.75" posZ="23.8125" a="60.7" b="60.15" dir="0.99,0.07" />
+    <pathlink posX="310.875" posY="2290.75" posZ="24.125" a="60.7" b="60.10" dir="-0.93,-0.35" />
+    <pathlink posX="384.75" posY="2353" posZ="24.25" a="60.8" b="60.194" dir="-0.69,-0.71" />
+    <pathlink posX="370" posY="2337.5" posZ="24.1875" a="60.8" b="60.9" dir="0.68,0.73" />
+    <pathlink posX="359.75" posY="2326.625" posZ="24.125" a="60.9" b="60.13" dir="0.69,0.71" />
+    <pathlink posX="324.375" posY="2297.25" posZ="24.125" a="60.10" b="60.11" dir="-0.85,-0.51" />
+    <pathlink posX="337" posY="2305.875" posZ="24.125" a="60.11" b="60.12" dir="-0.79,-0.61" />
+    <pathlink posX="348.75" posY="2315.875" posZ="24.125" a="60.12" b="60.13" dir="-0.73,-0.68" />
+    <pathlink posX="68.625" posY="2303" posZ="20.5625" a="60.14" b="60.22" dir="0.99,0.03" />
+    <pathlink posX="89" posY="2301.375" posZ="19.3125" a="60.14" b="60.21" dir="-0.98,0.17" />
+    <pathlink posX="230" posY="2283.375" posZ="22.875" a="60.15" b="60.16" dir="0.99,0.02" />
+    <pathlink posX="186.625" posY="2283.125" posZ="21.5" a="60.16" b="60.17" dir="0.99,-0.01" />
+    <pathlink posX="146.625" posY="2285.25" posZ="20.125" a="60.17" b="60.18" dir="0.99,-0.1" />
+    <pathlink posX="121.25" posY="2289" posZ="19.3125" a="60.18" b="60.19" dir="0.96,-0.25" />
+    <pathlink posX="109.25" posY="2293.375" posZ="19.0625" a="60.19" b="60.20" dir="0.89,-0.44" />
+    <pathlink posX="99.625" posY="2298" posZ="19.0625" a="60.20" b="60.21" dir="0.89,-0.43" />
+    <pathlink posX="18.75" posY="2299.5" posZ="22.4375" a="60.22" b="60.23" dir="0.99,0.06" />
+    <pathlink posX="745.625" posY="2351.25" posZ="12.375" a="60.24" b="60.25" dir="0.15,-0.98" />
+    <pathlink posX="742.375" posY="2387.25" posZ="15" a="60.25" b="60.26" dir="-0.05,-0.99" />
+    <pathlink posX="744.75" posY="2407" posZ="16.875" a="60.26" b="60.27" dir="-0.2,-0.97" />
+    <pathlink posX="667.5" posY="2470.875" posZ="30.5" a="60.28" b="60.132" dir="0.05,0.99" />
+    <pathlink posX="669.75" posY="2489.875" posZ="30.3125" a="60.28" b="60.29" dir="-0.17,-0.98" />
+    <pathlink posX="674.5" posY="2509.75" posZ="30" a="60.29" b="60.30" dir="-0.28,-0.95" />
+    <pathlink posX="681.5" posY="2528.75" posZ="29.375" a="60.30" b="60.31" dir="-0.39,-0.91" />
+    <pathlink posX="690.375" posY="2546.5" posZ="28.25" a="60.31" b="60.32" dir="-0.49,-0.86" />
+    <pathlink posX="702.25" posY="2566.375" posZ="26.125" a="60.32" b="60.88" dir="-0.45,-0.89" lanesLeft="0" lanesRight="2" />
+    <pathlink posX="578.125" posY="2657" posZ="39.875" a="60.33" b="60.40" dir="0.99,0.01" lanesLeft="0" lanesRight="2" />
+    <pathlink posX="617" posY="2657.875" posZ="33.875" a="60.33" b="60.38" dir="-0.99,-0.03" lanesLeft="2" lanesRight="0" />
+    <pathlink posX="721" posY="2659.125" posZ="18.875" a="60.34" b="60.35" dir="0.99,-0.03" lanesLeft="0" lanesRight="2" />
+    <pathlink posX="694.875" posY="2659.875" posZ="21.8125" a="60.35" b="60.36" dir="0.99,0" lanesLeft="0" lanesRight="2" />
+    <pathlink posX="672.5" posY="2659.625" posZ="24.9375" a="60.36" b="60.37" dir="0.99,0.02" lanesLeft="0" lanesRight="2" />
+    <pathlink posX="645.875" posY="2658.875" posZ="29.125" a="60.37" b="60.38" dir="0.99,0.03" lanesLeft="0" lanesRight="2" />
+    <pathlink posX="421" posY="2691.375" posZ="59.375" a="60.39" b="60.72" dir="0.42,-0.9" lanesLeft="0" lanesRight="2" />
+    <pathlink posX="428.875" posY="2678.25" posZ="58.875" a="60.39" b="60.47" dir="-0.51,0.86" lanesLeft="2" lanesRight="0" />
+    <pathlink posX="535.375" posY="2657" posZ="46.125" a="60.40" b="60.41" dir="0.99,-0.01" lanesLeft="0" lanesRight="2" />
+    <pathlink posX="492.75" posY="2658.25" posZ="50.75" a="60.41" b="60.42" dir="0.99,-0.04" lanesLeft="0" lanesRight="2" />
+    <pathlink posX="463.5" posY="2660" posZ="53.625" a="60.42" b="60.43" dir="0.99,-0.11" lanesLeft="0" lanesRight="2" />
+    <pathlink posX="451.375" posY="2662" posZ="55.25" a="60.43" b="60.44" dir="0.97,-0.2" lanesLeft="0" lanesRight="2" />
+    <pathlink posX="443.625" posY="2664" posZ="56.5625" a="60.44" b="60.45" dir="0.93,-0.35" lanesLeft="0" lanesRight="2" />
+    <pathlink posX="437.625" posY="2667.5" posZ="57.8125" a="60.45" b="60.46" dir="0.79,-0.61" lanesLeft="0" lanesRight="2" />
+    <pathlink posX="432.75" posY="2672.25" posZ="58.625" a="60.46" b="60.47" dir="0.6,-0.79" lanesLeft="0" lanesRight="2" />
+    <pathlink posX="540.75" posY="2724.5" posZ="62.875" a="60.48" b="60.57" dir="0.99,-0.1" />
+    <pathlink posX="574.25" posY="2719.625" posZ="59.5" a="60.48" b="60.55" dir="-0.98,0.14" />
+    <pathlink posX="729.125" posY="2706.625" posZ="51.375" a="60.49" b="60.50" dir="0.99,-0.04" />
+    <pathlink posX="692.75" posY="2708.125" posZ="56" a="60.50" b="60.51" dir="0.99,-0.03" />
+    <pathlink posX="663.125" posY="2709.5" posZ="59.125" a="60.51" b="60.52" dir="0.99,-0.05" />
+    <pathlink posX="643.25" posY="2710.875" posZ="59.5" a="60.52" b="60.53" dir="0.99,-0.08" />
+    <pathlink posX="623.5" posY="2712.875" posZ="58.75" a="60.53" b="60.54" dir="0.99,-0.11" />
+    <pathlink posX="601.375" posY="2715.75" posZ="58.25" a="60.54" b="60.55" dir="0.99,-0.13" />
+    <pathlink posX="423.625" posY="2700.375" posZ="60.25" a="60.56" b="60.72" dir="0.99,0.13" />
+    <pathlink posX="442.625" posY="2704" posZ="61.25" a="60.56" b="60.61" dir="-0.97,-0.23" />
+    <pathlink posX="523.375" posY="2724.25" posZ="65.3125" a="60.57" b="60.58" dir="0.99,0.1" />
+    <pathlink posX="510.75" posY="2722.375" posZ="65.5625" a="60.58" b="60.59" dir="0.98,0.18" />
+    <pathlink posX="490.5" posY="2717.5" posZ="64.75" a="60.59" b="60.60" dir="0.96,0.26" />
+    <pathlink posX="463" posY="2709.625" posZ="62.875" a="60.60" b="60.61" dir="0.95,0.28" />
+    <pathlink posX="152.25" posY="2744.125" posZ="54.1875" a="60.62" b="60.73" dir="0.89,0.44" />
+    <pathlink posX="184" posY="2752.5" posZ="56.5" a="60.62" b="60.71" dir="-0.99,-0.09" />
+    <pathlink posX="412.75" posY="2699.875" posZ="59.6875" a="60.63" b="60.72" dir="-0.99,0.05" />
+    <pathlink posX="393.875" posY="2702.75" posZ="59.625" a="60.63" b="60.64" dir="0.97,-0.23" />
+    <pathlink posX="378.125" posY="2706.75" posZ="59.5625" a="60.64" b="60.65" dir="0.96,-0.25" />
+    <pathlink posX="362" posY="2711" posZ="59.5" a="60.65" b="60.66" dir="0.96,-0.25" />
+    <pathlink posX="337.375" posY="2717.75" posZ="59.125" a="60.66" b="60.67" dir="0.96,-0.27" />
+    <pathlink posX="304.75" posY="2727.125" posZ="58.75" a="60.67" b="60.68" dir="0.96,-0.27" />
+    <pathlink posX="272.5" posY="2736.625" posZ="58.75" a="60.68" b="60.69" dir="0.95,-0.28" />
+    <pathlink posX="241.375" posY="2745.75" posZ="58.75" a="60.69" b="60.70" dir="0.95,-0.28" />
+    <pathlink posX="211.125" posY="2752" posZ="58.0625" a="60.70" b="60.71" dir="0.99,-0.11" />
+    <pathlink posX="128.25" posY="2726.5" posZ="52.25" a="60.73" b="60.74" dir="0.73,0.68" />
+    <pathlink posX="106.125" posY="2704.125" posZ="51.5" a="60.74" b="60.75" dir="0.68,0.72" />
+    <pathlink posX="82.5" posY="2680.875" posZ="51.75" a="60.75" b="60.76" dir="0.75,0.65" />
+    <pathlink posX="63" posY="2666.125" posZ="53.125" a="60.76" b="60.77" dir="0.83,0.55" />
+    <pathlink posX="39.25" posY="2653.375" posZ="55.5" a="60.77" b="60.78" dir="0.91,0.4" />
+    <pathlink posX="658.75" posY="2559" posZ="28.6875" a="60.79" b="60.107" dir="0.63,0.77" lanesLeft="0" lanesRight="2" />
+    <pathlink posX="678.25" posY="2580.375" posZ="27" a="60.79" b="60.85" dir="-0.71,-0.7" lanesLeft="2" lanesRight="0" />
+    <pathlink posX="742.25" posY="2628.75" posZ="18.5" a="60.80" b="60.81" dir="0.86,0.49" lanesLeft="0" lanesRight="2" />
+    <pathlink posX="730.125" posY="2621.75" posZ="20" a="60.81" b="60.82" dir="0.86,0.5" lanesLeft="0" lanesRight="2" />
+    <pathlink posX="718.625" posY="2614" posZ="21.625" a="60.82" b="60.83" dir="0.8,0.59" lanesLeft="0" lanesRight="2" />
+    <pathlink posX="708" posY="2606.25" posZ="23.125" a="60.83" b="60.84" dir="0.8,0.59" lanesLeft="0" lanesRight="2" />
+    <pathlink posX="694.625" posY="2595.25" posZ="24.9375" a="60.84" b="60.85" dir="0.76,0.64" lanesLeft="0" lanesRight="2" />
+    <pathlink posX="715.75" posY="2586.75" posZ="23.5" a="60.86" b="60.88" dir="0.77,0.63" lanesLeft="2" lanesRight="0" />
+    <pathlink posX="730.375" posY="2598.25" posZ="21.5" a="60.86" b="60.87" dir="-0.8,-0.58" lanesLeft="0" lanesRight="2" />
+    <pathlink posX="746.625" posY="2608.375" posZ="19.1875" a="60.87" b="61.219" dir="-0.86,-0.49" lanesLeft="0" lanesRight="2" />
+    <pathlink posX="698.125" posY="2572" posZ="25.8125" a="60.88" b="60.90" dir="0.74,0.66" lanesLeft="2" lanesRight="0" />
+    <pathlink posX="642.375" posY="2468.875" posZ="30" a="60.89" b="60.127" dir="0.16,0.98" lanesLeft="2" lanesRight="0" />
+    <pathlink posX="644.625" posY="2481" posZ="30.0625" a="60.89" b="60.97" dir="-0.19,-0.98" lanesLeft="0" lanesRight="2" />
+    <pathlink posX="689" posY="2562.75" posZ="27.3125" a="60.90" b="60.91" dir="0.7,0.71" lanesLeft="2" lanesRight="0" />
+    <pathlink posX="679.75" posY="2552.5" posZ="28.375" a="60.91" b="60.92" dir="0.64,0.76" lanesLeft="2" lanesRight="0" />
+    <pathlink posX="669.625" posY="2539.625" posZ="29.375" a="60.92" b="60.93" dir="0.58,0.81" lanesLeft="2" lanesRight="0" />
+    <pathlink posX="661.625" posY="2527.5" posZ="29.9375" a="60.93" b="60.94" dir="0.52,0.85" lanesLeft="2" lanesRight="0" />
+    <pathlink posX="655.375" posY="2515.625" posZ="30.25" a="60.94" b="60.95" dir="0.4,0.91" lanesLeft="2" lanesRight="0" />
+    <pathlink posX="650.75" posY="2504" posZ="30.3125" a="60.95" b="60.96" dir="0.32,0.94" lanesLeft="2" lanesRight="0" />
+    <pathlink posX="647.25" posY="2492.75" posZ="30.1875" a="60.96" b="60.97" dir="0.25,0.96" lanesLeft="2" lanesRight="0" />
+    <pathlink posX="668.5" posY="2279.125" posZ="25.125" a="60.98" b="60.124" dir="-0.1,0.99" lanesLeft="2" lanesRight="0" />
+    <pathlink posX="664.5" posY="2310.375" posZ="25.5625" a="60.98" b="60.105" dir="0.13,-0.99" lanesLeft="0" lanesRight="2" />
+    <pathlink posX="641" posY="2445.25" posZ="29.5625" a="60.99" b="60.128" dir="0.05,-0.99" lanesLeft="0" lanesRight="2" />
+    <pathlink posX="642.375" posY="2430.875" posZ="29.125" a="60.99" b="60.100" dir="-0.12,0.99" lanesLeft="2" lanesRight="0" />
+    <pathlink posX="644.875" posY="2415.625" posZ="28.5625" a="60.100" b="60.101" dir="-0.19,0.98" lanesLeft="2" lanesRight="0" />
+    <pathlink posX="648.25" posY="2398.5" posZ="27.875" a="60.101" b="60.102" dir="-0.19,0.98" lanesLeft="2" lanesRight="0" />
+    <pathlink posX="652.25" posY="2379.375" posZ="27.1875" a="60.102" b="60.103" dir="-0.2,0.97" lanesLeft="2" lanesRight="0" />
+    <pathlink posX="656.25" posY="2358.375" posZ="26.5625" a="60.103" b="60.104" dir="-0.17,0.98" lanesLeft="2" lanesRight="0" />
+    <pathlink posX="660.5" posY="2335.75" posZ="26" a="60.104" b="60.105" dir="-0.17,0.98" lanesLeft="2" lanesRight="0" />
+    <pathlink posX="623.625" posY="2421.375" posZ="28.9375" a="60.106" b="60.117" dir="-0.16,0.98" lanesLeft="0" lanesRight="2" />
+    <pathlink posX="621" posY="2444.375" posZ="29.6875" a="60.106" b="60.115" dir="0.04,-0.99" lanesLeft="2" lanesRight="0" />
+    <pathlink posX="651.375" posY="2548.625" posZ="29.6875" a="60.107" b="60.108" dir="0.58,0.81" lanesLeft="0" lanesRight="2" />
+    <pathlink posX="644.75" posY="2538.125" posZ="30.0625" a="60.108" b="60.109" dir="0.5,0.86" lanesLeft="0" lanesRight="2" />
+    <pathlink posX="637.625" posY="2524.625" posZ="30.3125" a="60.109" b="60.110" dir="0.41,0.9" lanesLeft="0" lanesRight="2" />
+    <pathlink posX="632.25" posY="2511.375" posZ="30.375" a="60.110" b="60.111" dir="0.32,0.94" lanesLeft="0" lanesRight="2" />
+    <pathlink posX="628.25" posY="2498.25" posZ="30.3125" a="60.111" b="60.112" dir="0.27,0.96" lanesLeft="0" lanesRight="2" />
+    <pathlink posX="625.125" posY="2485.5" posZ="30.1875" a="60.112" b="60.113" dir="0.18,0.98" lanesLeft="0" lanesRight="2" />
+    <pathlink posX="622.875" posY="2472.75" posZ="30.0625" a="60.113" b="60.114" dir="0.17,0.98" lanesLeft="0" lanesRight="2" />
+    <pathlink posX="621.25" posY="2459.125" posZ="29.9375" a="60.114" b="60.115" dir="0.07,0.99" lanesLeft="0" lanesRight="2" />
+    <pathlink posX="648.5" posY="2277.375" posZ="25.1875" a="60.116" b="60.122" dir="-0.09,0.99" lanesLeft="0" lanesRight="2" />
+    <pathlink posX="644.5" posY="2308.75" posZ="25.6875" a="60.116" b="60.121" dir="0.15,-0.98" lanesLeft="2" lanesRight="0" />
+    <pathlink posX="628.25" posY="2395.125" posZ="28" a="60.117" b="60.118" dir="-0.18,0.98" lanesLeft="0" lanesRight="2" />
+    <pathlink posX="632.25" posY="2375.875" posZ="27.3125" a="60.118" b="60.119" dir="-0.21,0.97" lanesLeft="0" lanesRight="2" />
+    <pathlink posX="636.75" posY="2355" posZ="26.6875" a="60.119" b="60.120" dir="-0.2,0.97" lanesLeft="0" lanesRight="2" />
+    <pathlink posX="640.75" posY="2332.875" posZ="26.125" a="60.120" b="60.121" dir="-0.14,0.98" lanesLeft="0" lanesRight="2" />
+    <pathlink posX="649.625" posY="2260.875" posZ="24.6875" a="60.122" b="60.123" dir="-0.06,0.99" lanesLeft="0" lanesRight="2" />
+    <pathlink posX="669.25" posY="2267.25" posZ="24.75" a="60.124" b="60.126" dir="-0.06,0.99" lanesLeft="2" lanesRight="0" />
+    <pathlink posX="669.75" posY="2257.375" posZ="24.5" a="60.125" b="60.126" dir="0.05,-0.99" lanesLeft="0" lanesRight="2" />
+    <pathlink posX="641.25" posY="2460.875" posZ="29.9375" a="60.127" b="60.129" dir="0.05,0.99" lanesLeft="2" lanesRight="0" />
+    <pathlink posX="641" posY="2455" posZ="29.8125" a="60.128" b="60.129" dir="-0.06,-0.99" lanesLeft="0" lanesRight="2" />
+    <pathlink posX="722.625" posY="2350.75" posZ="28.75" a="60.130" b="60.133" dir="0.89,-0.43" />
+    <pathlink posX="734.625" posY="2345.875" posZ="28.25" a="60.130" b="60.131" dir="-0.95,0.3" />
+    <pathlink posX="746.875" posY="2342.875" posZ="27.8125" a="60.131" b="61.265" dir="-0.98,0.15" />
+    <pathlink posX="667.25" posY="2454.125" posZ="30.6875" a="60.132" b="60.140" dir="-0.09,0.99" />
+    <pathlink posX="711.5" posY="2357.375" posZ="29.25" a="60.133" b="60.134" dir="0.8,-0.59" />
+    <pathlink posX="700.875" posY="2366.5" posZ="29.6875" a="60.134" b="60.135" dir="0.71,-0.7" />
+    <pathlink posX="691.25" posY="2377.875" posZ="30.0625" a="60.135" b="60.136" dir="0.57,-0.81" />
+    <pathlink posX="682.875" posY="2391.625" posZ="30.4375" a="60.136" b="60.137" dir="0.45,-0.88" />
+    <pathlink posX="676" posY="2408" posZ="30.6875" a="60.137" b="60.138" dir="0.32,-0.94" />
+    <pathlink posX="670.875" posY="2426.75" posZ="30.8125" a="60.138" b="60.139" dir="0.2,-0.97" />
+    <pathlink posX="668.25" posY="2443.25" posZ="30.8125" a="60.139" b="60.140" dir="0.07,-0.99" />
+    <pathlink posX="83.625" posY="2560" posZ="15.25" a="60.141" b="60.146" dir="-0.99,0.01" />
+    <pathlink posX="58.5" posY="2560.25" posZ="15.25" a="60.141" b="60.144" dir="0.99,0" />
+    <pathlink posX="21.375" posY="2560.375" posZ="15.25" a="60.142" b="60.143" dir="-0.99,0.01" />
+    <pathlink posX="38.625" posY="2560.25" posZ="15.25" a="60.143" b="60.144" dir="-1,0" />
+    <pathlink posX="271.375" posY="2560.375" posZ="15.25" a="60.145" b="60.156" dir="-0.99,-0.01" />
+    <pathlink posX="240.125" posY="2560.125" posZ="15.25" a="60.145" b="60.154" dir="0.99,-0.02" />
+    <pathlink posX="95.25" posY="2560" posZ="15.25" a="60.146" b="60.147" dir="-0.99,0" />
+    <pathlink posX="108.625" posY="2560.125" posZ="15.25" a="60.147" b="60.148" dir="-0.99,0" />
+    <pathlink posX="123.625" posY="2560.25" posZ="15.25" a="60.148" b="60.149" dir="-1,0" />
+    <pathlink posX="143.875" posY="2560" posZ="15.25" a="60.149" b="60.150" dir="-0.99,0.01" />
+    <pathlink posX="163.625" posY="2560.25" posZ="15.25" a="60.150" b="60.151" dir="-0.99,-0.03" />
+    <pathlink posX="182.125" posY="2560.5" posZ="15.25" a="60.151" b="60.152" dir="-1,0" />
+    <pathlink posX="203.125" posY="2560.75" posZ="15.25" a="60.152" b="60.153" dir="-0.99,-0.01" />
+    <pathlink posX="222.375" posY="2560.625" posZ="15.25" a="60.153" b="60.154" dir="-0.99,0.02" />
+    <pathlink posX="387.5" posY="2567.625" posZ="15.25" a="60.155" b="60.165" dir="-0.94,-0.31" />
+    <pathlink posX="379.125" posY="2565.125" posZ="15.25" a="60.155" b="60.164" dir="0.97,0.23" />
+    <pathlink posX="283.625" posY="2560.375" posZ="15.25" a="60.156" b="60.157" dir="-0.99,-0.01" />
+    <pathlink posX="296.875" posY="2560.375" posZ="15.25" a="60.157" b="60.158" dir="-1,0" />
+    <pathlink posX="311.625" posY="2560.375" posZ="15.25" a="60.158" b="60.159" dir="-1,0" />
+    <pathlink posX="325.25" posY="2560.5" posZ="15.25" a="60.159" b="60.160" dir="-0.99,0" />
+    <pathlink posX="339.5" posY="2560.5" posZ="15.25" a="60.160" b="60.161" dir="-0.99,0" />
+    <pathlink posX="350.625" posY="2560.375" posZ="15.25" a="60.161" b="60.162" dir="-0.99,0.01" />
+    <pathlink posX="359" posY="2560.75" posZ="15.25" a="60.162" b="60.163" dir="-0.99,-0.09" />
+    <pathlink posX="368.75" posY="2562.5" posZ="15.25" a="60.163" b="60.164" dir="-0.96,-0.25" />
+    <pathlink posX="390.375" posY="2574.125" posZ="15.3125" a="60.165" b="60.167" dir="0.25,-0.96" />
+    <pathlink posX="396.125" posY="2570.5" posZ="15.25" a="60.165" b="60.173" dir="-0.94,-0.32" />
+    <pathlink posX="393.375" posY="2563.75" posZ="15.375" a="60.165" b="60.169" dir="-0.29,0.95" />
+    <pathlink posX="388.25" posY="2588.5" posZ="15.375" a="60.166" b="60.168" dir="-0.17,0.98" />
+    <pathlink posX="388.875" posY="2582.125" posZ="15.375" a="60.167" b="60.168" dir="0.06,-0.99" />
+    <pathlink posX="394.625" posY="2558.125" posZ="15.5" a="60.169" b="60.171" dir="-0.17,0.98" />
+    <pathlink posX="395.25" posY="2553.125" posZ="15.4375" a="60.170" b="60.171" dir="0.07,-0.99" />
+    <pathlink posX="461.375" posY="2550.5" posZ="16.1875" a="60.172" b="60.183" dir="-0.67,0.73" />
+    <pathlink posX="452.5" posY="2557" posZ="15.5" a="60.172" b="60.181" dir="0.88,-0.45" />
+    <pathlink posX="400.75" posY="2572" posZ="15.25" a="60.173" b="60.174" dir="-0.92,-0.38" />
+    <pathlink posX="405.75" posY="2573.5" posZ="15.25" a="60.174" b="60.175" dir="-0.97,-0.23" />
+    <pathlink posX="411.125" posY="2574.25" posZ="15.25" a="60.175" b="60.176" dir="-1,0" />
+    <pathlink posX="416.375" posY="2573.375" posZ="15.25" a="60.176" b="60.177" dir="-0.95,0.29" />
+    <pathlink posX="422.375" posY="2571.125" posZ="15.25" a="60.177" b="60.178" dir="-0.91,0.41" />
+    <pathlink posX="429" posY="2568.125" posZ="15.25" a="60.178" b="60.179" dir="-0.91,0.39" />
+    <pathlink posX="436.25" posY="2564.75" posZ="15.25" a="60.179" b="60.180" dir="-0.89,0.44" />
+    <pathlink posX="444.375" posY="2561" posZ="15.3125" a="60.180" b="60.181" dir="-0.91,0.41" />
+    <pathlink posX="472.5" posY="2467.125" posZ="24" a="60.182" b="60.223" dir="-0.09,0.99" />
+    <pathlink posX="472" posY="2474.875" posZ="23.25" a="60.182" b="60.191" dir="0.02,-0.99" />
+    <pathlink posX="463.75" posY="2545.75" posZ="17.125" a="60.183" b="60.184" dir="-0.38,0.92" />
+    <pathlink posX="465.75" posY="2540.625" posZ="18.0625" a="60.184" b="60.185" dir="-0.33,0.94" />
+    <pathlink posX="467.75" posY="2533.25" posZ="19.125" a="60.185" b="60.186" dir="-0.22,0.97" />
+    <pathlink posX="469.25" posY="2524.125" posZ="20.0625" a="60.186" b="60.187" dir="-0.11,0.99" />
+    <pathlink posX="470.375" posY="2513.75" posZ="20.875" a="60.187" b="60.188" dir="-0.11,0.99" />
+    <pathlink posX="471.375" posY="2503" posZ="21.5" a="60.188" b="60.189" dir="-0.07,0.99" />
+    <pathlink posX="471.625" posY="2492.875" posZ="22.0625" a="60.189" b="60.190" dir="0.03,0.99" />
+    <pathlink posX="471.625" posY="2483.625" posZ="22.625" a="60.190" b="60.191" dir="-0.04,0.99" />
+    <pathlink posX="481.625" posY="2381.75" posZ="28.0625" a="60.192" b="60.214" dir="-0.33,-0.94" />
+    <pathlink posX="474.25" posY="2375.5" posZ="27.9375" a="60.192" b="60.193" dir="0.94,-0.31" />
+    <pathlink posX="483.5" posY="2371.75" posZ="28.3125" a="60.192" b="60.203" dir="-0.92,0.38" />
+    <pathlink posX="466.25" posY="2377.5" posZ="27.5625" a="60.193" b="60.202" dir="0.95,-0.28" />
+    <pathlink posX="390.5" posY="2358.375" posZ="24.25" a="60.194" b="60.195" dir="-0.73,-0.67" />
+    <pathlink posX="398.375" posY="2364.75" posZ="24.25" a="60.195" b="60.196" dir="-0.8,-0.59" />
+    <pathlink posX="407.375" posY="2370.5" posZ="24.3125" a="60.196" b="60.197" dir="-0.88,-0.46" />
+    <pathlink posX="416.875" posY="2374.625" posZ="24.5625" a="60.197" b="60.198" dir="-0.93,-0.34" />
+    <pathlink posX="426.75" posY="2377.625" posZ="25" a="60.198" b="60.199" dir="-0.97,-0.24" />
+    <pathlink posX="436.875" posY="2379.5" posZ="25.5625" a="60.199" b="60.200" dir="-0.99,-0.1" />
+    <pathlink posX="447.25" posY="2380" posZ="26.25" a="60.200" b="60.201" dir="-0.99,0.01" />
+    <pathlink posX="457.875" posY="2379.125" posZ="27" a="60.201" b="60.202" dir="-0.99,0.13" />
+    <pathlink posX="487.125" posY="2369.75" posZ="28.5625" a="60.203" b="60.212" dir="-0.87,0.47" />
+    <pathlink posX="534.625" posY="2337.625" posZ="30" a="60.204" b="60.205" dir="0.82,-0.57" />
+    <pathlink posX="529.5" posY="2341.125" posZ="29.6875" a="60.205" b="60.206" dir="0.83,-0.54" />
+    <pathlink posX="522.625" posY="2345.625" posZ="29.375" a="60.206" b="60.207" dir="0.82,-0.56" />
+    <pathlink posX="518.375" posY="2348.5" posZ="29.1875" a="60.207" b="60.208" dir="0.84,-0.53" />
+    <pathlink posX="515.5" posY="2350.5" posZ="29.125" a="60.208" b="60.209" dir="0.79,-0.61" />
+    <pathlink posX="510.5" posY="2354.375" posZ="29.0625" a="60.209" b="60.210" dir="0.79,-0.6" />
+    <pathlink posX="501.375" posY="2361" posZ="28.9375" a="60.210" b="60.211" dir="0.81,-0.57" />
+    <pathlink posX="492.625" posY="2366.75" posZ="28.75" a="60.211" b="60.212" dir="0.87,-0.49" />
+    <pathlink posX="482.625" posY="2438.5" posZ="27.375" a="60.213" b="60.224" dir="0.49,-0.86" />
+    <pathlink posX="486.875" posY="2430.75" posZ="27.8125" a="60.213" b="60.222" dir="-0.49,0.86" />
+    <pathlink posX="483.875" posY="2388" posZ="27.9375" a="60.214" b="60.215" dir="-0.35,-0.93" />
+    <pathlink posX="486" posY="2392.875" posZ="27.875" a="60.215" b="60.216" dir="-0.42,-0.9" />
+    <pathlink posX="487.875" posY="2398" posZ="27.875" a="60.216" b="60.217" dir="-0.27,-0.96" />
+    <pathlink posX="489.625" posY="2403.625" posZ="27.875" a="60.217" b="60.218" dir="-0.32,-0.94" />
+    <pathlink posX="490.875" posY="2409.125" posZ="27.875" a="60.218" b="60.219" dir="-0.11,-0.99" />
+    <pathlink posX="491.375" posY="2414.625" posZ="27.875" a="60.219" b="60.220" dir="-0.06,-0.99" />
+    <pathlink posX="491" posY="2420.125" posZ="27.875" a="60.220" b="60.221" dir="0.18,-0.98" />
+    <pathlink posX="489.375" posY="2425.5" posZ="27.875" a="60.221" b="60.222" dir="0.37,-0.92" />
+    <pathlink posX="472.875" posY="2461.5" posZ="24.5" a="60.223" b="60.228" dir="-0.12,0.99" />
+    <pathlink posX="479.75" posY="2443.125" posZ="26.8125" a="60.224" b="60.225" dir="0.49,-0.87" />
+    <pathlink posX="477.5" posY="2447.625" posZ="26.3125" a="60.225" b="60.226" dir="0.43,-0.89" />
+    <pathlink posX="475.25" posY="2453" posZ="25.625" a="60.226" b="60.227" dir="0.31,-0.94" />
+    <pathlink posX="473.625" posY="2458.25" posZ="24.9375" a="60.227" b="60.228" dir="0.26,-0.96" />
+    <patharea id="area60" posX="375" posY="2625" posZ="0" />
+</map>

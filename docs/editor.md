@@ -16,6 +16,7 @@ MTA's Map Editor like any map.
 | `vana-data-encounters` | `encounter` | `vana-encounters` | `Encounters` (one per encounter, by `kind`: Bigfoot) |
 | `vana-data-wildlife` | `wildlifespawner` | `vana-wildlife` | `WildlifeSpawners` (the animals' spots) |
 | `vana-data-radio` | `speaker` | `vana-radio` | `Speakers` (placed by hand: no seed) |
+| `[paths]/vana-data-paths-00` … `-63` | `pathnode`, `pathlink`, `patharea` | `vana-paths` | The path graph, one resource per area ([paths-and-lights.md](paths-and-lights.md)) |
 | `vana-data-activities` | `minigamespot`, `burglaryhouse`, `burglarydoor`, `race`, `racecheckpoint`, `chiliadroute`, `routepoint`, `spot` | `vana-activities` | `MinigameSpots`, `BurglaryHouses`, `BurglaryDoors`, `RaceTable`, `ChiliadRoutes`; spots for the rule configs |
 
 - **Schemas:** each owner's `config/maps.lua` describes its element types (fields, types, defaults,
@@ -116,8 +117,6 @@ Map Editor is the normal way to change placement data now.
 
 ## Not converted
 
-- **The road and footpath graph** (`NODES*.DAT`, read by `vana-paths`) stays retail binary data,
-  copied at setup: about 37,000 nodes and their links aren't something to edit as editor elements.
 - **Offsets relative to something else** stay in Lua config: school course layouts (from each test's
   start), shopkeeper layouts (per shop type, moved by each shop's offset), gym prop offsets.
 - **Not positions, though they look like them:** Blood Ring's arena box (`Racing.bloodring.area`),

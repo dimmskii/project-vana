@@ -14,8 +14,10 @@ function shouldCarStop(naviArea, naviIndex, toArea, toId, x, y, state)
     return Lights.shouldCarStop(naviArea, naviIndex, toArea, toId, x, y, state)
 end
 
--- Console-only integrity check against counts taken from the retail files with tools/scratch/verify_nodes.py.
-local EXPECTED = { vehicle = 30587, ped = 37650, navi = 31466, links = 143622, roadCross = 1697, pedLight = 1294 }
+-- Console-only integrity check against counts taken from the retail files. Navi nodes: the game's
+-- 31466, two of which it shares between two links each; the map data has one per link
+-- (paths_data.lua), so 31468. tools/convert/paths_to_maps.lua checks everything else field by field.
+local EXPECTED = { vehicle = 30587, ped = 37650, navi = 31468, links = 143622, roadCross = 1697, pedLight = 1294 }
 
 addCommandHandler("pathstest", function(source)
     if getElementType(source) ~= "console" then return end

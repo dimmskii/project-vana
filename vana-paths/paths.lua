@@ -1,4 +1,5 @@
--- Lazy, area-at-a-time access to the retail path graph. IDs are the game's own (area, 0-based node).
+-- Lazy, area-at-a-time access to the path graph: GTA:SA's, as map data ([data]/[paths]/vana-data-paths-NN,
+-- paths_data.lua), read from the files by the server. IDs are the game's own (area, 0-based node).
 Paths = {}
 
 local floor, max, min, sqrt = math.floor, math.max, math.min, math.sqrt
@@ -9,6 +10,10 @@ local CELLS = AREA_SIZE / CELL
 
 local areas = {}
 local buckets = {}
+local records = {} -- area -> its elements as records (or false: the area's data is missing)
+local infos = {}   -- area -> its node index (PathsData.buildArea's, kept between areas)
+local schemas = {}
+for _, schema in ipairs(PathsData.schemas) do schemas[schema.element] = schema end
 
 function Paths.getAreaAt(x, y)
     local ax = min(GRID - 1, max(0, floor((x - WORLD_MIN) / AREA_SIZE)))
@@ -16,17 +21,24 @@ function Paths.getAreaAt(x, y)
     return ay * GRID + ax
 end
 
+-- An area's elements as records, read once (vana-lib reads the files: MapData.fileElements).
+local function recordsOf(id)
+    if records[id] ~= nil then return records[id] end
+    local elements = id >= 0 and id < GRID * GRID and MapData.fileElements(PathsData.resourceName(id))
+    if not elements then records[id] = false return false end
+    local recs = {}
+    for name, schema in pairs(schemas) do
+        recs[name] = {}
+        for _, attr in ipairs(elements[name] or {}) do table.insert(recs[name], MapData.fromAttributes(schema, attr)) end
+    end
+    records[id] = recs
+    return recs
+end
+
 function Paths.loadArea(id)
     if areas[id] then return areas[id] end
-    local f = fileOpen(("data/NODES%d.DAT"):format(id), true)
-    if not f then return false end
-    local s = fileRead(f, fileGetSize(f))
-    fileClose(f)
-    local area, err = PathsFormat.parse(id, s)
-    if not area then
-        outputDebugString("[vana-paths] " .. err, 1)
-        return false
-    end
+    local area = PathsData.buildArea(id, recordsOf, infos)
+    if not area then return false end
     areas[id] = area
     return area
 end
@@ -34,6 +46,22 @@ end
 function Paths.loadAll()
     for id = 0, GRID * GRID - 1 do Paths.loadArea(id) end
 end
+
+-- Every area loaded in the background after start, one every few frames, so no one waits for one
+-- later (one asked for earlier loads at once).
+addEventHandler("onResourceStart", resourceRoot, function()
+    local id, started, missing = 0, getTickCount(), 0
+    local timer
+    timer = setTimer(function()
+        if not Paths.loadArea(id) then missing = missing + 1 end
+        id = id + 1
+        if id >= GRID * GRID then
+            killTimer(timer)
+            outputServerLog(("[vana-paths] path graph loaded: %d areas in %d ms%s"):format(GRID * GRID - missing, getTickCount() - started,
+                missing > 0 and (", " .. missing .. " MISSING (see docs/setup.md)") or ""))
+        end
+    end, 50, 0)
+end)
 
 function Paths.isLoaded(id) return areas[id] ~= nil end
 

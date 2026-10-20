@@ -58,5 +58,5 @@ once with `sa_gxt`, and answers every other resource through its exports (`isRea
 `plainText`); importers of `text` get the usual `Gxt.raw` / `Gxt.get` / `Gxt.format` / `Gxt.load`
 over them. Server-side only (clients get text from their resource's server).
 
-The path graph (`NODES*.DAT`) is still read by vana-paths' own `paths_format.lua`; it moves to
-`vana-lib` if another resource ever needs it. Map placements (IPL) aren't read at runtime at all.
+The path graph is map data now (`[data]/[paths]`, vana-paths' `paths_data.lua`); its `NODES*.DAT`
+reader (`paths_format.lua`) is the converter's. Map placements (IPL) aren't read at runtime at all.
