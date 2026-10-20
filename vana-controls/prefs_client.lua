@@ -55,7 +55,7 @@ items[#items + 1] = { label = "Back to the defaults", run = function()
     save()
 end }
 
-local panel = MenuList.new{ title = "Preferences", centred = true, y = 110, width = 440, rows = 14, items = items }
+local panel = MenuList.new{ title = "Preferences", centred = true, y = 110, width = 440, rows = 14, items = items, labelIndent = 40 }
 
 local function toggle()
     if panel:isOpen() then return panel:close() end

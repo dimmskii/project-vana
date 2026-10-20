@@ -144,6 +144,7 @@ end)
 
 addEvent("vana-services:release", true)
 addEventHandler("vana-services:release", resourceRoot, function(vehicle)
+    if not vehicle then return end -- destroyed before the event arrived (the resource stopping)
     prepared[vehicle] = nil
     if forgetHeli then forgetHeli(vehicle) end
 end)

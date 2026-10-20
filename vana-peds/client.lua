@@ -237,6 +237,7 @@ end)
 
 addEvent("vana-peds:release", true)
 addEventHandler("vana-peds:release", resourceRoot, function(ped)
+    if not ped then return end -- destroyed before the event arrived (the resource stopping)
     local cmd = commands[ped]
     commands[ped] = nil
     if cmd and isTimer(cmd.retry) then killTimer(cmd.retry) end

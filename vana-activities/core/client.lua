@@ -218,84 +218,29 @@ addEventHandler("onClientPlayerDamage", localPlayer, function(_, weapon)
     if Hud.perks.fireproof and weapon == 37 then cancelEvent() end
 end)
 
--- A vanilla-style pick list (top left): the server opens it with "vana-activities:menu" (id, title,
--- items = { { label, right, enabled } }, hint); choosing sends "vana-activities:menuChoice" (id, index).
--- Keys, the pad or the mouse (vana-lib's menu_input).
-local pick -- { id, title, items, selected, hint, rows }
-
-local function closePick()
-    if not pick then return end
-    pick = nil
-    toggleAllControls(true, true, false)
-    MenuInput.cursor(false)
-end
+-- A vanilla-style pick list (top left, vana-lib's menu_list): the server opens it with
+-- "vana-activities:menu" (id, title, items = { { label, right, enabled } }, hint); choosing sends
+-- "vana-activities:menuChoice" (id, index). An entry with enabled = false is greyed and does nothing.
+local pickId
+local pickList = MenuList.new{ x = 40, y = 120, width = 440, rows = 14, colorCoded = true,
+    onClose = function() pickId = nil end }
 
 addEvent("vana-activities:menu", true)
 addEventHandler("vana-activities:menu", resourceRoot, function(id, title, items, hint)
-    if not id then return closePick() end
-    if not pick then MenuInput.cursor(true) end
-    pick = { id = id, title = Hud.format(title), items = items, selected = 1, hint = hint, rows = {} }
-    toggleAllControls(false, true, false)
-end)
-
-local function choosePick()
-    local item = pick.items[pick.selected]
-    if item and item.enabled ~= false then
-        triggerServerEvent("vana-activities:menuChoice", resourceRoot, pick.id, pick.selected)
-        closePick()
+    if not id then return pickList:close() end
+    pickId = id
+    local entries = {}
+    for i, item in ipairs(items) do
+        entries[i] = { label = Hud.format(item.label), right = item.right, greyed = item.enabled == false,
+            run = function()
+                if item.enabled == false then return end
+                local chosen = pickId
+                pickList:close()
+                triggerServerEvent("vana-activities:menuChoice", resourceRoot, chosen, i)
+            end }
     end
-end
-
-addEventHandler("onClientKey", root, function(key, pressed)
-    if not pick or not pressed then return end
-    if MenuInput.wheel(pick, key, #pick.items) then return cancelEvent() end
-    local action = MenuInput.action(key)
-    if action == "up" then pick.selected = (pick.selected - 2) % #pick.items + 1
-    elseif action == "down" then pick.selected = pick.selected % #pick.items + 1
-    elseif action == "accept" then choosePick()
-    elseif action == "back" then closePick()
-    else return end
-    if pick then pick.first = nil end
-    cancelEvent()
-end)
-
-addEventHandler("onClientCursorMove", root, function(_, _, x, y)
-    local i = pick and MenuInput.rowAt(pick.rows, x, y)
-    if i then pick.selected = i end
-end)
-
-addEventHandler("onClientClick", root, function(button, state, x, y)
-    if not pick or state ~= "up" then return end
-    if button == "right" then return closePick() end
-    local i = button == "left" and MenuInput.rowAt(pick.rows, x, y)
-    if i then
-        pick.selected = i
-        choosePick()
-    end
-end)
-
-addEventHandler("onClientRender", root, function()
-    if not pick then return end
-    local _, sh = guiGetScreenSize()
-    local s = sh / 720
-    local x, y, w, row = 40 * s, 120 * s, 440 * s, 26 * s
-    local visible = math.min(#pick.items, 14)
-    pick.rows = {}
-    -- Where the keys left it (following the selection), or where the mouse wheel put it.
-    local first = math.max(1, math.min(pick.first or (pick.selected - 7), #pick.items - visible + 1))
-    pick.first, pick.visible = first, visible
-    pick.box = { x, y, x + w, y + row * (visible + 2.6) }
-    dxDrawRectangle(x, y, w, row * (visible + 2.6), tocolor(0, 0, 0, 190))
-    dxDrawText(pick.title, x + 12 * s, y + 6 * s, x + w, y + row, tocolor(172, 203, 241), 1.4 * s, "bankgothic", "left", "top", false, false, false, true)
-    for i = first, first + visible - 1 do
-        local item = pick.items[i]
-        local ry = y + row * (i - first + 1.4)
-        pick.rows[i] = { x, ry, x + w, ry + row }
-        if i == pick.selected then dxDrawRectangle(x + 4 * s, ry, w - 8 * s, row, tocolor(172, 203, 241, 60)) end
-        local colour = item.enabled == false and tocolor(90, 90, 90) or (i == pick.selected and tocolor(255, 255, 255) or tocolor(180, 180, 180))
-        dxDrawText(Hud.format(item.label), x + 12 * s, ry, x + w, ry + row, colour, 1.1 * s, "default-bold", "left", "center", false, false, false, true)
-        if item.right then dxDrawText(item.right, x, ry, x + w - 12 * s, ry + row, colour, 1.1 * s, "default-bold", "right", "center") end
-    end
-    local by = y + row * (visible + 1.5)
-    dxDrawText(pick.hint or "Enter: choose   Backspace: leave", x + 12 * s, by, x + w, by + row, tocolor(200, 200, 200), 1 * s, "default", "left", "center")
+    pickList:setTitle(Hud.format(title))
+    pickList.hint = hint or "Enter: choose   Backspace: leave"
+    pickList:setItems(entries, 1)
+    pickList:open()
 end)

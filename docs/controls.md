@@ -132,8 +132,9 @@ always has (a margin of half the rows); picked by the mouse, it stays where it i
 selects), and the wheel over the menu scrolls it a row at a time, selecting the row then under the
 cursor. Away from the menu, the wheel moves the selection like the arrow keys.
 Menus with the controls off swallow their keys, so binds (`/use` on Enter) don't fire under them.
-Done for the shop, garage, activity pick and driving school menus; the casino, pool and side games
-still take the arrow keys only.
+Every list menu is vana-lib's `menu_list`: the shop and garage menus (the garage's colour grid is its
+own, the list suspended under it), the activity pick list, the driving schools and the preferences
+panel. The casino, pool and side games still take the arrow keys only.
 
 `controlstest` (console) checks that the actions load and parse, `#id`s and the reach.
 
