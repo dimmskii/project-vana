@@ -94,5 +94,6 @@ Keepers = {
     X7_11S = { layout = "convenience", models = ClerkModels.city, keeper = { -23.67, -57.31, 1002.55, 359 } },
     X711FC = { layout = "convenience", models = ClerkModels.country, keeper = { -23.67, -57.31, 1002.55, 359 } },
     X711AP = { layout = "convenience", models = ClerkModels.country, keeper = { -23.67, -57.31, 1002.55, 359 } },
+    X7_11C = { layout = "convenience", models = ClerkModels.city, keeper = { -22.21, -140.42, 1002.55, 0 } }, -- no street door yet
     CSEXL = { layout = "clothes", model = 217, offset = { 1.2, -114.524, -1.51 }, keeper = { 204.366, -157.789, 999.563, 180 }, door = 2879 },
 }

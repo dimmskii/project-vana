@@ -28,7 +28,7 @@
     <shoppoint id="X711S2" posX="-30.99" posY="-28.93" posZ="1002.56" interior="4" kind="misc" note="Vinewood: at the counter (in game)" />
     <shoppoint id="X711S3" posX="6.09" posY="-25.27" posZ="1002.55" interior="10" kind="misc" note="4 m inside the door (no counter found)" />
     <shoppoint id="X7_11B" posX="-28.06" posY="-89.95" posZ="1002.55" interior="18" kind="misc" note="El Corona / Mulholland / LV: at the counter (in game)" />
-    <shoppoint id="X7_11C" posX="-25.13" posY="-135.07" posZ="1002.55" interior="16" kind="misc" note="4 m inside the door (no counter found)" />
+    <shoppoint id="X7_11C" posX="-22.15" posY="-138.46" posZ="1002.55" interior="16" kind="misc" note="at the counter (in game); no street door" />
     <shoppoint id="X7_11D" posX="-25.88" posY="-181.87" posZ="1002.55" interior="17" kind="misc" note="4 m inside the door (no counter found)" />
     <shoppoint id="X7_11S" posX="-23.52" posY="-55.02" posZ="1002.55" interior="6" kind="misc" note="Commerce / LV: at the counter (in game)" />
     <shoppoint id="X711FC" posX="-23.52" posY="-55.02" posZ="1002.55" interior="6" kind="misc" note="Fort Carson, a copy of X7_11S" instance="3003" />
