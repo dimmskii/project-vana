@@ -29,6 +29,15 @@ VehicleConfig = {
             { -1605.897, -2714.252, 48.5335 }, { -1471.48, 1864.3101, 32.64 }, { 1596.5, 2199.1001, 10.83 },
             { 2145.8999, 2748.1599, 10.83 }, { 2642.1101, 1106.53, 10.83 }, { 2117.4199, 920.42, 10.83 },
             { 1381.6801, 456.26, 19.91 },
+            -- Ours: the Mulholland / Temple station beside the Vinewood 24/7, which the mod skips.
+            { 1008.02, -939.96, 41.68 },
+        },
+        -- Ours: pumps standing where vanilla has none (the Mulholland station's island): GTA's own
+        -- gas pump, which blows up when shot. { x, y, z (ground), heading }
+        pumpModel = 1676,
+        pumpProps = {
+            { 1008.54, -936.09, 41.33, 102 }, { 1006.16, -936.49, 41.33, 100 },
+            { 1001.50, -937.19, 41.33, 99 }, { 998.60, -937.65, 41.33, 99 },
         },
         -- Each pump's marker, as the mod garages' and Pay 'n' Sprays' (vana-shops) but white, with the
         -- gas station icon standing in it (icons/radar_gasstn.png, pumps_client.lua).

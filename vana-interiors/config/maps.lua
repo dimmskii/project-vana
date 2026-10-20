@@ -1,6 +1,6 @@
 -- Map data (tools/lib/map_data.lua): entry/exit markers, in vana-data-interiors. Each marker takes
 -- you to the same-named entry in another area, arriving at that entry's exit point (ex, ey, ez).
-local FIELDS = { "name", "size", "ex", "ey", "ez", "heading", "flags", "open", "close", "enabled" }
+local FIELDS = { "name", "size", "ex", "ey", "ez", "heading", "flags", "open", "close", "enabled", "instance" }
 
 MapDatasets.entrances = {
     resource = "vana-data-interiors", file = "entrances.map", definition = "vana-interiors",
@@ -17,6 +17,7 @@ MapDatasets.entrances = {
               { "open", "int", 0, "opening hour" },
               { "close", "int", 24, "closing hour" },
               { "enabled", "bool", true, "usable at all" },
+              { "instance", "int", 0, "dimension (0: the shared world; another: a copy of the interior of its own, e.g. a second 24/7)" },
           },
           rep = '<marker type="arrow" size="1" color="#FFDC00AA" />' },
     },

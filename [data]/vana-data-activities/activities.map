@@ -2141,7 +2141,7 @@
     <spot id="Dating.venues.disco.3" posX="2507.44" posY="1242.31" posZ="9.83" interior="0" set="Dating.venues.disco" index="3" shape="array" />
     <spot id="Games.range.ranges.1.entry" posX="292.33" posY="-35.39" posZ="1000.5" interior="1" shape="array" />
     <spot id="Games.range.ranges.1.booth" posX="290.63" posY="-24.55" posZ="1000.52" interior="1" shape="array" />
-    <spot id="Games.range.ranges.2.entry" posX="289.48" posY="-79.66" posZ="1001.73" interior="4" shape="array" />
+    <spot id="Games.range.ranges.2.entry" posX="301.66" posY="-77.09" posZ="1000.52" interior="4" shape="array" />
     <spot id="Games.range.ranges.2.booth" posX="303.08" posY="-61.23" posZ="1000.52" interior="4" shape="array" />
     <spot id="Games.range.ranges.3.entry" posX="309.97" posY="-135.39" posZ="1002.83" interior="7" shape="array" />
     <spot id="Games.range.ranges.3.booth" posX="300.1" posY="-137.04" posZ="1003.05" interior="7" shape="array" />

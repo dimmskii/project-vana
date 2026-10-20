@@ -127,7 +127,7 @@ local function catalogue(shopName, player)
 end
 
 local function nearPoint(player, point)
-    if getElementInterior(player) ~= point.interior then return false end
+    if getElementInterior(player) ~= point.interior or getElementDimension(player) ~= (point.instance or 0) then return false end
     local x, y, z = getElementPosition(player)
     return getDistanceBetweenPoints3D(x, y, z, point.x, point.y, point.z + 1) < ShopConfig.radius + 1.5
 end
@@ -428,6 +428,7 @@ local function placeMarker(shopName, point)
     end
     local marker = createMarker(point.x, point.y, point.z - 0.1, "cylinder", ShopConfig.radius, 255, 120, 0, 90)
     setElementInterior(marker, point.interior)
+    setElementDimension(marker, point.instance or 0)
     markers[marker] = shopName
     pointMarkers[shopName] = marker
     local name = actionOf(point)
@@ -464,10 +465,11 @@ addCommandHandler("shoppoint", function(player, _, name)
     if not point then return outputChatBox("Usage: /shoppoint <shop name, e.g. AMMUN1>", player, 255, 200, 50) end
     local x, y, z = getElementPosition(player)
     point.x, point.y, point.z, point.interior = x, y, z - 1, getElementInterior(player)
+    point.instance = getElementDimension(player) ~= 0 and getElementDimension(player) or nil
     placeMarker(name, point)
     local attrs = {}
     for _, a in ipairs(MapData.toAttributes(MapDatasets.shops.types[1], { name = name, kind = point.kind, style = point.style, action = point.action,
-        note = point.note, interior = point.interior, x = point.x, y = point.y, z = point.z })) do
+        note = point.note, instance = point.instance, interior = point.interior, x = point.x, y = point.y, z = point.z })) do
         attrs[#attrs + 1] = ('%s="%s"'):format(a[1], a[2])
     end
     outputServerLog("[vana-shops] new point (replace it in [data]/vana-data-shops/shops.map): <shoppoint " .. table.concat(attrs, " ") .. " />")

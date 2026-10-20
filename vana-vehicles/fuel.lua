@@ -140,6 +140,7 @@ addEventHandler("onResourceStart", resourceRoot, function()
         createMarker(p[1], p[2], p[3] - 0.6, "cylinder", m.size, m.colour[1], m.colour[2], m.colour[3], m.colour[4])
         MapPoints.set("gasstation:" .. i, { category = "gasstation", x = p[1], y = p[2], z = p[3] })
     end
+    for _, p in ipairs(F.pumpProps or {}) do createObject(F.pumpModel, p[1], p[2], p[3], 0, 0, p[4]) end
 end)
 
 addEventHandler("onPlayerQuit", root, function() stopRefuel(source) end)

@@ -12,7 +12,7 @@
 --   name: name.2, name.3 ...
 --   the extra names in config/player.lua (warps)
 local W = PlayerConfig.warps
-local places, builtAt -- name -> { x, y, z, interior, label }; rebuilt when older than 30 s
+local places, builtAt -- name -> { x, y, z, interior, dimension, label }; rebuilt when older than 30 s
 
 local function add(list, name, place)
     name = name:lower():gsub("%s+", "")
@@ -71,7 +71,8 @@ local function build()
             local key = name:lower() .. (interior ~= 0 and ".in" or "")
             seen[key] = (seen[key] or 0) + 1
             add(list, key .. (seen[key] > 1 and ("." .. seen[key]) or ""),
-                { x = ex, y = ey, z = ez, interior = interior, label = "entrance " .. name .. (interior ~= 0 and " (inside)" or "") })
+                { x = ex, y = ey, z = ez, interior = interior, dimension = num(e, "instance") or 0,
+                  label = "entrance " .. name .. (interior ~= 0 and " (inside)" or "") })
         end
     end
     -- The config's names, last (they may point at the ones above).
@@ -200,7 +201,7 @@ local function resolve(args, source, subject)
         end
     end
     local p = list[found[1]]
-    return p.x, p.y, p.z, p.interior, 0, p.rot, found[1] .. " (" .. p.label .. ")"
+    return p.x, p.y, p.z, p.interior, p.dimension or 0, p.rot, found[1] .. " (" .. p.label .. ")"
 end
 
 local function reply(source, msg)
@@ -281,10 +282,10 @@ addCommandHandler("pos", function(source, _, name)
     local x, y, z = getElementPosition(subject)
     local _, _, rz = getElementRotation(subject)
     local interior, dimension = getElementInterior(subject), getElementDimension(subject)
-    -- The nearest warp place in the same interior (names sharing a place: the shortest).
+    -- The nearest warp place in the same interior and dimension (names sharing a place: the shortest).
     local best, bestD
     for placeName, p in pairs(allPlaces()) do
-        if p.interior == interior then
+        if p.interior == interior and (p.dimension or 0) == dimension then
             local d = getDistanceBetweenPoints3D(x, y, z, p.x, p.y, p.z)
             if not bestD or d < bestD - 0.01 or (math.abs(d - bestD) <= 0.01 and #placeName < #best) then best, bestD = placeName, d end
         end

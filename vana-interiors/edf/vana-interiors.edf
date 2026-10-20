@@ -11,6 +11,7 @@
         <data name="open" type="integer" default="0" required="false" description="opening hour" />
         <data name="close" type="integer" default="24" required="false" description="closing hour" />
         <data name="enabled" type="selection:true,false" default="true" required="false" description="usable at all" />
+        <data name="instance" type="integer" default="0" required="false" description="dimension (0: the shared world; another: a copy of the interior of its own, e.g. a second 24/7)" />
         <marker type="arrow" size="1" color="#FFDC00AA" />
     </element>
     <script src="edf/edf_lines_client.lua" type="client" />

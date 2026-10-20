@@ -20,6 +20,9 @@ local function isOpen(e)
     return hour >= e.open or hour < e.close -- open across midnight
 end
 
+-- Where an entrance is: its interior and dimension (an interior copied elsewhere has an instance).
+local function sameArea(a, b) return a.interior == b.interior and (a.instance or 0) == (b.instance or 0) end
+
 local function isDoor(e)
     return bitAnd(e.flags or 0, 4) ~= 0
 end
@@ -34,7 +37,7 @@ local function partnerOf(player, e)
     for _, other in ipairs(list) do
         if other ~= e then
             if isDoor(other) then doors[#doors + 1] = other else hubs[#hubs + 1] = other end
-            if other.interior ~= e.interior then otherArea[#otherArea + 1] = other end
+            if not sameArea(other, e) then otherArea[#otherArea + 1] = other end
         end
     end
     local used = lastUsed[player] and lastUsed[player][e.name]
@@ -44,7 +47,7 @@ local function partnerOf(player, e)
         return doors[1]
     end
     -- No door/hub split: outside goes in, inside goes back out the way the player came.
-    if used and used ~= e and used.interior ~= e.interior then return used end
+    if used and used ~= e and not sameArea(used, e) then return used end
     if e.interior == 0 then
         for _, other in ipairs(otherArea) do if other.interior ~= 0 then return other end end
     end
@@ -63,6 +66,7 @@ local function transition(player, from, to)
         if not isElement(player) then return end
         -- GTA's entry-exit conversion puts the player 1 m above the IPL point.
         setElementInterior(player, to.interior, to.ex, to.ey, to.ez + 1)
+        setElementDimension(player, to.instance or 0)
         setElementPosition(player, to.ex, to.ey, to.ez + 1)
         setElementRotation(player, 0, 0, to.heading, "default", true)
         setCameraTarget(player, player)
@@ -80,7 +84,7 @@ addEvent("onPlayerUseEntrance")
 local function onHit(player, matching)
     if not matching or getElementType(player) ~= "player" or isPedDead(player) or getPedOccupiedVehicle(player) then return end
     local e = triggers[source]
-    if not e or getElementInterior(player) ~= e.interior then return end
+    if not e or getElementInterior(player) ~= e.interior or getElementDimension(player) ~= (e.instance or 0) then return end
     if busy[player] and getTickCount() - busy[player] < CONFIG.cooldownMs then return end
     if not isOpen(e) then
         outputChatBox(("Closed. Opens at %02d:00."):format(e.open), player, 255, 200, 50)
@@ -103,11 +107,13 @@ addEventHandler("onResourceStart", resourceRoot, function()
             local w, d = math.max(CONFIG.minTrigger, e.size[1]), math.max(CONFIG.minTrigger, e.size[2])
             local col = createColCuboid(e.x - w / 2, e.y - d / 2, e.z, w, d, 3)
             setElementInterior(col, e.interior)
+            setElementDimension(col, e.instance or 0)
             triggers[col] = e
             addEventHandler("onColShapeHit", col, onHit)
             -- The yellow arrow, hovering over the doorway.
             local marker = createMarker(e.x, e.y, e.z + 1.5, "arrow", 1.0, 255, 220, 0, 170)
             setElementInterior(marker, e.interior)
+            setElementDimension(marker, e.instance or 0)
             e.marker = marker
             -- Street doors go on the map; vana-map knows which names to show and as what.
             if e.interior == 0 then MapPoints.set("enex:" .. e.name .. ":" .. math.floor(e.x) .. ":" .. math.floor(e.y), { tag = e.name, x = e.x, y = e.y, z = e.z }) end

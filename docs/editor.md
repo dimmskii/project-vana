@@ -25,7 +25,9 @@ MTA's Map Editor like any map.
   see [setup.md](setup.md)) and keep running when an owner restarts.
 - **Paths:** race checkpoints and Chiliad route points link to the next one with `nextid`, as in
   MTA race maps; a `race` / `chiliadroute` element points at its first one (`first`). Burglary doors
-  link to their `house`. Entrances and doors carry the exit point they put you at (`ex`, `ey`, `ez`).
+  link to their `house`. Entrances and doors carry the exit point they put you at (`ex`, `ey`, `ez`);
+  an entrance or shop point with an `instance` is in that dimension (a copy of an interior: a second
+  24/7 under its own name, 3000 and up; garages use 4000 and up, activities 20000 and up).
 - **Spots:** world positions inside the rule configs (job stations and drop-offs, race entries,
   stunt coronas, the triathlon, girlfriends' places, school starts and rings, the start spawn...) are
   `spot` elements, and the configs read them by id, keeping every other field and comment in Lua:

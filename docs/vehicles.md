@@ -58,7 +58,9 @@ After the `gasoline.cs` CLEO mod (bytecode read with `SASCM.INI`):
   1 unit below 45 m/s, 2 to 85, 3 to 110, 4 to 140, 5 above, 1 in the air, none standing still.
   About 20 minutes of ordinary driving per tank.
 - Empty: the engine dies and won't start again.
-- Pumps: the mod's 16 gas station spots, exactly as its script checks them (`gasoline.txt`). Roll up
+- Pumps: the mod's 16 gas station spots, exactly as its script checks them (`gasoline.txt`), and ours
+  at the Mulholland / Temple station beside the Vinewood 24/7, which the mod skips (with four of GTA's
+  explosive pumps, model 1676, on its island: `pumpProps`). Roll up
   to one (within 1.5 m) with less than 29000 in the tank: the car is held while it fills, 300 units
   per $1 (a full tank is about $100), paid at the end.
 - Each pump has a white marker, as the mod garages' and Pay 'n' Sprays' (4 m, `pumpMarker` in

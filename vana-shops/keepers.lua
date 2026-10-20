@@ -270,6 +270,20 @@ Flows.food = {
     end,
 }
 
+-- 24/7s (ours: vanilla has nobody behind these counters): the clerk stands at the till and rings
+-- up what you buy; you shop standing at the counter.
+Flows.convenience = {
+    idle = function(ped) stand(ped) end,
+    sit = function() end,
+    browse = function(player) step(player) end,
+    buy = function(player, ped)
+        step(player)
+        play(ped, "DEALER", "shop_pay")
+        later(player, 2000, function() stand(ped) end)
+    end,
+    leave = function(player, ped, done) done() end,
+}
+
 -- Clothes: CJ steps into the changing room, poses in what's highlighted (per apparel category) and
 -- steps out when done. The clerk stays at the counter.
 local function door(shopName, visible)
@@ -314,9 +328,12 @@ local function spawnKeeper(shopName)
     local layout = KeeperLayouts[k.layout]
     local x, y, z, heading
     if k.keeper then x, y, z, heading = unpack(k.keeper) else x, y, z, heading = spot(shopName, layout.keeper) end
-    local ped = createPed(k.model, x, y, z + 1, heading)
+    -- A clerk from the shop's pool (24/7s: the locals' faces) or its one vanilla model.
+    local model = k.models and k.models[math.random(#k.models)] or k.model
+    local ped = createPed(model, x, y, z + 1, heading)
     if not ped then return end
     setElementInterior(ped, point.interior)
+    setElementDimension(ped, point.instance or 0)
     setElementFrozen(ped, true)
     setElementData(ped, "vana:keeper", shopName)
     staff[shopName] = ped
@@ -324,12 +341,14 @@ local function spawnKeeper(shopName)
     if layout.kit and not props[shopName] then
         local kit = createObject(layout.kit.model, x, y, z + layout.kit.z, 0, 0, heading)
         setElementInterior(kit, point.interior)
+        setElementDimension(kit, point.instance or 0)
         props[shopName] = kit
     end
     if layout.door and k.door and not props[shopName] then
         local dx, dy, dz, dh = spot(shopName, layout.door)
         local d = createObject(k.door, dx, dy, dz, 0, 0, dh)
         setElementInterior(d, point.interior)
+        setElementDimension(d, point.instance or 0)
         props[shopName] = d
     end
 end
@@ -344,6 +363,11 @@ function keeperSeat(player, shopName)
     if robberies[shopName] then return false, "The shop's closed." end
     serving[shopName] = player
     customers[player] = { shop = shopName, layout = k.layout, token = 0 }
+    -- A counter you shop at standing (24/7s): no seat, no camera.
+    if not KeeperLayouts[k.layout].customer then
+        Flows[k.layout].sit(player, ped, customers[player])
+        return true
+    end
     local x, y, z, heading = spot(shopName, KeeperLayouts[k.layout].customer)
     setElementFrozen(player, true)
     setElementPosition(player, x, y, z + 1)
@@ -412,7 +436,8 @@ function keeperStatus()
     for shopName in pairs(Keepers) do
         total = total + 1
         local ped = staff[shopName]
-        if isElement(ped) and not isPedDead(ped) and getElementInterior(ped) == ShopPoints[shopName].interior then alive = alive + 1 end
+        if isElement(ped) and not isPedDead(ped) and getElementInterior(ped) == ShopPoints[shopName].interior
+            and getElementDimension(ped) == (ShopPoints[shopName].instance or 0) then alive = alive + 1 end
     end
     return alive, total
 end
@@ -487,7 +512,7 @@ addEvent("vana-shops:threat", true)
 addEventHandler("vana-shops:threat", resourceRoot, function(ped, how)
     local shopName = isElement(ped) and getElementData(ped, "vana:keeper")
     if not shopName or staff[shopName] ~= ped or isPedDead(ped) or isPedDead(client) then return end
-    if getElementInterior(client) ~= getElementInterior(ped) then return end
+    if getElementInterior(client) ~= getElementInterior(ped) or getElementDimension(client) ~= getElementDimension(ped) then return end
     local x, y, z = getElementPosition(ped)
     local px, py, pz = getElementPosition(client)
     if getDistanceBetweenPoints3D(x, y, z, px, py, pz) > R.resetRadius then return end
@@ -514,6 +539,7 @@ local function handOverTill(shopName, r, now)
     local pickup = createPickup(x - math.sin(h) * 0.8, y + math.cos(h) * 0.8, z - 0.4, 3, 1212, 3600000)
     if pickup then
         setElementInterior(pickup, getElementInterior(ped))
+        setElementDimension(pickup, getElementDimension(ped))
         addEventHandler("onPickupHit", pickup, function(player)
             if getElementType(player) ~= "player" or isPedDead(player) then return end
             givePlayerMoney(player, amount)

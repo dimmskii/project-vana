@@ -5,6 +5,7 @@
         <data name="style" type="integer" default="" required="false" description="fighting style taught (gym mats only)" />
         <data name="action" type="string" default="" required="false" description="the command walking in runs (default: the kind's, e.g. buyfood); its target is this shop's keeper" />
         <data name="note" type="string" default="" required="false" description="free-form note" />
+        <data name="instance" type="integer" default="0" required="false" description="dimension (0: the shared world; another: a copy of the interior, as its entrance's)" />
         <marker type="cylinder" size="1" color="#FF780060" />
     </element>
     <element name="vendor" friendlyname="Vending machine / food cart">

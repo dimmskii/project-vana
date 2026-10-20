@@ -243,6 +243,10 @@
     <entrance posX="1315.49" posY="-897.843" posZ="38.571" interior="0" name="X7_11B" size="4,4" ex="1315.49" ey="-900.843" ez="38.571" heading="180" flags="4" open="0" close="24" enabled="true" />
     <entrance posX="1199.13" posY="-918.071" posZ="42.324" interior="0" name="FDBURG" size="4,3" ex="1199.13" ey="-920.571" ez="42.324" heading="180" flags="4" open="0" close="24" enabled="true" />
     <entrance posX="1000.33" posY="-919.924" posZ="41.237" interior="0" name="X711S2" size="2,2" ex="998.327" ey="-919.924" ez="41.237" heading="97" flags="4" open="0" close="24" enabled="true" />
+    <entrance posX="1929.23" posY="-1776.38" posZ="12.55" interior="0" name="X711I1" size="2,2" ex="1929.23" ey="-1779.38" ez="12.55" heading="181" flags="4" open="0" close="24" enabled="true" />
+    <entrance posX="-27.312" posY="-31.378" posZ="1002.55" interior="4" name="X711I1" size="3,1" ex="-27.312" ey="-29.278" ez="1002.55" heading="0" flags="1" open="0" close="24" enabled="true" instance="3001" />
+    <entrance posX="2129.97" posY="-1761.45" posZ="12.56" interior="0" name="X711I2" size="2,2" ex="2129.97" ey="-1764.45" ez="12.56" heading="181" flags="4" open="0" close="24" enabled="true" />
+    <entrance posX="-27.312" posY="-31.378" posZ="1002.55" interior="4" name="X711I2" size="3,1" ex="-27.312" ey="-29.278" ez="1002.55" heading="0" flags="1" open="0" close="24" enabled="true" instance="3002" />
     <entrance posX="928.525" posY="-1352.77" posZ="12.434" interior="0" name="FDCHICK" size="2,4" ex="924.525" ey="-1352.77" ez="12.434" heading="90" flags="4" open="0" close="24" enabled="true" />
     <entrance posX="-1863.15" posY="-21.66" posZ="1060.15" interior="14" name="AIRPORT" size="4,2.27" ex="-1863.15" ey="-19.66" ez="1060.15" heading="0" flags="0" open="0" close="24" enabled="true" />
     <entrance posX="-1861.68" posY="58.864" posZ="1054.2" interior="14" name="AIRPOR2" size="4,2.27" ex="-1861.68" ey="60.864" ez="1054.2" heading="0" flags="0" open="0" close="24" enabled="true" />

@@ -77,7 +77,7 @@ ShopConfig = {
     -- cooldownMs. The shop reopens once no player has been within resetRadius for resetMs.
     robbery = {
         cashSeconds = 3, aimTimeoutMs = 1500,
-        cash = { food = { 80, 300 }, hair = { 60, 250 }, tattoo = { 100, 400 }, clothes = { 150, 600 } },
+        cash = { food = { 80, 300 }, hair = { 60, 250 }, tattoo = { 100, 400 }, clothes = { 150, 600 }, convenience = { 100, 450 } },
         cooldownMs = 600000, resetRadius = 25, resetMs = 8000,
         clerkWeapon = 22, clerkAmmo = 30000,
     },

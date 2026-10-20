@@ -23,7 +23,7 @@ vanilla's shop icons do) or map-wide.
 | From | Points |
 | --- | --- |
 | `vana-interiors` (street doors) | Ammu-Nation, barbers, tattoo parlours, clothes shops, Burger Shot, Cluckin' Bell, Well Stacked Pizza, restaurants, diners, bars, clubs, gyms, casinos, the driving school |
-| `vana-vehicles` | Gas stations (the 16 pumps) |
+| `vana-vehicles` | Gas stations (the pumps: the mod's 16 and ours) |
 | `vana-shops` | Mod garages, Pay 'n' Sprays |
 | `vana-activities` | Race entries, stadium events, the Chiliad Challenge, triathlons, schools (bike, boat, flight), trucking, the quarry, courier pick-ups, the lowrider contest |
 

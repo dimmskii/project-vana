@@ -23,9 +23,11 @@
     <shoppoint id="TATTO2" posX="-203.32" posY="-7.06" posZ="1001.28" interior="17" kind="tattoo" />
     <shoppoint id="TATTO3" posX="-203.32" posY="-42.38" posZ="1001.28" interior="3" kind="tattoo" />
     <shoppoint id="TATTOO" posX="-203.32" posY="-25.33" posZ="1001.28" interior="16" kind="tattoo" />
-    <shoppoint id="X711S2" posX="-27.31" posY="-25.28" posZ="1002.55" interior="4" kind="misc" note="4 m inside the door (no counter found)" />
+    <shoppoint id="X711I1" posX="-30.99" posY="-28.93" posZ="1002.56" interior="4" kind="misc" note="Idlewood (Xoomer), a copy of the Vinewood store" instance="3001" />
+    <shoppoint id="X711I2" posX="-30.99" posY="-28.93" posZ="1002.56" interior="4" kind="misc" note="Idlewood, a copy of the Vinewood store" instance="3002" />
+    <shoppoint id="X711S2" posX="-30.99" posY="-28.93" posZ="1002.56" interior="4" kind="misc" note="Vinewood: at the counter (in game)" />
     <shoppoint id="X711S3" posX="6.09" posY="-25.27" posZ="1002.55" interior="10" kind="misc" note="4 m inside the door (no counter found)" />
-    <shoppoint id="X7_11B" posX="-30.95" posY="-85.61" posZ="1002.55" interior="18" kind="misc" note="4 m inside the door (no counter found)" />
+    <shoppoint id="X7_11B" posX="-28.06" posY="-89.95" posZ="1002.55" interior="18" kind="misc" note="El Corona / Mulholland / LV: at the counter (in game)" />
     <shoppoint id="X7_11C" posX="-25.13" posY="-135.07" posZ="1002.55" interior="16" kind="misc" note="4 m inside the door (no counter found)" />
     <shoppoint id="X7_11D" posX="-25.88" posY="-181.87" posZ="1002.55" interior="17" kind="misc" note="4 m inside the door (no counter found)" />
     <shoppoint id="X7_11S" posX="-26.69" posY="-51.71" posZ="1002.55" interior="6" kind="misc" note="4 m inside the door (no counter found)" />
