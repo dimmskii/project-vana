@@ -95,11 +95,19 @@ local function setOwner(a, player)
     end
 end
 
-local function spawn(index, s, owner)
+-- Spawns one round the spot, out of every player's sight distance (minSpawnDistance from the point it
+-- appears at, not the spot: the pack scatters them up to spawnRadius); false when no point is far enough.
+local function spawn(index, s, owner, players)
     local kind, species = WildlifeKinds[s.species], WildlifeSpecies[s.species]
     local variant = math.random(#species.variants)
-    local angle, r = math.random() * 2 * math.pi, math.random() * (s.spawnRadius or 10)
-    local x, y, z = s[1] + math.cos(angle) * r, s[2] + math.sin(angle) * r, s[3]
+    local x, y, z
+    for _ = 1, 6 do
+        local angle, r = math.random() * 2 * math.pi, math.random() * (s.spawnRadius or 10)
+        x, y, z = s[1] + math.cos(angle) * r, s[2] + math.sin(angle) * r, s[3]
+        if not players or nearest(x, y, z, players) > CONFIG.minSpawnDistance then break end
+        x = nil
+    end
+    if not x then return false end
     local element
     if kind.driver == "ped" then
         element = createPed(7, x, y, z + 0.5, s.angle or math.random(0, 359))
@@ -122,6 +130,8 @@ local function spawn(index, s, owner)
     order(a, "idle")
     debugLog(("%s spawned at %.0f, %.0f, %.0f (spot %d, %d/%d there; %s simulates)"):format(s.species, x, y, z, index,
         spawners[index].alive, math.ceil((s.quantity or 1) * CONFIG.density), isElement(owner) and getPlayerName(owner) or "nobody"))
+
+    return true
 end
 
 -- The brain, once a tick.
@@ -270,10 +280,9 @@ setTimer(function()
                 if not sp then sp = { alive = 0, nextAt = 0 } spawners[i] = sp end
                 if d < (s.findRadius or 80) and now >= sp.nextAt
                     and sp.alive < math.ceil((s.quantity or 1) * CONFIG.density)
-                    and nearest(s[1], s[2], s[3], players) > CONFIG.minSpawnDistance then
-                    spawn(i, s, player)
+                then
+                    if spawn(i, s, player, players) then made = made + 1 end
                     sp.nextAt = now + 3000 -- one at a time per spot
-                    made = made + 1
                 end
             end
         end

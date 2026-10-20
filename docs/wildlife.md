@@ -68,7 +68,7 @@ would stand on GTA's human animations.
 
 - **Waking:** each second, near each player outdoors: a spawner within its `findRadius`, at its
   hours, keeps up to `quantity` times `density` alive, one every 3 s, never within
-  `minSpawnDistance` of a player, within the caps (`maxPerPlayer` within 200 m, `maxTotal`). Gone
+  `minSpawnDistance` of a player (from where it appears, not the spot), within the caps (`maxPerPlayer` within 200 m, `maxTotal`). Gone
   once every player is `findRadius + despawnMargin` from its spot (or 250 m from the animal); a body is removed after 20 s and its spawner
   waits its `respawn`.
 - **Behaviour** (per species): **prey** (hare, deer, cat) runs from anyone within `fleeRange`;
