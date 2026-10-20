@@ -69,22 +69,18 @@ Keep the file names in upper case; the Linux server is case-sensitive. Check the
 ## 4. mtaserver.conf
 
 Inside `<config>`, replace the stock `<resource>` lines with these, and only these: the Map Editor
-runs as a server of its own with `editor.conf`, never from this list ([editor.md](editor.md)).
+runs as a server of its own with `editor.conf`, never from this list ([editor.md](editor.md)). The other
+`vana-data-*` resources (player, parked, interiors, encounters, wildlife, radio) aren't started at
+all: vana-lib reads their files; they only have to be in `resources/`.
 
 ```xml
 <resource src="vana-lib" startup="1" protected="0" />
 <resource src="vana-core" startup="1" protected="0" />
 <resource src="vana-text" startup="1" protected="0" />
 <resource src="vana-controls" startup="1" protected="0" />
-<resource src="vana-data-player" startup="1" protected="0" />
-<resource src="vana-data-parked" startup="1" protected="0" />
-<resource src="vana-data-interiors" startup="1" protected="0" />
 <resource src="vana-data-shops" startup="1" protected="0" />
 <resource src="vana-data-gym" startup="1" protected="0" />
 <resource src="vana-data-activities" startup="1" protected="0" />
-<resource src="vana-data-encounters" startup="1" protected="0" />
-<resource src="vana-data-wildlife" startup="1" protected="0" />
-<resource src="vana-data-radio" startup="1" protected="0" />
 <resource src="vana-map" startup="1" protected="0" />
 <resource src="vana-paths" startup="1" protected="0" />
 <resource src="vana-lights" startup="1" protected="0" />
@@ -143,12 +139,14 @@ on every start (`adminRights` in `vana-player/config/player.lua`; the `Console` 
 After editing `acl.xml` on a running server, run `reloadacl` in the console.
 
 Our resources ask for ACL rights through `<aclrequest>`; approve them once from the console (the
-server saves it). Every resource that imports shared code from `vana-lib` on the server needs
-`loadstring` (see [libraries.md](libraries.md)), `vana-controls` runs other commands typed in
+server saves it). `vana-lib` reads the data resources' `.map` files for everyone
+(`general.ModifyOtherObjects`: reading another resource's files), every resource that imports shared
+code from `vana-lib` on the server needs `loadstring` (see [libraries.md](libraries.md)), `vana-controls` runs other commands typed in
 `/interact`'s box (`executeCommandHandler`, which still checks the player's own rights), and
 `vana-player` creates an account per player (named after their serial):
 
 ```text
+aclrequest allow vana-lib all
 aclrequest allow vana-text all
 aclrequest allow vana-controls all
 aclrequest allow vana-vehicles all

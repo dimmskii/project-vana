@@ -23,13 +23,14 @@ local function zoneName(x, y, z, city)
     return (getZoneName(x, y, z, city) or ""):lower():gsub("[^%w]", "")
 end
 
+-- A data resource's elements of a kind, as their attributes, from its .map files (most data
+-- resources don't run: vana-lib's map_data).
 local function elementsOf(resourceName, kind)
-    local res = getResourceFromName(resourceName)
-    local root = res and getResourceState(res) == "running" and getResourceRootElement(res)
-    return root and getElementsByType(kind, root) or {}
+    local all = MapData.fileElements(resourceName)
+    return all and all[kind] or {}
 end
 
-local function num(element, key) return tonumber(getElementData(element, key)) end
+local function num(e, key) return tonumber(e[key]) end
 
 local function build()
     local list = {}
@@ -38,7 +39,7 @@ local function build()
         local name = getResourceName(res)
         if name:find("^vana%-data%-") then
             for _, e in ipairs(elementsOf(name, "spot")) do
-                local id = getElementID(e) ~= "" and getElementID(e) or getElementData(e, "id")
+                local id = e.id
                 local x, y, z = num(e, "posX"), num(e, "posY"), num(e, "posZ")
                 if id and x then add(list, id, { x = x, y = y, z = z, interior = num(e, "interior") or 0, label = "spot" }) end
             end
@@ -47,7 +48,7 @@ local function build()
     -- Hospitals and police stations (restart points), numbered and by zone; each city's police station.
     local count = { hospital = 0, police = 0 }
     for _, e in ipairs(elementsOf("vana-data-player", "restart")) do
-        local kind = getElementData(e, "kind") or "hospital"
+        local kind = e.kind or "hospital"
         local x, y, z = num(e, "posX"), num(e, "posY"), num(e, "posZ")
         if x and count[kind] then
             count[kind] = count[kind] + 1
@@ -64,10 +65,10 @@ local function build()
     -- Interior entrances: where each side puts you (its exit point), outside by name, inside as name.in.
     local seen = {}
     for _, e in ipairs(elementsOf("vana-data-interiors", "entrance")) do
-        local name = getElementData(e, "name")
+        local name = e.name
         local ex, ey, ez = num(e, "ex"), num(e, "ey"), num(e, "ez")
         local interior = num(e, "interior") or 0
-        if name and ex and getElementData(e, "enabled") ~= "false" then
+        if name and ex and e.enabled ~= "false" then
             local key = name:lower() .. (interior ~= 0 and ".in" or "")
             seen[key] = (seen[key] or 0) + 1
             add(list, key .. (seen[key] > 1 and ("." .. seen[key]) or ""),

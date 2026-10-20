@@ -233,6 +233,7 @@ addCommandHandler("encountertest", function(source)
         local st = states[e.id]
         if st and isElement(st.ped) and not isPedDead(st.ped) then out = out + 1 end
     end
+    if count == 0 then problems[#problems + 1] = "no encounters: vana-data-encounters is missing" end
     if #problems > 0 then ok = false end
     local lines = {}
     for id, st in pairs(states) do

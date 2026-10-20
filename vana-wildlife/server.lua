@@ -338,7 +338,7 @@ addCommandHandler("wildlifetest", function(source)
             unknown = unknown + 1
         end
     end
-    if unknown > 0 then ok = false end
+    if unknown > 0 or #WildlifeSpawners == 0 then ok = false end -- none at all: vana-data-wildlife is missing
     local missing, files = {}, 0
     for id, sp in pairs(WildlifeSpecies) do
         local list = {}

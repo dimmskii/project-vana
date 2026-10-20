@@ -2,7 +2,8 @@
 -- doors, the race tournament's races and the Chiliad Challenge routes. Races and routes are paths:
 -- each checkpoint links to the next (nextid), as in MTA race maps, and the editor draws them.
 MapDatasets.activities = {
-    resource = "vana-data-activities", file = "activities.map", definition = "vana-activities",
+    -- clients: client scripts read it too, so it runs as a map resource (vana-lib's map_data)
+    resource = "vana-data-activities", clients = true, file = "activities.map", definition = "vana-activities",
     types = {
         { element = "minigamespot", friendly = "Minigame object", position = true, rotation = "heading", interior = "interior",
           fields = {

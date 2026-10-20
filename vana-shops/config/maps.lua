@@ -1,7 +1,8 @@
 -- Map data (tools/lib/map_data.lua): shop customer spots and vending machines / food carts, in
 -- vana-data-shops.
 MapDatasets.shops = {
-    resource = "vana-data-shops", file = "shops.map", definition = "vana-shops",
+    -- clients: client scripts read it too, so it runs as a map resource (vana-lib's map_data)
+    resource = "vana-data-shops", clients = true, file = "shops.map", definition = "vana-shops",
     types = {
         { element = "shoppoint", friendly = "Shop point", position = true, interior = "interior", id = "name",
           fields = {

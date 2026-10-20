@@ -144,9 +144,13 @@ end
 
 -- A dataset (each owning resource's config/maps.lua): its element schemas, where they live, and
 -- the conversion between element records and the tables the code uses:
---   { resource, file, definition, types = { schema, ... },
+--   { resource, file, definition, types = { schema, ... }, clients = true?,
 --     toRecords = fn(globals) -> { [element] = records },   -- for the converter and seeds
 --     fromRecords = fn({ [element] = records }) -> globals } -- e.g. { CarGenerators = {...} }
+-- Where the game reads it from (MapData.load): a dataset clients read too (`clients`: its tables on
+-- both sides, as the client scripts load) is a running map resource, read from its elements; any
+-- other is read by the server straight from the resource's .map files, the resource never started,
+-- so nothing of it goes to players.
 MapDatasets = MapDatasets or {}
 
 -- In MTA: every element of the schema's type in the dataset's map resource, as records. keyed: by id.
@@ -185,10 +189,75 @@ if getElementsByType then
         return out
     end
 
-    -- The dataset's tables, built from its map resource's elements (e.g. { CarGenerators = {...} }).
+    -- A map resource's elements read from its .map files (it needn't run): element name -> list
+    -- of attribute tables (strings, as written), in file order. Server only: clients can't read
+    -- another resource's files. False when the resource or its files are missing. Reading another
+    -- resource's files takes general.ModifyOtherObjects, so vana-lib alone holds it and reads for
+    -- everyone (its mapFileElements export, server.lua).
+    function MapData.readMapFiles(resourceName)
+        if localPlayer then return false end
+        if not getResourceFromName(resourceName) then
+            outputServerLog(("[MapData] WARNING: no resource %s: its data is missing (see docs/setup.md)"):format(tostring(resourceName)))
+            return false
+        end
+        local meta = xmlLoadFile(":" .. resourceName .. "/meta.xml", true)
+        if not meta then
+            outputServerLog(("[MapData] WARNING: can't read %s/meta.xml: its data is missing"):format(resourceName))
+            return false
+        end
+        local files = {}
+        for _, node in ipairs(xmlNodeGetChildren(meta)) do
+            if xmlNodeGetName(node) == "map" then files[#files + 1] = xmlNodeGetAttribute(node, "src") end
+        end
+        xmlUnloadFile(meta)
+        local byName = {}
+        for _, path in ipairs(files) do
+            local root = xmlLoadFile(":" .. resourceName .. "/" .. path, true)
+            if not root then
+                outputServerLog(("[MapData] WARNING: %s/%s is missing or unreadable: its data is missing"):format(resourceName, path))
+            else
+                for _, node in ipairs(xmlNodeGetChildren(root)) do
+                    local name = xmlNodeGetName(node)
+                    byName[name] = byName[name] or {}
+                    table.insert(byName[name], xmlNodeGetAttributes(node))
+                end
+                xmlUnloadFile(root)
+            end
+        end
+        return byName
+    end
+
+    function MapData.fileElements(resourceName)
+        if localPlayer then return false end
+        if getResourceName(getThisResource()) == "vana-lib" then return MapData.readMapFiles(resourceName) end
+        local lib = getResourceFromName("vana-lib")
+        if not lib or getResourceState(lib) ~= "running" then
+            outputServerLog(("[MapData] WARNING: vana-lib isn't running: no data from %s"):format(tostring(resourceName)))
+            return false
+        end
+        return exports["vana-lib"]:mapFileElements(resourceName)
+    end
+
+    -- The schema's records from a resource's .map files (see fileElements).
+    function MapData.readFile(schema, resourceName, keyed, elements)
+        elements = elements or MapData.fileElements(resourceName) or {}
+        local out = {}
+        for _, attr in ipairs(elements[schema.element] or {}) do
+            local rec = MapData.fromAttributes(schema, attr)
+            if keyed then out[rec[schema.id]] = rec else out[#out + 1] = rec end
+        end
+        return out
+    end
+
+    -- The dataset's tables (e.g. { CarGenerators = {...} }): from its running map resource's
+    -- elements if clients read it too, else from its .map files on the server.
     function MapData.load(dataset)
         local byType = {}
-        for _, schema in ipairs(dataset.types) do byType[schema.element] = MapData.read(schema, dataset.resource) end
+        local elements = not dataset.clients and MapData.fileElements(dataset.resource)
+        for _, schema in ipairs(dataset.types) do
+            if dataset.clients then byType[schema.element] = MapData.read(schema, dataset.resource)
+            else byType[schema.element] = MapData.readFile(schema, dataset.resource, false, elements or {}) end
+        end
         return dataset.fromRecords(byType)
     end
 end

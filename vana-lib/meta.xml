@@ -1,7 +1,14 @@
 <meta>
     <info author="ProjectVana" name="Vana lib" description="Shared code the other resources import (game-file readers, map data)" version="1.0.0" type="script" />
+    <aclrequest>
+        <!-- reading the data resources' .map files for everyone (server.lua, lib/map_data.lua) -->
+        <right name="general.ModifyOtherObjects" access="true" />
+    </aclrequest>
     <script src="import.lua" type="shared" />
+    <script src="lib/map_data.lua" type="server" />
+    <script src="server.lua" type="server" />
     <export function="import" type="shared" />
+    <export function="mapFileElements" type="server" />
     <!-- Served to clients too, so client scripts can import them. -->
     <file src="lib/sa_reader.lua" />
     <file src="lib/sa_gxt.lua" />

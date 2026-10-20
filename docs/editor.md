@@ -20,9 +20,14 @@ MTA's Map Editor like any map.
 
 - **Schemas:** each owner's `config/maps.lua` describes its element types (fields, types, defaults,
   descriptions, editor look) and converts between elements and the Lua tables the code uses.
-- **Loading:** `MapData` (`vana-lib`'s `map_data`, imported by each owner) reads the elements when
-  the owner starts. The data resources start first (top of the startup list in `mtaserver.conf`,
-  see [setup.md](setup.md)) and keep running when an owner restarts.
+- **Loading:** `MapData` (`vana-lib`'s `map_data`, imported by each owner) reads them when the owner
+  starts. Most data resources are never started: vana-lib reads their `.map` files for the server
+  (`mapFileElements`; reading another resource's files takes `general.ModifyOtherObjects`, which
+  only vana-lib asks for), so none of it goes to players. The few whose data client scripts read
+  too (`clients = true` in the dataset: `vana-data-activities`, `-gym`, `-shops`) run as map
+  resources at the top of the startup list ([setup.md](setup.md)). A missing data resource or file
+  is a `[MapData] WARNING` in the server log. After editing a map, restart its owner (and the map
+  itself, for the three that run).
 - **Paths:** race checkpoints and Chiliad route points link to the next one with `nextid`, as in
   MTA race maps; a `race` / `chiliadroute` element points at its first one (`first`). Burglary doors
   link to their `house`. Entrances and doors carry the exit point they put you at (`ex`, `ey`, `ez`);
@@ -78,7 +83,7 @@ definitions.
 3. Move, add or delete elements; their fields show in the properties panel with descriptions.
 4. **Lines:** our EDF script draws paths as arrows, door-to-house links and exit points near the
    camera. `/vanalines` toggles them.
-5. Save, then on the game server restart the map and its owner (e.g. `restart vana-data-activities`,
+5. Save, then on the game server restart the owner (and the map too, if it's one of the three that run: e.g. `restart vana-data-activities`,
    `restart vana-activities`) to use the changes; commit the `.map`.
 
 **No comments in data.** Saving rewrites the whole `.map` from its elements, so anything kept for

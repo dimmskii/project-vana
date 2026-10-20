@@ -1,6 +1,7 @@
 -- Map data (tools/lib/map_data.lua): gym equipment, in vana-data-gym.
 MapDatasets.gym = {
-    resource = "vana-data-gym", file = "gym.map", definition = "vana-gym",
+    -- clients: client scripts read it too, so it runs as a map resource (vana-lib's map_data)
+    resource = "vana-data-gym", clients = true, file = "gym.map", definition = "vana-gym",
     types = {
         { element = "gymequipment", friendly = "Gym equipment", position = true, rotation = "heading", interior = "interior",
           fields = { { "kind", "string", "bike", "bike, treadmill, bench or mat" } },
