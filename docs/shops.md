@@ -259,8 +259,7 @@ gyms and Madd Dogg's home gym. Vanilla's gym scripts (`GYMBIKE`, `GYMBENC`, `GYM
   (vanilla's convention); held items sit exactly on the hand bone with no offset. The food tray
   preview is rotated 90 degrees for at least the Well Stacked Pizza meals.
 - **24/7 stores:** `X7_11C` and `X7_11D` (clerks placed) have no street door. `X711S3` got one
-  (ours: Flint County, 24.5, -2646.6), its counter and clerk the Vinewood store's moved by the offset
-  between their doors (to check in game).
+  (ours: Flint County, 24.5, -2646.6).
 - **The LV sex shop** (`SEXSHOP`, ours): a misc counter with a clerk (246, VHFYST3) and its own stock
   (`stocks` in `config/shops.lua`: a dildo and flowers).
 - **Wardrobe:** vanilla's safehouse wardrobe script (`WARROBE`) isn't ported; our closet is the
