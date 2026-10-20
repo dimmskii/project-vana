@@ -110,7 +110,7 @@ local function writeEdf(owner, datasets)
             for _, f in ipairs(schema.fields) do
                 local kind = f[2] == "ref" and ("element:" .. f[5]) or EDF_TYPES[f[2]]
                 local default = f[3] == nil and "" or (type(f[3]) == "boolean" and tostring(f[3]) or tostring(f[3]))
-                if f[2] == "ref" or f[1] == "ex" then lines = true end
+                if f[2] == "ref" or f[1] == "ex" or schema.element == "pathlink" then lines = true end
                 out[#out + 1] = ('        <data name="%s" type="%s" default="%s" required="false" description="%s" />')
                     :format(f[1], kind, xml(default), xml(f[4] or ""))
             end

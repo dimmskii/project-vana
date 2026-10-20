@@ -28,6 +28,35 @@ shares between two links each are one per link (31,468). A field at its default 
   added node gets the next index), and each link's length. A link crossing areas lives in its navi
   node's area (a ped link: its `a`'s); the areas around one are searched for it.
 
+## Editing paths
+
+Open an area's resource (`vana-data-paths-15` is Grove Street's) in the Map Editor's own server
+([editor.md](editor.md)). Near the camera our line script draws, refreshed twice a second:
+
+| Drawn | Means |
+| --- | --- |
+| Cross at a node | Its type: cyan road, orange highway, blue boat path, red emergency only, purple parking, green ped path |
+| Curve, node to node | A vehicle link, through its navi node (the link element stands there): drag the link to bend it. Dimmer: quieter traffic |
+| Straight line | A ped link |
+| Arrowhead halfway | One-way (lanes only one way: left lanes run toward the navi node's own node, `naviNode` or `a`) |
+| Yellow cross | A traffic light at the navi node; white: a train crossing |
+| Thick yellow line | A ped crossing (`crossingA`/`crossingB`) |
+| Red stub | The other end is in an area that isn't open |
+
+- **Moving** a node or a link is all it takes; lengths and link lists are rebuilt when loaded.
+- **A new node:** place a *Path node*; its id can be anything unique (it gets the next index;
+  vehicle nodes go before ped nodes). Set `kind` to `vehicle` for a road.
+- **A new link:** place a *Path link* where its lane point goes and type its ends' ids in `a` and
+  `b` (a node in a neighbouring area by its full id). A road link needs `dir` (the lane direction,
+  e.g. `0.7,-0.7`); without it, it's a ped link.
+- **Connectivity:** routing only joins nodes of one `flood` network; a new road joining two keeps
+  each node's own value until we recompute them (not yet).
+- **Saving** writes every field, defaults included, so an edited area's file grows (about twice);
+  it reads the same.
+
+Not checked in the editor itself yet: the drawing, and the editor coping with an area's thousands of
+elements (the largest, 41, has about 9,000).
+
 ## NODES*.DAT (the converter's source)
 
 There are 64 files, one per 750 × 750 area. The areas form an 8 × 8 grid starting at

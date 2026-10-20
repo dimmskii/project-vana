@@ -38,4 +38,5 @@
         <data name="trailer" type="string" default="" required="false" description="the 384 bytes after its links: index:value pairs of the non-zero ones" />
         <marker type="corona" size="2" color="#FFFFFF40" />
     </element>
+    <script src="edf/edf_lines_client.lua" type="client" />
 </def>

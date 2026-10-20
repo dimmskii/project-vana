@@ -83,7 +83,8 @@ definitions.
 2. Its definitions (e.g. `vana-activities`) load with it; if not, add them under *Definitions*.
 3. Move, add or delete elements; their fields show in the properties panel with descriptions.
 4. **Lines:** our EDF script draws paths as arrows, door-to-house links and exit points near the
-   camera. `/vanalines` toggles them.
+   camera, and the path graph as roads and footpaths ([paths-and-lights.md](paths-and-lights.md)).
+   `/vanalines` toggles them.
 5. Save, then on the game server restart the owner (and the map too, if it's one of the three that run: e.g. `restart vana-data-activities`,
    `restart vana-activities`) to use the changes; commit the `.map`.
 
