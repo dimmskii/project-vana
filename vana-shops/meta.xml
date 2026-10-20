@@ -24,6 +24,7 @@
     <script src="sprays_client.lua" type="client" />
     <script src="icons_client.lua" type="client" />
     <file src="data/hud.txd" /> <!-- the radar icons drawn in the garage markers: copied from your game at setup -->
+    <file src="icons/radar_247.png" /> <!-- ours: the 24/7 map icon (vana-map's convenience category; vanilla has none); the .pdn next to it is its Paint.NET source -->
     <script src="help.lua" type="server" />
     <export function="getHelpPages" type="server" />
     <export function="getActions" type="server" />

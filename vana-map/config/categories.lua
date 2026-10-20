@@ -27,6 +27,7 @@ MapCategories = {
     modgarage = { icon = 27, name = "Mod garage", short = true },
     spray = { icon = 63, name = "Pay 'n' Spray", short = true },
     gasstation = { image = ":vana-vehicles/icons/radar_gasstn.png", name = "Gas station", short = true },
+    convenience = { image = ":vana-shops/icons/radar_247.png", name = "24/7", short = true },
     bigfoot = { image = ":vana-encounters/icons/radar_bigfoot.png", name = "Bigfoot", short = false }, -- while he's out (vana-encounters)
 }
 
@@ -40,7 +41,7 @@ MapEntranceCategories = {
     { "^FDDONUT$", "diner" }, { "^DINER%d$", "diner" }, { "^TSDINER$", "diner" }, { "^REST2$", "restaurant" },
     { "^BAR1$", "club" }, { "^BAR2$", "bar" }, { "^UFOBAR$", "bar" },
     { "^GYM%d$", "gym" }, { "^TRICAS$", "casinoTriads" }, { "^MAFCAS%d?$", "casino" }, { "^CASINO2$", "casino" },
-    { "^DRIVES$", "school" },
+    { "^DRIVES$", "school" }, { "^X7_?11", "convenience" }, -- 24/7s: vanilla's X7_11*/X711S*, our copies (X711I1 ...)
 }
 -- How far short-range icons show (metres).
 MapShortRange = 250
