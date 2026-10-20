@@ -27,6 +27,7 @@ MapCategories = {
     modgarage = { icon = 27, name = "Mod garage", short = true },
     spray = { icon = 63, name = "Pay 'n' Spray", short = true },
     gasstation = { image = ":vana-vehicles/icons/radar_gasstn.png", name = "Gas station", short = true },
+    bigfoot = { image = ":vana-encounters/icons/radar_bigfoot.png", name = "Bigfoot", short = false }, -- while he's out (vana-encounters)
 }
 
 -- Entrances (vana-interiors' enex names) and the category their street doors show as. Patterns are Lua

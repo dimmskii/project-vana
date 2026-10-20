@@ -1,5 +1,8 @@
 <map edf:definitions="vana-encounters">
-    <!-- Encounter spawn -->
+    <!-- Encounter -->
+    <encounter id="bigfoot.whetstone" posX="-1360.31" posY="-2313.07" posZ="38.14" rotX="0" rotY="0" rotZ="18" kind="bigfoot" name="Bigfoot" startHour="0" endHour="0" reward="5000" note="first test: all day, from midnight" />
+    <!-- Bigfoot v1.2's own 38 spots (the mod picked one at random; fog ones walk to ex/ey/ez), kept for
+         placing more: to use one, give it an id and kind="bigfoot" name="Bigfoot", hours, and uncomment.
     <encounter posX="-451.9473" posY="-2676.257" posZ="155.9322" creature="bigfoot" startHour="0" endHour="0" />
     <encounter posX="-684.2419" posY="-2166.613" posZ="23.1425" creature="bigfoot" startHour="0" endHour="0" />
     <encounter posX="-946.9445" posY="-2476.911" posZ="100.3482" creature="bigfoot" startHour="0" endHour="0" />
@@ -38,4 +41,5 @@
     <encounter posX="-1602.242" posY="-2211.599" posZ="23.5317" creature="bigfoot" startHour="0" endHour="0" weather="9" ex="-1570.16" ey="-2370.899" ez="34.3084" />
     <encounter posX="-1329.914" posY="-2233.906" posZ="29.6537" creature="bigfoot" startHour="0" endHour="0" weather="9" ex="-1359.687" ey="-2357.69" ez="36.135" />
     <encounter posX="-1365.292" posY="-2074.084" posZ="19.0865" creature="bigfoot" startHour="0" endHour="0" weather="9" ex="-1282.466" ey="-2022.393" ez="18.0593" />
+    -->
 </map>

@@ -1,51 +1,41 @@
--- Map data (vana-lib's map_data): where encounters can happen, in vana-data-encounters. One element
--- type for every creature or NPC: what appears (creature), when (hours, weather), where it heads, and
--- a free-form params string for what one creature needs that the others don't.
-local function weatherList(s)
-    if type(s) ~= "string" or s == "" then return nil end
-    local set = {}
-    for w in s:gmatch("%d+") do set[tonumber(w)] = true end
-    return next(set) and set or nil
-end
-
-local function weatherString(set)
-    if not set then return nil end
-    local list = {}
-    for w in pairs(set) do list[#list + 1] = w end
-    table.sort(list)
-    return table.concat(list, ",")
-end
-
+-- Map data (vana-lib's map_data): the encounters, in vana-data-encounters. One element per encounter:
+-- a single instance of its kind (config/encounters.lua) that appears at its place every day at
+-- startHour and is cleaned up at endHour; killed, it stays dead until the next day.
 MapDatasets.encounters = {
     resource = "vana-data-encounters", file = "encounters.map", definition = "vana-encounters",
     types = {
-        { element = "encounter", friendly = "Encounter spawn", position = true,
+        { element = "encounter", friendly = "Encounter", position = true, rotation = "heading", id = "id",
           fields = {
-              { "creature", "string", "bigfoot", "who appears here (config/encounters.lua: bigfoot ...)" },
-              { "startHour", "int", 0, "from this game hour (0-23); the same as endHour: any time" },
-              { "endHour", "int", 0, "until this game hour (exclusive)" },
-              { "weather", "string", nil, "only in these vanilla weathers (comma-separated IDs, e.g. 9 for fog); none: the creature's own rule" },
-              { "ex", "number", nil, "walks to here (x); none: stays where it appears" },
+              { "kind", "string", "bigfoot", "what appears (config/encounters.lua EncounterKinds: bigfoot ...)" },
+              { "name", "string", nil, "its name, shown on the map and in messages (none: the kind's)" },
+              { "startHour", "int", 0, "it appears at this game hour, every day (0-23), unless killed that day" },
+              { "endHour", "int", 0, "and is cleaned up at this one (the same as startHour: a whole day, from that hour)" },
+              { "blip", "string", nil, "vana-map category of its map icon while it's out (none: the kind's; \"none\": no icon)" },
+              { "health", "int", nil, "health in GTA's units (none: the kind's)" },
+              { "reward", "int", nil, "cash for killing it, shared by the damage each player did (none: the kind's)" },
+              { "model", "int", nil, "ped model (none: the kind's; a kind with its own DFF shows that on it)" },
+              { "walkingStyle", "int", nil, "walking style (none: the kind's)" },
+              { "fightingStyle", "int", nil, "fighting style (none: the kind's)" },
+              { "weapon", "int", nil, "weapon in hand (none: fists)" },
+              { "anim", "string", nil, "idle animation while it stands, block/name (e.g. ped/idle_tired)" },
+              { "ex", "number", nil, "walks to here after appearing (x); none: stays where it appears" },
               { "ey", "number", nil, "y" },
               { "ez", "number", nil, "z" },
-              { "params", "string", nil, "anything else this creature reads, free-form (key=value;...)" },
+              { "params", "string", nil, "anything else its script reads, free-form (key=value;...)" },
               { "note", "string", nil, "free-form note" },
           },
           rep = '<marker type="cylinder" size="2" color="#6A4A2A90" />' },
     },
     toRecords = function(g)
         local list = {}
-        for _, s in ipairs(g.Encounters) do
-            list[#list + 1] = { x = s[1], y = s[2], z = s[3], creature = s.creature, startHour = s.startHour, endHour = s.endHour,
-                                weather = weatherString(s.weathers), ex = s.ex, ey = s.ey, ez = s.ez, params = s.params, note = s.note }
-        end
+        for _, s in ipairs(g.Encounters) do list[#list + 1] = s end
         return { encounter = list }
     end,
     fromRecords = function(t)
         local list = {}
-        for _, r in ipairs(t.encounter) do
-            list[#list + 1] = { r.x, r.y, r.z, creature = r.creature, startHour = r.startHour or 0, endHour = r.endHour or 0,
-                                weathers = weatherList(r.weather), ex = r.ex, ey = r.ey, ez = r.ez, params = r.params, note = r.note }
+        for i, r in ipairs(t.encounter) do
+            r.id = r.id or ("encounter" .. i)
+            list[#list + 1] = r
         end
         return { Encounters = list }
     end,

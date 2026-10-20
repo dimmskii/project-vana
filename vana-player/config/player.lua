@@ -19,7 +19,7 @@ PlayerConfig = {
 
     -- Rights our admin commands need, granted to the Admin ACL on start (restricted commands).
     adminRights = { "command.traffic", "command.peds", "command.wanted", "command.shoppoint",
-                    "command.setmoney", "command.addmoney", "command.setstat", "command.event", "command.bigfoot",
+                    "command.setmoney", "command.addmoney", "command.setstat", "command.event",
                     "command.warp", "command.warphere", "command.warps", "command.cleanvehicles", "command.vanadebug",
                     "command.vanaset", "command.animal", "command.pos" },
 

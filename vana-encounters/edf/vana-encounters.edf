@@ -1,14 +1,23 @@
 <def name="vana-encounters">
-    <element name="encounter" friendlyname="Encounter spawn">
+    <element name="encounter" friendlyname="Encounter">
         <data name="position" type="coord3d" default="0,0,0" />
-        <data name="creature" type="string" default="bigfoot" required="false" description="who appears here (config/encounters.lua: bigfoot ...)" />
-        <data name="startHour" type="integer" default="0" required="false" description="from this game hour (0-23); the same as endHour: any time" />
-        <data name="endHour" type="integer" default="0" required="false" description="until this game hour (exclusive)" />
-        <data name="weather" type="string" default="" required="false" description="only in these vanilla weathers (comma-separated IDs, e.g. 9 for fog); none: the creature's own rule" />
-        <data name="ex" type="number" default="" required="false" description="walks to here (x); none: stays where it appears" />
+        <data name="rotation" type="coord3d" default="0,0,0" />
+        <data name="kind" type="string" default="bigfoot" required="false" description="what appears (config/encounters.lua EncounterKinds: bigfoot ...)" />
+        <data name="name" type="string" default="" required="false" description="its name, shown on the map and in messages (none: the kind's)" />
+        <data name="startHour" type="integer" default="0" required="false" description="it appears at this game hour, every day (0-23), unless killed that day" />
+        <data name="endHour" type="integer" default="0" required="false" description="and is cleaned up at this one (the same as startHour: a whole day, from that hour)" />
+        <data name="blip" type="string" default="" required="false" description="vana-map category of its map icon while it's out (none: the kind's; &quot;none&quot;: no icon)" />
+        <data name="health" type="integer" default="" required="false" description="health in GTA's units (none: the kind's)" />
+        <data name="reward" type="integer" default="" required="false" description="cash for killing it, shared by the damage each player did (none: the kind's)" />
+        <data name="model" type="integer" default="" required="false" description="ped model (none: the kind's; a kind with its own DFF shows that on it)" />
+        <data name="walkingStyle" type="integer" default="" required="false" description="walking style (none: the kind's)" />
+        <data name="fightingStyle" type="integer" default="" required="false" description="fighting style (none: the kind's)" />
+        <data name="weapon" type="integer" default="" required="false" description="weapon in hand (none: fists)" />
+        <data name="anim" type="string" default="" required="false" description="idle animation while it stands, block/name (e.g. ped/idle_tired)" />
+        <data name="ex" type="number" default="" required="false" description="walks to here after appearing (x); none: stays where it appears" />
         <data name="ey" type="number" default="" required="false" description="y" />
         <data name="ez" type="number" default="" required="false" description="z" />
-        <data name="params" type="string" default="" required="false" description="anything else this creature reads, free-form (key=value;...)" />
+        <data name="params" type="string" default="" required="false" description="anything else its script reads, free-form (key=value;...)" />
         <data name="note" type="string" default="" required="false" description="free-form note" />
         <marker type="cylinder" size="2" color="#6A4A2A90" />
     </element>
