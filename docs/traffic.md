@@ -50,6 +50,11 @@ built, so ambient traffic and scripted actors behave alike.
   `traffictest` fails if any light stop lands on the centre line of a two-way road.
 - **Bikes, bicycles and quads:** their riders stay ambient peds with GTA's ambient event profile while
   riding (not mission actors), so collisions knock them off as in vanilla.
+- **When a unit ends** (jacked, driver killed or out, wrecked, bailing out): its occupants are
+  released (automatic sync) and become vana-peds pedestrians once on foot. Those still seated stop
+  being mission actors (so a jacked car's passenger bails out, as in vanilla) and are told to get out
+  by whoever syncs them, every 2 s; after 5 tries they're taken out of the car, beside it. Before
+  this, a passenger of a car you jacked sat on in it as a mission actor nothing ran.
 - **Light rules (vanilla):**
   - Red: stop, unless the line can't be made even braking hard (7 m/s²).
   - Amber: stop if it can be done comfortably (5 m/s²) at the stop point; otherwise commit and

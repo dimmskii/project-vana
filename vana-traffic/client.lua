@@ -90,13 +90,19 @@ addEventHandler("vana-traffic:release", resourceRoot, function(vehicle, ped)
 end)
 
 -- Occupants get out (to pick a fight, or because the car has been abandoned).
+-- Released occupants (the unit ended: jacked, crashed, bailing out) are no longer mission actors, so
+-- GTA's own responses come back (a passenger bails out of a jacked car, as in vanilla); the client that
+-- syncs each one also gets it out. The server sends this again until they're out (server.lua).
 addEvent("vana-traffic:exit", true)
 addEventHandler("vana-traffic:exit", resourceRoot, function(vehicle, peds)
-    commands[vehicle] = nil
+    if vehicle then commands[vehicle] = nil end
     for _, ped in ipairs(peds) do
         if isElement(ped) and isElementStreamedIn(ped) and getPedOccupiedVehicle(ped) then
-            killPedTask(ped, "primary", 3, false)
-            setPedExitVehicle(ped)
+            setPedMissionActor(ped, false)
+            if isElementSyncer(ped) then
+                killPedTask(ped, "primary", 3, false)
+                setPedExitVehicle(ped)
+            end
         end
     end
 end)

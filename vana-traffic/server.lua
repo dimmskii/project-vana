@@ -77,6 +77,8 @@ local function setOwner(unit, owner)
     end
 end
 
+local EXIT_RETRY_MS, EXIT_TRIES = 2000, 5 -- released occupants still seated: how often, how many times to tell them
+
 local function releasePed(ped, spec, encounter)
     if not isElement(ped) then return end
     -- Back to automatic syncing: a ped (or body) nobody syncs freezes wherever it was.
@@ -373,6 +375,30 @@ setTimer(function()
             and adoptAsPedestrian(element, info) then
             -- An occupant out of the car (pulled out, fled, crashed, picking a fight) walks on as a pedestrian.
             released[element] = nil
+        elseif getElementType(element) == "ped" and not isPedDead(element) and getPedOccupiedVehicle(element) then
+            -- Still seated (a passenger of a jacked car, say): told to get out again, by whoever syncs it
+            -- now, every EXIT_RETRY_MS; after EXIT_TRIES, taken out of the car (then adopted above).
+            local now = getTickCount()
+            if now - (info.exitAt or 0) >= EXIT_RETRY_MS then
+                info.exitAt, info.exitTries = now, (info.exitTries or 0) + 1
+                local vehicle = getPedOccupiedVehicle(element)
+                if info.exitTries > EXIT_TRIES then
+                    removePedFromVehicle(element)
+                    local vx, vy, vz = getElementPosition(vehicle)
+                    local ex, ey, ez = getElementPosition(element)
+                    -- Beside the car, on its side, rather than inside it.
+                    local dx, dy = ex - vx, ey - vy
+                    local len = math.max(0.1, math.sqrt(dx * dx + dy * dy))
+                    setElementPosition(element, vx + dx / len * 2.2, vy + dy / len * 2.2, math.max(ez, vz) + 0.3)
+                else
+                    local to = getElementSyncer(element)
+                    if not isElement(to) then
+                        local px, py, pz = getElementPosition(element)
+                        to = nearestPlayer(px, py, pz, players)
+                    end
+                    if isElement(to) then triggerClientEvent(to, "vana-traffic:exit", resourceRoot, vehicle, { element }) end
+                end
+            end
         else
             local x, y, z = getElementPosition(element)
             local occupied = getElementType(element) == "vehicle" and next(getVehicleOccupants(element) or {})
