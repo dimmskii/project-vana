@@ -119,7 +119,7 @@
     <entrance posX="315.821" posY="-143.332" posZ="998.662" interior="7" name="AMMUN4" size="3.13,2.69" ex="315.821" ey="-142.432" ez="998.662" heading="359.9" flags="9" open="0" close="24" enabled="true" />
     <entrance posX="316.525" posY="-169.607" posZ="998.662" interior="6" name="AMMUN5" size="3.13,2.69" ex="316.525" ey="-168.707" ez="998.662" heading="359.9" flags="9" open="0" close="24" enabled="true" />
     <entrance posX="460.1" posY="-88.428" posZ="998.622" interior="4" name="DINER1" size="2.13,2.69" ex="460.1" ey="-88.428" ez="998.622" heading="90" flags="3" open="0" close="24" enabled="true" />
-    <entrance posX="459.351" posY="-111.005" posZ="998.718" interior="5" name="DINER2" size="2.13,2.69" ex="459.351" ey="-110.105" ez="998.718" heading="0" flags="3" open="0" close="24" enabled="true" />
+    <entrance posX="459.351" posY="-111.005" posZ="998.718" interior="5" name="DINER2" size="2.13,2.69" ex="459.351" ey="-108.6" ez="998.718" heading="0" flags="3" open="0" close="24" enabled="true" />
     <entrance posX="227.294" posY="-7.432" posZ="1001.26" interior="5" name="CSDESGN" size="1,2" ex="226.294" ey="-7.432" ez="1001.26" heading="90" flags="9" open="0" close="24" enabled="true" />
     <entrance posX="254.137" posY="-41.532" posZ="1001.07" interior="14" name="CHANGER" size="1,2" ex="255.137" ey="-41.532" ez="1001.07" heading="270" flags="0" open="0" close="24" enabled="true" />
     <entrance posX="-72.15" posY="780.976" posZ="1122.32" interior="7" name="OFTEST" size="3.2,7" ex="-72.15" ey="786.476" ez="1122.32" heading="0" flags="3" open="0" close="24" enabled="true" />
