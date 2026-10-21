@@ -34,10 +34,11 @@ local function num(e, key) return tonumber(e[key]) end
 
 local function build()
     local list = {}
-    -- Spots, in every data resource.
+    -- Spots, in every data resource but the path graph's 64 areas (~14 MB of nodes, no spots: reading
+    -- them stalled the server for seconds).
     for _, res in ipairs(getResources()) do
         local name = getResourceName(res)
-        if name:find("^vana%-data%-") then
+        if name:find("^vana%-data%-") and not name:find("^vana%-data%-paths%-") then
             for _, e in ipairs(elementsOf(name, "spot")) do
                 local id = e.id
                 local x, y, z = num(e, "posX"), num(e, "posY"), num(e, "posZ")
