@@ -16,8 +16,9 @@ case "${1:-}" in
     start)
         running && { echo "already running (pid $(cat "$PIDF"))"; exit 0; }
         rm -f "$FIFO"; mkfifo "$FIFO"
-        # Holder keeps the FIFO's write end open so the server never sees EOF on stdin.
-        (exec 3>"$FIFO"; while [[ -p "$FIFO" ]]; do sleep 60; done) &
+        # Holder keeps the FIFO's write end open so the server never sees EOF on stdin. Its stdio is
+        # detached so `ssh host srv.sh start` returns.
+        (exec 3>"$FIFO"; while [[ -p "$FIFO" ]]; do sleep 60; done) </dev/null >/dev/null 2>&1 &
         echo $! > "$RUN/holder.pid"
         cd "$SRV"
         # Prod ships a start.sh wrapper that runs the binary under a bundled glibc (Ubuntu 20.04 host).
