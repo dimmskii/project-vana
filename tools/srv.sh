@@ -1,5 +1,5 @@
 #!/bin/bash
-# Headless control for the dev server: srv.sh start|stop|status|cmd "<console command>"|log [n]|restartall
+# Headless control for the server (dev or prod): srv.sh start|stop|status|cmd "<console command>"|log [n]|restartall
 set -euo pipefail
 # Lives in the repo at [vana]/tools/, i.e. <server>/mods/deathmatch/resources/[vana]/tools/.
 HERE="$(cd "$(dirname "$(readlink -f "$0")")" && pwd)"
@@ -20,7 +20,9 @@ case "${1:-}" in
         (exec 3>"$FIFO"; while [[ -p "$FIFO" ]]; do sleep 60; done) &
         echo $! > "$RUN/holder.pid"
         cd "$SRV"
-        nohup ./mta-server64 -n -t -u < "$FIFO" > "$OUT" 2>&1 &
+        # Prod ships a start.sh wrapper that runs the binary under a bundled glibc (Ubuntu 20.04 host).
+        launch=./mta-server64; [[ -x start.sh ]] && launch=./start.sh
+        nohup "$launch" -n -t -u < "$FIFO" > "$OUT" 2>&1 &
         echo $! > "$PIDF"
         for _ in $(seq 1 30); do
             grep -q "ready to accept connections" "$OUT" 2>/dev/null && { echo "started (pid $(cat "$PIDF"))"; exit 0; }
