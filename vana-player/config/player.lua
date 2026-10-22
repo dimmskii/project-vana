@@ -22,7 +22,7 @@ PlayerConfig = {
                     "command.setmoney", "command.addmoney", "command.setstat", "command.event",
                     "command.warp", "command.warphere", "command.warps", "command.cleanvehicles", "command.vanadebug",
                     "command.vanaset", "command.animal", "command.pos",
-                    "command.car", "command.spawncar" },
+                    "command.car", "command.spawncar", "command.trains" },
 
     -- Admin warps (/warp, /warphere, /warps; docs/player.md). Places come from the map data (spots by
     -- id, hospitals and police stations, interior entrances by vanilla's names); these are extra names

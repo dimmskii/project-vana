@@ -1,0 +1,7 @@
+<def name="vana-trains">
+    <element name="tracknode" friendlyname="Track node">
+        <data name="position" type="coord3d" default="0,0,0" />
+        <data name="stop" type="selection:true,false" default="false" required="false" description="a station stop: trains that stop halt with their middle here" />
+        <marker type="corona" size="0.8" color="#C08040A0" />
+    </element>
+</def>

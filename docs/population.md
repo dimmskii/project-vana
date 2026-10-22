@@ -172,5 +172,5 @@ appear: Grove Street, El Corona, the LS airport, the SF golf club and SF downtow
 - **Tuning in game:** collision severity scale, jack chance, and how the native fight, flee and
   jack tasks behave.
 - **Emergency services:** medics, firefighters, police response.
-- **Data:** zone-specific car generators and parked cars; boats, aircraft, trains.
+- **Data:** zone-specific car generators and parked cars; boats, aircraft. Trains: [trains.md](trains.md).
 - **Storage:** move config and data to XML and elements (long-term).

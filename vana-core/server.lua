@@ -24,6 +24,7 @@ local TOPICS = { -- resource -> { topic = what it checks }
     ["vana-peds"] = { orders = "every walk or encounter order a client couldn't give, with the ped's state" },
     ["vana-controls"] = { targets = "how each action found its target, or why it found none" },
     ["vana-traffic"] = { telemetry = "slow traffic units and their native autopilot state (as /traffic debug)" },
+    ["vana-trains"] = { sync = "trains made and removed, who simulates them, taken trains, and where a train's game disagrees with the timetable (as /trains debug)" },
     ["vana-encounters"] = { encounters = "each encounter appearing, cleaned up, going for someone, giving up, killed" },
     ["vana-wildlife"] = { brains = "what animals do (spawning, fleeing, hurt, chases, deaths, despawns) and orders a client couldn't give" },
 }

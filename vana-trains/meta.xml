@@ -1,0 +1,24 @@
+<meta>
+    <info author="ProjectVana" name="Vana trains" description="Freight trains, the Brown Streak and the San Fierro trams: a server timetable, elements only near players" version="0.1.0" type="script" edf:definition="edf/vana-trains.edf" />
+    <include resource="vana-population" />
+    <aclrequest>
+        <right name="function.loadstring" access="true" /> <!-- importing shared code from vana-lib -->
+    </aclrequest>
+    <!-- The levers: /vanaset trains <name> <value> (or /trains freight|passenger|tram <count>), or the admin panel. -->
+    <settings>
+        <setting name="@freight" value="2" desc="Freight trains on the mainland line" accept="0-8" />
+        <setting name="@passenger" value="2" desc="Brown Streak passenger trains on the mainland line" accept="0-8" />
+        <setting name="@trams" value="2" desc="Trams in San Fierro" accept="0-8" />
+    </settings>
+    <script src="lib.lua" type="server" />
+    <script src="tracks_data.lua" type="server" />
+    <script src="config/maps.lua" type="server" />
+    <script src="config/trains.lua" type="server" />
+    <script src="schedule.lua" type="server" />
+    <script src="server.lua" type="server" />
+    <script src="test.lua" type="server" />
+    <script src="help.lua" type="server" />
+    <export function="getHelpPages" type="server" />
+    <export function="getSettings" type="server" />
+    <export function="setSetting" type="server" />
+</meta>

@@ -4,7 +4,7 @@
 -- of it to the player's console (F8). (desktop_client.lua keeps the old window for later.)
 local pages = {}   -- name -> page (with .resource)
 local AREAS = {    -- resource -> the area its pages are listed under
-    ["vana-player"] = "Players", ["vana-vehicles"] = "Vehicles", ["vana-radio"] = "Radio", ["vana-traffic"] = "Traffic",
+    ["vana-player"] = "Players", ["vana-vehicles"] = "Vehicles", ["vana-radio"] = "Radio", ["vana-traffic"] = "Traffic", ["vana-trains"] = "Trains",
     ["vana-peds"] = "Pedestrians", ["vana-services"] = "Police and events", ["vana-shops"] = "Shops and garages",
     ["vana-activities"] = "Activities", ["vana-wildlife"] = "Wildlife", ["vana-encounters"] = "Encounters", ["vana-help"] = "Help",
     ["vana-controls"] = "Controls", ["vana-core"] = "Server",
