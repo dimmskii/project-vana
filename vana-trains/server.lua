@@ -15,8 +15,9 @@ local trains, lastId = {}, 0  -- id -> train (schedule.lua)
 local live = {}               -- train -> { engine, cars = {}, driver, driverSpec, owner, ... }
 local released = {}           -- drivers no longer ours: ped -> { kind, personality, encounter }
 local enabled = true
--- setTrainDirection(true) runs the way rail distances grow, until a running train shows otherwise.
-local clockwiseGrows = true
+-- setTrainDirection(true) runs the way rail distances grow, until a running train shows otherwise
+-- (once: a second flip would mean the check is wrong, not the flag).
+local clockwiseGrows, flipped = true, false
 
 local function sync(text) if Debug.on("sync") then Debug.log("sync", text) end end
 
@@ -81,8 +82,12 @@ local function railPlace(vehicle, track, s, forward)
     setTrainDirection(vehicle, forward == clockwiseGrows)
 end
 
--- Every vehicle of the train put at its rail distance (only while nobody can see it).
+-- Every vehicle of the train put at its rail distance (only while nobody can see it). The server's
+-- copy of the engine's position stays where it was until the owner's game syncs the new one, so
+-- readbacks of that old position (stale) are ignored.
 local function replace(train, l)
+    l.stale, l.placedTick, l.placedS = { getElementPosition(l.engine) }, getTickCount(), train.s
+    l.stillTicks, l.wrongWay = 0, 0
     local dir = train.forward and 1 or -1
     for k, v in ipairs(vehiclesOf(l)) do
         if isElement(v) then railPlace(v, train.track, TracksData.wrap(Tracks[train.track], train.s - dir * (k - 1) * CONFIG.carSpacing), train.forward) end
@@ -195,13 +200,31 @@ local function replaceTaken(train, players)
     sync(("train %d (%s): replaced by train %d at %.0f m"):format(train.id, train.service, fresh.id, spot))
 end
 
--- Where the client's game has the train now: its s, unless it hasn't moved while it should have (no
--- client simulates it yet): then it's put where the schedule has it, out of sight.
+-- Where the owner's game has the train now becomes its s. Not when that is still where it was before
+-- we last put it somewhere, nor a jump: then it's put where the timetable has it, out of sight (a
+-- train its owner's game doesn't simulate: not streamed in yet).
 local function readBack(train, l)
     local t = Tracks[train.track]
     local x, y, z = getElementPosition(l.engine)
+    if l.stale then
+        if getDistanceBetweenPoints3D(x, y, z, l.stale[1], l.stale[2], l.stale[3]) < 0.05 then
+            -- Not synced since: it runs on the timetable, put where that has it now and then, so it's
+            -- there when it streams in.
+            if getTickCount() - l.placedTick > 5000 and math.abs(TracksData.ahead(t, l.placedS, train.s, train.forward)) > 1 then
+                replace(train, l)
+            end
+            return
+        end
+        -- Synced again: from here on, steps are the train running, not the jump we made.
+        l.stale = nil
+        l.lastS = TracksData.nearestAround(t, x, y, z, train.s, 200)
+    end
     local s, off = TracksData.nearestAround(t, x, y, z, train.s, 200)
-    local moved = math.abs(TracksData.ahead(t, l.lastS, s, true)) > 0.05 and math.abs(TracksData.ahead(t, s, l.lastS, true)) > 0.05
+    -- Since the last readback, signed along the rail (positions arrive with the owner's sync, a
+    -- fraction of a second late, so they're compared with each other, never with the timetable's).
+    local step = TracksData.ahead(t, l.lastS, s, true)
+    if step > t.length / 2 then step = step - t.length end
+    local moved = math.abs(step) > 0.05
     l.lastS = s
     if train.state == "taken" then
         if off < 20 then train.s = s end
@@ -221,21 +244,31 @@ local function readBack(train, l)
     end
     l.stillTicks = 0
     -- Which way it went: setTrainDirection's meaning, learnt from the first trains that run.
-    local signed = TracksData.ahead(t, train.s, s, true)
-    if signed > t.length / 2 then signed = signed - t.length end
-    if train.v > 3 and signed * (train.forward and 1 or -1) < -1 then
+    if train.v > 3 and step * (train.forward and 1 or -1) < -1 then
         l.wrongWay = l.wrongWay + 1
-        if l.wrongWay >= 3 then
-            clockwiseGrows = not clockwiseGrows
-            sync(("train %d (%s): ran the wrong way: setTrainDirection(true) now means rail distances %s"):format(train.id, train.service, clockwiseGrows and "grow" or "shrink"))
-            outputServerLog(("[vana-trains] trains ran backwards: direction flag flipped (now %s)"):format(tostring(clockwiseGrows)))
-            for other, ol in pairs(live) do if other.state ~= "taken" then replace(other, ol) end end
-            for _, ol in pairs(live) do ol.wrongWay = 0 end
+        if l.wrongWay >= 3 and not flipped then
+            clockwiseGrows, flipped = not clockwiseGrows, true
+            outputServerLog(("[vana-trains] trains ran backwards: direction flag flipped (setTrainDirection(true) now means rail distances %s)")
+                :format(clockwiseGrows and "grow" or "shrink"))
+            for other, ol in pairs(live) do
+                if other.state ~= "taken" then
+                    for _, v in ipairs(vehiclesOf(ol)) do if isElement(v) then setTrainDirection(v, other.forward == clockwiseGrows) end end
+                end
+                ol.wrongWay = 0
+            end
+        elseif l.wrongWay == 3 then
+            outputServerLog(("[vana-trains] WARNING: train %d (%s) runs backwards although the direction flag was already flipped"):format(train.id, train.service))
         end
         return
     end
     l.wrongWay = 0
-    if math.abs(signed) > 30 then sync(("train %d (%s): %.0f m from where the schedule had it"):format(train.id, train.service, signed)) end
+    local drift = TracksData.ahead(t, train.s, s, true)
+    if drift > t.length / 2 then drift = drift - t.length end
+    if math.abs(drift) > 50 then
+        -- Far from the timetable: never a jump to adopt. Put it back where it should be.
+        sync(("train %d (%s): %.0f m from where the timetable had it: put back"):format(train.id, train.service, drift))
+        return replace(train, l)
+    end
     train.s = s
     Schedule.moved(train)
 end

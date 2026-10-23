@@ -56,10 +56,15 @@ Vanilla instead spawns trains around the player; the speeds, counts and dwell ar
 - **Simulated** by the nearest such player (pinned, handed over past 300 m), like traffic units.
   The server sets the speed (`setTrainSpeed`, which reaches every client); where the train is comes
   back from that client's game each tick and becomes the timetable's, so nothing is teleported in
-  sight. A train that hasn't moved while it should have (nobody simulates it yet) is put where the
-  timetable has it, out of sight; so is one more than 20 m off its track.
-- **Direction:** `setTrainDirection(true)` is taken to run the way rail distances grow; if running
-  trains show otherwise, the server flips it once and logs it.
+  sight. Positions arrive a fraction of a second late, so they're only compared with each other,
+  never with the timetable's. A train that hasn't moved while it should have (nobody simulates it
+  yet), one more than 20 m off its track and one more than 50 m from the timetable are put where the
+  timetable has it, out of sight. After that, the server's copy of the position stays the old one
+  until the owner's game syncs again; until then readbacks are ignored and the train runs on the
+  timetable (put where that has it every 5 s, so it's right when it streams in).
+- **Direction:** `setTrainDirection(true)` is taken to run the way rail distances grow; if a running
+  train shows otherwise (three readbacks in a row going backwards), the server flips it once and
+  logs it. A second time is only a warning in the log.
 - **Vanilla:** no radar blips for trains; they can't be wrecked (damage-proof) and don't derail while
   they run themselves. They're `vana:managed`, so vana-vehicles never keeps one.
 - **Taken:** a player who pulls the driver out drives the train: it leaves the timetable, the others
