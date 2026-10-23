@@ -54,7 +54,9 @@ way, so none meets another head on. Every 500 ms each train:
 - if it stops at stations (the Brown Streak), brakes to halt with its middle on each stop and waits
   20 s.
 
-Vanilla instead spawns trains around the player; the speeds, counts and dwell are ours.
+Vanilla instead spawns trains around the player; the speeds, counts and dwell are ours. With
+vana-cars, freight trains pull the Mastodon a third of the time and take its wagons among theirs,
+and a third of the Brown Streaks are Streakliners ([cars.md](cars.md)).
 
 ## In the world (`server.lua`)
 

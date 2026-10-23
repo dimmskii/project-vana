@@ -86,9 +86,12 @@ flight school's rings at 100-110 m (touch-and-go training).
 - **Following a wanted player (vanilla):** from 4 stars the second helicopter is the news one; that's
   vana-services ([services.md](services.md)).
 - **Passing by (ours):** every minute, for each player with none around, a 15% chance of a helicopter
-  flying past 150-400 m off, 110-180 m up (Maverick 50%, Sparrow 25%, Raindance 15%, Leviathan 10%).
+  flying past 150-400 m off, 110-180 m up (weights: Maverick 50, Sparrow 25, Raindance 15, Leviathan
+  10, and with vana-cars Little Willy 15, Armadillo 10). Every 2 minutes, 5%: a Blimp drifting over
+  (12 m/s, 150-250 m up).
 - **Airliners overhead (vanilla's ambient planes, `CPlane::DoPlaneGenerationAndRemoval`):** every
-  90 s, 12% for each player: one high over them (300-550 m), never in vanilla's no-plane zones and
+  90 s, 12% for each player: one high over them (300-550 m; with vana-cars also the Baron, AT-20 and
+the pack's airliner), never in vanilla's no-plane zones and
   only the small ones (Shamal, Nevada) in its no-big-plane zones (downtown Los Santos and San Fierro;
   `CPlane::AreWeInNoPlaneZone`, `AreWeInNoBigPlaneZone`, gta-reversed). Vanilla's choice of where they
   come from isn't reversed yet; ours: straight past, 1.8 km each side.

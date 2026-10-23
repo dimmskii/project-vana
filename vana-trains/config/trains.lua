@@ -6,10 +6,14 @@ TrainConfig = {
     -- distances grow), what they're made of, how fast, and whether they stop at the station stops.
     -- Every train of a track runs the same way, so none ever meets another head on.
     services = {
+        -- engines / cars: models, or added vehicles' names (vana-cars: the Mastodon and its wagons, the
+        -- Streakliner), picked at random; an added one that isn't there falls back to `engine` / the
+        -- first car.
         freight = { setting = "freight", count = 2, track = 0, forward = true, cruise = 18, stops = false,
-                    engine = 537, cars = { 569, 590 }, minCars = 3, maxCars = 6 },
+                    engine = 537, engines = { 537, 537, "mastd" }, cars = { 569, 590, "freitank", "freigon", "freicont" },
+                    minCars = 3, maxCars = 6 },
         passenger = { setting = "passenger", count = 2, track = 0, forward = true, cruise = 22, stops = true,
-                      engine = 538, cars = { 570 }, minCars = 2, maxCars = 3 },
+                      engine = 538, engines = { 538, 538, "streakl" }, cars = { 570 }, minCars = 2, maxCars = 3 },
         tram = { setting = "trams", count = 2, track = 1, forward = true, cruise = 11, stops = false,
                  engine = 449, cars = {}, minCars = 0, maxCars = 0 },
     },

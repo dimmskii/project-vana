@@ -32,12 +32,15 @@ AirConfig = {
              speed = 18, crew = { 61, 61 } },
     -- Helicopters passing now and then (ours): checked every `every` for each player, one at a time
     -- around a player. Weights by model.
-    ambient = { every = 60000, chance = 0.15, models = { [487] = 50, [469] = 25, [563] = 15, [417] = 10 },
+    -- Models may be added vehicles' names (vana-cars: Little Willy, the Armadillo).
+    ambient = { every = 60000, chance = 0.15, models = { [487] = 50, [469] = 25, [563] = 15, [417] = 10, lilwill = 15, armad = 10 },
                 speed = 35, distance = 900, height = { 110, 180 } },
+    -- A blimp drifting over now and then (ours; vana-cars' Blimp).
+    blimp = { model = "blimp", every = 120000, chance = 0.05, speed = 12, distance = 900, height = { 150, 250 } },
     -- Airliners passing high overhead, as vanilla's (CPlane::DoPlaneGenerationAndRemoval), none in its
     -- no-plane zones, no big ones in its no-big-plane zones (CPlane::AreWeInNoPlaneZone,
     -- AreWeInNoBigPlaneZone; gta-reversed). The rest is ours.
-    overflights = { every = 90000, chance = 0.12, big = { 577, 592 }, small = { 519, 553 },
+    overflights = { every = 90000, chance = 0.12, big = { 577, 592, "airtrain" }, small = { 519, 553, "baron", "at20" },
                     height = { 300, 550 }, speed = 70, distance = 1800 },
     noPlaneZones = { circles = { { -1073, -675, 200 } },
                      boxes = { { -2743, 1300, -2626, 2200 }, { -1668, 541, -1122, 1118 } } },

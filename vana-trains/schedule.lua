@@ -132,7 +132,8 @@ function Schedule.newTrain(id, serviceName, s, random)
     return {
         id = id, service = serviceName, track = service.track, forward = service.forward,
         s = TracksData.wrap(Tracks[service.track], s), v = 0, state = "run",
-        engine = service.engine, cars = cars, length = (n + 1) * TrainConfig.carSpacing,
+        engine = service.engines and service.engines[random(1, #service.engines)] or service.engine, cars = cars,
+        length = (n + 1) * TrainConfig.carSpacing,
     }
 end
 

@@ -88,18 +88,30 @@ local function setOwner(train, l, owner)
     sync(("train %d (%s): simulated by %s"):format(train.id, train.service, getPlayerName(owner)))
 end
 
+-- A model, or an added vehicle's name (vana-cars); `fallback` when that isn't there.
+local function modelOf(model, fallback)
+    if type(model) ~= "string" then return model end
+    local res = getResourceFromName("vana-cars")
+    if res and getResourceState(res) == "running" then
+        local ok, id = pcall(function() return exports["vana-cars"]:getModel(model) end)
+        if ok and id then return id end
+    end
+    return fallback
+end
+
 local function materialize(train, owner)
     local t = Tracks[train.track]
+    local service = CONFIG.services[train.service]
     local x, y, z, heading = TracksData.pointAt(t, train.s)
     if not train.forward then heading = (heading + 180) % 360 end
-    local engine = createVehicle(train.engine, x, y, z + 1, 0, 0, heading)
+    local engine = createVehicle(modelOf(train.engine, service.engine), x, y, z + 1, 0, 0, heading)
     if not engine then return false end
     local l = { engine = engine, cars = {}, sent = -1, sentAt = 0, lastS = train.s, stillTicks = 0, wrongWay = 0 }
     local dir = train.forward and 1 or -1
     local prev = engine
     for k, model in ipairs(train.cars) do
         local cx, cy, cz = TracksData.pointAt(t, train.s - dir * k * CONFIG.carSpacing)
-        local car = createVehicle(model, cx, cy, cz + 1, 0, 0, heading)
+        local car = createVehicle(modelOf(model, service.cars[1]), cx, cy, cz + 1, 0, 0, heading)
         if car then
             l.cars[#l.cars + 1] = car
             attachTrailerToVehicle(prev, car)

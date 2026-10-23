@@ -1,7 +1,9 @@
 # Added vehicles (`vana-cars`)
 
-Vehicles San Andreas never had where it should have: each city's own police cars, more
-ambulances and fire trucks, school and tour buses, mail and delivery vans, more taxis and beaters.
+Vehicles San Andreas never had: first where it should have (each city's own police cars, more
+ambulances and fire trucks, school and tour buses, mail and delivery vans, more taxis and beaters),
+then the rest of the pack: everyday, sports and race cars, bikes, boats, trailers, trains and
+unarmed aircraft.
 They come from mods, cherry-picked ([credits.md](credits.md)), and are always **added**: each is a
 model of its own, built on a vanilla parent, and no vanilla model, name or ID is ever replaced. The
 same goes for retextures (the Flame Infernus is a model of its own; the vanilla Infernus is
@@ -24,7 +26,13 @@ higher-resolution set, as the pack does.
   (colours kept) and vana-services' responders and roadblocks all call it.
 - **Shared textures:** `mods/evvpr/generic/vehicle.txd` (19 textures, 14 MB) is imported into every
   vehicle model, vanilla and added.
-- **Files** go to clients when they join (about 120 MB, cached by MTA after the first time).
+- **Files** (about 920 MB in all) aren't sent at join: a model's DFF and TXD are downloaded the first
+  time a vehicle of it streams in (it shows as its parent until then), and the service vehicles'
+  variants in the background, two at a time. MTA keeps them for next time. The shared textures
+  (14 MB) come at join.
+- **The ID budget:** Neon never reuses a model ID while the server runs (so a late packet can't be
+  mistaken for a new model), and IDs go up to 65534: vana-cars can be restarted about 60 times
+  (365 models each) before the server itself must be. Allocation failures are a warning in the log.
 
 ## Where they appear
 
@@ -46,14 +54,19 @@ higher-resolution set, as the pack does.
 | Fire Truck (407) | Firehook, Biff FDSA; at the airports only the Firebrigade |
 | Securicar (428) | in Las Venturas only the casino Securicar |
 
+- **Trains** (vana-trains): freight trains pull the Mastodon a third of the time and the new tank,
+  scrap and container wagons among the vanilla ones; a third of the Brown Streaks are Streakliners.
+- **Aircraft** (vana-air): Little Willy and the Armadillo among the helicopters passing by, the
+  Baron and AT-20 among the small planes overhead and the airliner among the big ones; the Blimp
+  drifts over now and then.
 - **Retextures** (`CarSkins`): now and then in place of the vanilla model where it's picked as a
   service vehicle or variant (Flame Infernus 15%, Big Boy's Toys monster truck 50%).
 - **`/car <name>`** spawns any of them by name or model name (`/car brigham lspd`, `/car taco`).
 
-## The batch
+## What's added
 
-41 vehicles from the Extended Vanilla Vehicles Pack Reboot 2.0, chosen for what San Andreas lacks
-(service vehicles, liveries, everyday types), and two retextures:
+363 vehicles from the Extended Vanilla Vehicles Pack Reboot 2.0 and two retextures. First the
+service vehicles, liveries and everyday types San Andreas lacks:
 
 | Group | Vehicles |
 | --- | --- |
@@ -65,6 +78,18 @@ higher-resolution set, as the pack does.
 | Delivery | Pizza Chimp, Taco Van, Chilli Wagon, Rusty Browns, Messenger, Dolva, Bastion |
 | Beaters | Grand Beater, Chumash Beater, Montoya Beater, Skulker Beater, Avaritia Beater |
 | Retextures | Flame Infernus, Big Boy's Toys monster truck |
+
+Then the rest of the pack: 272 cars (everyday, sports, race, muscle, utility), 22 bikes, a bicycle
+(Whippet), a trike, 6 monster trucks, 4 boats, 6 trailers players can hook, the trains (Streakliner,
+Mastodon, tank, scrap and container wagons) and the unarmed aircraft (Baron, AT-20, the airliner,
+Blimp, Little Willy, Armadillo). Parents: the vanilla model whose handling it uses, or the pack's
+own parent hint, else a vanilla one of its type.
+
+Left out: the pack's armed military aircraft (Valkyrie, KH-1, Molotok, Peregrine, Tula, Mogul: the
+pack arms them with its scripts); Kubota (a real brand); the Long Bus and its trailer (traffic
+doesn't tow); the Issi (MTA finds its DFF broken); the Seville, Skateboard and Blista GPX (no data
+or files in the pack); every model that replaces a vanilla one, and the pack's scripts, plugins,
+tuning parts and paintjobs.
 
 Their data (`config/vehicles.lua`: parent, label, handling, colours, groups, credit) was seeded once
 from the pack's `vehicles.ide`, `handling.cfg`, `carcols.dat`, `cargrp.dat` and `vehicle names.fxt`,
@@ -78,8 +103,10 @@ reuses a vanilla label (Taxi, Ambulance, Securicar, Ranger...).
 - **Names in the game's own HUD** (entering a vehicle shows its parent's name).
 - **The Flame Jester:** a paintjob TXD, which the game applies to the car's remap materials from
   its paintjob slots, not the model's TXD; needs its own handling.
-- **Left for later:** what needs trailers (the Long Bus, semis), the new trains, planes and
-  helicopters, and the pack's everyday cars beyond these gaps.
+- **Tuning parts and paintjobs** the pack gives some cars (bumpers, spoilers, paintjob TXDs).
+- **Trains and aircraft in game:** a Mastodon or Streakliner as a train engine, its wagons, and the
+  added aircraft flown by vana-air are untested: the game may treat a train it doesn't know by ID
+  differently.
 
 ## Commands
 

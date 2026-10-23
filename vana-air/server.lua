@@ -289,8 +289,19 @@ local function weighted(weights)
     end
 end
 
+-- A model, or an added vehicle's name (vana-cars); nil when that isn't there.
+local function modelOf(model)
+    if type(model) ~= "string" then return model end
+    local res = getResourceFromName("vana-cars")
+    if not res or getResourceState(res) ~= "running" then return nil end
+    local ok, id = pcall(function() return exports["vana-cars"]:getModel(model) end)
+    return ok and id or nil
+end
+
 -- Passing by a player: from `distance` away, past them 150-400 m off, as far on the other side.
 local function pass(player, kind, model, heli, speed, height, distance, now)
+    model = modelOf(model)
+    if not model then return nil end
     local px, py, pz = getElementPosition(player)
     local a = math.random() * 2 * math.pi
     local side = (math.random() < 0.5 and -1 or 1) * math.random(150, 400)
@@ -306,7 +317,7 @@ local function pass(player, kind, model, heli, speed, height, distance, now)
     return craft
 end
 
-local lastAmbient, lastOverflight = 0, 0
+local lastAmbient, lastOverflight, lastBlimp = 0, 0, 0
 local function updatePassersBy(players, now)
     local function anyNear(px, py, pz, range)
         for _, c in pairs(crafts) do
@@ -333,6 +344,15 @@ local function updatePassersBy(players, now)
             if math.random() < C.overflights.chance and not noPlanes(px, py) and not anyNear(px, py, pz, 2500) then
                 local list = inZone(px, py, C.noBigPlaneZones) and C.overflights.small or C.overflights.big
                 pass(player, "overflight", list[math.random(#list)], false, C.overflights.speed, C.overflights.height, C.overflights.distance, now)
+            end
+        end
+    end
+    if C.blimp and now - lastBlimp >= C.blimp.every then
+        lastBlimp = now
+        for _, player in ipairs(players) do
+            local px, py, pz = getElementPosition(player)
+            if math.random() < C.blimp.chance and not anyNear(px, py, pz, 2500) then
+                pass(player, "blimp", C.blimp.model, true, C.blimp.speed, C.blimp.height, C.blimp.distance, now)
             end
         end
     end

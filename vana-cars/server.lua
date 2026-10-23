@@ -159,10 +159,12 @@ addCommandHandler("carstest", function(source)
         local e = added[def.name]
         check(e ~= nil, def.name .. ": no model")
         check(fileExists(CarFiles(def) .. ".dff"), def.name .. ": no " .. CarFiles(def) .. ".dff")
-        check(def.txd or fileExists(CarFiles(def) .. ".txd"), def.name .. ": no " .. CarFiles(def) .. ".txd")
+        check(def.noTxd or fileExists(CarFiles(def) .. ".txd"), def.name .. ": no " .. CarFiles(def) .. ".txd")
         check(def.display or def.label, def.name .. ": no name")
         check(def.credit and def.credit ~= "", def.name .. ": no credit")
-        check(#colourSets(def.colours) > 0, def.name .. ": no colours")
+        if #colourSets(def.colours) == 0 and def.type ~= "trailer" and def.type ~= "train" then
+            outputServerLog("[carstest] note: " .. def.name .. " has no colours of its own (its parent's)")
+        end
     end
     for _, def in ipairs(CarSkins) do
         n = n + 1
