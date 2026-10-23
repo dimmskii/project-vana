@@ -558,7 +558,7 @@ addCommandHandler("air", function(source, _, action, value)
             end
         end
         table.sort(lines)
-        reply(("Aircraft are %s. Usage: /air on|off|reset|at400|andromada|shamal|nevada <count>|pass|debug on|off"):format(enabled and "on" or "off"))
+        reply(("Aircraft are %s. Usage: /air on|off|reset|at400|andromada|shamal|nevada <count>|pass|near|debug on|off"):format(enabled and "on" or "off"))
         for _, line in ipairs(lines) do reply(line) end
     end
 end, true)

@@ -102,6 +102,7 @@ flight school's rings at 100-110 m (touch-and-go training).
 | `/air reset` | Start everything over |
 | `/air at400\|andromada\|shamal\|nevada <count>` | How many airliners of each (kept; resets them) |
 | `/air pass` | A helicopter flies past you now |
+| `/air near` | Every vehicle but cars within 150 m of you (or the first player, from the console): our craft, who syncs it, its driver, where its leg wants it |
 | `/air debug on\|off` | The `vana-air:sync` debug switch ([debug.md](debug.md)) |
 | `airtest` (console) | 4 hours of the timetable and the circuit: every plane keeps flying, never jumps, no two within 25 m on the ground or in a hold, nobody waits 15 minutes, circuit planes never within 100 m |
 
