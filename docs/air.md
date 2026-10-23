@@ -20,10 +20,15 @@ landing gear), built the same on the server and on the client from a short descr
 | `spline` | Flown through points on a smooth curve at their speeds, banked into turns (planes up to 35 degrees, helicopters 20 with the nose a little down); points marked ground are on the runway, wheels down |
 
 The client sets the aircraft's matrix and velocity every frame from the leg at that moment. Wheels
-down near the ground, a plane is put on the ground by its own model's lowest point (bounding box)
-rather than at the leg's height, blending back to it over the first 10 m up: the recordings were
-made with an AT-400, and the parking and taxi heights are the ATP mod's (any other model sank into
-the runway, gear out of sight, belly scraping). This is ours, not Neon's native recording playback:
+down near the ground, a plane is put at its model's resting height over the ground rather than at
+the leg's height, blending back to it over the first 10 m up: the recordings were made with an
+AT-400, and the parking and taxi heights are the ATP mod's (other models sank into the runway, gear
+out of sight, belly scraping). The resting height is what the game's suspension gives the model
+(GTA rests a vehicle by its height above road, `CAutomobile::PlaceOnRoadProperly`; Lua can't read
+it): the first time a model stands parked, its owner's client drops it from 3 m onto its wheels,
+lets it settle and keeps the height (shared with every client, logged for `rests` in
+`config/air.lua`; measured so far: Andromada 2.23 m, Shamal 1.93 m). Until then: the model's wheel
+positions less their radius. This is ours, not Neon's native recording playback:
 that can't start partway through or move to another client. A
 new owner gets the leg and how far into it the aircraft is, and carries on. Without a pilot (shot,
 pulled out) the flying stops and the game's physics has it: what's in the air comes down.

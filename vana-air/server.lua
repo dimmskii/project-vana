@@ -458,6 +458,21 @@ Settings.bind(counts, { at400 = "number", andromada = "number", shamal = "number
 rebuild()
 setTimer(tick, C.tick, 0)
 
+-- Planes' resting heights over the ground (client.lua): the config's, and any a client measured
+-- since (logged, to keep in the config), shared with every client.
+local rests = {}
+for model, h in pairs(C.rests or {}) do rests[tostring(model)] = h end
+setElementData(resourceRoot, "vana:rests", rests)
+addEvent("vana-air:rest", true)
+addEventHandler("vana-air:rest", resourceRoot, function(model, h)
+    model, h = tonumber(model), tonumber(h)
+    if not model or not h or h < 0 or h > 10 or rests[tostring(model)] then return end
+    rests[tostring(model)] = h
+    setElementData(resourceRoot, "vana:rests", rests)
+    outputServerLog(("[vana-air] %s (%d) rests %.2f m over the ground (measured by %s): add it to config/air.lua rests"):format(
+        getVehicleNameFromModel(model), model, h, getPlayerName(client)))
+end)
+
 -- The owner needs a flight recording's frames (once per flight).
 addEvent("vana-air:needFlight", true)
 addEventHandler("vana-air:needFlight", resourceRoot, function(id)
@@ -503,6 +518,31 @@ addCommandHandler("air", function(source, _, action, value)
     elseif fleetSetting[action] and tonumber(value) then
         Settings.set(action, math.max(0, math.min(6, math.floor(tonumber(value)))))
         reply(("%d %s (aircraft reset)."):format(counts[action], action))
+    elseif action == "near" then
+        -- Every vehicle within 150 m of a player (the one typing, or the first one): what it is to us.
+        local who = getElementType(source) == "player" and source or getElementsByType("player")[1]
+        if not who then return reply("Nobody to look around.") end
+        local px, py, pz = getElementPosition(who)
+        local byVehicle = {}
+        for craft, l in pairs(live) do byVehicle[l.vehicle] = craft end
+        for _, v in ipairs(getElementsByType("vehicle")) do
+            local x, y, z = getElementPosition(v)
+            if getDistanceBetweenPoints3D(px, py, pz, x, y, z) < 150 and getVehicleType(v) ~= "Automobile" then
+                local craft = byVehicle[v]
+                local vx, vy, vz = getElementVelocity(v)
+                local syncer = getElementSyncer(v)
+                local driver = getVehicleOccupant(v, 0)
+                local leg, lx, ly, lz = nil
+                if craft then leg, lx, ly, lz = where(craft, clock()) end
+                reply(("%s at %.1f, %.1f, %.2f (%.0f m away), %.1f m/s; air %s, craft %s, syncer %s, driver %s%s, wreck %s%s"):format(
+                    getVehicleName(v), x, y, z, getDistanceBetweenPoints3D(px, py, pz, x, y, z), math.sqrt(vx * vx + vy * vy + vz * vz) * 50,
+                    tostring(getElementData(v, "vana:air")), craft and (craft.id .. " " .. craft.kind) or "none",
+                    syncer and getElementType(syncer) == "player" and getPlayerName(syncer) or tostring(syncer),
+                    driver and getElementType(driver) or "none", driver and isPedDead(driver) and " (dead)" or "",
+                    tostring(wrecks[v] ~= nil),
+                    lx and (", leg %s puts it at %.1f, %.1f, %.2f"):format(leg.desc.kind, lx, ly, lz) or ""))
+            end
+        end
     elseif action == "pass" and getElementType(source) == "player" then
         pass(source, "heli", weighted(C.ambient.models), true, C.ambient.speed, C.ambient.height, C.ambient.distance, clock())
         reply("A helicopter is on its way past you.")
