@@ -1,0 +1,949 @@
+Ambulance — TheF3nt0n
+
+Bandito - jalbert1998
+
+Banshee - Onik
+
+Buffalo - Piccardi
+
+Huntley - HisMajesty93
+
+Intruder - Piccardi
+
+Merit — Mit_subi92
+
+Nebula — Qwerty Van Hallen 
+
+Previon - YOCHIThMaster333
+
+Regina — TecnhoPH
+
+Stretch - Piccardi
+
+Tampa - HisMajesty93
+
+Towtruck — Calvin.linardi
+
+Windsor - Onik
+
+Barracks — Calvin.linardi
+
+Buccaneer — TheMadeMan
+
+Bus — Calvin.linardi
+
+Club — HisMajesty93
+
+Bravura — Krystofer
+
+Linerun — TheF3nt0n
+
+Sentinel — James_Hoxwort
+
+Manana — Piccardi
+
+Infernus — Burbalade
+
+Voodoo — Spartan 112
+
+Cheetah — Spartan 112
+
+Moonbeam — Spartan 112
+
+Esperanto — TheMadeMan
+
+Premier Taxi — LyoSHeX
+
+Premier — LyoSHeX
+
+Rhino — Spartan 112
+
+Hotknife — Spartan 112
+
+Coach — Calvin.linardi
+
+Combine — Mugetsuga
+
+Comet — LyoSHeX
+
+Dumper — MrFinger
+
+Elegant — LyoSHeX
+
+Elegy RH5 — Mit_subi92
+
+FBI Truck - Maladoy
+
+Flash — joepesci69
+
+Cabbie — TommyAssassin
+
+Flatbed — Calvin.linardi
+
+Hotrina — (Little) D
+
+Hotrinb — (Little) D
+
+Hotring — (Little) D
+
+Hustler — WolfRamXX
+
+Jester — Onik
+
+Journey — Calvin.linardi
+
+Monster — Son Of Big Boss
+
+Patriot — Son Of Big Boss
+
+Stallion — LyoSHeX
+
+Phoenix — (Little) D
+
+Primo — Piccardi
+
+Rnchlure — TheGhostWheels12
+
+Romero — DirtyImpala
+
+S.W.A.T. — Calvin.linardi
+
+Sabre — (Little) D
+
+Stafford — XG417
+
+Stratum — Klutchy
+
+Uranus — Crack Yo' Neck
+
+Admiral -daniltk2
+
+Pizzaboy — Onik
+
+Tram — SergeDV
+
+Turismo — LyoSHeX
+
+Solair — XG417
+
+Faggio — Onik
+
+Glendale — TommyAssassin
+
+Hermes — Th14g0MR
+
+ZR350 — Tom_Nord
+
+BMX — TommyAssassin
+
+Camper — Stierlitz
+
+Dozer — Calvin.linardi
+
+Maverick — Stella
+
+FBI Rancher — Son Of Big Boss
+
+Greenwoo — GCT
+
+Petro —  TheF3nt0n
+
+Road Train — nyolc08
+
+Majestic — Spartan 112
+
+Shamal — MrFinger
+
+Bike Police — TommyAssassin
+
+Cadrona — savidge
+
+Feltzer — TrushinVlad
+
+Freight — eliz0918
+
+Streak — Liimert
+
+Streakc - Spartan112
+
+Vincent — joepesci69
+
+Willard — pmma
+
+Bullet — (Little) D
+
+Utility — direct
+
+Yosemite — Tom_Nord
+
+Tahoma — TheMadeMan
+
+Emperor — Crack Yo' Neck
+
+Andromada — MrFinger
+
+Dodo — TommyAssassin
+
+Premier LSPD — LyoSHeX
+
+Premier SFPD — LyoSHeX
+
+Brigham LVPD — GCT
+
+Riata SAPD — Calvin.linardi, TheMadeMan
+
+Boxburg — Crack Yo' Neck
+
+Pcj-600 — Mugetsua
+
+BF-400 — Mugetsua
+
+Freeway — Kr0n0s800
+
+NRG500 — Mugetsua
+
+Quad — Tom_Nord
+
+Sanchez — Mugetsua
+
+Wayfarer — Kr0n0s800
+
+Hydra — MrFinger
+
+Jetmax — Dragomazing
+
+Speeder — Dragomazing
+
+Vortex — Dragomazing
+
+Cargobob — Son Of Big Boss
+
+Hunter — Son Of Big Boss
+
+Leviathan — MrFinger
+
+Sparrow — MrFinger
+
+Seasparrow — MrFinger
+
+Beagle - Spartan 112
+
+Artict1 — Calvin.linardi
+
+Artict2 — Calvin.linardi
+
+Artict3 — Calvin.linardi
+
+Petrol Trailer — Calvin.linardi
+
+Riata — TheMadeMan
+
+Electron — TheMadeMan
+
+XP1 — TheGhostWheels12
+
+Coyote — Calvin.linardi
+
+Tailgater — TheMadeMan
+
+Sightseer — Calvin.linardi
+
+Rebel — TheMadeMan
+
+Impaler SS — XG417
+
+Lifeguard — TheF3nt0n
+
+Sabre Turbo — (Little) D
+
+JB 700 — DirtyImpala
+
+Gaunglet — Son Of Big Boss
+
+Blista Classic — joepesci69
+
+Thunderhawk — DirtyImpala
+
+Elegy RH6 — Crack Yo' Neck
+
+Callista — Crack Yo' Neck
+
+Astrale — Crack Yo' Neck
+
+Jester Inferno — Crack Yo' Neck
+
+Peacekeeper — Qwerty Van Hallen, Calvin.linardi
+
+Razor — Calvin.linardi
+
+Impaler SZ — LyoSHeX
+
+Kuruma — Qwerty Van Hallen
+
+Kamacho — XG417
+
+Lebonham — Calvin.linardi
+
+Peyote — XG417
+
+Deviant — Cerberus Harrier
+
+Little Willy — Calvin.linardi
+
+Rat Rod — Stella
+
+Sentinel Classic — tigerlim
+
+School Bus — Calvin.linardi
+
+Hercules — Calvin.linardi
+
+Hotring Dukes (?)
+
+Blista — Helomyname
+
+Asbo — Onik
+
+NRG-DRAG600 — DirtyImpala
+
+Bellevue — DirtyImpala
+
+Seraph XS- joepesci69
+
+Velox — DirtyImpala
+
+Ironbolt GTP — Crack Yo' Neck
+
+DR1 — StarGTS
+
+Monroe — DirtyImpala
+
+Z-Type — QuanAnhGaming, Techno G. PH, ssolar (solair)
+
+Vincent XS- joepesci69
+
+Comet SP — joepesci69
+
+Type 29 — Helomyname
+
+Z-100 XS — Helomyname
+
+Shinigami — Helomyname
+
+Shinobi — Washek
+
+Asuka — QuanAnhGaming, ssolar (solair), DJ Atomika
+
+Euros Classic — joepesci69
+
+Lurani — direct
+
+Ghost V8 — Cerberus Harrier
+
+Rattler — Cerberus Harrier
+
+Magnus — XG417
+
+Diensta — Colday Vss
+
+Schrauber Evo — joepesci69
+
+Viseris — TecnhoPH
+
+Adder — Calvin.linardi
+
+Baller — Spartan 112
+
+Stinger — blaue
+
+Beaufort — Crack Yo' Neck
+
+Clover Clean- LyoSHeX
+
+Shogun — TheMadeMan
+
+Brigham — GCT
+
+Emperor Classic- Burbalade
+
+Fortune Eryth — (Little) D
+
+Bug — direct
+
+Monstrosity — tigerlim
+
+Deluxo — Calvin.linardi
+
+Diamond — Stierlitz
+
+Dukes — Spartan 112
+
+Brigham Estate — GCT
+
+Perenedan — direct
+
+Burrito XL — Qwerty Van Hallen
+
+Pounder — Son Of Big Boss
+
+Rhapsody — matinat0r
+
+Buffalo Classic — Crack Yo' Neck
+
+Puma — joepesci69
+
+Stanier LE — Son Of Big Boss
+
+Staber — m1racle
+
+Silver — Stierlitz
+
+Burrito XLB — Maladoy
+
+Rancher Pickup — L.D.G.
+
+Cambridge — Calvin.linardi
+
+Sadler MT — TheGhostWheels12
+
+Jeeper — AiExcel
+
+Corsac — by Crack Yo' Neck
+
+Letrune — Crack Yo' Neck
+
+Brioso — Helomyname
+
+Steed Ambulance — Son Of Big Boss
+
+Benson XLB — Son Of Big Boss
+
+Schafter — Crack Yo' Neck
+
+El Latino — Spartan 112
+
+Zion — Son Of Big Boss
+
+Vanguard — Crack Yo' Neck
+
+Verdana — Crack Yo' Neck
+
+Interstate — Fuze
+
+Warwick — Crack Yo' Neck
+
+Zartex — Maladoy
+
+Grand Emperor (+ beater version) — Crack Yo' Neck
+
+DFT-40 — SergeDV
+
+Utility 2 — XG417
+
+Bullion — Spartan 112
+
+Elsperanto LT (?)
+
+Mesa Grande — Calvin.linardi
+
+Cruiser — Crack Yo' Neck
+
+Bison — Crack Yo' Neck
+
+Stromberg GT — Crack Yo' Neck
+
+Chumash (+ beater version) — Crack Yo' Neck
+
+Longbridge — Crack Yo' Neck
+
+Montoya (+ beater version) — Crack Yo' Neck
+
+Zircon CX — Crack Yo' Neck
+
+Hauler — Puzi_krem
+
+Waltbed — Spartan 112
+
+Waltvan — Spartan 112
+
+Saxon — Calvin.linardi
+
+Idaho - TommyAssassin
+
+Tommy - Crack Yo' Neck
+
+Linerunner FX — Calvin.linardi
+
+Anchor — TheMadeMan
+
+Futo — joepesci69
+
+Seville — blue
+
+Rancher XL — SergeDV
+
+Trashmaster ALT — Burbalade
+
+Fagaloa — direct
+
+Ventura — Maladoy
+
+Mesa Off-Road — Bobby & Spartan 112
+
+Granger 2400LX — Son Of Big Boss
+
+Zircon DX — Crack Yo' Neck
+
+Catalina — Crack Yo' Neck
+
+Cabbie Beater — direct
+
+Farmer — direct
+
+Bifta — direct
+
+Faggio Sport — 1Hellen
+
+Vivant — direct
+
+Rinehart — Crack Yo' Neck
+
+Skulker (+ beater version) — Crack Yo' Neck
+
+Moonbeam Classic — Crack Yo' Neck
+
+Issi — Crack Yo' Neck
+
+Roosevelt — Spartan 112
+
+Avaritia (+ beater version) — Crack Yo' Neck
+
+Kubota — Crack Yo' Neck
+
+Faggio Turbo — 1Hellen
+
+Hellenbach — Spartan 112
+
+Dagger GTX — Maladoy
+
+Virgo Classic — Thiben
+
+Hotrod — PROspekt
+
+Stallion GT — Balcer
+
+DFT-20 — universetwisters
+
+Sabre 550SS — GCT
+
+Oceanic Custom — Maladoy
+
+Heavy Tow Truck — KST
+
+ZXF400 Custom — Yonebayashi
+
+Matriach — Crack Yo' Neck
+
+Hustler 2 — WolfRamXX
+
+Campbell - universetwisters
+
+Seminole — Calvin.linardi
+
+Enforcer 2 — Bob_Marley
+
+Cerrano — Maladoy
+
+Admiral Estate — miracle
+
+Taxi 2 — GCT
+
+Yardie Lobo — Spartan112
+
+Duneload — Calvin.linardi
+
+Coquette G4 — LyoSHeX
+
+Turismo GTO — Star GTS, Stella
+
+Coquette G3 — direct
+
+Freightrunner — Crack Yo' Neck
+
+Lokus - Piccardi
+
+Trophy Truck — Calvin.linardi
+
+Savanna Coupe - TheGhostWheels12
+
+Securicar Casino - TheGhostWheels12
+
+Baron — Noah_Antilles
+
+Ruiner — direct
+
+Slamvan West — JD-225
+
+Firebrigade — Calvin.linardi
+
+Mobile Police Base — Calvin.linardi
+
+Long Bus — Calvin.linardi
+
+Steed — Son Of Big Boss
+
+Tornado Custom — Claude GTA III
+
+Valkyrie — Calvin.linardi
+
+Sultan RS — Piccardi
+
+Behemoth — Calvin.linardi
+
+Marshall — Spartan 112
+
+Walton Truck — vanchik92
+
+Velox SAPD — DirtyImpala
+
+Bodhi — Calvin.linardi
+
+Rowley — direct
+
+Duneride 2 — Angel W
+
+S-230 — 13Stewartc
+
+Vigero — 13Stewartc
+
+Admiral Classic — Crack Yo' Neck
+
+Jora Turbo — Calvin.linardi
+
+Skid — Calvin.linardi
+
+Schrauber — joepesci69
+
+Rusty Browns — Cerberus Harrier
+
+APC — Calvin.linardi
+
+Alpha  — Onik
+
+Champion — Helomyname
+
+Dante — yonebayashi
+
+Artict4 — Calvin.linardi
+
+Tour Bus — Calvin.linardi
+
+Manana Custom — direct
+
+Crusader 4X4- TheGhostWheels12
+
+4F Drafter — joepesci69
+
+Astron — joepesci69
+
+Archer GPX — joepesci69
+
+Vigero LE — joepesci69
+
+Vigero ZX — joepesci69
+
+Stafford Classic — TechnoGamerPH
+
+Defiant — JWJ
+
+Tulip — TheGhostWheels12
+
+Enduro — TheGhostWheels12
+
+BF-400 MK2 — daniltk2
+
+Supernova - TechnoPH
+
+Feltzer SR — Onik
+
+Deimos — Onik
+
+Mozzanica — StarGTS
+
+Sabotage — StarGTS
+
+Dolva — Calvin.linardi
+
+Voyager — Calvin.linardi
+
+Bandito 2 — Calvin.linardi
+
+Air Train — TheGhostWheels12
+
+Float — TheGhostWheels12
+
+Roller — TheGhostWheels12
+
+Trike — Calvin.linardi
+
+Leonida — Calvin.linardi
+
+Tula — Calvin.linardi
+
+AT-20 — Calvin.linardi
+
+Trager — Calvin.linardi
+
+Road Train Trailers — Calvin.linardi
+
+Rescue Truck — Calvin.linardi
+
+Clover Primera — (Little) D
+
+Faction Turbo — Spartan 112
+
+Hotring Faction — Puzi_Krem
+
+Admiral Cabrio — XG417
+
+Ranger — TheGhostWheels12
+
+Brigham SAPD — GCT
+
+Vertice — StarGTS
+
+Cheetah UC (?)
+
+Violator (?)
+
+PR4 — Spartan 112
+
+Falcon — Spartan 112
+
+Warthog — Spartan 112
+
+Mjolnir — Spartan 112
+
+Angel (?)
+
+Elevator (?)
+
+Firehook (?)
+
+Fire Trailer (?)
+
+Lobo Donk (?)
+
+Patriot MK1 — Son Of Big Boss
+
+Sheriff Patriot — Son Of Big Boss
+
+Biff FDSA - Stella
+
+Yola (?)
+
+Arbiter — (Little) D
+
+Presidente — Son Of Big Boss
+
+Glendale Coupe (?)
+
+Brigham LSPD — GCT
+
+Solair SFPD — XG417
+
+Beaufort LVPD — Crack Yo' Neck
+
+Bullet Classic — Crack Yo' Neck
+
+V-65 Molotok — Dmitry Raven
+
+Bloodring Banger — DirtyImpala
+
+Imperator (?)
+
+Centella — (Little) D
+
+KH-1 — StarGTS
+
+Mogul — Cruothenium, Liimert, Calvin.linardi's, R, _-ZACERMAN- _HI_
+
+SS800 — Washek
+
+Savestra — joepesci69
+
+Streetfighter — MrFinger
+
+Armadillo — Son Of Big Boss
+
+Blimp — Calvin.linardi
+
+Speedo Classic — Crack Yo' Neck
+
+RG21 — Crack Yo' Neck
+
+Thunder — Crack Yo' Neck
+
+D855 — Crack Yo' Neck
+
+WX55 — Crack Yo' Neck
+
+Fieldmaster — Calvin.linardi
+
+Rio - MrFinger
+
+Critter - JWJ
+
+Morton - Puzi_Krem
+
+Kalahari - XG417
+
+Pizza Chimp - Blakfire
+
+Stanier ST - Blue
+
+Car Trailer - emexD
+
+Espresso - Crack Yo' Neck
+
+Lil Devil - direct
+
+Stanier SL (& FBI) — Mit_subi92
+
+Strizh - Dmitry Raven
+
+Bastion — StarGTS
+
+Barricade — StarGTS
+
+Sweeper 2 — Calvin.linardi
+
+Solair LM - XG417
+
+Bobtail - direct
+
+Greenwood Estate (& Taxi) - Boss
+
+Blackline ST - Maladoy
+
+Viento — Colday Vss
+
+Streakliner — eliz0918
+
+Splitz-6 — Calvin.linardi
+
+Mastodon (& Wagons) — eliz0918
+
+Trailmaster - XG417
+
+Cheese — Calvin.linardi
+
+Tuff (& Towtruck) — Calvin.linardi
+
+Huntley Sport - Spartan 112
+
+Kariance - Piccardi
+
+Landstalker JK - XG417
+
+Granger 2500SX - Son Of Big Boss
+
+Milano - TheMadeMan
+
+Ocelotti - TheMadeMan
+
+Blista Skyview - YOCHIThMaster333
+
+Sabre 550GT - Dirty Impala
+
+Leotown K90 — Crack Yo' Neck
+
+Speedo — Calvin.linardi
+
+Messenger - XG417
+
+FBI Premier — LyoSHeX
+
+Peregrine - Dmitry Raven
+
+Mail Truck — Calvin.linardi
+
+Remus — Mit_subi92
+
+Phobos VT - BenefactorSchysterCo
+
+Papagayo - Chloe
+
+Akuma - StarGTS
+
+Samurai - StarGTS
+
+R4 - StarGTS
+
+1001R - StarGTS
+
+Natter — Colday Vss
+
+Garcia — Colday Vss
+
+Ambulance Burrito - XG417
+
+Elegant Classic (& Stretch) — TecnhoPH
+
+Dominator GTC — Mit_subi92
+
+Chilli Wagon — Calvin.linardi
+
+Berserker — Calvin.linardi
+
+Odin — Calvin.linardi
+
+Valger - MrFinger
+
+Dunemaster - TheGhostWheels12
+
+Abydos - XG417
+
+Taco Van - TheF3nt0n
+
+Signori - Chloe
+
+Zinger — Calvin.linardi
+
+Ludendorff — tigerlim
+
+Stomper — tigerlim
+
+Sadler XL - jim_1989
+
+Darlington - direct
+
+Maryland - direct
+
+Faria (& Beater) - direct
+
+Marion - direct
+
+Manana Classic - direct
+
+Communisator - Qwerty Van Hallen
+
+Oxford - DirtyImpala
+
+Retinue - Cerberus Harrier
+
+Stafford Stretch - XG417
+
+Silver Dart - Crack Yo' Neck
+
+Insurrection (?)
+
+Stardust GT - StarGTS
+
+Marina - TheMadeMan
+
+GCT — joepesci69
+
+Spectre — TecnhoPH
+
+Calico - Tepig

@@ -50,6 +50,8 @@ local function snapshot(vehicle)
         dashboard = getElementData(vehicle, "vana:dashboard"), tune = getElementData(vehicle, "vana:tune"),
         handling = {},
     }
+    -- An added model (vana-cars) by its name too: its ID is only the one it got this time.
+    if s.model > 611 then s.modelName = engineGetModelName(s.model) or nil end
     for i = 0, 6 do s.panels[i + 1] = getVehiclePanelState(vehicle, i) end
     for i = 0, 5 do
         s.doors[i + 1] = getVehicleDoorState(vehicle, i)
@@ -75,12 +77,21 @@ local function snapshot(vehicle)
 end
 
 local function build(s)
+    if s.modelName then
+        local model = engineGetModelIDFromName(s.modelName)
+        if not model then
+            outputServerLog(("[vana-vehicles] WARNING: a kept %s can't be rebuilt: no such model now (is vana-cars running?)"):format(s.modelName))
+            return false
+        end
+        s.model = model
+    end
     local vehicle = createVehicle(s.model, s.pos[1], s.pos[2], s.pos[3], s.rot[1], s.rot[2], s.rot[3], s.plate, false,
         s.variant[1], s.variant[2])
     if not vehicle then return false end
     setElementInterior(vehicle, s.interior)
     setElementDimension(vehicle, s.dimension)
     setVehicleColor(vehicle, unpack(s.colors))
+    dressAdded(vehicle, true)
     if s.paintjob and s.paintjob ~= 3 then setVehiclePaintjob(vehicle, s.paintjob) end
     for _, upgrade in ipairs(s.upgrades or {}) do addVehicleUpgrade(vehicle, upgrade) end
     setVehicleHeadLightColor(vehicle, unpack(s.headlights))

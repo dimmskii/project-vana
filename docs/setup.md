@@ -96,6 +96,7 @@ all: vana-lib reads their files; they only have to be in `resources/`.
 <resource src="vana-map" startup="1" protected="0" />
 <resource src="vana-paths" startup="1" protected="0" />
 <resource src="vana-lights" startup="1" protected="0" />
+<resource src="vana-cars" startup="1" protected="0" />
 <resource src="vana-population" startup="1" protected="0" />
 <resource src="vana-vehicles" startup="1" protected="0" />
 <resource src="vana-radio" startup="1" protected="0" />

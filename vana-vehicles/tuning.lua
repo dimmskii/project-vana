@@ -32,8 +32,17 @@ local function randomParts(vehicle, count, wheelsOnly)
     end
 end
 
+-- An added vehicle (vana-cars) gets its own colours and, for emergency ones, sirens.
+function dressAdded(vehicle, keepColours)
+    local res = getResourceFromName("vana-cars")
+    if not res or getResourceState(res) ~= "running" then return false end
+    local ok, done = pcall(function() return exports["vana-cars"]:dress(vehicle, keepColours) end)
+    return ok and done
+end
+
 function tuneRandomly(vehicle)
     if not isElement(vehicle) or getElementType(vehicle) ~= "vehicle" then return false end
+    dressAdded(vehicle)
     local model = getElementModel(vehicle)
     local handling = getOriginalHandling(model)
     if handling and handling.handlingFlags and math.floor(handling.handlingFlags / 0x10000) % 2 == 1 and math.random() < T.hydraulicGeom then

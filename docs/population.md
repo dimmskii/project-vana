@@ -173,4 +173,7 @@ appear: Grove Street, El Corona, the LS airport, the SF golf club and SF downtow
   jack tasks behave.
 - **Emergency services:** medics, firefighters, police response.
 - **Data:** zone-specific car generators and parked cars; boats, aircraft. Trains: [trains.md](trains.md).
+- **Added vehicles** (vana-cars, [cars.md](cars.md)) join the car groups they belong to, and service units
+  pick among the vanilla vehicle and its variants (`Population.variant`), taken again whenever
+  vana-cars starts.
 - **Storage:** move config and data to XML and elements (long-term).

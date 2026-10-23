@@ -1,0 +1,100 @@
+<meta>
+    <info author="ProjectVana" name="Vana cars" description="Added vehicles (new models of their own, never replacing vanilla ones), retextures as variants, and clean high-resolution shared vehicle textures" version="0.1.0" type="script" />
+    <script src="config/vehicles.lua" type="shared" />
+    <script src="config/cars.lua" type="shared" />
+    <script src="server.lua" type="server" />
+    <script src="client.lua" type="client" />
+    <script src="help.lua" type="server" />
+    <file src="mods/bigboys_monster/monstbbt.txd" />
+    <file src="mods/evvpr/avarb.dff" />
+    <file src="mods/evvpr/avarb.txd" />
+    <file src="mods/evvpr/bastion.dff" />
+    <file src="mods/evvpr/bastion.txd" />
+    <file src="mods/evvpr/burrita.dff" />
+    <file src="mods/evvpr/burrita.txd" />
+    <file src="mods/evvpr/cabshit.dff" />
+    <file src="mods/evvpr/cabshit.txd" />
+    <file src="mods/evvpr/cheetuc.dff" />
+    <file src="mods/evvpr/chilwagn.dff" />
+    <file src="mods/evvpr/chilwagn.txd" />
+    <file src="mods/evvpr/chumshit.dff" />
+    <file src="mods/evvpr/chumshit.txd" />
+    <file src="mods/evvpr/dolva.dff" />
+    <file src="mods/evvpr/dolva.txd" />
+    <file src="mods/evvpr/empshit.dff" />
+    <file src="mods/evvpr/empshit.txd" />
+    <file src="mods/evvpr/enforcr2.dff" />
+    <file src="mods/evvpr/enforcr2.txd" />
+    <file src="mods/evvpr/fbibrg.dff" />
+    <file src="mods/evvpr/fbibrg.txd" />
+    <file src="mods/evvpr/fbiprm.dff" />
+    <file src="mods/evvpr/fbiprm.txd" />
+    <file src="mods/evvpr/fbistn.dff" />
+    <file src="mods/evvpr/fbistn.txd" />
+    <file src="mods/evvpr/firebrg.dff" />
+    <file src="mods/evvpr/firebrg.txd" />
+    <file src="mods/evvpr/firehk.dff" />
+    <file src="mods/evvpr/firehk.txd" />
+    <file src="mods/evvpr/generic/vehicle.txd" />
+    <file src="mods/evvpr/lguard.dff" />
+    <file src="mods/evvpr/lguard.txd" />
+    <file src="mods/evvpr/mailtruk.dff" />
+    <file src="mods/evvpr/mailtruk.txd" />
+    <file src="mods/evvpr/messen.dff" />
+    <file src="mods/evvpr/messen.txd" />
+    <file src="mods/evvpr/montshit.dff" />
+    <file src="mods/evvpr/montshit.txd" />
+    <file src="mods/evvpr/oldfire.dff" />
+    <file src="mods/evvpr/oldfire.txd" />
+    <file src="mods/evvpr/polbet.dff" />
+    <file src="mods/evvpr/polbet.txd" />
+    <file src="mods/evvpr/polbrg.dff" />
+    <file src="mods/evvpr/polbrg.txd" />
+    <file src="mods/evvpr/polpat.dff" />
+    <file src="mods/evvpr/polpat.txd" />
+    <file src="mods/evvpr/polsol.dff" />
+    <file src="mods/evvpr/polsol.txd" />
+    <file src="mods/evvpr/polvel.dff" />
+    <file src="mods/evvpr/polvel.txd" />
+    <file src="mods/evvpr/pzchmp.dff" />
+    <file src="mods/evvpr/pzchmp.txd" />
+    <file src="mods/evvpr/ranger.dff" />
+    <file src="mods/evvpr/ranger.txd" />
+    <file src="mods/evvpr/rusty.dff" />
+    <file src="mods/evvpr/rusty.txd" />
+    <file src="mods/evvpr/school.dff" />
+    <file src="mods/evvpr/school.txd" />
+    <file src="mods/evvpr/securic.dff" />
+    <file src="mods/evvpr/securic.txd" />
+    <file src="mods/evvpr/skulshit.dff" />
+    <file src="mods/evvpr/skulshit.txd" />
+    <file src="mods/evvpr/steeda.dff" />
+    <file src="mods/evvpr/steeda.txd" />
+    <file src="mods/evvpr/sweepeb.dff" />
+    <file src="mods/evvpr/sweepeb.txd" />
+    <file src="mods/evvpr/taco.dff" />
+    <file src="mods/evvpr/taco.txd" />
+    <file src="mods/evvpr/taxib.dff" />
+    <file src="mods/evvpr/taxib.txd" />
+    <file src="mods/evvpr/taxic.dff" />
+    <file src="mods/evvpr/taxic.txd" />
+    <file src="mods/evvpr/tourbus.dff" />
+    <file src="mods/evvpr/tourbus.txd" />
+    <file src="mods/evvpr/towheavy.dff" />
+    <file src="mods/evvpr/towheavy.txd" />
+    <file src="mods/evvpr/towtrukb.dff" />
+    <file src="mods/evvpr/towtrukb.txd" />
+    <file src="mods/evvpr/trasha.dff" />
+    <file src="mods/evvpr/trasha.txd" />
+    <file src="mods/evvpr/utilityb.dff" />
+    <file src="mods/evvpr/utilityb.txd" />
+    <file src="mods/flame_infernus/infernfl.dff" />
+    <file src="mods/flame_infernus/infernfl.txd" />
+    <export function="getModel" type="server" />
+    <export function="getAddedVehicles" type="server" />
+    <export function="getModelName" type="server" />
+    <export function="getParent" type="server" />
+    <export function="pickVariant" type="server" />
+    <export function="dress" type="server" />
+    <export function="getHelpPages" type="server" />
+</meta>

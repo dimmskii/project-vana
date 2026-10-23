@@ -23,6 +23,7 @@ Start here:
 | [docs/shops.md](docs/shops.md) | Entrances into interiors, the shops and the gym |
 | [docs/map.md](docs/map.md) | The shared map: publishing points, categories, blips |
 | [docs/activities.md](docs/activities.md) | Per-player activities ported from main.scm: the framework, burglary and the rest |
+| [docs/cars.md](docs/cars.md) | Added vehicles: new models on vanilla parents, where they appear (car groups, service variants), the batch |
 | [docs/air.md](docs/air.md) | Aircraft: flight recordings and airports as map data, the airliners' timetable with holding, circuits, helicopters |
 | [docs/trains.md](docs/trains.md) | Trains: the tracks as map data, the timetable, trains in the world only near players, taking one |
 | [docs/traffic.md](docs/traffic.md) | Traffic, pedestrians and the AI actor architecture: Lua decides, the engine executes |
@@ -62,5 +63,6 @@ Start here:
 | `vana-wildlife` | Animals in the countryside: Myths Maker's animals at its spots |
 | `vana-traffic` | Road traffic: server-planned routes and light stops, driven by native drive-to tasks |
 | `vana-peds` | Ambient pedestrians: server-planned walks and road crossings, native follow-route tasks and event reactions |
+| `vana-cars` | Added vehicles (each a model of its own, never replacing a vanilla one): service vehicles, liveries, everyday types; clean shared vehicle textures |
 | `vana-air` | Airliners on vanilla's flight recordings, the Verdant Meadows circuit, news and passing helicopters |
 | `vana-trains` | Freight trains, the Brown Streak and the San Fierro trams: a server timetable, elements only near players |

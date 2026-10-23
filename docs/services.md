@@ -49,6 +49,9 @@ Edit freely.
   - The gunner fires drive-by (`setPedDriveBy`, MP5).
   - It has a searchlight at night.
   - It flies off once the level drops below 3.
+- **Vehicles:** each unit's vanilla vehicle or one of the added ones beside it (each city's own
+  police car, more FBI cars, a second Enforcer, ambulances, fire trucks; [cars.md](cars.md)), with
+  sirens of their own.
 - **News helicopter, from 4 stars (vanilla):** the second helicopter is SAN News' Maverick (488),
   unless one of the player's was shot down since their level was last below 3: then a second police
   one. Pilot and camera operator (ours: `WMYPLT`), no gun, no searchlight; it circles 50 m out and

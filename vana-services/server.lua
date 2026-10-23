@@ -265,6 +265,12 @@ local function roadSpawnNear(x, y, z, players)
 end
 
 -- kind: police | swat | fbi | army | tank | medics | fire; level picks police weapons.
+-- An added vehicle (vana-cars: a city's own police car, say) gets its colours and sirens.
+local function dressAdded(vehicle)
+    local res = getResourceFromName("vana-cars")
+    if res and getResourceState(res) == "running" then pcall(function() exports["vana-cars"]:dress(vehicle) end) end
+end
+
 local function spawnResponder(kind, x, y, z, players, owner, level)
     local node = roadSpawnNear(x, y, z, players)
     if not node then return false end
@@ -273,6 +279,7 @@ local function spawnResponder(kind, x, y, z, players, owner, level)
     local heading = math.deg(math.atan2(y - node.y, x - node.x)) - 90
     local vehicle = createVehicle(unit.car, node.x, node.y, node.z + 1, 0, 0, heading)
     if not vehicle then return false end
+    dressAdded(vehicle)
     setVehicleEngineState(vehicle, true)
     setVehicleSirensOn(vehicle, true)
     local weapon = crewRules.weapon
@@ -579,6 +586,7 @@ local function tryRoadblock(player, level, players, now)
         local cx, cy = node.x + dy * side, node.y - dx * side
         local vehicle = createVehicle(unit.car, cx, cy, node.z + 1, 0, 0, roadHeading + 90)
         if vehicle then
+            dressAdded(vehicle)
             setVehicleSirensOn(vehicle, true)
             rb.elements[#rb.elements + 1] = vehicle
             -- A cop behind each car, weapon out, facing the player's approach.

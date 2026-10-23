@@ -2,13 +2,45 @@
 --   /car <vehicle> [player]       you (or the player) in the driver's seat of a new one, replacing the
 --                                 last one /car gave them; it isn't kept by the registry ("vana:managed")
 --   /spawncar <vehicle> [player]  a new one, empty, in front of you (or the player): an ordinary car
--- A vehicle is a model ID (400-611), GTA's name for it, or an alias (config: spawnAliases); a
--- unique start or part of a name is enough, as /warp's places.
+-- A vehicle is a model ID (400-611, or an added vehicle's), GTA's name for it, an added vehicle's
+-- name or model name (vana-cars), or an alias (config: spawnAliases); a unique start or part of a
+-- name is enough, as /warp's places.
 local C = VehicleConfig
 local names       -- normalised name -> model
 local given = {}  -- player -> the vehicle /car gave them
 
 local function normalise(s) return (s:lower():gsub("[^%w]", "")) end
+
+-- vana-cars' added vehicles: { model -> its name }, when it runs (taken afresh each time: its models'
+-- IDs are its own).
+local function addedNames()
+    local res = getResourceFromName("vana-cars")
+    if not res or getResourceState(res) ~= "running" then return {} end
+    local ok, list = pcall(function() return exports["vana-cars"]:getAddedVehicles() end)
+    local out = {}
+    if ok and type(list) == "table" then
+        for _, v in ipairs(list) do
+            local text = v.display
+            if not text and v.label then
+                local tres = getResourceFromName("vana-text")
+                if tres and getResourceState(tres) == "running" then
+                    local okText, plain = pcall(function() return exports["vana-text"]:plainText(v.label) end)
+                    text = okText and plain or nil
+                end
+            end
+            out[v.model] = { name = v.name, text = text or v.name }
+        end
+    end
+    return out
+end
+
+-- A vehicle model's name, added ones too.
+local function modelName(model)
+    local name = getVehicleNameFromModel(model)
+    if name and name ~= "" then return name end
+    local a = addedNames()[model]
+    return a and a.text or tostring(model)
+end
 
 local function allNames()
     if names then return names end
@@ -16,6 +48,10 @@ local function allNames()
     for model = 400, 611 do
         local name = getVehicleNameFromModel(model)
         if name and name ~= "" then names[normalise(name)] = names[normalise(name)] or model end
+    end
+    for model, a in pairs(addedNames()) do
+        names[normalise(a.name)] = model
+        names[normalise(a.text)] = names[normalise(a.text)] or model
     end
     for alias, model in pairs(C.spawnAliases) do names[normalise(alias)] = model end
     return names
@@ -26,7 +62,8 @@ local function resolve(what)
     local id = tonumber(what)
     if id then
         if id >= 400 and id <= 611 and getVehicleNameFromModel(id) ~= "" then return id end
-        return nil, ("No vehicle model %d (400-611)."):format(id)
+        if addedNames()[id] then return id end
+        return nil, ("No vehicle model %d (400-611, or an added vehicle's)."):format(id)
     end
     local list, wanted = allNames(), normalise(what)
     if wanted == "" then return nil, "Name a vehicle." end
@@ -43,7 +80,7 @@ local function resolve(what)
     if #models == 0 then return nil, ("No vehicle called %s."):format(what) end
     table.sort(models)
     local shown = {}
-    for i = 1, math.min(#models, 10) do shown[i] = ("%s (%d)"):format(getVehicleNameFromModel(models[i]), models[i]) end
+    for i = 1, math.min(#models, 10) do shown[i] = ("%s (%d)"):format(modelName(models[i]), models[i]) end
     return nil, ("%d vehicles match %s: %s%s"):format(#models, what, table.concat(shown, ", "), #models > 10 and " ..." or "")
 end
 
@@ -65,7 +102,7 @@ end
 
 -- "a Sultan", "an Infernus".
 local function aName(model)
-    local name = getVehicleNameFromModel(model)
+    local name = modelName(model)
     return (name:find("^[AEIOUaeiou]") and "an " or "a ") .. name
 end
 
@@ -76,6 +113,7 @@ end
 local function create(model, x, y, z, rz, interior, dimension)
     local vehicle = createVehicle(model, x, y, z, 0, 0, rz)
     if not vehicle then return end
+    dressAdded(vehicle)
     setElementInterior(vehicle, interior)
     setElementDimension(vehicle, dimension)
     setVehicleFuel(vehicle, C.fuel.tank) -- a full tank (nothing for those that don't use fuel)
@@ -163,3 +201,8 @@ end)
 
 -- For vehicletest: names resolve as typed.
 function spawnResolve(what) return resolve(what) end
+
+-- vana-cars (re)started: its models' IDs may be new.
+addEventHandler("onResourceStart", root, function(res)
+    if getResourceName(res) == "vana-cars" then names = nil end
+end)

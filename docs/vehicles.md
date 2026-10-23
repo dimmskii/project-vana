@@ -36,7 +36,9 @@ Everything the server knows about the car, in `vehicles.db` (sqlite, not committ
 
 Kept cars are saved every `saveIntervalMs` (30 s, only when something changed), on exit, when a
 player quits in one, and when the resource stops. A server restart rebuilds them; restarting only
-`vana-vehicles` picks up the cars still in the world.
+`vana-vehicles` picks up the cars still in the world. An added vehicle (vana-cars, [cars.md](cars.md))
+is saved by its model name as well as its ID, and rebuilt by the name: its ID is only the one it got
+when vana-cars last started.
 
 GTA:SA has no free-form body deformation: all visible damage is these component states, which MTA
 syncs from the clients natively. So a snapshot is the complete damage.

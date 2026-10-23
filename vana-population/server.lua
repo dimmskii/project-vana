@@ -159,3 +159,19 @@ end
 function getServiceUnit(x, y, z, service)
     return Population.serviceUnit(Population.profile(x, y, z, Population.now()), service)
 end
+
+-- The added vehicles (vana-cars), now and whenever vana-cars (re)starts.
+local function takeAddedVehicles()
+    local res = getResourceFromName("vana-cars")
+    if not res or getResourceState(res) ~= "running" then return end
+    local ok, list = pcall(function() return exports["vana-cars"]:getAddedVehicles() end)
+    if ok and type(list) == "table" then
+        local n = Population.addVehicles(list)
+        outputServerLog(("[vana-population] %d added vehicles, in %d car group places"):format(#list, n))
+    end
+end
+takeAddedVehicles()
+addEventHandler("onResourceStart", root, function(res)
+    if getResourceName(res) == "vana-cars" then setTimer(takeAddedVehicles, 50, 1) end
+end)
+

@@ -1,0 +1,2 @@
+Questa mod è stata scaricata da GTA-Modding.it
+Per l'installazione di questa mod basta inserire il file monsterb.txd nel gta3.img con qualsiasi IMG Editor.

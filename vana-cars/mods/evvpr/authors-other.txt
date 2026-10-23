@@ -1,0 +1,13 @@
+Rikintosh's Small Details Mod - Rikintosh, Zera, Junior_Djjr
+
+Proper Vehicle Retex - Miguel Araújo, Jéssica Natália, Nick Oliveira, Meck, Junior_Djjr, CassadorEterno
+
+Round Tuning  Wheels - CassadorEterno
+
+Beta Leftovers Fix - MrFinger
+
+Updated Classic Transport - The Hero, ily4danshin, Function-X-, KiloRyu, Александр Яковлев
+
+Fixes for handling.cfg - Tom_Nord
+
+Fixes for vehicles.ide - Cruothenium

@@ -83,3 +83,76 @@ In `gtaref/mta_modded`, with their readmes' credits:
 - **Sanny Builder**'s opcode database (`SASCM.INI`), used to read compiled CLEO scripts.
 - **MTA Neon** (<https://github.com/Dryxio/mtasa-neon>): the engine fork, and the API lists in
   `tools/luacheck/`.
+
+### Extended Vanilla Vehicles Pack Reboot 2.0 (EVVPR)
+
+- **Authors:** many; per model below, from the pack's `Mod Authors (Vehicles).txt` (copied as
+  `authors-vehicles.txt`; scripts and other parts in `authors-other.txt`). The pack itself is a
+  compilation; its readme names no single author.
+- **Source:** a local copy (`gtaref/vehicle skins/extended-vanilla-vehicles-pack-reboot_1762020974_583960`).
+- **License:** none stated.
+- **In the project:** `vana-cars/mods/evvpr/` ([cars.md](cars.md)): 41 added vehicles (cherry-picked:
+  their `.dff` and `.txd`; the pack's models that replace vanilla ones, its scripts and plugins are
+  not used), and `generic/vehicle.txd`, the shared vehicle textures, credited in the pack as **Proper
+  Vehicle Retex** by Miguel Araújo, Jéssica Natália, Nick Oliveira, Meck, Junior_Djjr and
+  CassadorEterno. Their data (handling, colours, car groups, names) is in `vana-cars/config/vehicles.lua`.
+
+  | Model | Name | Author |
+  | --- | --- | --- |
+  | `polbrg` | Brigham LSPD | GCT |
+  | `polsol` | Solair SFPD | XG417 |
+  | `polbet` | Beaufort LVPD | Crack Yo' Neck |
+  | `polvel` | Velox SAPD | DirtyImpala |
+  | `ranger` | RANGER | TheGhostWheels12 |
+  | `polpat` | Sheriff Patriot | Son Of Big Boss |
+  | `cheetuc` | CHEETAH | unknown (the pack lists it as "Cheetah UC (?)"; base Cheetah by Spartan 112) |
+  | `fbistn` | FBI Stanier SL | Mit_subi92 |
+  | `fbibrg` | FBI Brigham | GCT |
+  | `fbiprm` | FBI Premier | LyoSHeX |
+  | `enforcr2` | ENFORCR | Bob_Marley |
+  | `steeda` | AMBULAN | Son Of Big Boss |
+  | `burrita` | AMBULAN | XG417 |
+  | `firebrg` | Firebrigade | Calvin.linardi |
+  | `firehk` | Firehook | unknown (the pack lists it as "Firehook (?)") |
+  | `oldfire` | Biff FDSA | Stella |
+  | `school` | School Bus | Calvin.linardi |
+  | `tourbus` | Tour Bus | Calvin.linardi |
+  | `mailtruk` | Mail Truck | Calvin.linardi |
+  | `trasha` | TRASHM | Burbalade |
+  | `sweepeb` | SWEEPER | Calvin.linardi |
+  | `utilityb` | UTILITY | XG417 |
+  | `towheavy` | Heavy Tow Truck | KST |
+  | `towtrukb` | TOWTRUK | Calvin.linardi |
+  | `securic` | SECURI | TheGhostWheels12 |
+  | `lguard` | Lifeguard | TheF3nt0n |
+  | `taxib` | TAXI | GCT |
+  | `taxic` | TAXI | Boss |
+  | `cabshit` | Cabbie Beater | direct |
+  | `pzchmp` | Pizza Chimp | Blakfire |
+  | `taco` | Taco Van | TheF3nt0n |
+  | `chilwagn` | Chilli Wagon | Calvin.linardi |
+  | `rusty` | Rusty Browns | Cerberus Harrier |
+  | `messen` | Messenger | XG417 |
+  | `dolva` | Dolva | Calvin.linardi |
+  | `bastion` | Bastion | StarGTS |
+  | `empshit` | Grand Beater | Crack Yo' Neck |
+  | `chumshit` | Chumash Beater | Crack Yo' Neck |
+  | `montshit` | Montoya Beater | Crack Yo' Neck |
+  | `skulshit` | Skulker Beater | Crack Yo' Neck |
+  | `avarb` | Avaritia Beater | Crack Yo' Neck |
+
+### Flame Infernus v4.0
+
+- **Authors:** original model and textures by Silver3o5; edited model and new textures by FunGt
+  (readme). Source: gta-modding.com (readme), a local copy (`gtaref/vehicle skins/131_flame_infernus4`).
+- **License:** none stated ("You can edit this Infernus as you want").
+- **In the project:** `vana-cars/mods/flame_infernus/`: `infernfl.dff` (the "DFF primary color"
+  version: stripes take the primary colour), `infernfl.txd`, the readme. A model of its own; the
+  vanilla Infernus is untouched.
+
+### Big Boy's Toys monster truck
+
+- **Author:** not given (readme, from gta-modding.it). Source: a local copy (`gtaref/vehicle skins/124_bad_boy_toys_monster_truck`).
+- **License:** none stated.
+- **In the project:** `vana-cars/mods/bigboys_monster/`: `monstbbt.txd` (the mod's `monsterb.txd`),
+  on a model of its own built on the vanilla Monster (557); the readmes.

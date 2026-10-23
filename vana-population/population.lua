@@ -131,15 +131,55 @@ local SPECIAL_UNITS = {
     army = { ped = 287, car = 433 }, tank = { ped = 287, car = 432 },
 }
 
+-- A vanilla service vehicle or one of the added vehicles beside it here (vana-cars' variants: the
+-- city's police car, the airports' fire brigade...). Itself without vana-cars.
+function Population.variant(model, profile)
+    local res = getResourceFromName and getResourceFromName("vana-cars")
+    if not res or getResourceState(res) ~= "running" then return model end
+    local ok, pick = pcall(function() return exports["vana-cars"]:pickVariant(model, profile.city, profile.zone) end)
+    return ok and pick or model
+end
+
 -- Emergency service crew and vehicle for a place: "police", "heli" (police Maverick with local
 -- cops), "swat", "fbi", "army", "tank", "medics" or "fire".
 function Population.serviceUnit(profile, service)
-    if service == "medics" then return { ped = MEDICS[profile.city] or MEDICS.los_santos, car = 416 } end
-    if service == "fire" then return { ped = FIREFIGHTERS[profile.city] or FIREFIGHTERS.los_santos, car = 407 } end
-    if SPECIAL_UNITS[service] then return SPECIAL_UNITS[service] end
+    if service == "medics" then return { ped = MEDICS[profile.city] or MEDICS.los_santos, car = Population.variant(416, profile) } end
+    if service == "fire" then return { ped = FIREFIGHTERS[profile.city] or FIREFIGHTERS.los_santos, car = Population.variant(407, profile) } end
+    if SPECIAL_UNITS[service] then
+        local u = SPECIAL_UNITS[service]
+        return { ped = u.ped, car = Population.variant(u.car, profile) }
+    end
     local c = cops(profile)
     if service == "heli" then return { ped = c.ped, car = 497 } end
-    return c
+    return { ped = c.ped, car = Population.variant(c.car, profile) }
+end
+
+-- The added vehicles (vana-cars) as members of the car groups and the vehicle table: taken again
+-- whenever vana-cars starts (its models' IDs come from it).
+local baseGroups -- the vanilla car groups, before any added vehicles
+function Population.addVehicles(list)
+    if not baseGroups then
+        baseGroups = {}
+        for g, models in pairs(PopData.carGroups) do
+            baseGroups[g] = {}
+            for i, m in ipairs(models) do baseGroups[g][i] = m end
+        end
+    end
+    for g, models in pairs(baseGroups) do
+        PopData.carGroups[g] = {}
+        for i, m in ipairs(models) do PopData.carGroups[g][i] = m end
+    end
+    local n = 0
+    for _, v in ipairs(list or {}) do
+        PopData.vehicles[v.model] = { name = v.name, type = v.type, class = v.class, added = true }
+        for _, g in ipairs(v.groups or {}) do
+            if PopData.carGroups[g] then
+                table.insert(PopData.carGroups[g], v.model)
+                n = n + 1
+            end
+        end
+    end
+    return n
 end
 
 -- One of the gang's weapons (armedChance), and whether it starts in hand (drawnChance) or holstered.
@@ -245,7 +285,7 @@ function Population.pickCar(profile, counts)
     elseif kind == "cop" then
         local c = cops(profile)
         local partner = Population.random() < 0.5 and { ped("cop", c.ped, { weapon = 22, weaponDrawn = false }) } or {}
-        return { kind = "cop", model = c.car, driver = ped("cop", c.ped, { weapon = 22, weaponDrawn = false }), passengers = partner }
+        return { kind = "cop", model = Population.variant(c.car, profile), driver = ped("cop", c.ped, { weapon = 22, weaponDrawn = false }), passengers = partner }
     elseif kind == "civilian" then
         for _ = 1, 10 do
             local group = pickCivilianGroup(profile.row)
