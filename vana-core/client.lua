@@ -24,6 +24,7 @@ local MEANT = { "KILL_PED", "GUN", "FIGHT", "HIT", "SHOOT" }
 local function meantToStand(ped)
     if getPedAnimation(ped) then return true end -- an animation of ours (a medic's CPR, a dance)
     if getElementData(ped, "vana:animal") then return true end -- wildlife idles where it stands (vana-wildlife:brains)
+    if getElementData(ped, "vana:train") == "waiting" then return true end -- waiting for the train (vana-trains)
     local task, simplest = tostring(getPedTask(ped, "primary", 3)), tostring(getPedSimplestTask(ped))
     for _, part in ipairs(MEANT) do
         if task:find(part, 1, true) or simplest:find(part, 1, true) then return true end

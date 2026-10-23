@@ -1,7 +1,8 @@
 -- Console-only: runs the configured trains for hours of schedule (schedule.lua) and checks it: no
 -- train ever runs into another, the stopping ones halt with their middle at every station stop on
 -- each lap, nobody goes over its cruise or brakes harder than the emergency rate, and a train taken
--- and left standing on the line holds the ones behind it only while it's there. No elements are made.
+-- and left standing on the line holds the ones behind it only while it's there; level crossings are
+-- closed whenever a train is on them and open most of the time. No elements are made.
 -- Plain Lua apart from the command, so it also runs offline.
 TrainTest = {}
 
@@ -18,6 +19,8 @@ function TrainTest.run(seed)
     local stats = { steps = 0, minGap = math.huge, overSpeed = 0, hardBrake = 0, collisions = 0, badStops = 0, stops = {} }
     local laps, travelled, prevS, prevV = {}, {}, {}, {}
     for id, train in pairs(trains) do laps[id], travelled[id], prevS[id], prevV[id] = 0, 0, train.s, 0 end
+    local crossings = Schedule.prepareCrossings(TrackCrossings or {})
+    local closedSteps, openOnTrain, checks = {}, 0, 0
     local blocker
     local now
     for step = 1, HOURS * 3600 / DT do
@@ -62,7 +65,23 @@ function TrainTest.run(seed)
                 end
             end
         end
+        if step % 2 == 0 then
+            checks = checks + 1
+            local closed = Schedule.closedCrossings(crossings, trains)
+            for _, c in ipairs(crossings) do
+                if closed[c.id] then closedSteps[c.id] = (closedSteps[c.id] or 0) + 1 end
+                for _, train in pairs(trains) do
+                    if train.track == c.track and not closed[c.id] then
+                        local track = Tracks[c.track]
+                        local r = TracksData.ahead(track, train.s, c.s, train.forward)
+                        if r > track.length / 2 then r = r - track.length end
+                        if r <= 0 and r >= -train.length then openOnTrain = openOnTrain + 1 end
+                    end
+                end
+            end
+        end
         stats.steps = step
+        if step % 500 == 0 and TrainTest.pause then TrainTest.pause() end
     end
 
     local lines, ok = {}, true
@@ -85,16 +104,33 @@ function TrainTest.run(seed)
     check(stats.overSpeed == 0, "nobody over its cruise speed")
     check(stats.hardBrake == 0, "nobody braked harder than the emergency rate")
     check(stats.badStops == 0, "every halt at a stop had the train's middle on it")
+    local mostClosed, everClosed = 0, 0
+    for _, n in pairs(closedSteps) do
+        everClosed = everClosed + 1
+        mostClosed = math.max(mostClosed, n / checks)
+    end
+    check(openOnTrain == 0, ("no crossing open with a train on it (%d crossings, %d closed at some time)"):format(#crossings, everClosed))
+    check(#crossings == 0 or everClosed > 0 and mostClosed < 0.5, ("crossings open most of the time (the busiest closed %.0f%%)"):format(mostClosed * 100))
     lines[#lines + 1] = ok and ("PASS: %d trains, %d h of schedule"):format(#lines > 0 and lastId or 0, HOURS) or "FAIL"
     return ok, lines
 end
 
+-- In the server: a coroutine resumed every frame (the whole run at once would hold the server up for seconds).
 if addCommandHandler then
     addCommandHandler("traintest", function(source, _, seed)
         if getElementType(source) ~= "console" then return end
         local t0 = getTickCount()
-        local _, lines = TrainTest.run(tonumber(seed))
-        for _, line in ipairs(lines) do outputServerLog("[traintest] " .. line) end
-        outputServerLog(("[traintest] took %d ms"):format(getTickCount() - t0))
+        local co = coroutine.create(function()
+            local _, lines = TrainTest.run(tonumber(seed))
+            for _, line in ipairs(lines) do outputServerLog("[traintest] " .. line) end
+            outputServerLog(("[traintest] took %d ms"):format(getTickCount() - t0))
+        end)
+        TrainTest.pause = coroutine.yield
+        local timer
+        timer = setTimer(function()
+            local ok, err = coroutine.resume(co)
+            if not ok then outputServerLog("[traintest] ERROR: " .. tostring(err)) end
+            if coroutine.status(co) == "dead" then killTimer(timer) end
+        end, 50, 0)
     end)
 end

@@ -24,6 +24,24 @@ local function randomRoute()
     end
 end
 
+-- A closed level crossing on a straight road: a car far enough away stops RAIL_CLEAR + STOP_BACK
+-- before the rails, one too close to stop commits, and nobody waits once it's open.
+local function crossingCase()
+    local function route()
+        return { idx = 2, decisions = {}, { area = 0, id = 0, x = 0, y = 0, z = 0 },
+                 { area = 0, id = 1, x = 0, y = 100, z = 0, rail = { { id = "c", x = 0, y = 50 } } },
+                 { area = 0, id = 2, x = 0, y = 200, z = 0 } }
+    end
+    local far = Planner.chooseTarget(route(), 0, 0, 10, 0, FRONT, { c = true })
+    local line = 50 - Planner.RAIL_CLEAR - Planner.STOP_BACK - FRONT
+    local close = Planner.chooseTarget(route(), 0, 44, 15, 0, FRONT, { c = true })
+    local open = Planner.chooseTarget(route(), 0, 0, 10, 0, FRONT, {})
+    local ok = far.hold and math.abs(far.y - line) < 0.01 and not close.hold and not open.hold
+    outputServerLog(("[traffictest] level crossing: stops %s at %.1f (line %.1f), too close to stop %s, open %s")
+        :format(far.hold and "yes" or "NO", far.y or -1, line, close.hold and "STOPS" or "goes", open.hold and "STOPS" or "goes"))
+    return ok
+end
+
 -- Runs as a coroutine resumed every frame, one unit at a time: a cold start (every node fetched
 -- through vana-paths' exports) would otherwise exceed the script time limit.
 local function run(seed)
@@ -114,7 +132,7 @@ local function run(seed)
         coroutine.yield()
     end
 
-    local ok = stats.centreStops == 0 and stats.redRuns == 0 and stats.wrongWay == 0 and stats.uturns == 0 and stats.badNodes == 0 and stats.stalled == 0 and stats.lightStops > 0
+    local ok = crossingCase() and stats.centreStops == 0 and stats.redRuns == 0 and stats.wrongWay == 0 and stats.uturns == 0 and stats.badNodes == 0 and stats.stalled == 0 and stats.lightStops > 0
     outputServerLog(("[traffictest] %d units x %ds simulated in %d ms (across frames), avg %.1f km each"):format(CARS, DURATION, getTickCount() - t0, totalDist / CARS / 1000))
     outputServerLog(("[traffictest] light stops %d, green passes %d, amber passes %d, amber-committed red clears %d, red runs %d")
         :format(stats.lightStops, stats.lightPasses, stats.amberRuns, stats.committedRed, stats.redRuns))

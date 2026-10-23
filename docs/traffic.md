@@ -60,6 +60,9 @@ built, so ambient traffic and scripted actors behave alike.
   - Amber: stop if it can be done comfortably (5 m/s²) at the stop point; otherwise commit and
     clear the junction.
   - A decision to stop is never reversed before green.
+- **Level crossings:** while vana-trains has one closed (a train coming or passing), a stop line
+  7 m before the first rails, with the red-light rule: a car that can't stop braking hard commits
+  ([trains.md](trains.md)). `traffictest` checks a stop, a commit and an open crossing.
 - **Routes:**
   - Routes prefer going straight, stay within one flood-fill group and exclude boat and
     emergency-only nodes.
@@ -101,6 +104,8 @@ Road crossings use the intersection flags on the links:
   crossing early in the walk phase (6 s or more left); later, only one that can mostly be finished
   in the time left.
 - **Unlit crossing:** wait until no moving vehicle is within 18 m of it.
+- **Level crossing:** while vana-trains has it closed, wait 4 m before the first rails; a ped
+  already past that point walks on ([trains.md](trains.md)). `pedtest` checks both and an open one.
 - **No stopping halfway:** a ped already more than 3 m out on a crossing never stops. Arriving at
   the kerb never counts as being out.
 

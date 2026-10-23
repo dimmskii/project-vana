@@ -45,11 +45,13 @@ out[#out + 1] = "</map>\n"
 writeFile(OUT .. "/tracks.map", table.concat(out, "\n"))
 writeFile(OUT .. "/meta.xml", ([[
 <meta>
-    <info type="map" name="%s" author="ProjectVana" description="Railway tracks (GTA:SA's tracks*.dat): open it in the Map Editor (definitions: vana-trains)" version="1.0.0" edf:definitions="vana-trains" />
+    <info type="map" name="%s" author="ProjectVana" description="Railway tracks (GTA:SA's tracks*.dat), their crossings and platforms: open it in the Map Editor (definitions: vana-trains)" version="1.0.0" edf:definitions="vana-trains" />
     <map src="tracks.map" dimension="0" />
+    <map src="crossings.map" dimension="0" />
+    <map src="platforms.map" dimension="0" />
 </meta>
 ]]):format(TracksData.resource))
-print(("wrote %d track nodes -> %s"):format(#records, OUT))
+print(("wrote %d track nodes -> %s (then lua5.1 tools/convert/track_places.lua for its crossings and platforms)"):format(#records, OUT))
 
 -- Back as the game reads them: attributes -> records -> each track's tables.
 local back = {}

@@ -71,7 +71,8 @@ again (`tools/convert/paths_to_maps.lua`) copy `data/Paths/NODES0.DAT` … `NODE
 The railway tracks ship converted the same way, as map data in `[data]/vana-data-trains`
 ([trains.md](trains.md)); nothing to copy. Only to convert them again
 (`tools/convert/tracks_to_maps.lua`) copy `data/Paths/tracks.dat`, `tracks2.dat`, `tracks3.dat` and
-`tracks4.dat` into `[vana]/vana-trains/data/`.
+`tracks4.dat` into `[vana]/vana-trains/data/`. Their crossings and platform spots come from our own
+map data (`tools/convert/track_places.lua`).
 
 ## 4. mtaserver.conf
 

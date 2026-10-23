@@ -1,4 +1,6 @@
 <meta>
-    <info type="map" name="vana-data-trains" author="ProjectVana" description="Railway tracks (GTA:SA's tracks*.dat): open it in the Map Editor (definitions: vana-trains)" version="1.0.0" edf:definitions="vana-trains" />
+    <info type="map" name="vana-data-trains" author="ProjectVana" description="Railway tracks (GTA:SA's tracks*.dat), their crossings and platforms: open it in the Map Editor (definitions: vana-trains)" version="1.0.0" edf:definitions="vana-trains" />
     <map src="tracks.map" dimension="0" />
+    <map src="crossings.map" dimension="0" />
+    <map src="platforms.map" dimension="0" />
 </meta>

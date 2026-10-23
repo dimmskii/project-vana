@@ -105,7 +105,7 @@ function Schedule.step(train, trains, dt, now)
         move = min(move, stopDist)
         if stopDist - move < 0.5 and v0 <= TrainConfig.emergencyDecel * dt then
             train.s, train.v = Schedule.nextStop(train), 0
-            train.state, train.dwellUntil = "dwell", now + TrainConfig.dwell
+            train.state, train.dwellUntil, train.arrivedAt = "dwell", now + TrainConfig.dwell, now
             return
         end
     end
@@ -190,4 +190,42 @@ function Schedule.freeSpot(track, trains, need, avoid)
         end
     end
     return best
+end
+
+-- Track crossings (map data, tracks_data.lua) on the tracks whose trains close them (not the trams':
+-- they share the street, as in vanilla), each with its rail distance.
+function Schedule.prepareCrossings(records)
+    local out = {}
+    for _, rec in ipairs(records) do
+        local t = Tracks[rec.track]
+        if t and TrainConfig.crossings.tracks[rec.track] then
+            out[#out + 1] = { id = rec.id, track = rec.track, s = TracksData.nearest(t, rec.x, rec.y, rec.z),
+                              x = rec.x, y = rec.y, z = rec.z, a = rec.a, b = rec.b, kind = rec.kind }
+        end
+    end
+    return out
+end
+
+-- The crossings closed now: { [id] = true } for each with a train coming (within warnSeconds at its
+-- speed, or warnMin), on it, or not clearAfter past it. A taken train may go either way: closed on
+-- both sides of it.
+function Schedule.closedCrossings(crossings, trains)
+    local C = TrainConfig.crossings
+    local closed = {}
+    for _, train in pairs(trains) do
+        local t = Tracks[train.track]
+        local warn = math.max(C.warnMin, train.v * C.warnSeconds)
+        local behind = train.length + C.clearAfter
+        for _, c in ipairs(crossings) do
+            if c.track == train.track and not closed[c.id] then
+                -- Signed distance from the engine to the crossing, the way the train runs.
+                local r = TracksData.ahead(t, train.s, c.s, train.forward)
+                if r > t.length / 2 then r = r - t.length end
+                if r <= warn and r >= -behind or train.state == "taken" and r >= -behind - warn and r <= warn then
+                    closed[c.id] = true
+                end
+            end
+        end
+    end
+    return closed
 end

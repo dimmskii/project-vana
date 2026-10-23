@@ -257,7 +257,7 @@ local function handToTraffic(walker, vehicle)
     return false
 end
 
-local function updateWalker(walker, players, signal, walkMsLeft)
+local function updateWalker(walker, players, signal, walkMsLeft, closedCrossings)
     local ped = walker.ped
     if not isElement(ped) then return removeWalker(walker) end
     local e = walker.encounter
@@ -368,7 +368,7 @@ local function updateWalker(walker, players, signal, walkMsLeft)
     PedPlanner.advance(route, x, y)
     if not PedPlanner.extend(route) and route.idx >= #route then return removeWalker(walker) end
 
-    local target = PedPlanner.chooseTarget(route, x, y, signal, walkMsLeft, isCrossingClear)
+    local target = PedPlanner.chooseTarget(route, x, y, signal, walkMsLeft, isCrossingClear, closedCrossings)
     if PedPlanner.needsNewTarget(walker.target, target, x, y, getTickCount() - (walker.sentAt or 0)) then
         sendTarget(walker, target)
     end
@@ -409,7 +409,8 @@ setTimer(function()
     local signal = paths:getPedSignal()
     local _, _, walkMsLeft = exports["vana-lights"]:getPhase()
     if signal ~= "walk" then walkMsLeft = 0 end
-    for _, walker in pairs(walkers) do updateWalker(walker, players, signal, walkMsLeft or 0) end
+    local closedCrossings = TrainCrossings.refresh() -- level crossings closed for a train (vana-trains)
+    for _, walker in pairs(walkers) do updateWalker(walker, players, signal, walkMsLeft or 0, closedCrossings) end
     challengePlayers(players)
 
     for ped in pairs(released) do

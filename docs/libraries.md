@@ -38,6 +38,7 @@ it in its own Lua state. It behaves exactly like a local copy: no per-call cost,
 | `actions` (`Actions`) | Actions: what a player does to something, as a command (server); the exports vana-controls collects ([controls.md](controls.md)) | vana-controls, vana-vehicles, vana-shops |
 | `menu_input` (`MenuInput`) | One way through every menu: keys, pad, mouse (client) | vana-controls, vana-shops, vana-activities |
 | `menu_list` (`MenuList`) | Every list menu of ours: rows that run, headings the selection skips, choices changed in place, right-hand columns, greyed rows, a message line, levels (setItems, onBack), keys/pad/mouse and the scroll fix (client; needs `menu_input`) | vana-controls (preferences), vana-shops (shop and garage menus), vana-activities (pick list, schools) |
+| `train_crossings` (`TrainCrossings`) | Server: the level crossings from vana-trains, by path link, and which are closed now ([trains.md](trains.md)) | vana-traffic, vana-peds |
 | `debug` (`Debug`) | Debug switches: `Debug.on(topic)`, `Debug.log(topic, text)` to the server log from either side ([debug.md](debug.md)) | vana-controls, vana-core, vana-peds, vana-traffic, vana-wildlife |
 | `settings` (`Settings`) | Server: a resource's meta.xml settings bound into its CONFIG and kept current (`Settings.bind`, `Settings.set`), plus the `getSettings`/`setSetting` exports `/vanaset` calls ([setup.md](setup.md)) | vana-peds, vana-traffic, vana-wildlife |
 | `text` (`Gxt`) | The game's text, answered by `vana-text` | vana-shops, vana-activities |

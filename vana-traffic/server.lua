@@ -301,7 +301,7 @@ function panicUnit(vehicle, seconds)
     return true
 end
 
-local function updateUnit(unit, players, lightState)
+local function updateUnit(unit, players, lightState, closedCrossings)
     local vehicle, ped = unit.vehicle, unit.ped
     if not isElement(vehicle) then return removeUnit(unit) end
     if isVehicleBlown(vehicle) or not isElement(ped) or isPedDead(ped) or getPedOccupiedVehicle(ped) ~= vehicle
@@ -344,7 +344,7 @@ local function updateUnit(unit, players, lightState)
     local vx, vy, vz = getElementVelocity(vehicle)
     local speed = math.sqrt(vx * vx + vy * vy + vz * vz) * 50
     -- Panicking drivers run lights (state 9: lights off).
-    local target = Planner.chooseTarget(route, x, y, speed, panicking(unit) and 9 or lightState, unit.front)
+    local target = Planner.chooseTarget(route, x, y, speed, panicking(unit) and 9 or lightState, unit.front, closedCrossings)
     local panicChanged = unit.wasPanicking ~= panicking(unit)
     unit.wasPanicking = panicking(unit)
     if panicChanged or Planner.needsNewTarget(unit.target, target, x, y, getTickCount() - (unit.sentAt or 0)) then
@@ -367,7 +367,8 @@ end
 setTimer(function()
     local players = eligiblePlayers()
     local lightState = getTrafficLightState()
-    for _, unit in pairs(units) do updateUnit(unit, players, lightState) end
+    local closedCrossings = TrainCrossings.refresh() -- level crossings closed for a train (vana-trains)
+    for _, unit in pairs(units) do updateUnit(unit, players, lightState, closedCrossings) end
 
     for element, info in pairs(released) do
         if not isElement(element) then

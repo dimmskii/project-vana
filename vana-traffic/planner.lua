@@ -12,6 +12,7 @@ Planner.AMBER_DECEL = 5     -- m/s^2; on amber, stop only if this deceleration s
 Planner.HARD_DECEL = 7      -- m/s^2; on red, go through only if even this can't stop before the line
 Planner.ROUTE_AHEAD = 12    -- nodes kept planned ahead of the unit
 Planner.LANE_WIDTH = 5.4    -- the engine's lane width (CCarPathLink::OneWayLaneOffset)
+Planner.RAIL_CLEAR = 4      -- m: at a closed level crossing the stop line is this far before the rails' centre
 Planner.random = math.random
 
 local paths = exports["vana-paths"]
@@ -169,7 +170,10 @@ function Planner.extend(route)
         local link = Planner.pickNext(prev, Planner.getNode(cur.area, cur.id), route.flood)
         if not link then return false end
         if prev and link.area == prev.area and link.id == prev.id then route.turnBacks = (route.turnBacks or 0) + 1 end
-        route[#route + 1] = entry(Planner.getNode(link.area, link.id), link)
+        local e = entry(Planner.getNode(link.area, link.id), link)
+        -- Level crossings on the way to it (vana-trains, through vana-lib's train_crossings).
+        e.rail = TrainCrossings and TrainCrossings.between(cur, e, "vehicle")
+        route[#route + 1] = e
     end
     return true
 end
@@ -189,15 +193,17 @@ function Planner.advance(route, x, y)
         for _ = 1, 8 do
             local e = table.remove(route, 1)
             if e.light then route.decisions[e.light] = nil end
+            route.decisions[e] = nil
         end
         route.idx = route.idx - 8
     end
 end
 
 -- Where a unit at (x, y) moving at speed m/s should drive now. front is the distance from the
--- vehicle's position to its front bumper. Returns a target table: x, y, z (vehicle position to
--- reach), mode ("normal" or "accurate"), hold (stopping for a light), light, index.
-function Planner.chooseTarget(route, x, y, speed, lightState, front)
+-- vehicle's position to its front bumper; closed: the level crossings closed now ({ [id] = true }).
+-- Returns a target table: x, y, z (vehicle position to reach), mode ("normal" or "accurate"), hold
+-- (stopping for a light or a train), light or crossing, index.
+function Planner.chooseTarget(route, x, y, speed, lightState, front, closed)
     front = front or 0
     local lane = currentLane(route, x, y)
     local lookahead = math.max(Planner.LOOKAHEAD, speed * speed / (2 * Planner.AMBER_DECEL) + 15)
@@ -232,6 +238,30 @@ function Planner.chooseTarget(route, x, y, speed, lightState, front)
                     end
                     route.decisions[light] = "go-" .. colour
                 end
+            end
+        end
+        if e.rail and closed then
+            -- A level crossing on the way to this node: while it's closed, stop before the first rails
+            -- (a road may cross two tracks side by side), unless it can't be done braking hard: then
+            -- commit and clear it. A train is at least warnSeconds away when it closes.
+            local dirX, dirY = direction(route[j - 1] or e, e)
+            local first, shut
+            for _, c in ipairs(e.rail) do
+                local ahead = dist + (c.x - px) * dirX + (c.y - py) * dirY - front
+                if not first or ahead < first.ahead then first = { ahead = ahead, x = c.x, y = c.y, id = c.id } end
+                shut = shut or closed[c.id]
+            end
+            if not shut then
+                route.decisions[e] = nil
+            elseif route.decisions[e] ~= "go" and first.ahead > -1 then
+                local toLine = first.ahead - Planner.RAIL_CLEAR - Planner.STOP_BACK
+                if route.decisions[e] == "hold" or toLine > speed * speed / (2 * Planner.HARD_DECEL) then
+                    route.decisions[e] = "hold"
+                    local back = Planner.RAIL_CLEAR + Planner.STOP_BACK + front
+                    local sx, sy = inLane(first.x - dirX * back, first.y - dirY * back, dirX, dirY, e.link, lane)
+                    return { x = sx, y = sy, z = e.z, mode = "accurate", hold = true, crossing = first.id, index = j }
+                end
+                route.decisions[e] = "go"
             end
         end
         dist = dist + sqrt((e.x - px) ^ 2 + (e.y - py) ^ 2)

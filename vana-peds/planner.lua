@@ -12,6 +12,7 @@ PedPlanner.MIN_RETARGET_MS = 400
 PedPlanner.WALK_SPEED = 1.4       -- m/s, used to judge whether a crossing can be finished on the walk signal
 PedPlanner.EARLY_WALK_MS = 6000   -- with at least this much walk signal left, start any crossing
 PedPlanner.ROUTE_AHEAD = 12
+PedPlanner.RAIL_CLEAR = 4         -- m: at a closed level crossing peds wait this far before the rails' centre
 PedPlanner.random = math.random
 
 local paths = exports["vana-paths"]
@@ -48,6 +49,8 @@ local function entry(node, link, from)
         e.lit = link.pedTrafficLight or (reverse and reverse.pedTrafficLight) or false
         e.length = sqrt((node.x - from.x) ^ 2 + (node.y - from.y) ^ 2)
     end
+    -- Level crossings on the way to it (vana-trains, through vana-lib's train_crossings).
+    if from then e.rail = TrainCrossings and TrainCrossings.between(from, e, "ped") end
     return e
 end
 
@@ -129,12 +132,32 @@ end
 --   signal: "walk", "dont_walk" or "off" (vana-paths getPedSignal)
 --   walkMsLeft: time left on the walk signal
 --   isClear(from, to): whether an unlit crossing has no traffic close by
--- Returns a target table: x, y, z, hold (waiting at a kerb), index.
-function PedPlanner.chooseTarget(route, x, y, signal, walkMsLeft, isClear)
+--   closed: the level crossings closed now ({ [id] = true })
+-- Returns a target table: x, y, z, hold (waiting at a kerb or a level crossing), index.
+function PedPlanner.chooseTarget(route, x, y, signal, walkMsLeft, isClear, closed)
     local px, py, dist = x, y, 0
     for j = route.idx, #route do
         local e = route[j]
         local from = route[j - 1]
+        if e.rail and from and closed then
+            -- A closed level crossing on this stretch: wait RAIL_CLEAR before the first rails, unless
+            -- already past that point (then keep going: a train is at least warnSeconds away).
+            local shut, first
+            local len = sqrt((e.x - from.x) ^ 2 + (e.y - from.y) ^ 2)
+            if len > 0.1 then
+                local ux, uy = (e.x - from.x) / len, (e.y - from.y) / len
+                for _, c in ipairs(e.rail) do
+                    shut = shut or closed[c.id]
+                    local along = (c.x - from.x) * ux + (c.y - from.y) * uy
+                    if not first or along < first then first = along end
+                end
+                local at = math.max(0, first - PedPlanner.RAIL_CLEAR)
+                local mine = j == route.idx and (x - from.x) * ux + (y - from.y) * uy or -math.huge
+                if shut and mine < at + 0.5 then
+                    return { x = from.x + ux * at, y = from.y + uy * at, z = from.z + (e.z - from.z) * at / len, hold = true, index = j - 1 }
+                end
+            end
+        end
         if e.crossing and from and not route.approved[e] then
             -- A ped already out on the crossing is never stopped halfway.
             local onCrossing = false

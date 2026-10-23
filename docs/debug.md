@@ -45,7 +45,7 @@ Restricted (`command.vanadebug`; vana-player grants it to `Admin`). Works at the
 | `vana-traffic:telemetry` | Slow traffic units and their native autopilot state; `/traffic debug on|off` sets the same switch. |
 | `vana-trains:sync` | Trains made and removed (where, how many cars), who simulates each, a train taken or left without a driver, replaced; a train that hasn't moved, is off its track or more than 30 m from where the timetable had it, and the direction flag flipping ([trains.md](trains.md)); `/trains debug on|off` sets the same switch. |
 | `vana-encounters:encounters` | Each encounter appearing, cleaned up at its end hour, going for someone, giving up the chase, killed ([encounters.md](encounters.md)). |
-| `vana-wildlife:brains` | What animals do: spawned (where, which spot, who simulates it), fleeing, hurt and the reaction, a predator going for someone, a chase given up, died, despawned; and orders a client couldn't give ([wildlife.md](wildlife.md)). Animals standing still are left out of `vana-core:stuck`. |
+| `vana-wildlife:brains` | What animals do: spawned (where, which spot, who simulates it), fleeing, hurt and the reaction, a predator going for someone, a chase given up, died, despawned; and orders a client couldn't give ([wildlife.md](wildlife.md)). Animals standing still are left out of `vana-core:stuck` (so are people waiting for a train). |
 
 Reading a stuck ped's line: `mine false` with `syncer none` means nobody simulates it (it freezes in
 its pose); `ground not loaded` with `HANGING` means no collision under it; `mine true` with an idle task

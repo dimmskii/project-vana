@@ -17,6 +17,25 @@ TracksData.schemas = {
       fields = { { "stop", "bool", false, "a station stop: trains that stop halt with their middle here" } },
       rep = '<marker type="corona" size="0.8" color="#C08040A0" />' },
 }
+-- Where trains meet the rest of the world, worked out from the path graph and the tracks
+-- (tools/convert/track_places.lua; editable):
+--   trackcrossing  a road or footpath link crossing a track at the same height: the point where they
+--                  cross, the track, and the link's ends (pathnode ids)
+--   platformspot   a place to wait for the train at a station stop: a ped path node on the platform
+--                  beside it, facing the track
+TracksData.placeSchemas = {
+    { element = "trackcrossing", friendly = "Track crossing (a road or footpath over the rails)", position = true, id = "id",
+      fields = {
+          { "track", "int", 0, "the track it crosses" },
+          { "a", "string", nil, "the path link's one end (pathnode id)" },
+          { "b", "string", nil, "its other end" },
+          { "kind", "string", "vehicle", "vehicle (a road) or ped (a footpath)" },
+      },
+      rep = '<marker type="corona" size="1.5" color="#FF404090" />' },
+    { element = "platformspot", friendly = "Platform spot (people wait for the train here)", position = true, rotation = "heading", id = "id",
+      fields = { { "stop", "string", nil, "the station stop it waits at (tracknode id)" } },
+      rep = '<marker type="corona" size="0.7" color="#40FF8090" />' },
+}
 
 function TracksData.nodeId(track, index) return track .. "." .. index end
 

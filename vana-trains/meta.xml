@@ -15,8 +15,13 @@
     <script src="config/maps.lua" type="server" />
     <script src="config/trains.lua" type="server" />
     <script src="schedule.lua" type="server" />
+    <script src="players.lua" type="server" />
+    <script src="platforms.lua" type="server" />
     <script src="server.lua" type="server" />
     <script src="test.lua" type="server" />
+    <script src="client.lua" type="client" />
+    <export function="getCrossings" type="server" />
+    <export function="getClosedCrossings" type="server" />
     <script src="help.lua" type="server" />
     <export function="getHelpPages" type="server" />
     <export function="getSettings" type="server" />

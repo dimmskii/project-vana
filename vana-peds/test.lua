@@ -118,7 +118,22 @@ addCommandHandler("pedtest", function(source, _, seed)
         if travelled < 150 then stats.stalled = stats.stalled + 1 end
     end
 
-    local ok = stats.badStarts == 0 and stats.uturns == 0 and stats.badNodes == 0 and stats.stalled == 0 and stats.litCrossings > 0
+    -- A closed level crossing: a ped short of it waits RAIL_CLEAR before the rails, one past that
+    -- point walks on, and nobody waits once it's open.
+    local function crossingRoute()
+        return { idx = 2, approved = {}, { area = 0, id = 0, x = 0, y = 0, z = 0 },
+                 { area = 0, id = 1, x = 0, y = 20, z = 0, rail = { { id = "c", x = 0, y = 10 } } },
+                 { area = 0, id = 2, x = 0, y = 40, z = 0 } }
+    end
+    local yes = function() return true end
+    local short = PedPlanner.chooseTarget(crossingRoute(), 0, 0, "off", 0, yes, { c = true })
+    local past = PedPlanner.chooseTarget(crossingRoute(), 0, 8, "off", 0, yes, { c = true })
+    local open = PedPlanner.chooseTarget(crossingRoute(), 0, 0, "off", 0, yes, {})
+    local railOk = short.hold and math.abs(short.y - (10 - PedPlanner.RAIL_CLEAR)) < 0.01 and not past.hold and not open.hold
+    outputServerLog(("[pedtest] level crossing: waits %s at %.1f, past the wait point %s, open %s")
+        :format(short.hold and "yes" or "NO", short.y or -1, past.hold and "WAITS" or "walks on", open.hold and "WAITS" or "walks on"))
+
+    local ok = railOk and stats.badStarts == 0 and stats.uturns == 0 and stats.badNodes == 0 and stats.stalled == 0 and stats.litCrossings > 0
     outputServerLog(("[pedtest] %d peds x %ds simulated in %d ms, avg %.0f m walked, %.1f retargets per ped-minute")
         :format(PEDS, DURATION, getTickCount() - t0, totalDist / PEDS, stats.retargets / PEDS / (DURATION / 60)))
     outputServerLog(("[pedtest] crossings: %d lit, %d unlit; %d started without approval; %d finished >6s after walk ended; %d kerb waits, avg %.1fs")

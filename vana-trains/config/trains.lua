@@ -29,4 +29,22 @@ TrainConfig = {
     abandonedMs = 60000,       -- a train a player took and left: removed after this, once nobody is near
 
     drivers = { 27, 50, 153, 260 }, -- ours: workmen (WMYCON, WMYMECH, WMYCONB, BMYCON)
+
+    -- Level crossings (map data: trackcrossing): closed to cars and pedestrians while a train comes
+    -- (warnSeconds away at its speed, at least warnMin metres), is on it, or hasn't cleared it by
+    -- clearAfter. The tram's track isn't one of them: trams share the street, as in vanilla.
+    crossings = { tracks = { [0] = true, [2] = true, [3] = true }, warnSeconds = 12, warnMin = 50, clearAfter = 10 },
+
+    -- People at the stations (map data: platformspot) and aboard the passenger cars (ours: vanilla's
+    -- trains take on and let off passengers at stations too, by their own rules).
+    platforms = {
+        range = 150, keep = 220,       -- a station fills while a player is this close, empties past keep
+        fill = { day = 0.6, night = 0.25 }, max = 6, -- share of its spots taken (day 7:00-22:00), at most
+        spawnEvery = 2500, notCloser = 20,            -- one at a time; never this close to a player
+        wander = 15,                   -- further than this from their spot: no longer waiting (vana-peds')
+        riderChance = 0.5,             -- each seat of a passenger car taken when the train is made
+        alightChance = 0.4, boardChance = 0.7,        -- at each stop
+        boardMs = 15000, alightMs = 6000,             -- then put in / taken out by hand
+        maxExtraDwell = 15000,         -- the train waits up to this much longer for those getting on
+    },
 }

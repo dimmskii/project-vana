@@ -13,8 +13,10 @@ for _, service in pairs(CONFIG.services) do counts[service.setting] = service.co
 
 local trains, lastId = {}, 0  -- id -> train (schedule.lua)
 local live = {}               -- train -> { engine, cars = {}, driver, driverSpec, owner, ... }
-local released = {}           -- drivers no longer ours: ped -> { kind, personality, encounter }
+local released = {}           -- peds no longer ours: ped -> { kind, personality, encounter }
 local enabled = true
+local crossings = Schedule.prepareCrossings(TrackCrossings) -- level crossings (config crossings.tracks)
+local closedCrossings = {}    -- id -> true while closed (traffic and peds ask: getClosedCrossings)
 -- setTrainDirection(true) runs the way rail distances grow, until a running train shows otherwise
 -- (once: a second flip would mean the check is wrong, not the flag).
 local clockwiseGrows, flipped = true, false
@@ -25,24 +27,6 @@ local function serviceCounts()
     local out = {}
     for name, service in pairs(CONFIG.services) do out[name] = counts[service.setting] or service.count end
     return out
-end
-
-local function eligiblePlayers()
-    local list = {}
-    for _, player in ipairs(getElementsByType("player")) do
-        if getElementDimension(player) == 0 and getElementInterior(player) == 0 then list[#list + 1] = player end
-    end
-    return list
-end
-
-local function nearestPlayer(x, y, z, players, maxDist)
-    local best, bestDist = false, maxDist or math.huge
-    for _, player in ipairs(players) do
-        local px, py, pz = getElementPosition(player)
-        local d = getDistanceBetweenPoints3D(x, y, z, px, py, pz)
-        if d < bestDist then best, bestDist = player, d end
-    end
-    return best, bestDist
 end
 
 -- The nearest player to any part of a train (engine, middle, tail).
@@ -100,6 +84,7 @@ local function setOwner(train, l, owner)
     if not owner or train.state == "taken" then return end
     for _, v in ipairs(vehiclesOf(l)) do if isElement(v) then setElementSyncer(v, owner, true, true) end end
     if isElement(l.driver) then setElementSyncer(l.driver, owner, true, true) end
+    Platforms.setOwner(l, owner)
     sync(("train %d (%s): simulated by %s"):format(train.id, train.service, getPlayerName(owner)))
 end
 
@@ -139,6 +124,7 @@ local function materialize(train, owner)
     end
     setVehicleEngineState(engine, true)
     live[train] = l
+    Platforms.addRiders(train, l)
     setOwner(train, l, owner)
     sync(("train %d (%s): made at %.0f m on track %d (%s), %d cars"):format(train.id, train.service, train.s, train.track, getZoneName(x, y, z), #l.cars))
     return true
@@ -152,21 +138,30 @@ local function dematerialize(train)
         if isElement(v) then destroyElement(v) end
     end
     if isElement(l.driver) and not released[l.driver] then destroyElement(l.driver) end
+    Platforms.removeRiders(l, released)
     sync(("train %d (%s): removed at %.0f m"):format(train.id, train.service, train.s))
 end
 
--- Its driver walks off (pulled out, or out to fight or flee) as one of vana-peds' pedestrians.
-local function releaseDriver(l, encounter)
-    if not isElement(l.driver) or released[l.driver] then return end
-    setElementSyncer(l.driver, true)
-    released[l.driver] = { kind = l.driverSpec.kind, personality = l.driverSpec.personality, encounter = encounter }
+-- A ped of ours (the driver, a passenger, someone waiting) walks off as one of vana-peds' pedestrians
+-- once on foot (pulled out, got off, out to fight or flee). spec: { kind, personality }. One still
+-- seated is told to get out by whoever syncs it, then taken out (EXIT_MS).
+local EXIT_MS = 5000
+function releasePed(ped, spec, encounter)
+    if not isElement(ped) or released[ped] then return end
+    setElementSyncer(ped, true)
+    removeElementData(ped, "vana:train")
+    released[ped] = { kind = spec and spec.kind or "civilian", personality = spec and spec.personality, encounter = encounter, at = getTickCount() }
+    local vehicle = getPedOccupiedVehicle(ped)
+    local to = vehicle and getElementSyncer(vehicle)
+    if isElement(to) and getElementType(to) == "player" then triggerClientEvent(to, "vana-trains:alight", resourceRoot, { ped }) end
 end
 
--- How the driver answers being pulled out: temper and fear (config/personalities.lua), as traffic's.
-local function jackedEncounter(l, jacker)
-    local p = l.driverSpec and l.driverSpec.personality or {}
+-- How one of ours answers a player who pulled them out or hurt them: temper and fear
+-- (config/personalities.lua), as traffic's.
+function reactionTo(spec, attacker)
+    local p = spec and spec.personality or {}
     local fight = (p.temper or 50) >= rules.collision.fightTemper and (p.fear or 50) < rules.collision.fleeFear
-    return { mode = fight and "fight" or "flee", target = jacker }
+    return { mode = fight and "fight" or "flee", target = attacker }
 end
 
 -- A player took the cab, or the driver is gone: off the schedule, every element back to automatic sync.
@@ -178,7 +173,7 @@ local function take(train, l, jacker)
             setTrainDerailable(v, true) -- a player can derail it, as in vanilla
         end
     end
-    releaseDriver(l, jacker and jackedEncounter(l, jacker) or nil)
+    if isElement(l.driver) then releasePed(l.driver, l.driverSpec, jacker and reactionTo(l.driverSpec, jacker) or nil) end
     sync(("train %d (%s): %s"):format(train.id, train.service, jacker and ("taken by " .. getPlayerName(jacker)) or "lost its driver"))
 end
 
@@ -327,6 +322,8 @@ local function tick()
         if live[train] then updateLive(train, live[train], players, dt) end
     end
     for _, train in pairs(trains) do Schedule.step(train, trains, dt, now) end
+    closedCrossings = Schedule.closedCrossings(crossings, trains)
+    Platforms.tick(players, live, now)
     for _, train in pairs(trains) do
         local l = live[train]
         if l and train.state ~= "taken" then sendSpeed(train, l, train.v) end
@@ -347,6 +344,12 @@ local function tick()
                 end)
                 if ok and adopted then released[ped] = nil end
             end
+        elseif not isPedDead(ped) and now - info.at > EXIT_MS then
+            -- Still seated: taken out, onto the platform if there's one beside the car.
+            local vehicle = getPedOccupiedVehicle(ped)
+            removePedFromVehicle(ped)
+            setElementPosition(ped, Platforms.outside(vehicle))
+            info.at = now
         end
         if isElement(ped) and released[ped] then
             local x, y, z = getElementPosition(ped)
@@ -366,6 +369,22 @@ end
 Settings.bind(counts, { freight = "number", passenger = "number", trams = "number" }, rebuild)
 rebuild()
 setTimer(tick, CONFIG.tick, 0)
+
+-- One of our peds hurt by a player, reported by the client that syncs it.
+addEvent("vana-trains:hurt", true)
+addEventHandler("vana-trains:hurt", resourceRoot, function(ped, attacker)
+    if not isElement(ped) or getElementSyncer(ped) ~= client or not isElement(attacker) or getElementType(attacker) ~= "player" then return end
+    Platforms.hurt(ped, attacker, live)
+end)
+
+-- For vana-traffic and vana-peds (vana-lib's train_crossings): every level crossing, and the closed ones.
+function getCrossings()
+    local out = {}
+    for i, c in ipairs(crossings) do out[i] = { id = c.id, x = c.x, y = c.y, z = c.z, a = c.a, b = c.b, kind = c.kind, track = c.track } end
+    return out
+end
+
+function getClosedCrossings() return closedCrossings end
 
 addEventHandler("onPlayerQuit", root, function()
     for _, l in pairs(live) do if l.owner == source then l.owner = nil end end
@@ -407,6 +426,7 @@ addCommandHandler("trains", function(source, _, action, value)
                 getZoneName(x, y, z), live[train] and " (in the world)" or "")
         end
         table.sort(lines)
+        for _, line in ipairs(Platforms.describe(live)) do lines[#lines + 1] = line end
         reply(("Trains are %s. Usage: /trains on|off|reset|freight|passenger|tram <count>|debug on|off"):format(enabled and "on" or "off"))
         for _, line in ipairs(lines) do reply(line) end
     end
