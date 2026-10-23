@@ -212,7 +212,7 @@ local function setOwner(r, owner)
         if isElement(ped) then setElementSyncer(ped, owner, true, true) end
     end
     r.lastOrder = nil -- re-issue the current orders to the new owner
-    if r.kind == "heli" then send(r, "vana-services:heli", r.vehicle, r.crew, r.target, r.state == "leaving") end
+    if r.kind == "heli" then send(r, "vana-services:heli", r.vehicle, r.crew, r.target, r.state == "leaving", r.news) end
 end
 
 local function driveTo(r, x, y, z, mode)
@@ -337,7 +337,7 @@ end
 local function leave(r, players)
     r.state, r.since = "leaving", getTickCount()
     setVehicleSirensOn(r.vehicle, false)
-    if r.kind == "heli" then return send(r, "vana-services:heli", r.vehicle, r.crew, r.target, true) end
+    if r.kind == "heli" then return send(r, "vana-services:heli", r.vehicle, r.crew, r.target, true, r.news) end
     local x, y, z = getElementPosition(r.vehicle)
     local node = roadSpawnNear(x, y, z, players)
     if node then driveTo(r, node.x, node.y, node.z) end
@@ -489,17 +489,25 @@ addEventHandler("vana-services:crewHit", resourceRoot, function(ped, attacker, w
 end)
 
 ---------------------------------------------------------------------------------------------------
--- Police helicopter: flown by the owning client around the player; the gunner fires drive-by.
+-- Police helicopter: flown by the owning client around the player; the gunner fires drive-by. From
+-- newsHeliFromStars a second one, SAN News' (vanilla), filming from further out.
+local newsAllowed = {} -- player -> false once a news helicopter of theirs came down (until below 3 stars)
 
 local function dispatchHeli(player, level, players)
     if level < Wanted.heliFromStars then return end
+    local count, hasNews = 0, false
     for _, r in pairs(responders) do
-        if r.kind == "heli" and r.target == player and r.state ~= "leaving" then return end
+        if r.kind == "heli" and r.target == player and r.state ~= "leaving" then
+            count = count + 1
+            hasNews = hasNews or r.news
+        end
     end
+    if count >= (level >= Wanted.newsHeliFromStars and 2 or 1) then return end
+    local news = count >= 1 and not hasNews and newsAllowed[player] ~= false
     local x, y, z = getElementPosition(player)
     local angle = math.random() * 2 * math.pi
     local hx, hy = x + math.cos(angle) * CONFIG.dispatchMax, y + math.sin(angle) * CONFIG.dispatchMax
-    local unit = population:getServiceUnit(x, y, z, "heli")
+    local unit = news and { car = Wanted.newsHeli.model, ped = Wanted.newsHeli.crew } or population:getServiceUnit(x, y, z, "heli")
     local vehicle = createVehicle(unit.car, hx, hy, z + 60, 0, 0, math.deg(math.atan2(y - hy, x - hx)) - 90)
     if not vehicle then return end
     setVehicleEngineState(vehicle, true)
@@ -507,22 +515,25 @@ local function dispatchHeli(player, level, players)
     for seat = 0, 1 do
         local ped = createPed(unit.ped, hx, hy, z + 62)
         if ped and warpPedIntoVehicle(ped, vehicle, seat) then
-            setElementData(ped, "vana:service", "police")
-            setElementData(ped, "vana:traffic", "cop")
-            if seat == 1 then giveWeapon(ped, Wanted.heliWeapon, 9999, true) end
+            setElementData(ped, "vana:service", news and "news" or "police")
+            if not news then
+                setElementData(ped, "vana:traffic", "cop")
+                if seat == 1 then giveWeapon(ped, Wanted.heliWeapon, 9999, true) end
+            end
             crew[#crew + 1] = ped
         elseif ped then
             destroyElement(ped)
         end
     end
-    local r = { kind = "heli", vehicle = vehicle, crew = crew, state = "pursuing", since = getTickCount(), target = player }
+    local r = { kind = "heli", vehicle = vehicle, crew = crew, state = "pursuing", since = getTickCount(), target = player, news = news }
     responders[vehicle] = r
     setOwner(r, player)
 end
 
 local function updateHeli(r, players, now)
     local level = isElement(r.target) and getPlayerWantedLevel(r.target) or 0
-    if r.state ~= "leaving" and (level < Wanted.heliFromStars or isPedDead(r.target)) then leave(r, players) end
+    local needs = r.news and Wanted.newsHeliFromStars or Wanted.heliFromStars
+    if r.state ~= "leaving" and (level < needs or isPedDead(r.target)) then leave(r, players) end
 end
 
 ---------------------------------------------------------------------------------------------------
@@ -741,6 +752,7 @@ setTimer(function()
 
     for _, player in ipairs(players) do
         local level = updateWanted(player, now)
+        if level < Wanted.heliFromStars then newsAllowed[player] = nil end
         if level > 0 then
             recruitPatrols(player, players)
             dispatchPolice(player, level, players)
@@ -754,6 +766,7 @@ setTimer(function()
 
     for _, r in pairs(responders) do
         if not isElement(r.vehicle) or isVehicleBlown(r.vehicle) or #crewAlive(r) == 0 then
+            if r.news and isElement(r.target) then newsAllowed[r.target] = false end -- no more of them for now (vanilla)
             release(r)
         else
             local x, y, z = getElementPosition(r.vehicle)

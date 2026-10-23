@@ -18,6 +18,7 @@ local DATASETS = {
     radio = { owner = "vana-radio", configs = {}, hand = true }, -- placed by hand: no seed to convert
     paths = { owner = "vana-paths", configs = {}, hand = true }, -- converted by tools/convert/paths_to_maps.lua (per area)
     trains = { owner = "vana-trains", configs = {}, hand = true }, -- converted by tools/convert/tracks_to_maps.lua
+    air = { owner = "vana-air", configs = {}, hand = true }, -- flights converted by tools/convert/flights_to_maps.lua; airports, helis ours
     activities = { owner = "vana-activities", configs = { "vana-activities/config/minigames.lua",
         "vana-activities/config/burglary_houses.lua", "vana-activities/config/races.lua" }, notes = true },
 }

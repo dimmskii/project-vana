@@ -1,0 +1,68 @@
+<def name="vana-air">
+    <element name="flightpath" friendlyname="Flight path (a vanilla flight recording)">
+        <data name="position" type="coord3d" default="0,0,0" />
+        <data name="from" type="string" default="" required="false" description="the airport it takes off from (airport id)" />
+        <data name="to" type="string" default="" required="false" description="the airport it lands at" />
+        <data name="gearUp" type="integer" default="" required="false" description="ms into the flight the landing gear goes up" />
+        <data name="gearDown" type="integer" default="" required="false" description="ms into the flight it goes down for landing" />
+        <data name="duration" type="integer" default="" required="false" description="ms, wheels rolling to wheels stopped" />
+        <marker type="corona" size="3" color="#4080FFA0" />
+    </element>
+    <element name="flightframe" friendlyname="Flight frame">
+        <data name="position" type="coord3d" default="0,0,0" />
+        <data name="path" type="string" default="" required="false" description="its flightpath id" />
+        <data name="t" type="integer" default="0" required="false" description="ms into the flight" />
+        <data name="fwd" type="string" default="" required="false" description="the plane's forward vector (x,y,z)" />
+        <data name="right" type="string" default="" required="false" description="its right vector" />
+        <data name="vel" type="string" default="" required="false" description="velocity, m/s (x,y,z)" />
+        <marker type="corona" size="0.8" color="#4080FF60" />
+    </element>
+    <element name="airport" friendlyname="Airport">
+        <data name="position" type="coord3d" default="0,0,0" />
+        <data name="name" type="string" default="" required="false" description="for logs and /air" />
+        <marker type="corona" size="4" color="#FFFFFF60" />
+    </element>
+    <element name="airspot" friendlyname="Air spot (a plane waits here)">
+        <data name="position" type="coord3d" default="0,0,0" />
+        <data name="rotation" type="coord3d" default="0,0,0" />
+        <data name="airport" type="string" default="" required="false" description="its airport (id)" />
+        <data name="runway" type="string" default="" required="false" description="the runway it's on (one plane moves on a runway at a time)" />
+        <data name="departs" type="string" default="" required="false" description="flightpaths that start here, comma-separated" />
+        <data name="arrives" type="string" default="" required="false" description="flightpaths that end here, comma-separated" />
+        <marker type="corona" size="3" color="#40FF40A0" />
+    </element>
+    <element name="taxiroute" friendlyname="Taxi route">
+        <data name="position" type="coord3d" default="0,0,0" />
+        <data name="from" type="string" default="" required="false" description="the airspot it leaves" />
+        <data name="to" type="string" default="" required="false" description="the airspot it reaches" />
+        <data name="first" type="string" default="" required="false" description="its first taxipoint (each links to the next with nextid)" />
+        <data name="runways" type="string" default="" required="false" description="runways it rolls along, comma-separated (held while it taxis)" />
+        <marker type="corona" size="1.5" color="#FFD040A0" />
+    </element>
+    <element name="taxipoint" friendlyname="Taxi point">
+        <data name="position" type="coord3d" default="0,0,0" />
+        <data name="nextid" type="string" default="" required="false" description="the next taxipoint, none at the end" />
+        <marker type="corona" size="1" color="#FFD04080" />
+    </element>
+    <element name="circuit" friendlyname="Circuit (planes fly it round and round)">
+        <data name="position" type="coord3d" default="0,0,0" />
+        <data name="airport" type="string" default="" required="false" description="its airstrip (airport id)" />
+        <data name="first" type="string" default="" required="false" description="its first circuitpoint" />
+        <data name="models" type="string" default="" required="false" description="the planes that fly it, one each (repeat a model for more)" />
+        <marker type="corona" size="3" color="#FF8040A0" />
+    </element>
+    <element name="circuitpoint" friendlyname="Circuit point">
+        <data name="position" type="coord3d" default="0,0,0" />
+        <data name="nextid" type="string" default="" required="false" description="the next point, none at the end (the circuit starts over)" />
+        <data name="speed" type="number" default="30" required="false" description="m/s reaching it" />
+        <data name="ground" type="selection:true,false" default="false" required="false" description="on the runway (wheels down)" />
+        <marker type="corona" size="2" color="#FF804080" />
+    </element>
+    <element name="helispot" friendlyname="Heli spot (a news helicopter circles it)">
+        <data name="position" type="coord3d" default="0,0,0" />
+        <data name="kind" type="string" default="news" required="false" description="news: a news helicopter circles it" />
+        <data name="radius" type="number" default="150" required="false" description="m, the circle's radius" />
+        <data name="city" type="string" default="" required="false" description="LS, SF or LV" />
+        <marker type="corona" size="4" color="#FF40FFA0" />
+    </element>
+</def>

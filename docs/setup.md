@@ -74,11 +74,15 @@ The railway tracks ship converted the same way, as map data in `[data]/vana-data
 `tracks4.dat` into `[vana]/vana-trains/data/`. Their crossings and platform spots come from our own
 map data (`tools/convert/track_places.lua`).
 
+Vanilla's flight recordings ship converted too, in `[data]/vana-data-air` ([air.md](air.md)); only to
+convert them again (`tools/convert/flights_to_maps.lua`) copy `data/Paths/carrec.img` into
+`[vana]/vana-air/data/`.
+
 ## 4. mtaserver.conf
 
 Inside `<config>`, replace the stock `<resource>` lines with these, and only these: the Map Editor
 runs as a server of its own with `editor.conf`, never from this list ([editor.md](editor.md)). The other
-`vana-data-*` resources (player, parked, interiors, encounters, wildlife, radio, trains) aren't started at
+`vana-data-*` resources (player, parked, interiors, encounters, wildlife, radio, trains, air) aren't started at
 all: vana-lib reads their files; they only have to be in `resources/`.
 
 ```xml
@@ -99,6 +103,7 @@ all: vana-lib reads their files; they only have to be in `resources/`.
 <resource src="vana-traffic" startup="1" protected="0" />
 <resource src="vana-peds" startup="1" protected="0" />
 <resource src="vana-trains" startup="1" protected="0" />
+<resource src="vana-air" startup="1" protected="0" />
 <resource src="vana-parked" startup="1" protected="0" />
 <resource src="vana-services" startup="1" protected="0" />
 <resource src="vana-interiors" startup="1" protected="0" />
@@ -144,6 +149,7 @@ on every start (`adminRights` in `vana-player/config/player.lua`; the `Console` 
 <right name="command.car" access="true"></right>
 <right name="command.spawncar" access="true"></right>
 <right name="command.trains" access="true"></right>
+<right name="command.air" access="true"></right>
 ```
 
 After editing `acl.xml` on a running server, run `reloadacl` in the console.
@@ -210,6 +216,7 @@ tools/srv.sh cmd "lightcycletest"  # vanilla light cycle order and timing (runs 
 tools/srv.sh cmd "traffictest"     # traffic planner: 100 virtual cars x 300 s against the light cycle
 tools/srv.sh cmd "pedtest"         # ped planner: 200 virtual peds x 300 s, road crossings against the walk signal
 tools/srv.sh cmd "traintest"       # train timetable: 3 h of every service, stops, spacing, a train left on the line
+tools/srv.sh cmd "airtest"         # airliner timetable and circuit: 4 h, no jumps, no planes meeting, no endless waits
 tools/srv.sh cmd "poptest"         # population data and sampled spawns at known places
 tools/srv.sh cmd "parkedtest"      # car generator data, spawning around Grove Street
 tools/srv.sh cmd "wantedtest"      # wanted level thresholds

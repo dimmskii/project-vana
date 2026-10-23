@@ -1,0 +1,9 @@
+<map edf:definitions="vana-air">
+    <!-- Heli spot (a news helicopter circles it) -->
+    <helispot id="LS.news.eastside" posX="2000" posY="-1400" posZ="150" kind="news" radius="250" city="LS" />
+    <helispot id="LS.news.beach" posX="400" posY="-1750" posZ="120" kind="news" radius="200" city="LS" />
+    <helispot id="SF.news.garcia" posX="-2350" posY="150" posZ="160" kind="news" radius="220" city="SF" />
+    <helispot id="SF.news.calton" posX="-2100" posY="800" posZ="180" kind="news" radius="200" city="SF" />
+    <helispot id="LV.news.strip" posX="2050" posY="1500" posZ="170" kind="news" radius="250" city="LV" />
+    <helispot id="LV.news.north" posX="2300" posY="2300" posZ="150" kind="news" radius="200" city="LV" />
+</map>

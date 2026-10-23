@@ -1,0 +1,74 @@
+<map edf:definitions="vana-air">
+    <!-- Airport -->
+    <airport id="LS" posX="1750" posY="-2490" posZ="13.5" name="Los Santos International" />
+    <airport id="LV" posX="1477" posY="1680" posZ="10.8" name="Las Venturas Airport" />
+    <airport id="SF" posX="-1580" posY="-100" posZ="14" name="San Fierro International" />
+    <airport id="VM" posX="300" posY="2502.31" posZ="17.1" name="Verdant Meadows" />
+    <!-- Air spot (a plane waits here) -->
+    <airspot id="LS.dep.north" posX="1577.5233" posY="-2493.5564" posZ="13.4705" rotX="0" rotY="0" rotZ="270" airport="LS" runway="LS.north" departs="46,42" />
+    <airspot id="LS.dep.south" posX="1494.0999" posY="-2593.6995" posZ="14.7567" rotX="0" rotY="0" rotZ="270" airport="LS" runway="LS.south" departs="41" />
+    <airspot id="LS.arr.49" posX="1993.1895" posY="-2488.1265" posZ="13.4627" rotX="0" rotY="0" rotZ="270" airport="LS" runway="LS.north" arrives="49" />
+    <airspot id="LS.arr.48" posX="2046.3146" posY="-2492.6272" posZ="13.4629" rotX="0" rotY="0" rotZ="270" airport="LS" runway="LS.north" arrives="48" />
+    <airspot id="LV.dep.43" posX="1475.702" posY="1642.6296" posZ="10.7448" rotX="0" rotY="0" rotZ="180" airport="LV" runway="LV" departs="43" />
+    <airspot id="LV.dep.48" posX="1479.7693" posY="1716.343" posZ="10.7705" rotX="0" rotY="0" rotZ="180" airport="LV" runway="LV" departs="48" />
+    <airspot id="LV.arr.46" posX="1476.4661" posY="1718.7635" posZ="10.7288" rotX="0" rotY="0" rotZ="0" airport="LV" runway="LV" arrives="46" />
+    <airspot id="LV.arr.44" posX="1480.411" posY="1697.752" posZ="10.7323" rotX="0" rotY="0" rotZ="0" airport="LV" runway="LV" arrives="44" />
+    <airspot id="SF.dep.49" posX="-1627.5796" posY="-138.8973" posZ="14.0598" rotX="0" rotY="0" rotZ="315" airport="SF" runway="SF" departs="49" />
+    <airspot id="SF.dep.44" posX="-1594.2548" posY="-106.94" posZ="14.0829" rotX="0" rotY="0" rotZ="315" airport="SF" runway="SF" departs="44" />
+    <airspot id="SF.arr.43" posX="-1542.307" posY="-47.1985" posZ="14.0603" rotX="0" rotY="0" rotZ="135" airport="SF" runway="SF" arrives="43,42" />
+    <airspot id="SF.arr.41" posX="-1606.5895" posY="-116.576" posZ="15.3408" rotX="0" rotY="0" rotZ="135" airport="SF" runway="SF" arrives="41" />
+    <!-- Taxi route -->
+    <taxiroute id="LS.49-north" posX="1993.1895" posY="-2488.1265" posZ="13.4627" from="LS.arr.49" to="LS.dep.north" first="LS.49-north.1" runways="LS.north" />
+    <taxiroute id="LS.49-south" posX="1993.1895" posY="-2488.1265" posZ="13.4627" from="LS.arr.49" to="LS.dep.south" first="LS.49-south.1" runways="LS.north,LS.south" />
+    <taxiroute id="LS.48-north" posX="2046.3146" posY="-2492.6272" posZ="13.4629" from="LS.arr.48" to="LS.dep.north" first="LS.48-north.1" runways="LS.north" />
+    <taxiroute id="LS.48-south" posX="2046.3146" posY="-2492.6272" posZ="13.4629" from="LS.arr.48" to="LS.dep.south" first="LS.48-south.1" runways="LS.north,LS.south" />
+    <taxiroute id="LV.46-43" posX="1476.4661" posY="1718.7635" posZ="10.7288" from="LV.arr.46" to="LV.dep.43" first="LV.46-43.1" runways="LV" />
+    <taxiroute id="LV.46-48" posX="1476.4661" posY="1718.7635" posZ="10.7288" from="LV.arr.46" to="LV.dep.48" first="LV.46-48.1" runways="LV" />
+    <taxiroute id="LV.44-48" posX="1480.411" posY="1697.752" posZ="10.7323" from="LV.arr.44" to="LV.dep.48" first="LV.44-48.1" runways="LV" />
+    <taxiroute id="LV.44-43" posX="1480.411" posY="1697.752" posZ="10.7323" from="LV.arr.44" to="LV.dep.43" first="LV.44-43.1" runways="LV" />
+    <taxiroute id="SF.43-49" posX="-1542.307" posY="-47.1985" posZ="14.0603" from="SF.arr.43" to="SF.dep.49" first="SF.43-49.1" runways="SF" />
+    <taxiroute id="SF.43-44" posX="-1542.307" posY="-47.1985" posZ="14.0603" from="SF.arr.43" to="SF.dep.44" first="SF.43-44.1" runways="SF" />
+    <taxiroute id="SF.41-44" posX="-1606.5895" posY="-116.576" posZ="15.3408" from="SF.arr.41" to="SF.dep.44" first="SF.41-44.1" runways="SF" />
+    <taxiroute id="SF.41-49" posX="-1606.5895" posY="-116.576" posZ="15.3408" from="SF.arr.41" to="SF.dep.49" first="SF.41-49.1" runways="SF" />
+    <!-- Taxi point -->
+    <taxipoint id="LS.49-north.1" posX="1993.1895" posY="-2488.1265" posZ="13.4627" nextid="LS.49-north.2" />
+    <taxipoint id="LS.49-north.2" posX="1577.5233" posY="-2493.5564" posZ="13.4705" />
+    <taxipoint id="LS.49-south.1" posX="1993.1895" posY="-2488.1265" posZ="13.4627" nextid="LS.49-south.2" />
+    <taxipoint id="LS.49-south.2" posX="1494.0999" posY="-2490.5" posZ="13.47" nextid="LS.49-south.3" />
+    <taxipoint id="LS.49-south.3" posX="1494.0999" posY="-2593.6995" posZ="14.7567" />
+    <taxipoint id="LS.48-north.1" posX="2046.3146" posY="-2492.6272" posZ="13.4629" nextid="LS.48-north.2" />
+    <taxipoint id="LS.48-north.2" posX="1577.5233" posY="-2493.5564" posZ="13.4705" />
+    <taxipoint id="LS.48-south.1" posX="2046.3146" posY="-2492.6272" posZ="13.4629" nextid="LS.48-south.2" />
+    <taxipoint id="LS.48-south.2" posX="1494.0999" posY="-2492.6272" posZ="13.4629" nextid="LS.48-south.3" />
+    <taxipoint id="LS.48-south.3" posX="1494.0999" posY="-2593.6995" posZ="14.7567" />
+    <taxipoint id="LV.46-43.1" posX="1476.4661" posY="1718.7635" posZ="10.7288" nextid="LV.46-43.2" />
+    <taxipoint id="LV.46-43.2" posX="1475.702" posY="1642.6296" posZ="10.7448" />
+    <taxipoint id="LV.46-48.1" posX="1476.4661" posY="1718.7635" posZ="10.7288" nextid="LV.46-48.2" />
+    <taxipoint id="LV.46-48.2" posX="1479.7693" posY="1716.343" posZ="10.7705" />
+    <taxipoint id="LV.44-48.1" posX="1480.411" posY="1697.752" posZ="10.7323" nextid="LV.44-48.2" />
+    <taxipoint id="LV.44-48.2" posX="1479.7693" posY="1716.343" posZ="10.7705" />
+    <taxipoint id="LV.44-43.1" posX="1480.411" posY="1697.752" posZ="10.7323" nextid="LV.44-43.2" />
+    <taxipoint id="LV.44-43.2" posX="1475.702" posY="1642.6296" posZ="10.7448" />
+    <taxipoint id="SF.43-49.1" posX="-1542.307" posY="-47.1985" posZ="14.0603" nextid="SF.43-49.2" />
+    <taxipoint id="SF.43-49.2" posX="-1627.5796" posY="-138.8973" posZ="14.0598" />
+    <taxipoint id="SF.43-44.1" posX="-1542.307" posY="-47.1985" posZ="14.0603" nextid="SF.43-44.2" />
+    <taxipoint id="SF.43-44.2" posX="-1594.2548" posY="-106.94" posZ="14.0829" />
+    <taxipoint id="SF.41-44.1" posX="-1606.5895" posY="-116.576" posZ="15.3408" nextid="SF.41-44.2" />
+    <taxipoint id="SF.41-44.2" posX="-1594.2548" posY="-106.94" posZ="14.0829" />
+    <taxipoint id="SF.41-49.1" posX="-1606.5895" posY="-116.576" posZ="15.3408" nextid="SF.41-49.2" />
+    <taxipoint id="SF.41-49.2" posX="-1627.5796" posY="-138.8973" posZ="14.0598" />
+    <!-- Circuit (planes fly it round and round) -->
+    <circuit id="VM.circuit" posX="150" posY="2502.31" posZ="17.1" airport="VM" first="VM.c1" models="593,593,476,476" />
+    <!-- Circuit point -->
+    <circuitpoint id="VM.c1" posX="150" posY="2502.31" posZ="17.1" speed="20" ground="true" nextid="VM.c2" />
+    <circuitpoint id="VM.c2" posX="300" posY="2502.31" posZ="17.1" speed="32" ground="true" nextid="VM.c3" />
+    <circuitpoint id="VM.c3" posX="420" posY="2502.31" posZ="22" speed="36" nextid="VM.c4" />
+    <circuitpoint id="VM.c4" posX="735.92" posY="2502.31" posZ="90" speed="40" nextid="VM.c5" />
+    <circuitpoint id="VM.c5" posX="635.92" posY="2802.31" posZ="110" speed="42" nextid="VM.c6" />
+    <circuitpoint id="VM.c6" posX="-83.79" posY="2902.31" posZ="110" speed="42" nextid="VM.c7" />
+    <circuitpoint id="VM.c7" posX="-783.79" posY="2802.31" posZ="110" speed="42" nextid="VM.c8" />
+    <circuitpoint id="VM.c8" posX="-683.79" posY="2502.31" posZ="100" speed="40" nextid="VM.c9" />
+    <circuitpoint id="VM.c9" posX="-383.79" posY="2502.31" posZ="85" speed="38" nextid="VM.c10" />
+    <circuitpoint id="VM.c10" posX="0" posY="2502.31" posZ="40" speed="34" nextid="VM.c11" />
+    <circuitpoint id="VM.c11" posX="110" posY="2502.31" posZ="18.5" speed="28" />
+</map>

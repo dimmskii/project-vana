@@ -23,6 +23,7 @@ Start here:
 | [docs/shops.md](docs/shops.md) | Entrances into interiors, the shops and the gym |
 | [docs/map.md](docs/map.md) | The shared map: publishing points, categories, blips |
 | [docs/activities.md](docs/activities.md) | Per-player activities ported from main.scm: the framework, burglary and the rest |
+| [docs/air.md](docs/air.md) | Aircraft: flight recordings and airports as map data, the airliners' timetable with holding, circuits, helicopters |
 | [docs/trains.md](docs/trains.md) | Trains: the tracks as map data, the timetable, trains in the world only near players, taking one |
 | [docs/traffic.md](docs/traffic.md) | Traffic, pedestrians and the AI actor architecture: Lua decides, the engine executes |
 | [docs/vehicles.md](docs/vehicles.md) | Kept cars (registry and persistence), fuel, each car's radio station |
@@ -61,4 +62,5 @@ Start here:
 | `vana-wildlife` | Animals in the countryside: Myths Maker's animals at its spots |
 | `vana-traffic` | Road traffic: server-planned routes and light stops, driven by native drive-to tasks |
 | `vana-peds` | Ambient pedestrians: server-planned walks and road crossings, native follow-route tasks and event reactions |
+| `vana-air` | Airliners on vanilla's flight recordings, the Verdant Meadows circuit, news and passing helicopters |
 | `vana-trains` | Freight trains, the Brown Streak and the San Fierro trams: a server timetable, elements only near players |

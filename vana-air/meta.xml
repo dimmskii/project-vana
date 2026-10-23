@@ -1,0 +1,27 @@
+<meta>
+    <info author="ProjectVana" name="Vana air" description="Airliners on vanilla's flight recordings, the Verdant Meadows circuit, news and passing helicopters: a server timetable, elements only near players" version="0.1.0" type="script" edf:definition="edf/vana-air.edf" />
+    <include resource="vana-population" />
+    <aclrequest>
+        <right name="function.loadstring" access="true" /> <!-- importing shared code from vana-lib -->
+    </aclrequest>
+    <!-- The levers: /vanaset air <name> <value> (or /air <model> <count>), or the admin panel. -->
+    <settings>
+        <setting name="@at400" value="2" desc="AT-400 airliners" accept="0-6" />
+        <setting name="@andromada" value="2" desc="Andromada cargo planes" accept="0-6" />
+        <setting name="@shamal" value="2" desc="Shamal jets" accept="0-6" />
+        <setting name="@nevada" value="2" desc="Nevada planes" accept="0-6" />
+    </settings>
+    <script src="lib.lua" type="server" />
+    <script src="air_data.lua" type="server" />
+    <script src="config/maps.lua" type="server" />
+    <script src="config/air.lua" type="server" />
+    <script src="legs.lua" type="shared" />
+    <script src="schedule.lua" type="server" />
+    <script src="server.lua" type="server" />
+    <script src="test.lua" type="server" />
+    <script src="client.lua" type="client" />
+    <script src="help.lua" type="server" />
+    <export function="getHelpPages" type="server" />
+    <export function="getSettings" type="server" />
+    <export function="setSetting" type="server" />
+</meta>

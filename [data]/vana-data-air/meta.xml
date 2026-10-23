@@ -1,0 +1,6 @@
+<meta>
+    <info type="map" name="vana-data-air" author="ProjectVana" description="Aircraft: vanilla's flight recordings (converted), airports, taxi routes and the Verdant Meadows circuit (from the ATP CLEO mod), news helicopter spots: open it in the Map Editor (definitions: vana-air)" version="1.0.0" edf:definitions="vana-air" />
+    <map src="flights.map" dimension="0" />
+    <map src="airports.map" dimension="0" />
+    <map src="helis.map" dimension="0" />
+</meta>

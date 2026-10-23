@@ -169,13 +169,14 @@ addEventHandler("vana-services:spray", resourceRoot, function(ped, x, y, z, ms)
 end)
 
 -- Police helicopter, flown by its owner: circles the player at a height, nose toward them; the
--- gunner fires drive-by from the side door; a searchlight at night.
-local helis = {} -- vehicle -> { crew, target, leaving, angle, light }
+-- gunner fires drive-by from the side door; a searchlight at night. The news helicopter circles
+-- further out and higher, and only films (ours: 50 m out, 35 m up).
+local helis = {} -- vehicle -> { crew, target, leaving, news, angle, light }
 
 addEvent("vana-services:heli", true)
-addEventHandler("vana-services:heli", resourceRoot, function(vehicle, crew, target, leaving)
+addEventHandler("vana-services:heli", resourceRoot, function(vehicle, crew, target, leaving, news)
     local h = helis[vehicle] or { angle = math.random() * 2 * math.pi }
-    h.crew, h.target, h.leaving, h.firing = crew, target, leaving, nil
+    h.crew, h.target, h.leaving, h.news, h.firing = crew, target, leaving, news, nil
     helis[vehicle] = h
 end)
 
@@ -201,8 +202,9 @@ addEventHandler("onClientPreRender", root, function(msPassed)
             if h.leaving then
                 gx, gy, gz = x + (x - tx), y + (y - ty), z + 40
             else
-                h.angle = h.angle + dt * 0.25
-                gx, gy, gz = tx + math.cos(h.angle) * 28, ty + math.sin(h.angle) * 28, tz + 22
+                h.angle = h.angle + dt * (h.news and 0.15 or 0.25)
+                local out, up = h.news and 50 or 28, h.news and 35 or 22
+                gx, gy, gz = tx + math.cos(h.angle) * out, ty + math.sin(h.angle) * out, tz + up
             end
             local dx, dy, dz = gx - x, gy - y, gz - z
             local dist = math.sqrt(dx * dx + dy * dy + dz * dz)
@@ -214,12 +216,12 @@ addEventHandler("onClientPreRender", root, function(msPassed)
             setVehicleRotorSpeed(vehicle, 0.2)
 
             local gunner = h.crew and h.crew[2]
-            if not h.leaving and isElement(gunner) and not h.firing and getDistanceBetweenPoints3D(x, y, z, tx, ty, tz) < 70 then
+            if not h.news and not h.leaving and isElement(gunner) and not h.firing and getDistanceBetweenPoints3D(x, y, z, tx, ty, tz) < 70 then
                 h.firing = setPedDriveBy(gunner, h.target, 120, "ai_side")
             end
 
             local hour = getTime()
-            if not h.leaving and (hour >= 20 or hour < 6) then
+            if not h.news and not h.leaving and (hour >= 20 or hour < 6) then
                 if not isElement(h.light) then h.light = createSearchLight(x, y, z, tx, ty, tz, 0.5, 6) end
                 if h.light then
                     setSearchLightStartPosition(h.light, x, y, z - 1)

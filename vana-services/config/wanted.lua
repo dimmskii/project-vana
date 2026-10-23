@@ -31,6 +31,10 @@ Wanted = {
     },
     -- Police helicopter (Maverick with a pilot and a gunner) from this many stars.
     heliFromStars = 3, heliWeapon = 29, heliHeight = 22, heliOrbit = 28,
+    -- From 4 stars a second helicopter: SAN News' Maverick (488), unless one of the player's was shot
+    -- down since their level was last below 3; then another police one (vanilla: CWanted::
+    -- NumOfHelisRequired, UseNewsHeliInAdditionToPolice). Its crew of two (pilot, camera) is ours.
+    newsHeliFromStars = 4, newsHeli = { model = 488, crew = 61 },
     -- Roadblocks ahead of a wanted player in a vehicle: chance per check by stars (CWanted::m_ChanceOnRoadBlock).
     roadblockChance = { 0, 0, 12, 18, 24, 30 }, roadblockEveryMs = 15000, roadblockAhead = { 120, 160 },
 

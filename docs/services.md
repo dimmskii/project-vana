@@ -49,6 +49,10 @@ Edit freely.
   - The gunner fires drive-by (`setPedDriveBy`, MP5).
   - It has a searchlight at night.
   - It flies off once the level drops below 3.
+- **News helicopter, from 4 stars (vanilla):** the second helicopter is SAN News' Maverick (488),
+  unless one of the player's was shot down since their level was last below 3: then a second police
+  one. Pilot and camera operator (ours: `WMYPLT`), no gun, no searchlight; it circles 50 m out and
+  35 m up and leaves below 4 stars. Hitting its crew is hitting civilians.
 - **Roadblocks, from 3 stars:**
   - While the player drives, every 15 s there's a 12/18/24/30% chance (vanilla
     `m_ChanceOnRoadBlock`) of two police cars across the road 120-160 m ahead, out of sight.
