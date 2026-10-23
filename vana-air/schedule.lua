@@ -67,6 +67,13 @@ function AirSchedule.departureSpots() return depSpots end
 -- Bookings: resource ("spot:<id>", "runway:<id>") -> { { from, to, owner }, ... }.
 local bookings = {}
 
+-- The bookings in use, swapped for others (the self-test runs on its own, never the live timetable's).
+function AirSchedule.swapBookings(other)
+    local current = bookings
+    bookings = other or {}
+    return current
+end
+
 local function free(key, a, b, owner)
     for _, w in ipairs(bookings[key] or {}) do
         if w.owner ~= owner and w.from < b and a < w.to then return false end
@@ -279,7 +286,7 @@ end
 -- times; those the spots can't take start in the air, on their way in. counts: setting -> count.
 function AirSchedule.build(counts, now, random)
     random = random or math.random
-    bookings = {}
+    bookings = {} -- the old fleet's bookings go with it
     local planes, id = {}, 0
     local spots = shuffled(depSpots, random)
     for _, f in ipairs(C.fleet) do

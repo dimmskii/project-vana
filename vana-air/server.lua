@@ -91,6 +91,8 @@ local function materialize(craft, owner, now)
     if not vehicle then return end
     setElementData(vehicle, "vana:managed", true, false) -- ours: never kept by vana-vehicles
     setElementData(vehicle, "vana:air", craft.kind)
+    -- Flown by script, it can't avoid anything: proof against damage while it's ours (its pilot isn't).
+    setVehicleDamageProof(vehicle, true)
     setVehicleEngineState(vehicle, true)
     local l = { vehicle = vehicle, crew = {} }
     for seat, model in ipairs(craft.crew) do
@@ -141,6 +143,7 @@ local function letGo(craft, why, jacker)
         if isElement(l.owner) then triggerClientEvent(l.owner, "vana-air:stop", resourceRoot, l.vehicle) end
         if isElement(l.vehicle) then
             setElementSyncer(l.vehicle, true)
+            setVehicleDamageProof(l.vehicle, false)
             wrecks[l.vehicle] = { since = getTickCount(), taken = jacker ~= nil }
         end
         for _, ped in ipairs(l.crew) do

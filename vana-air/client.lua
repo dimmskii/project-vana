@@ -37,6 +37,13 @@ addEvent("vana-air:fly", true)
 addEventHandler("vana-air:fly", resourceRoot, function(vehicle, pilot, desc, elapsed, loop, heli)
     if not isElement(vehicle) then return end
     flying[vehicle] = { pilot = pilot, desc = desc, frames = framesFor(desc), started = getTickCount() - elapsed, loop = loop, heli = heli }
+    -- Flown aircraft pass through each other (they're on separate timings; a clip shouldn't wreck them).
+    for other in pairs(flying) do
+        if other ~= vehicle and isElement(other) then
+            setElementCollidableWith(vehicle, other, false)
+            setElementCollidableWith(other, vehicle, false)
+        end
+    end
 end)
 
 addEvent("vana-air:stop", true)

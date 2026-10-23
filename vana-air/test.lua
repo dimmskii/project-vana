@@ -14,6 +14,7 @@ function AirTest.run(seed)
         return a + rnd % (b - a + 1)
     end
     AirSchedule.prepare()
+    local live = AirSchedule.swapBookings({}) -- the running timetable's, put back at the end
     local counts = {}
     for _, f in ipairs(AirConfig.fleet) do counts[f.setting] = f.count end
     local planes = AirSchedule.build(counts, 0, random)
@@ -64,7 +65,12 @@ function AirTest.run(seed)
                 end
             end
         end
-        if now % 600000 == 0 and AirTest.pause then AirTest.pause() end
+        if now % 600000 == 0 and AirTest.pause then
+            -- The server's timetable runs between these pauses: on its own bookings.
+            local mine = AirSchedule.swapBookings(live)
+            AirTest.pause()
+            live = AirSchedule.swapBookings(mine)
+        end
         AirSchedule.prune(now)
     end
 
@@ -102,6 +108,7 @@ function AirTest.run(seed)
         check(nearest > 100, ("circuit %s planes never within 100 m (closest %.0f m)"):format(c.id, nearest))
     end
     lines[#lines + 1] = ok and ("PASS: %d planes, %d h"):format(n, HOURS) or "FAIL"
+    AirSchedule.swapBookings(live)
     return ok, lines
 end
 
