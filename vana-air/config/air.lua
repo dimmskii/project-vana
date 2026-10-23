@@ -20,7 +20,7 @@ AirConfig = {
     pilot = 61,                -- WMYPLT, as the ATP mod (vanilla's ticket desk has no pilot)
     -- Resting height of each plane model's position over the ground, as the game's suspension puts it
     -- (measured: client.lua settles a parked plane once and logs the figure; keep them here).
-    rests = { [592] = 2.23, [519] = 1.93 }, -- Andromada, Shamal
+    rests = { [577] = 0.99, [592] = 2.23, [519] = 1.93 }, -- AT-400, Andromada, Shamal
 
     -- Elements only near players (dimension 0, outside interiors).
     spawnRange = 600, despawn = 800, ownerRadius = 600,

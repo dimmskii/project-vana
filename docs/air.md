@@ -27,7 +27,7 @@ out of sight, belly scraping). The resting height is what the game's suspension 
 (GTA rests a vehicle by its height above road, `CAutomobile::PlaceOnRoadProperly`; Lua can't read
 it): the first time a model stands parked, its owner's client drops it from 3 m onto its wheels,
 lets it settle and keeps the height (shared with every client, logged for `rests` in
-`config/air.lua`; measured so far: Andromada 2.23 m, Shamal 1.93 m). Until then: the model's wheel
+`config/air.lua`; measured so far: AT-400 0.99 m, Andromada 2.23 m, Shamal 1.93 m). Until then: the model's wheel
 positions less their radius. This is ours, not Neon's native recording playback:
 that can't start partway through or move to another client. A
 new owner gets the leg and how far into it the aircraft is, and carries on. Without a pilot (shot,
