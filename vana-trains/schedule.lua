@@ -132,7 +132,8 @@ function Schedule.newTrain(id, serviceName, s, random)
     return {
         id = id, service = serviceName, track = service.track, forward = service.forward,
         s = TracksData.wrap(Tracks[service.track], s), v = 0, state = "run",
-        engine = service.engines and service.engines[random(1, #service.engines)] or service.engine, cars = cars,
+        engine = service.engine, cars = cars,
+        -- engine = service.engines and service.engines[random(1, #service.engines)] or service.engine, cars = cars, -- Waiting on MTA Neon fix: CPoolsSA::AddTrain only creates the six vanilla train models; an added one crashes the client in CTrain::CreateMissionTrain (2026-10-23).
         length = (n + 1) * TrainConfig.carSpacing,
     }
 end

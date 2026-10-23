@@ -54,8 +54,11 @@ higher-resolution set, as the pack does.
 | Fire Truck (407) | Firehook, Biff FDSA; at the airports only the Firebrigade |
 | Securicar (428) | in Las Venturas only the casino Securicar |
 
-- **Trains** (vana-trains): freight trains pull the Mastodon a third of the time and the new tank,
-  scrap and container wagons among the vanilla ones; a third of the Brown Streaks are Streakliners.
+- **Trains:** none for now. **On hold (commented out):** the added train models (Streakliner, Mastodon and its wagons) crash
+the client: Neon's `CPoolsSA::AddTrain` only creates the six vanilla train models, and an added one
+reaches `CTrain::CreateMissionTrain` with no model (2026-10-23). Their entries in
+`config/vehicles.lua`, their files in `meta.xml` and vana-trains' use of them are commented out,
+waiting on a fix in Neon.
 - **Aircraft** (vana-air): Little Willy and the Armadillo among the helicopters passing by, the
   Baron and AT-20 among the small planes overhead and the airliner among the big ones; the Blimp
   drifts over now and then.
@@ -104,9 +107,7 @@ reuses a vanilla label (Taxi, Ambulance, Securicar, Ranger...).
 - **The Flame Jester:** a paintjob TXD, which the game applies to the car's remap materials from
   its paintjob slots, not the model's TXD; needs its own handling.
 - **Tuning parts and paintjobs** the pack gives some cars (bumpers, spoilers, paintjob TXDs).
-- **Trains and aircraft in game:** a Mastodon or Streakliner as a train engine, its wagons, and the
-  added aircraft flown by vana-air are untested: the game may treat a train it doesn't know by ID
-  differently.
+- **Aircraft in game:** the added aircraft flown by vana-air are untested.
 
 ## Commands
 

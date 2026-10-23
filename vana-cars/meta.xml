@@ -260,12 +260,12 @@
     <file src="mods/evvpr/float.txd" download="false" />
     <file src="mods/evvpr/fort3.dff" download="false" />
     <file src="mods/evvpr/fort3.txd" download="false" />
-    <file src="mods/evvpr/freicont.dff" download="false" />
-    <file src="mods/evvpr/freicont.txd" download="false" />
-    <file src="mods/evvpr/freigon.dff" download="false" />
-    <file src="mods/evvpr/freigon.txd" download="false" />
-    <file src="mods/evvpr/freitank.dff" download="false" />
-    <file src="mods/evvpr/freitank.txd" download="false" />
+    <!-- <file src="mods/evvpr/freicont.dff" download="false" /> --> <!-- Waiting on MTA Neon fix: CPoolsSA::AddTrain only creates the six vanilla train models; an added one crashes the client in CTrain::CreateMissionTrain (2026-10-23). -->
+    <!-- <file src="mods/evvpr/freicont.txd" download="false" /> --> <!-- Waiting on MTA Neon fix: CPoolsSA::AddTrain only creates the six vanilla train models; an added one crashes the client in CTrain::CreateMissionTrain (2026-10-23). -->
+    <!-- <file src="mods/evvpr/freigon.dff" download="false" /> --> <!-- Waiting on MTA Neon fix: CPoolsSA::AddTrain only creates the six vanilla train models; an added one crashes the client in CTrain::CreateMissionTrain (2026-10-23). -->
+    <!-- <file src="mods/evvpr/freigon.txd" download="false" /> --> <!-- Waiting on MTA Neon fix: CPoolsSA::AddTrain only creates the six vanilla train models; an added one crashes the client in CTrain::CreateMissionTrain (2026-10-23). -->
+    <!-- <file src="mods/evvpr/freitank.dff" download="false" /> --> <!-- Waiting on MTA Neon fix: CPoolsSA::AddTrain only creates the six vanilla train models; an added one crashes the client in CTrain::CreateMissionTrain (2026-10-23). -->
+    <!-- <file src="mods/evvpr/freitank.txd" download="false" /> --> <!-- Waiting on MTA Neon fix: CPoolsSA::AddTrain only creates the six vanilla train models; an added one crashes the client in CTrain::CreateMissionTrain (2026-10-23). -->
     <file src="mods/evvpr/frunner.dff" download="false" />
     <file src="mods/evvpr/frunner.txd" download="false" />
     <file src="mods/evvpr/futo.dff" download="false" />
@@ -374,8 +374,8 @@
     <file src="mods/evvpr/marion.txd" download="false" />
     <file src="mods/evvpr/marylan.dff" download="false" />
     <file src="mods/evvpr/marylan.txd" download="false" />
-    <file src="mods/evvpr/mastd.dff" download="false" />
-    <file src="mods/evvpr/mastd.txd" download="false" />
+    <!-- <file src="mods/evvpr/mastd.dff" download="false" /> --> <!-- Waiting on MTA Neon fix: CPoolsSA::AddTrain only creates the six vanilla train models; an added one crashes the client in CTrain::CreateMissionTrain (2026-10-23). -->
+    <!-- <file src="mods/evvpr/mastd.txd" download="false" /> --> <!-- Waiting on MTA Neon fix: CPoolsSA::AddTrain only creates the six vanilla train models; an added one crashes the client in CTrain::CreateMissionTrain (2026-10-23). -->
     <file src="mods/evvpr/matrch.dff" download="false" />
     <file src="mods/evvpr/matrch.txd" download="false" />
     <file src="mods/evvpr/mesab.dff" download="false" />
@@ -598,8 +598,8 @@
     <file src="mods/evvpr/stinger.txd" download="false" />
     <file src="mods/evvpr/stomper.dff" download="false" />
     <file src="mods/evvpr/stomper.txd" download="false" />
-    <file src="mods/evvpr/streakl.dff" download="false" />
-    <file src="mods/evvpr/streakl.txd" download="false" />
+    <!-- <file src="mods/evvpr/streakl.dff" download="false" /> --> <!-- Waiting on MTA Neon fix: CPoolsSA::AddTrain only creates the six vanilla train models; an added one crashes the client in CTrain::CreateMissionTrain (2026-10-23). -->
+    <!-- <file src="mods/evvpr/streakl.txd" download="false" /> --> <!-- Waiting on MTA Neon fix: CPoolsSA::AddTrain only creates the six vanilla train models; an added one crashes the client in CTrain::CreateMissionTrain (2026-10-23). -->
     <file src="mods/evvpr/streetf.dff" download="false" />
     <file src="mods/evvpr/streetf.txd" download="false" />
     <file src="mods/evvpr/stretchb.dff" download="false" />

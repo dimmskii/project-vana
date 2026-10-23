@@ -10,10 +10,12 @@ TrainConfig = {
         -- Streakliner), picked at random; an added one that isn't there falls back to `engine` / the
         -- first car.
         freight = { setting = "freight", count = 2, track = 0, forward = true, cruise = 18, stops = false,
-                    engine = 537, engines = { 537, 537, "mastd" }, cars = { 569, 590, "freitank", "freigon", "freicont" },
+                    engine = 537, cars = { 569, 590 },
+                    -- engine = 537, engines = { 537, 537, "mastd" }, cars = { 569, 590, "freitank", "freigon", "freicont" }, -- Waiting on MTA Neon fix: CPoolsSA::AddTrain only creates the six vanilla train models; an added one crashes the client in CTrain::CreateMissionTrain (2026-10-23).
                     minCars = 3, maxCars = 6 },
         passenger = { setting = "passenger", count = 2, track = 0, forward = true, cruise = 22, stops = true,
-                      engine = 538, engines = { 538, 538, "streakl" }, cars = { 570 }, minCars = 2, maxCars = 3 },
+                      engine = 538, cars = { 570 }, minCars = 2, maxCars = 3 },
+                      -- engine = 538, engines = { 538, 538, "streakl" }, cars = { 570 }, minCars = 2, maxCars = 3 }, -- Waiting on MTA Neon fix: CPoolsSA::AddTrain only creates the six vanilla train models; an added one crashes the client in CTrain::CreateMissionTrain (2026-10-23).
         tram = { setting = "trams", count = 2, track = 1, forward = true, cruise = 11, stops = false,
                  engine = 449, cars = {}, minCars = 0, maxCars = 0 },
     },
