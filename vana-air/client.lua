@@ -5,6 +5,7 @@
 local flights = {}  -- flight recording id -> frames (from the server, once each)
 local wanted = {}   -- flight id -> true while asked for
 local flying = {}   -- vehicle -> { pilot, desc, frames, started, loop, heli }
+local gearStats = {} -- vehicle -> { frames, foundUp, stillUp } while vana-air:sync is on
 
 local function framesFor(desc)
     if desc.kind ~= "flight" then return Legs.build(desc) end
@@ -16,6 +17,29 @@ local function framesFor(desc)
         return nil
     end
     return Legs.build(desc, flights)
+end
+
+-- The recordings were made with an AT-400, and taxi and parking heights come from the ATP mod: any
+-- other model at those heights sits too low or too high. Near the ground (wheels down) a plane is
+-- put on the ground by its own model's bottom instead, blending back to the leg's height over the
+-- first BLEND m above it.
+local BLEND = 10
+local bottoms = {} -- model -> its bounding box's lowest point, below the vehicle's position
+local function onGround(vehicle, x, y, z)
+    local model = getElementModel(vehicle)
+    if not bottoms[model] then
+        local _, _, minZ = getElementBoundingBox(vehicle)
+        bottoms[model] = minZ or false
+    end
+    local minZ = bottoms[model]
+    if not minZ then return z end
+    local gz = getGroundPosition(x, y, z + 3)
+    if not gz or gz == 0 then return z end
+    local rest = gz - minZ
+    local above = z - rest
+    if above >= BLEND then return z end
+    local w = above <= 0 and 1 or 1 - above / BLEND
+    return z + (rest - z) * w
 end
 
 addEvent("vana-air:flight", true)
@@ -63,6 +87,7 @@ addEventHandler("onClientPreRender", root, function()
             local t = now - f.started
             if f.loop then t = t % f.loop end
             local x, y, z, fx, fy, fz, rx, ry, rz, vx, vy, vz, gear = Legs.sample(f.frames, t)
+            if x and gear and not f.heli then z = onGround(vehicle, x, y, z) end
             if x then
                 -- up = right x forward
                 local ux, uy, uz = ry * fz - rz * fy, rz * fx - rx * fz, rx * fy - ry * fx
@@ -72,9 +97,30 @@ addEventHandler("onClientPreRender", root, function()
                 if f.heli then
                     setVehicleRotorSpeed(vehicle, 0.2)
                 elseif getVehicleType(vehicle) == "Plane" then
+                    local before = getVehicleLandingGearDown(vehicle)
                     setVehicleLandingGearDown(vehicle, gear)
+                    if Debug.on("sync") and gear then
+                        -- Wheels wanted down: found up (raised since the last frame), still up after asking.
+                        local st = gearStats[vehicle] or { frames = 0, foundUp = 0, stillUp = 0 }
+                        gearStats[vehicle] = st
+                        st.frames = st.frames + 1
+                        if not before then st.foundUp = st.foundUp + 1 end
+                        if not getVehicleLandingGearDown(vehicle) then st.stillUp = st.stillUp + 1 end
+                    end
                 end
             end
         end
     end
 end)
+
+-- vana-air:sync: how the landing gear fares while it should be down (docs/debug.md).
+setTimer(function()
+    for vehicle, st in pairs(gearStats) do
+        if isElement(vehicle) and st.frames > 0 then
+            Debug.log("sync", ("gear of %s (%s): wanted down %d frames, found up %d, still up after asking %d; driver %s, on ground %s")
+                :format(getVehicleName(vehicle), tostring(getElementData(vehicle, "vana:air")), st.frames, st.foundUp, st.stillUp,
+                    tostring(getVehicleController(vehicle) and getElementType(getVehicleController(vehicle))), tostring(isVehicleOnGround(vehicle))))
+        end
+        gearStats[vehicle] = nil
+    end
+end, 3000, 0)

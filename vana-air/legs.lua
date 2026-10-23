@@ -267,7 +267,9 @@ function Legs.sample(frames, t)
     rx, ry, rz = rx - d * fx, ry - d * fy, rz - d * fz
     local rl = sqrt(rx * rx + ry * ry + rz * rz)
     if rl > 0 then rx, ry, rz = rx / rl, ry / rl, rz / rl end
-    return l("x"), l("y"), l("z"), fx, fy, fz, rx, ry, rz, l("vx"), l("vy"), l("vz"), u < 0.5 and a.gear or b.gear
+    local gear = b.gear
+    if u < 0.5 then gear = a.gear end
+    return l("x"), l("y"), l("z"), fx, fy, fz, rx, ry, rz, l("vx"), l("vy"), l("vz"), gear
 end
 
 -- The first and last moments a frame is on the ground (wheels on the runway: within `above` m of the

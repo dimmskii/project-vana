@@ -19,8 +19,12 @@ landing gear), built the same on the server and on the client from a short descr
 | `hold` | A lap of a holding circle, climbing to or coming down from a hold level |
 | `spline` | Flown through points on a smooth curve at their speeds, banked into turns (planes up to 35 degrees, helicopters 20 with the nose a little down); points marked ground are on the runway, wheels down |
 
-The client sets the aircraft's matrix and velocity every frame from the leg at that moment (not
-Neon's native recording playback: that can't start partway through or move to another client). A
+The client sets the aircraft's matrix and velocity every frame from the leg at that moment. Wheels
+down near the ground, a plane is put on the ground by its own model's lowest point (bounding box)
+rather than at the leg's height, blending back to it over the first 10 m up: the recordings were
+made with an AT-400, and the parking and taxi heights are the ATP mod's (any other model sank into
+the runway, gear out of sight, belly scraping). This is ours, not Neon's native recording playback:
+that can't start partway through or move to another client. A
 new owner gets the leg and how far into it the aircraft is, and carries on. Without a pilot (shot,
 pulled out) the flying stops and the game's physics has it: what's in the air comes down.
 

@@ -11,7 +11,7 @@
         <setting name="@shamal" value="2" desc="Shamal jets" accept="0-6" />
         <setting name="@nevada" value="2" desc="Nevada planes" accept="0-6" />
     </settings>
-    <script src="lib.lua" type="server" />
+    <script src="lib.lua" type="shared" />
     <script src="air_data.lua" type="server" />
     <script src="config/maps.lua" type="server" />
     <script src="config/air.lua" type="server" />
