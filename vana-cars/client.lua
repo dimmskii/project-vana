@@ -9,6 +9,20 @@ local state = {} -- model -> "loading" | "loaded"
 local waiting = {} -- file path -> model, while downloading
 local PREFETCH_AT_ONCE = 2
 
+-- Debug topic "load" (docs/debug.md): each model set up, and what was last set up before a crash. The
+-- last step is also kept in a file, since a crash inside engineReplaceModel takes the queued event with it.
+local TRACE = "@load-trace.txt"
+local function debugLog(text)
+    local v = getElementData(resourceRoot, "vana:debug")
+    if v == "all" or (type(v) == "string" and ("," .. v .. ","):find(",load,", 1, true)) then
+        triggerServerEvent("vana-core:debug", localPlayer, "vana-cars", "load", text)
+    end
+end
+local function trace(text)
+    local f = fileCreate(TRACE)
+    if f then fileWrite(f, text) fileClose(f) end
+end
+
 local function importBase(model)
     if base then engineImportTXD(base, model) end
 end
@@ -24,6 +38,8 @@ end
 local function apply(model)
     local entry = defs[model]
     local def = entry.def
+    local what = ("%s (%d)%s"):format(def.name, model, isMTAWindowActive() and "" or ", window in the background")
+    trace(("%d loading %s"):format(getRealTime().timestamp, what))
     if not def.noTxd then
         local txd = engineLoadTXD(CarFiles(def) .. ".txd")
         if txd then engineImportTXD(txd, model) end
@@ -34,6 +50,8 @@ local function apply(model)
         if dff then engineReplaceModel(dff, model) end
     end
     state[model] = "loaded"
+    trace(("%d loaded %s"):format(getRealTime().timestamp, what))
+    debugLog("loaded " .. what)
 end
 
 local function want(model)
@@ -85,7 +103,17 @@ local function prefetchNext()
     if #prefetch > 0 then setTimer(prefetchNext, 2000, 1) end
 end
 
+addEventHandler("onClientResourceStop", resourceRoot, function() trace("clean") end)
+
 addEventHandler("onClientResourceStart", resourceRoot, function()
+    if fileExists(TRACE) then
+        local f = fileOpen(TRACE, true)
+        local last = f and fileRead(f, fileGetSize(f)) or ""
+        if f then fileClose(f) end
+        local at, step = last:match("^(%d+) (.*)$")
+        if at then debugLog(("last session didn't stop cleanly; its last model step, %d s before this start: %s"):format(getRealTime().timestamp - tonumber(at), step)) end
+    end
+    trace("clean")
     base = engineLoadTXD(CarBaseTextures.file)
     for model = 400, 611 do importBase(model) end
     local byName = {}

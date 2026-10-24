@@ -27,6 +27,7 @@ local TOPICS = { -- resource -> { topic = what it checks }
     ["vana-air"] = { sync = "aircraft made and removed, who flies them, taken or come down (as /air debug)" },
     ["vana-trains"] = { sync = "trains made and removed, who simulates them, taken trains, and where a train's game disagrees with the timetable (as /trains debug)" },
     ["vana-encounters"] = { encounters = "each encounter appearing, cleaned up, going for someone, giving up, killed" },
+    ["vana-cars"] = { load = "each added model set up on a client (TXD + DFF), and the last one before a client crash" },
     ["vana-wildlife"] = { brains = "what animals do (spawning, fleeing, hurt, chases, deaths, despawns) and orders a client couldn't give" },
 }
 local switches = {} -- resource name -> "all" | "topic,topic"
