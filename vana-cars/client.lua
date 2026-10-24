@@ -18,6 +18,22 @@ local function debugLog(text)
         triggerServerEvent("vana-core:debug", localPlayer, "vana-cars", "load", text)
     end
 end
+-- The game has room for 50 vehicle models set up at once (its CVehicleStructure pool); one more and it
+-- crashes in CVehicleModelInfo::PreprocessHierarchy (0x4C8F24). MTA's model cache alone keeps up to 56
+-- vehicle models loaded (with 128 MB+ of streaming memory), on top of the ones in view: with hundreds
+-- of different models in traffic that fills the pool. So the cache is kept small.
+local MODEL_CACHE = 12
+local POOL_WARN = 44
+local function loadedVehicleModels()
+    local n = 0
+    for model = 400, 611 do
+        if engineStreamingGetModelLoadState(model) ~= "unloaded" then n = n + 1 end
+    end
+    for model in pairs(defs) do
+        if engineStreamingGetModelLoadState(model) ~= "unloaded" then n = n + 1 end
+    end
+    return n
+end
 local function trace(text)
     local f = fileCreate(TRACE)
     if f then fileWrite(f, text) fileClose(f) end
@@ -51,7 +67,7 @@ local function apply(model)
     end
     state[model] = "loaded"
     trace(("%d loaded %s"):format(getRealTime().timestamp, what))
-    debugLog("loaded " .. what)
+    debugLog(("loaded %s; %d vehicle models loaded"):format(what, loadedVehicleModels()))
 end
 
 local function want(model)
@@ -103,7 +119,10 @@ local function prefetchNext()
     if #prefetch > 0 then setTimer(prefetchNext, 2000, 1) end
 end
 
-addEventHandler("onClientResourceStop", resourceRoot, function() trace("clean") end)
+addEventHandler("onClientResourceStop", resourceRoot, function()
+    trace("clean")
+    engineStreamingSetModelCacheLimits()
+end)
 
 addEventHandler("onClientResourceStart", resourceRoot, function()
     if fileExists(TRACE) then
@@ -114,6 +133,16 @@ addEventHandler("onClientResourceStart", resourceRoot, function()
         if at then debugLog(("last session didn't stop cleanly; its last model step, %d s before this start: %s"):format(getRealTime().timestamp - tonumber(at), step)) end
     end
     trace("clean")
+    engineStreamingSetModelCacheLimits(MODEL_CACHE)
+    -- How close the pool is getting (debug), at most once a minute.
+    local warned = 0
+    setTimer(function()
+        local n = loadedVehicleModels()
+        if n >= POOL_WARN and getTickCount() - warned > 60000 then
+            warned = getTickCount()
+            debugLog(("%d vehicle models loaded (the game has room for 50)"):format(n))
+        end
+    end, 5000, 0)
     base = engineLoadTXD(CarBaseTextures.file)
     for model = 400, 611 do importBase(model) end
     local byName = {}
