@@ -3,7 +3,7 @@ HelpPages = {
     { name = "radio", topic = true, summary = "Car radio stations, switching, speakers",
       text = [[Every station plays on the server's clock: everyone tuned in hears the same moment, in cars, from cars outside, and from speakers in clubs.
 
-In a car: the radio keys (mouse wheel by default) switch station; the driver chooses, passengers only when no player drives. The station's name shows at the top.]],
+In a car: the radio keys (mouse wheel by default) switch station, from the driver's seat only: never as a passenger, even with a ped driving. The station's name shows at the top.]],
       see = { "radiovolume", "radiodebug" },
     },
     { name = "radiovolume", usage = "/radiovolume [0-100]", summary = "Set (or show) your radio volume",

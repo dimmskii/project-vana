@@ -105,15 +105,15 @@ addEventHandler("onPlayerQuit", root, function()
     ready[source], lastPing[source] = nil, nil
 end)
 
--- Retuning a car: the driver chooses; passengers only when no player drives. Vehicles without a
--- station (vana-vehicles gives one only to cars with a radio) can't be tuned.
+-- Retuning a car: from the driver's seat only, as the car's other controls (passengers never, even
+-- with a ped driving). Vehicles without a station (vana-vehicles gives one only to cars with a
+-- radio) can't be tuned.
 addEvent("vana-radio:tune", true)
 addEventHandler("vana-radio:tune", resourceRoot, function(vehicle, id)
     if type(id) ~= "number" or (id ~= 0 and (not stations[id] or stations[id].def.hidden)) then return end
     if not isElement(vehicle) or getPedOccupiedVehicle(client) ~= vehicle then return end
     if type(getElementData(vehicle, "vana:radio")) ~= "number" then return end
-    local driver = getVehicleOccupant(vehicle, 0)
-    if driver and driver ~= client and getElementType(driver) == "player" then return end
+    if getVehicleOccupant(vehicle, 0) ~= client then return end
     setElementData(vehicle, "vana:radio", id)
 end)
 

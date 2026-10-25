@@ -44,12 +44,18 @@ local function nativeOff()
 end
 
 ----------------------------------------------------------------------------------------------------
--- Switching: the radio keys step through our stations (the driver's say; passengers only when no
--- player drives). The server checks the same and sets the car's station.
+-- Switching: the radio keys step through our stations, from the driver's seat only (as /engine and
+-- /lights; a ped driving doesn't hand the radio to its passengers). The server checks the same and
+-- sets the car's station.
 
 local function canTune(vehicle)
-    local driver = getVehicleOccupant(vehicle, 0)
-    return not driver or driver == localPlayer or getElementType(driver) ~= "player"
+    return getVehicleOccupant(vehicle, 0) == localPlayer
+end
+
+-- The status line (vana-controls), as for the driver's other controls.
+local function status(text)
+    local res = getResourceFromName("vana-controls")
+    if res and getResourceState(res) == "running" then exports["vana-controls"]:status(text) end
 end
 
 local pending -- { vehicle, id, at }: asked for, not yet set by the server
@@ -57,7 +63,8 @@ local pending -- { vehicle, id, at }: asked for, not yet set by the server
 local function step(dir)
     local vehicle = getPedOccupiedVehicle(localPlayer)
     local current = stationOf(vehicle)
-    if not current or not canTune(vehicle) or isCursorShowing() then return end
+    if not current or isCursorShowing() then return end
+    if not canTune(vehicle) then return status("Only the driver can do that.") end
     -- Several presses in a row step on from the last one asked for.
     if pending and pending.vehicle == vehicle and getTickCount() - pending.at < 2000 then current = pending.id end
     local at = 1
