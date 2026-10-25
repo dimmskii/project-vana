@@ -4,6 +4,7 @@
 local CONFIG = {
     fadeMs = 500,
     cooldownMs = 1500,      -- no re-trigger right after arriving
+    holdMs = 5000,          -- the longest a player is held after arriving, waiting for the floor to load
     minTrigger = 1.2,       -- trigger boxes are at least this wide (some IPL sizes are tiny)
     respectOpeningHours = true,
 }
@@ -55,6 +56,23 @@ local function partnerOf(player, e)
     return otherArea[1]
 end
 
+-- Held after arriving until their client has the floor (client.lua), at most holdMs.
+local holding = {} -- player -> token (a number: it goes to the client and back)
+local tokens = 0
+
+local function release(player, token)
+    if holding[player] ~= token then return end
+    holding[player] = nil
+    if not isElement(player) then return end
+    setCameraTarget(player, player)
+    fadeCamera(player, true, CONFIG.fadeMs / 1000)
+    setElementFrozen(player, false)
+    busy[player] = getTickCount()
+end
+
+addEvent("vana-interiors:ready", true)
+addEventHandler("vana-interiors:ready", resourceRoot, function(token) release(client, token) end)
+
 local function transition(player, from, to)
     busy[player] = getTickCount()
     -- Remember the way in, to come back out the same way.
@@ -69,9 +87,12 @@ local function transition(player, from, to)
         setElementDimension(player, to.instance or 0)
         setElementPosition(player, to.ex, to.ey, to.ez + 1)
         setElementRotation(player, 0, 0, to.heading, "default", true)
-        setCameraTarget(player, player)
-        fadeCamera(player, true, CONFIG.fadeMs / 1000)
-        setElementFrozen(player, false)
+        -- Still frozen and faded until the floor there has loaded (or holdMs passes).
+        tokens = tokens + 1
+        local token = tokens
+        holding[player] = token
+        triggerClientEvent(player, "vana-interiors:arrived", resourceRoot, token, to.ex, to.ey, to.ez)
+        setTimer(release, CONFIG.holdMs, 1, player, token)
         busy[player] = getTickCount()
         -- Other resources react to arrivals (e.g. the closet opens on reaching the changing room).
         -- Arguments: entrance name, from interior, to interior, arrived at a hub (not a door).
@@ -121,7 +142,7 @@ addEventHandler("onResourceStart", resourceRoot, function()
     end
 end)
 
-addEventHandler("onPlayerQuit", root, function() lastUsed[source], busy[source] = nil, nil end)
+addEventHandler("onPlayerQuit", root, function() lastUsed[source], busy[source], holding[source] = nil, nil, nil end)
 
 -- Console-only: every enabled entrance has somewhere to go.
 addCommandHandler("interiortest", function(source)
