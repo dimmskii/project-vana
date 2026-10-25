@@ -213,6 +213,15 @@ Hud.perks = {}
 addEvent("vana-activities:perks", true)
 addEventHandler("vana-activities:perks", resourceRoot, function(held) Hud.perks = held or {} end)
 
+-- A passenger let out (Activity.letOut): out through their own door, as GTA's peds get out. The
+-- server sends this again until they're out.
+addEvent("vana-activities:letOut", true)
+addEventHandler("vana-activities:letOut", resourceRoot, function(ped)
+    if not isElement(ped) or not isElementStreamedIn(ped) or not getPedOccupiedVehicle(ped) or not isElementSyncer(ped) then return end
+    killPedTask(ped, "primary", 3, false)
+    setPedExitVehicle(ped)
+end)
+
 -- Firefighter's reward (vanilla): fire doesn't hurt you.
 addEventHandler("onClientPlayerDamage", localPlayer, function(_, weapon)
     if Hud.perks.fireproof and weapon == 37 then cancelEvent() end

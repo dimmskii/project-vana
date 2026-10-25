@@ -10,6 +10,7 @@
     <script src="config/vendorkinds.lua" type="shared" />
     <script src="config/keepers.lua" type="server" />
     <script src="config/carmods_data.lua" type="server" />
+    <script src="config/spoilers_data.lua" type="server" />
     <script src="config/garages.lua" type="shared" />
     <script src="config/sprays.lua" type="shared" />
     <script src="server.lua" type="server" />

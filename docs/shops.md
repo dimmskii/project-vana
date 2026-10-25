@@ -168,8 +168,14 @@ Low Co. (LS) and Wheel Arch Angels (SF), all open.
 - **Stock:** each garage's `shopping.dat` list (`carmod1` normal cars, `carmod2` lowriders,
   `carmod3` street racers), priced from its `CarMods` section, named by the game's text (each item's
   name tag). Ours, at every garage: all 17 wheels, nitro (2x, 5x, 10x), hydraulics, the stereo, and
-  the 20 spoilers MTA fits to any car. Categories are MTA's upgrade slots. Parts this vehicle can't
-  take (`getVehicleCompatibleUpgrades`) are shown greyed out, `N/A`.
+  the 20 spoilers. Categories are MTA's upgrade slots. Parts this vehicle can't take
+  (`getVehicleCompatibleUpgrades`) are shown greyed out, `N/A`. Spoilers go by model instead: MTA
+  passes every spoiler on every car, though only 37 models have somewhere to put one (bought, it never
+  showed), so each model's own spoilers come from MTA's per-model table (`config/spoilers_data.lua`;
+  an added model, vana-cars', takes its parent's).
+- **Removing (ours):** a category the car has a part in starts with **Remove** (free): the part comes
+  off, back to stock. The same for performance parts (Turbo, the lightweight kit, AWD...). Parts the
+  car has that this garage doesn't sell are listed too, so they can come off.
 - **Trying on:** the highlighted part, colour or paintjob is put on the car (server-side, so the car
   really changes); leaving takes off whatever wasn't bought. The camera frames the category's part
   of the car (front, rear, side, roof).
@@ -186,8 +192,10 @@ Low Co. (LS) and Wheel Arch Angels (SF), all open.
   what was bought (element data `vana:garage`), not in the garage's dimension with a part on trial.
 - **Data:** `config/carmods_data.lua` (part IDs from `veh_mods.ide`, the palette from `carcols.dat`)
   is seeded by `tools/seed/seed_carmods.py`; stock and prices are read from `data/shopping.dat`.
+  `config/spoilers_data.lua` (each model's spoilers) is seeded by `tools/seed/seed_spoilers.py` from
+  MTA Neon's `Server/mods/deathmatch/logic/CVehicleUpgrades.cpp`.
 - `garagetest` (console): the stock resolves, a Blade's menu builds, a police car takes the
-  universal parts. Warp names for the doorways: `transfender`, `transfender.sf`, `transfender.lv`,
+  universal parts, and spoilers go by model (a Sentinel takes one, a police car and a Blade none). Warp names for the doorways: `transfender`, `transfender.sf`, `transfender.lv`,
   `locolow`, `waa`.
 - **Not done:** the door closing behind you as vanilla's does, vanilla's per-part camera moves, the bonnet ornaments 1111/1112
   (MTA refuses them on every model).

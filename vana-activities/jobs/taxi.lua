@@ -22,15 +22,20 @@ local function stopped(vehicle)
     return vx * vx + vy * vy + vz * vz < 0.0016
 end
 
-local function clearFare(session, leaveCar)
+-- leave: the fare gets out and walks on ("out"), or runs from the player ("fled"); otherwise (dead) the
+-- body goes after a while.
+local function clearFare(session, leave)
     local d = session.data
     if d.blip and isElement(d.blip) then destroyElement(session:disown(d.blip)) end
     if d.marker and isElement(d.marker) then destroyElement(session:disown(d.marker)) end
     d.blip, d.marker = nil, nil
     if d.fare and isElement(d.fare) then
         local ped = session:disown(d.fare)
-        if leaveCar then removePedFromVehicle(ped) end
-        setTimer(function() if isElement(ped) then destroyElement(ped) end end, 15000, 1)
+        if leave then
+            Activity.letOut(ped, session.player, leave == "fled" and { mode = "flee", target = session.player } or nil)
+        else
+            setTimer(function() if isElement(ped) then destroyElement(ped) end end, 15000, 1)
+        end
     end
     d.fare, d.destination = nil, nil
     session:clearCounter("tip")
@@ -59,7 +64,7 @@ local function pickedUp(session, taxi)
     local x, y, z = getElementPosition(taxi)
     local dx, dy, dz = Activity.streetSpot(x, y, z, T.destinationRange[1], T.destinationRange[2], "vehicle", { x, y, z })
     if not dx then
-        clearFare(session, true)
+        clearFare(session, "out")
         session:say(session:text("TX_OOPS"))
         return
     end
@@ -81,7 +86,7 @@ local function delivered(session)
     local player = session.player
     local tip = math.max(0, d.tipUntil - d.tipPenalty - getTickCount())
     local pay = math.floor(d.distance / (tip > 0 and T.fareFast or T.fare))
-    clearFare(session, true)
+    clearFare(session, "out")
     givePlayerMoney(player, pay)
     d.earned, d.streak = d.earned + pay, d.streak + 1
     session:big(session:text(tip > 0 and "TX_FAST" or "TX_WIN"), 3000, "title")
@@ -133,7 +138,7 @@ Activity.register("taxi", {
             if getElementHealth(taxi) < T.junkHealth then
                 if dd.fare and dd.destination then
                     s:say(s:text("TX_FLED"))
-                    clearFare(s, true)
+                    clearFare(s, "fled")
                 elseif not dd.junkSaid or now - dd.junkSaid > 8000 then
                     dd.junkSaid = now
                     s:say(s:text("TX_REP"))
