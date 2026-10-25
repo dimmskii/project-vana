@@ -38,7 +38,7 @@ Prices and stock come from the retail `shopping.dat`, and names from the retail 
 - **Prices:** `shopping.dat`'s, overridable per item in `config/shops.lua` (`prices`). Each shop interior has a point where customers stand (`[data]/vana-data-shops/shops.map`): walking onto
 its orange marker opens the menu, as vanilla's counters do, and `/use` (F) there opens it again.
 - **Actions** ([controls.md](controls.md)): each point runs its kind's action (`/buyfood`, `/buyweapons`,
-  `/buyclothes`, `/buyitems`, `/haircut`, `/tattoo`, `/learnstyle`), or the one its `action` field
+  `/buyclothes`, `/buyitems`, `/haircut`, `/tattoo`, `/learnstyle`, `/changeclothes`), or the one its `action` field
   names. The same command, or the keeper's entry in `/interact`, serves you from anywhere in the shop
   in sight of the keeper (8 m), who seats you; shops without a keeper (the gym trainers, the 24/7s
   without a clerk yet) want you at the counter.
@@ -107,9 +107,14 @@ an offset from it, in `config/keepers.lua`; the keeper models are vanilla's.
 ### Closet
 
 Every safehouse closet door leads into one shared changing room (the `CHANGER` hub, see
-Entrances). Arriving there opens the closet: every clothing item the player owns, from all chains,
-by the same categories, free to put on, plus "Take off" per category. `vana-interiors` reports
-arrivals with the `onPlayerUseEntrance` event (name, from interior, to interior, arrived at a hub).
+Entrances), as in vanilla (`wardrobe.sc`, `WARROBE`). Besides the marker back out, the room has the
+wardrobe's own marker in front of its changing room door (shop point `CLOSET`). Stopping there runs
+the clothes shops' changing room: CJ steps in (`CLO_In`), poses under vanilla's camera, steps out
+when done. It's the clothes shops' layout moved by `wardrobe.sc`'s offset (43.529, 0.694, 0.012),
+with Binco's door (`CJ_BINCO_DOOR`, 2877) and no clerk (`Keepers.CLOSET` has no model). One player
+at a time. The menu: every clothing item the player owns, from all chains, by the same categories,
+free to put on, plus "Take off" per category. `vana-interiors` still reports arrivals with the
+`onPlayerUseEntrance` event (name, from interior, to interior, arrived at a hub).
 
 ### Shop points
 
@@ -271,8 +276,8 @@ gyms and Madd Dogg's home gym. Vanilla's gym scripts (`GYMBIKE`, `GYMBENC`, `GYM
   `X711S3` (24.5, -2646.6) is kept commented out in `entrances.map`.
 - **The LV sex shop** (`SEXSHOP`, ours): a misc counter with a clerk (246, VHFYST3) and its own stock
   (`stocks` in `config/shops.lua`: a dildo and flowers).
-- **Wardrobe:** vanilla's safehouse wardrobe script (`WARROBE`) isn't ported; our closet is the
-  menu in the shared changing room.
+- **Wardrobe:** vanilla's first menu picks a chain, then its categories; ours lists the categories
+  straight away, every chain's items together.
 - **Hostile keepers:** keepers can be killed (back after a minute) but don't react; vanilla's react
   when attacked (the Ammu-Nation clerk fights back).
 - **Other shops:** car mod shops (TransFender, Loco Low Co., Wheel Arch Angels).

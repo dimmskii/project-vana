@@ -71,9 +71,6 @@ ShopConfig = {
         { type = 8, name = "Back" }, { type = 9, name = "Left chest" }, { type = 10, name = "Right chest" },
         { type = 11, name = "Stomach" }, { type = 12, name = "Lower back" },
     },
-    -- The closet: arriving through this entrance's hub (the changing room every safehouse closet door
-    -- leads into) opens a menu of every clothing item the player owns.
-    closetEntrance = "CHANGER",
     -- How close to a shop point you need to be.
     radius = 1.5,
 

@@ -75,7 +75,7 @@ function savePlayer(player)
 end
 
 -- Things a player owns for good, by kind (e.g. "clothes" -> "texture/model"): bought once, kept
--- across sessions. The closet (still to come) will offer every owned item.
+-- across sessions. The safehouse closet (vana-shops) offers every owned item.
 function isOwned(player, kind, key)
     local d = data[player]
     return d and d.owned and d.owned[kind] and d.owned[kind][key] == true or false

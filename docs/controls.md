@@ -83,7 +83,7 @@ us in the same place instead.
 | `/lights` | your vehicle | its driver | On, off, automatic (the game's: night, tunnels), in turn |
 | `/lock` | a vehicle, 6 m | its driver, or a holder beside it | Locks or unlocks the doors |
 | `/hood`, `/trunk`, `/doorfrontleft`, `/doorfrontright`, `/doorrearleft`, `/doorrearright` | your vehicle, or on foot one within 6 m | inside: the driver for the hood and trunk, each seat its own door; on foot: anyone, when unlocked | Opens or closes it (rear doors on 4+ seaters; a missing door is gone) |
-| `/buyfood`, `/buyweapons`, `/buyclothes`, `/buyitems`, `/haircut`, `/tattoo`, `/learnstyle` | the shop's keeper or counter marker, 8 m | anyone | Opens that shop's menu (the keeper seats you; shops without one need you at the counter) |
+| `/buyfood`, `/buyweapons`, `/buyclothes`, `/buyitems`, `/haircut`, `/tattoo`, `/learnstyle`, `/changeclothes` | the shop's keeper or counter marker, 8 m | anyone | Opens that shop's menu (the keeper seats you; shops without one need you at the counter) |
 
 A shop point's action is its kind's unless its map element names another (`action` on `shoppoint`
 in `[data]/vana-data-shops/shops.map`, editable in the Map Editor); the target is that shop's keeper.

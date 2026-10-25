@@ -8,7 +8,8 @@
     <shoppoint id="BARBER2" posX="421.29" posY="-81.3" posZ="1000.81" interior="3" kind="hair" />
     <shoppoint id="BARBER3" posX="414.67" posY="-51.32" posZ="1000.81" interior="12" kind="hair" />
     <shoppoint id="BARBERS" posX="414.3" posY="-19.9" posZ="1000.81" interior="2" kind="hair" />
-    <shoppoint id="CLOTHGP" posX="181.42" posY="-86.9" posZ="1001.03" interior="18" kind="clothes" note="vanilla: the changing room" />
+    <shoppoint id="CLOSET" posX="258.15" posY="-39.96" posZ="1001.05" interior="14" kind="closet" note="vanilla (WARROBE): the safehouse changing room, in front of its door" />
+    <shoppoint id="CLOTHGP"posX="181.42" posY="-86.9" posZ="1001.03" interior="18" kind="clothes" note="vanilla: the changing room" />
     <shoppoint id="CSCHP" posX="217.47" posY="-98.19" posZ="1004.29" interior="15" kind="clothes" note="vanilla: the changing room" />
     <shoppoint id="CSDESGN" posX="208.82" posY="-3.92" posZ="1000.22" interior="5" kind="clothes" note="vanilla: the changing room" />
     <shoppoint id="CSEXL" posX="215.82" posY="-155.18" posZ="999.52" interior="14" kind="clothes" note="vanilla: the changing room" />
