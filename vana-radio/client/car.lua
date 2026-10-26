@@ -1,204 +1,171 @@
--- Car radios: the native radio stays off for good (channel 0, its HUD hidden, its switching
--- cancelled); the radio switch keys tune the car to our stations instead, played in the car as 2D
--- and from running cars nearby as muffled 3D (client/player.lua). The station's name shows as
--- vanilla's does.
-local R = RadioConfig
-local order = {} -- switching order: the stations, then off
-for _, def in ipairs(R.stations) do
-    if not def.hidden then order[#order + 1] = def.id end
-end
-order[#order + 1] = 0
+-- Car radios: the game's own radio stays off; our stations play in the car (2D) and from running
+-- cars nearby (muffled 3D). The radio keys run /radionext and /radioprevious (server actions).
 
-local inCar           -- the emitter for the car we're in
-local outside = {}    -- vehicle -> emitter
-local shown = { id = nil, at = 0 }
+local config = RadioConfig
+
+---@type table? emitter for the car we're in
+local inCarEmitter
+---@type table<vehicle, table> emitters for cars heard from outside
+local outsideEmitters = {}
+local shownStation = { id = nil, at = 0 }
 local hudWasVisible
-local switching = false -- our own setRadioChannel(0)
+--- True while we switch the game's radio off ourselves, so the switch isn't cancelled.
+local switchingNative = false
 
+---@param vehicle vehicle?
+---@return integer? stationId nil for vehicles without a radio
 local function stationOf(vehicle)
     local id = vehicle and getElementData(vehicle, "vana:radio")
     return type(id) == "number" and id or nil
 end
 
-local function showName(id)
-    shown.id, shown.at = id, getTickCount()
+---@param id integer
+local function showStationName(id)
+    shownStation.id, shownStation.at = id, getTickCount()
 end
 
-----------------------------------------------------------------------------------------------------
--- The native radio: off, quietly
-
-addEventHandler("onClientPlayerRadioSwitch", localPlayer, function(channel)
-    if channel ~= 0 and not switching then cancelEvent() end
-end)
-
--- MTA's channel isn't enough: the game's radio can play with it at 0 (started by
--- setRadioPlaybackState, as vana-vehicles' old sync did), so the game's own track manager is
--- checked too (modes 0-2: starting, waiting to play, playing).
-local function nativeOff()
+--- Stops the game's radio. MTA's channel can read 0 while the game still plays (setRadioPlaybackState
+--- starts it), so the track manager's mode (0-2: starting, waiting, playing) is checked too.
+local function silenceNativeRadio()
     local state = getRadioPlaybackState()
     if getRadioChannel() ~= 0 or (state and state.mode and state.mode <= 2) then
-        switching = true
+        switchingNative = true
         setRadioChannel(0)
-        switching = false
+        switchingNative = false
     end
 end
 
-----------------------------------------------------------------------------------------------------
--- Switching: the radio keys step through our stations, from the driver's seat only (as /engine and
--- /lights; a ped driving doesn't hand the radio to its passengers). The server checks the same and
--- sets the car's station.
-
-local function canTune(vehicle)
-    return getVehicleOccupant(vehicle, 0) == localPlayer
-end
-
--- The status line (vana-controls), as for the driver's other controls.
-local function status(text)
-    local res = getResourceFromName("vana-controls")
-    if res and getResourceState(res) == "running" then exports["vana-controls"]:status(text) end
-end
-
-local pending -- { vehicle, id, at }: asked for, not yet set by the server
-
-local function step(dir)
-    local vehicle = getPedOccupiedVehicle(localPlayer)
-    local current = stationOf(vehicle)
-    if not current or isCursorShowing() then return end
-    if not canTune(vehicle) then return status("Only the driver can do that.") end
-    -- Several presses in a row step on from the last one asked for.
-    if pending and pending.vehicle == vehicle and getTickCount() - pending.at < 2000 then current = pending.id end
-    local at = 1
-    for i, id in ipairs(order) do if id == current then at = i end end
-    local id = order[(at - 1 + dir) % #order + 1]
-    pending = { vehicle = vehicle, id = id, at = getTickCount() }
-    triggerServerEvent("vana-radio:tune", resourceRoot, vehicle, id)
-    showName(id)
-end
-
-bindKey("radio_next", "down", function() step(1) end)
-bindKey("radio_previous", "down", function() step(-1) end)
-
-addEventHandler("onClientPlayerVehicleEnter", localPlayer, function(vehicle)
+---@param vehicle vehicle
+---@param px number
+---@param py number
+---@param pz number
+---@return number|false distance when this car's radio can be heard from (px, py, pz)
+local function audibleDistance(vehicle, px, py, pz)
+    if isVehicleBlown(vehicle) or not getVehicleEngineState(vehicle) then return false end
     local id = stationOf(vehicle)
-    if id then showName(id) end
-end)
-
--- The station arriving after we got in (the server picks it as we enter).
-addEventHandler("onClientElementDataChange", root, function(key, old, new)
-    if key == "vana:radio" and source == getPedOccupiedVehicle(localPlayer) and old == nil and type(new) == "number" then showName(new) end
-end)
-
-----------------------------------------------------------------------------------------------------
--- Who plays what: the car we're in, and the nearest running cars outside
-
-local function audibleOutside(vehicle, px, py, pz)
-    if isVehicleBlown(vehicle) or not getVehicleEngineState(vehicle) then return end
-    local id = stationOf(vehicle)
-    if not id or id == 0 or not Radio.byId[id] then return end
-    local x, y, z = getElementPosition(vehicle)
-    local d = getDistanceBetweenPoints3D(x, y, z, px, py, pz)
-    return d < R.outside.range and d
+    if not id or id == 0 or not Radio.byId[id] then return false end
+    local distance = getDistanceBetweenPoints3D(px, py, pz, getElementPosition(vehicle))
+    return distance < config.outside.range and distance
 end
 
-setTimer(function()
-    nativeOff()
-    local mine = getPedOccupiedVehicle(localPlayer)
-    local id = stationOf(mine)
-    if id and id ~= 0 and Radio.byId[id] and getVehicleEngineState(mine) and not isVehicleBlown(mine) then
-        if not inCar then inCar = Radio.addEmitter({ station = id, volume = R.car.volume }) end
-        Radio.setEmitterStation(inCar, id)
-    elseif inCar then
-        Radio.removeEmitter(inCar)
-        inCar = nil
+local function updateInCarEmitter(vehicle)
+    local id = stationOf(vehicle)
+    local playing = id and id ~= 0 and Radio.byId[id] and getVehicleEngineState(vehicle) and not isVehicleBlown(vehicle)
+    if playing then
+        inCarEmitter = inCarEmitter or Radio.addEmitter({ station = id, volume = config.car.volume })
+        Radio.setEmitterStation(inCarEmitter, id)
+    elseif inCarEmitter then
+        Radio.removeEmitter(inCarEmitter)
+        inCarEmitter = nil
     end
+end
 
+local function updateOutsideEmitters(ownVehicle)
     local px, py, pz = getElementPosition(localPlayer)
-    local near = {}
+    local audible = {}
     for _, vehicle in ipairs(getElementsByType("vehicle", root, true)) do
-        local d = vehicle ~= mine and audibleOutside(vehicle, px, py, pz)
-        if d then near[#near + 1] = { vehicle, d } end
+        local distance = vehicle ~= ownVehicle and audibleDistance(vehicle, px, py, pz)
+        if distance then audible[#audible + 1] = { vehicle = vehicle, distance = distance } end
     end
-    table.sort(near, function(a, b) return a[2] < b[2] end)
-    local keep = {}
-    for i = 1, math.min(#near, R.outside.nearest) do keep[near[i][1]] = true end
-    for vehicle, e in pairs(outside) do
-        if not keep[vehicle] or not isElement(vehicle) then
-            Radio.removeEmitter(e)
-            outside[vehicle] = nil
+    table.sort(audible, function(a, b) return a.distance < b.distance end)
+
+    local nearest = {}
+    for i = 1, math.min(#audible, config.outside.nearest) do nearest[audible[i].vehicle] = true end
+    for vehicle, emitter in pairs(outsideEmitters) do
+        if not nearest[vehicle] or not isElement(vehicle) then
+            Radio.removeEmitter(emitter)
+            outsideEmitters[vehicle] = nil
         end
     end
-    for vehicle in pairs(keep) do
+    for vehicle in pairs(nearest) do
         local station = stationOf(vehicle)
-        if outside[vehicle] then
-            Radio.setEmitterStation(outside[vehicle], station)
+        if outsideEmitters[vehicle] then
+            Radio.setEmitterStation(outsideEmitters[vehicle], station)
         else
-            local o = R.outside
-            outside[vehicle] = Radio.addEmitter({ station = station, element = vehicle, volume = o.volume,
-                minDistance = o.minDistance, maxDistance = o.range, muffle = o.muffle })
+            local outside = config.outside
+            outsideEmitters[vehicle] = Radio.addEmitter({ station = station, element = vehicle, volume = outside.volume,
+                minDistance = outside.minDistance, maxDistance = outside.range, muffle = outside.muffle })
         end
     end
-end, 250, 0)
-
-----------------------------------------------------------------------------------------------------
--- The station's name, top centre (vanilla shows it on getting in and on every switch)
-
-addEventHandler("onClientRender", root, function()
-    if not shown.id or not getPedOccupiedVehicle(localPlayer) then return end
-    local H = R.hud
-    local t = getTickCount() - shown.at
-    if t > H.showMs + H.fadeMs then
-        shown.id = nil
-        return
-    end
-    local alpha = t < H.showMs and 255 or 255 * (1 - (t - H.showMs) / H.fadeMs)
-    local def = Radio.byId[shown.id]
-    local c = def and H.colour or H.offColour
-    local W, Hs = guiGetScreenSize()
-    local k = Hs / 448
-    local y = H.y * k
-    local text = def and def.name or "Radio Off"
-    dxDrawText(text, 2, y + 2, W + 2, y + 2, tocolor(0, 0, 0, alpha), H.scale * k, H.font, "center", "top")
-    dxDrawText(text, 0, y, W, y, tocolor(c[1], c[2], c[3], alpha), H.scale * k, H.font, "center", "top")
-end)
-
-----------------------------------------------------------------------------------------------------
--- Volume: the game's radio volume can't be read, so ours is a setting (/radiovolume 0-100).
-
-local SETTINGS = "@settings.json"
+end
 
 local function loadVolume()
-    if not fileExists(SETTINGS) then return end
-    local f = fileOpen(SETTINGS, true)
-    if not f then return end
-    local data = fromJSON(fileRead(f, fileGetSize(f)) or "")
-    fileClose(f)
-    if type(data) == "table" and type(data.volume) == "number" then Radio.volume = math.max(0, math.min(1, data.volume)) end
+    if not fileExists("@settings.json") then return end
+    local file = fileOpen("@settings.json", true)
+    if not file then return end
+    local settings = fromJSON(fileRead(file, fileGetSize(file)) or "")
+    fileClose(file)
+    if type(settings) == "table" and type(settings.volume) == "number" then
+        Radio.volume = math.max(0, math.min(1, settings.volume))
+    end
 end
 
 local function saveVolume()
-    local f = fileCreate(SETTINGS)
-    if not f then return end
-    fileWrite(f, toJSON({ volume = Radio.volume }))
-    fileClose(f)
+    local file = fileCreate("@settings.json")
+    if not file then return end
+    fileWrite(file, toJSON({ volume = Radio.volume }))
+    fileClose(file)
 end
 
-addCommandHandler("radiovolume", function(_, value)
-    local v = tonumber(value)
-    if not v then
-        outputChatBox(("Radio volume: %d (use /radiovolume 0-100)"):format(math.floor(Radio.volume * 100 + 0.5)))
+addEventHandler("onClientPlayerRadioSwitch", localPlayer, function(channel)
+    if channel ~= 0 and not switchingNative then cancelEvent() end
+end)
+
+addEventHandler("onClientPlayerVehicleEnter", localPlayer, function(vehicle)
+    local id = stationOf(vehicle)
+    if id then showStationName(id) end
+end)
+
+addEventHandler("onClientElementDataChange", root, function(key, old, new)
+    if key == "vana:radio" and source == getPedOccupiedVehicle(localPlayer) and type(new) == "number" and new ~= old then
+        showStationName(new)
+    end
+end)
+
+setTimer(function()
+    silenceNativeRadio()
+    local vehicle = getPedOccupiedVehicle(localPlayer)
+    updateInCarEmitter(vehicle)
+    updateOutsideEmitters(vehicle)
+end, 250, 0)
+
+addEventHandler("onClientRender", root, function()
+    if not shownStation.id or not getPedOccupiedVehicle(localPlayer) then return end
+    local hud = config.hud
+    local elapsed = getTickCount() - shownStation.at
+    if elapsed > hud.showMs + hud.fadeMs then
+        shownStation.id = nil
         return
     end
-    Radio.volume = math.max(0, math.min(100, v)) / 100
-    Radio.refreshVolume()
-    saveVolume()
-    outputChatBox(("Radio volume set to %d"):format(math.floor(Radio.volume * 100 + 0.5)))
+    local alpha = elapsed < hud.showMs and 255 or 255 * (1 - (elapsed - hud.showMs) / hud.fadeMs)
+    local def = Radio.byId[shownStation.id]
+    local colour = def and hud.colour or hud.offColour
+    local text = def and def.name or "Radio Off"
+    local screenWidth, screenHeight = guiGetScreenSize()
+    local scale = screenHeight / 448
+    local y = hud.y * scale
+    dxDrawText(text, 2, y + 2, screenWidth + 2, y + 2, tocolor(0, 0, 0, alpha), hud.scale * scale, hud.font, "center", "top")
+    dxDrawText(text, 0, y, screenWidth, y, tocolor(colour[1], colour[2], colour[3], alpha), hud.scale * scale, hud.font, "center", "top")
+end)
+
+-- The game's radio volume can't be read, so ours is a setting of its own.
+addCommandHandler("radiovolume", function(_, value)
+    local volume = tonumber(value)
+    if volume then
+        Radio.volume = math.max(0, math.min(100, volume)) / 100
+        Radio.refreshVolume()
+        saveVolume()
+    end
+    outputChatBox(("Radio volume: %d%s"):format(math.floor(Radio.volume * 100 + 0.5), volume and "" or " (use /radiovolume 0-100)"))
 end)
 
 addEventHandler("onClientResourceStart", resourceRoot, function()
+    bindKey("radio_next", "down", "radionext")
+    bindKey("radio_previous", "down", "radioprevious")
     loadVolume()
     hudWasVisible = isPlayerHudComponentVisible("radio")
     setPlayerHudComponentVisible("radio", false)
-    nativeOff()
+    silenceNativeRadio()
 end)
 
 addEventHandler("onClientResourceStop", resourceRoot, function()

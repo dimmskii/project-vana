@@ -1,37 +1,47 @@
--- Where a station's programme comes from (config/radio.lua's `source`). Each source makes a planner:
--- planner(ctx) -> the next segments to play back to back, each { length (ms), track (a vanilla track
--- ID, played from the game's own audio) or label (no audio), kind, and for routines beat (vanilla's
--- beat-track number) and fade (ms) }. A "stream" station has no planner: it plays its URL live.
+-- Station sources (RadioConfig.stations[].source). Each makes a planner that returns the next
+-- segments to play back to back. "stream" stations have no planner: they play their URL live.
+
+---@alias Planner fun(context: table): Segment[]
+
+---@type table<string, fun(def: table): Planner>
 RadioSources = {}
 
+--- Vanilla's programme from the game's own audio.
+---@param def table
+---@return Planner
 function RadioSources.vanilla(def)
     local station = VanillaStation.new(def.radio)
-    return function(ctx)
-        local out = station:next(ctx)
-        for _, seg in ipairs(out) do seg.length = RadioData.durations[seg.track + 1] end
-        return out
+    return function(context)
+        local segments = station:next(context)
+        for _, segment in ipairs(segments) do segment.length = RadioData.durations[segment.track + 1] end
+        return segments
     end
 end
 
+--- Silent segments of a fixed length, for testing.
+---@param def table
+---@return Planner
 function RadioSources.timer(def)
     return function()
         return { { length = def.length or 180000, label = def.label or def.name, kind = "timer" } }
     end
 end
 
--- Beat tracks as routines: each plays until its end marker (key 33, 2 s after the last beat) plus
--- the fade, never past the track's end.
+--- Vanilla's beat tracks as dance routines. Each plays to its end marker (key 33, 2 s after the last
+--- beat) plus the fade, never past the track's end.
+---@param def table
+---@return Planner
 function RadioSources.beats(def)
-    local last, step = nil, 0
+    local lastBeat, sequenceIndex = nil, 0
     return function()
         local beat
         if def.order == "sequence" then
-            step = step % #def.beats + 1
-            beat = def.beats[step]
+            sequenceIndex = sequenceIndex % #def.beats + 1
+            beat = def.beats[sequenceIndex]
         else
-            repeat beat = def.beats[math.random(#def.beats)] until #def.beats == 1 or beat ~= last
+            repeat beat = def.beats[math.random(#def.beats)] until #def.beats == 1 or beat ~= lastBeat
         end
-        last = beat
+        lastBeat = beat
         local track = RadioData.beatTracks[beat + 1]
         local beats = RadioData.beats[track]
         local length = RadioData.durations[track + 1]

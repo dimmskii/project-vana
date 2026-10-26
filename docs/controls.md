@@ -81,6 +81,7 @@ us in the same place instead.
 | `/givemoney <amount> [player]` (`/pay`) | a player, 4 m | anyone | Moves the cash, saves both, tells both |
 | `/engine` | your vehicle | its driver | Engine off or on (not with an empty tank) |
 | `/lights` | your vehicle | its driver | On, off, automatic (the game's: night, tunnels), in turn |
+| `/radionext`, `/radioprevious` | your vehicle | its driver | Next or previous station, then off (bound to the radio keys) |
 | `/lock` | a vehicle, 6 m | its driver, or a holder beside it | Locks or unlocks the doors |
 | `/hood`, `/trunk`, `/doorfrontleft`, `/doorfrontright`, `/doorrearleft`, `/doorrearright` | your vehicle, or on foot one within 6 m | inside: the driver for the hood and trunk, each seat its own door; on foot: anyone, when unlocked | Opens or closes it (rear doors on 4+ seaters; a missing door is gone) |
 | `/buyfood`, `/buyweapons`, `/buyclothes`, `/buyitems`, `/haircut`, `/tattoo`, `/learnstyle`, `/changeclothes` | the shop's keeper or counter marker, 8 m | anyone | Opens that shop's menu (the keeper seats you; shops without one need you at the counter) |

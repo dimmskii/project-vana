@@ -41,10 +41,11 @@ a station hears the same moment of it. The game's own radio is switched off for 
 - The native radio is kept on channel 0 with its HUD hidden, and its own switching is cancelled.
   MTA's channel alone isn't checked: the game's radio can play while it reads 0 (started by
   `setRadioPlaybackState`), so the game's track manager is checked too (`getRadioPlaybackState`).
-- The radio keys (`radio_next` / `radio_previous`, the mouse wheel by default) step through the
-  stations, then off. Only from the driver's seat, as the car's other controls (`/engine`,
-  `/lights`): passengers never, even with a ped driving; they get "Only the driver can do that." on
-  the status line. The server checks the same rule (`vana-radio:tune`) and sets the car's station.
+- Switching is two actions ([controls.md](controls.md)), `/radionext` and `/radioprevious`, which
+  step through the stations, then off. The radio keys (`radio_next` / `radio_previous`, the mouse
+  wheel by default) are bound to them. As with `/engine`, only the driver can: anyone else gets
+  "Only the driver can do that." The server sets the car's `vana:radio`, and every client in the car
+  shows the new station's name when it changes.
 - The station's name shows top centre on getting in and on each switch, as vanilla does. The font
   and colour are approximations (`hud` in the config).
 - The radio plays while the engine runs.
