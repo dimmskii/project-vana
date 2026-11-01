@@ -10,6 +10,8 @@ local busy = {}     -- doorway index -> player inside
 local cleared = {}  -- player -> doorway they came out into (no way back in until they drive off it)
 local nameOf = {}   -- upgrade ID -> name
 for name, id in pairs(CarModIds) do nameOf[id] = name end
+local isSpoiler = {}
+for _, id in ipairs(CarSpoilerIds) do isSpoiler[id] = true end
 
 local function loadStock()
     local text = SA.readFile("data/shopping.dat")
@@ -42,6 +44,26 @@ local function sameTune(a, b)
     for k, v in pairs(a) do if b[k] ~= v then return false end end
     for k, v in pairs(b) do if a[k] ~= v then return false end end
     return true
+end
+
+-- The model whose parts an added model (vana-cars) takes: its vanilla parent.
+local function partsModel(vehicle)
+    local model = getElementModel(vehicle)
+    local res = getResourceFromName("vana-cars")
+    if not res or getResourceState(res) ~= "running" then return model end
+    local ok, parent = pcall(function() return exports["vana-cars"]:getParent(model) end)
+    return ok and parent or model
+end
+
+-- The parts this vehicle takes (ID -> true). MTA passes every spoiler on every car, though only some
+-- models have somewhere to put one (bought, it never shows): spoilers go by config/spoilers_data.lua.
+local function fitsOf(vehicle)
+    local fits, spoilers = {}, {}
+    for _, id in ipairs(CarSpoilers[partsModel(vehicle)] or {}) do spoilers[id] = true end
+    for _, id in ipairs(getVehicleCompatibleUpgrades(vehicle)) do
+        if not isSpoiler[id] or spoilers[id] then fits[id] = true end
+    end
+    return fits
 end
 
 local function paintjobsOf(model)
@@ -82,11 +104,16 @@ local function restore(vehicle, base)
     if not sameTune(vehicles("getTune", vehicle) or {}, base.tune) then vehicles("setTuneTable", vehicle, base.tune) end
 end
 
+-- Ours: taking a part off, free, first in its category when the car has one there. value: the upgrade
+-- slot (a number) or the performance category (its key).
+local function removeItem(value, label)
+    return { key = "remove:" .. value, kind = "remove", value = value, label = "Remove " .. label, fits = true }
+end
+
 -- The garage's menu for this vehicle: categories (upgrade slots, in slot order) of items, each
 -- { key = ID, label, price, fits, owned }, then colours and paintjobs.
 local function menuFor(s)
-    local fits, seen, bySlot = {}, {}, {}
-    for _, id in ipairs(getVehicleCompatibleUpgrades(s.vehicle)) do fits[id] = true end
+    local fits, seen, bySlot = fitsOf(s.vehicle), {}, {}
     local names = {}
     for _, n in ipairs(stock[s.garage.shop] or {}) do names[#names + 1] = n end
     for _, n in ipairs(G.everywhere) do names[#names + 1] = n end
@@ -103,19 +130,34 @@ local function menuFor(s)
     -- Ours: a repair, as a Pay 'n' Spray does it, only when there's something to fix.
     local categories = { { name = "Repair", items = { { key = "repair", kind = "repair", value = 1, label = "Repair the vehicle",
         price = SprayConfig.price, fits = isVehicleDamaged(s.vehicle), reason = "Nothing to repair." } } } }
+    -- What it has, even where this garage doesn't sell it (a tuned car off the street).
+    local fitted = {} -- slot name -> true
+    for id in pairs(s.base.upgrades) do
+        local name = getVehicleUpgradeSlotName(id)
+        fitted[name] = true
+        if not seen[id] then
+            seen[id] = true
+            local price = prices[nameOf[id]]
+            bySlot[name] = bySlot[name] or {}
+            table.insert(bySlot[name], { key = id, kind = "part", value = id, price = price and price[2] or 0,
+                label = price and Gxt.get(price[1]) or nameOf[id] or tostring(id), fits = true, owned = true })
+        end
+    end
     for slot = 0, 16 do
         local name = getVehicleUpgradeSlotName(slot)
         if bySlot[name] then
             table.sort(bySlot[name], function(a, b) return a.price < b.price end)
+            if fitted[name] then table.insert(bySlot[name], 1, removeItem(slot, name)) end
             categories[#categories + 1] = { name = name, items = bySlot[name] }
         end
     end
     -- Ours: performance parts, a category each; a level replaces the one before it.
     for _, cat in ipairs(vehicles("getTuneOptions") or {}) do
         local items = {}
+        if s.base.tune[cat.key] then items[1] = removeItem(cat.key, cat.name) end
         for level, l in ipairs(cat.levels) do
-            items[level] = { key = cat.key .. ":" .. level, kind = "tune", value = { cat.key, level }, label = l.name, price = l.price,
-                             fits = true, owned = s.base.tune[cat.key] == level }
+            items[#items + 1] = { key = cat.key .. ":" .. level, kind = "tune", value = { cat.key, level }, label = l.name, price = l.price,
+                                  fits = true, owned = s.base.tune[cat.key] == level }
         end
         categories[#categories + 1] = { name = cat.name, items = items, performance = true }
     end
@@ -205,8 +247,29 @@ local function leave(player, now)
     setTimer(out, 1000, 1)
 end
 
--- Trying an item on: kind "part" (ID), "colour" ({ slot 1 or 2, palette index }), "paintjob" (0-2);
--- nil: back to what the car has.
+-- Takes off what the car has in an upgrade slot (value: a number) or a performance category (its
+-- key), from `base` (the car's state; nil: just the car, for a try-on). True if there was something.
+local function removePart(vehicle, value, base)
+    if type(value) == "number" then
+        local id = getVehicleUpgradeOnSlot(vehicle, value)
+        if not id or id == 0 then return false end
+        removeVehicleUpgrade(vehicle, id)
+        if base then base.upgrades[id] = nil end
+        return true
+    elseif type(value) == "string" then
+        local tune = {}
+        for k, v in pairs(base and base.tune or vehicles("getTune", vehicle) or {}) do tune[k] = v end
+        if not tune[value] then return false end
+        tune[value] = nil
+        if base then base.tune = tune end
+        vehicles("setTuneTable", vehicle, tune)
+        return true
+    end
+    return false
+end
+
+-- Trying an item on: kind "part" (ID), "colour" ({ slot 1 or 2, palette index }), "paintjob" (0-2),
+-- "tune" ({ category, level }), "remove" (see removePart); nil: back to what the car has.
 addEvent("vana-garage:preview", true)
 addEventHandler("vana-garage:preview", resourceRoot, function(kind, value)
     local s = sessions[client]
@@ -229,6 +292,8 @@ addEventHandler("vana-garage:preview", resourceRoot, function(kind, value)
         for k, v in pairs(s.base.tune) do tune[k] = v end
         tune[tostring(value[1])] = tonumber(value[2])
         vehicles("setTuneTable", s.vehicle, tune)
+    elseif kind == "remove" then
+        removePart(s.vehicle, value)
     end
 end)
 
@@ -237,14 +302,20 @@ addEventHandler("vana-garage:buy", resourceRoot, function(kind, value)
     local s = sessions[client]
     if not s or not s.base then return end
     local v, base = s.vehicle, s.base
+    if kind == "remove" then
+        restore(v, base)
+        if not removePart(v, value, base) then return end
+        base.upgrades = stateOf(v).upgrades
+        markKept(s)
+        say(client, "Removed.", true)
+        return triggerClientEvent(client, "vana-garage:open", resourceRoot, menuFor(s), true)
+    end
     local price
     if kind == "part" then
         local name = nameOf[value]
         local p = name and prices[name]
         if not p then return end
-        local fits = false
-        for _, id in ipairs(getVehicleCompatibleUpgrades(v)) do fits = fits or id == value end
-        if not fits then return say(client, Gxt.get("MODNO2") or "You cannot mod this vehicle.") end
+        if not fitsOf(v)[value] then return say(client, Gxt.get("MODNO2") or "You cannot mod this vehicle.") end
         if base.upgrades[value] then return say(client, Gxt.get("CLTHNO2") or "You have already bought this item!") end
         price = p[2]
     elseif kind == "colour" or kind == "paintjob" then
@@ -361,10 +432,14 @@ addCommandHandler("garagetest", function(source)
     for _, c in ipairs(m.categories) do for _, item in ipairs(c.items) do total = total + 1 if item.fits then fit = fit + 1 end end end
     local copFits = 0
     for _, id in ipairs(getVehicleCompatibleUpgrades(cop)) do if id == 1087 or id == 1010 or id == 1025 then copFits = copFits + 1 end end
+    -- Spoilers only where the model has somewhere to put one: a Sentinel takes the Win, a police car none.
+    local sentinel = createVehicle(405, 10, 0, -50)
+    local spoilersOk = fitsOf(sentinel)[1001] == true and not fitsOf(cop)[1001] and not fitsOf(car)[1000]
+    destroyElement(sentinel)
     destroyElement(car)
     destroyElement(cop)
     outputServerLog(("[garagetest] stock: %s; unresolved: %s"):format(table.concat(counts, ", "), #missing == 0 and "none" or table.concat(missing, " ")))
-    outputServerLog(("[garagetest] Blade at Loco Low Co.: %d categories, %d of %d items fit, %d paintjobs; police car takes hydraulics, nitro, wheels: %s")
-        :format(#m.categories, fit, total, m.paintjobs, copFits == 3 and "yes" or "no"))
-    outputServerLog("[garagetest] " .. ((#missing == 0 and fit > 0 and copFits == 3) and "PASS" or "FAIL"))
+    outputServerLog(("[garagetest] Blade at Loco Low Co.: %d categories, %d of %d items fit, %d paintjobs; police car takes hydraulics, nitro, wheels: %s; spoilers by model: %s")
+        :format(#m.categories, fit, total, m.paintjobs, copFits == 3 and "yes" or "no", spoilersOk and "yes" or "no"))
+    outputServerLog("[garagetest] " .. ((#missing == 0 and fit > 0 and copFits == 3 and spoilersOk) and "PASS" or "FAIL"))
 end)

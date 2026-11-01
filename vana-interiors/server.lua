@@ -94,7 +94,7 @@ local function transition(player, from, to)
         triggerClientEvent(player, "vana-interiors:arrived", resourceRoot, token, to.ex, to.ey, to.ez)
         setTimer(release, CONFIG.holdMs, 1, player, token)
         busy[player] = getTickCount()
-        -- Other resources react to arrivals (e.g. the closet opens on reaching the changing room).
+        -- Other resources can react to arrivals.
         -- Arguments: entrance name, from interior, to interior, arrived at a hub (not a door).
         triggerEvent("onPlayerUseEntrance", player, to.name, from.interior, to.interior, not isDoor(to))
     end, CONFIG.fadeMs + 100, 1)

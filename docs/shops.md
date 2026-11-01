@@ -38,7 +38,7 @@ Prices and stock come from the retail `shopping.dat`, and names from the retail 
 - **Prices:** `shopping.dat`'s, overridable per item in `config/shops.lua` (`prices`). Each shop interior has a point where customers stand (`[data]/vana-data-shops/shops.map`): walking onto
 its orange marker opens the menu, as vanilla's counters do, and `/use` (F) there opens it again.
 - **Actions** ([controls.md](controls.md)): each point runs its kind's action (`/buyfood`, `/buyweapons`,
-  `/buyclothes`, `/buyitems`, `/haircut`, `/tattoo`, `/learnstyle`), or the one its `action` field
+  `/buyclothes`, `/buyitems`, `/haircut`, `/tattoo`, `/learnstyle`, `/changeclothes`), or the one its `action` field
   names. The same command, or the keeper's entry in `/interact`, serves you from anywhere in the shop
   in sight of the keeper (8 m), who seats you; shops without a keeper (the gym trainers, the 24/7s
   without a clerk yet) want you at the counter.
@@ -107,9 +107,14 @@ an offset from it, in `config/keepers.lua`; the keeper models are vanilla's.
 ### Closet
 
 Every safehouse closet door leads into one shared changing room (the `CHANGER` hub, see
-Entrances). Arriving there opens the closet: every clothing item the player owns, from all chains,
-by the same categories, free to put on, plus "Take off" per category. `vana-interiors` reports
-arrivals with the `onPlayerUseEntrance` event (name, from interior, to interior, arrived at a hub).
+Entrances), as in vanilla (`wardrobe.sc`, `WARROBE`). Besides the marker back out, the room has the
+wardrobe's own marker in front of its changing room door (shop point `CLOSET`). Stopping there runs
+the clothes shops' changing room: CJ steps in (`CLO_In`), poses under vanilla's camera, steps out
+when done. It's the clothes shops' layout moved by `wardrobe.sc`'s offset (43.529, 0.694, 0.012),
+with Binco's door (`CJ_BINCO_DOOR`, 2877) and no clerk (`Keepers.CLOSET` has no model). One player
+at a time. The menu: every clothing item the player owns, from all chains, by the same categories,
+free to put on, plus "Take off" per category. `vana-interiors` still reports arrivals with the
+`onPlayerUseEntrance` event (name, from interior, to interior, arrived at a hub).
 
 ### Shop points
 
@@ -168,8 +173,14 @@ Low Co. (LS) and Wheel Arch Angels (SF), all open.
 - **Stock:** each garage's `shopping.dat` list (`carmod1` normal cars, `carmod2` lowriders,
   `carmod3` street racers), priced from its `CarMods` section, named by the game's text (each item's
   name tag). Ours, at every garage: all 17 wheels, nitro (2x, 5x, 10x), hydraulics, the stereo, and
-  the 20 spoilers MTA fits to any car. Categories are MTA's upgrade slots. Parts this vehicle can't
-  take (`getVehicleCompatibleUpgrades`) are shown greyed out, `N/A`.
+  the 20 spoilers. Categories are MTA's upgrade slots. Parts this vehicle can't take
+  (`getVehicleCompatibleUpgrades`) are shown greyed out, `N/A`. Spoilers go by model instead: MTA
+  passes every spoiler on every car, though only 37 models have somewhere to put one (bought, it never
+  showed), so each model's own spoilers come from MTA's per-model table (`config/spoilers_data.lua`;
+  an added model, vana-cars', takes its parent's).
+- **Removing (ours):** a category the car has a part in starts with **Remove** (free): the part comes
+  off, back to stock. The same for performance parts (Turbo, the lightweight kit, AWD...). Parts the
+  car has that this garage doesn't sell are listed too, so they can come off.
 - **Trying on:** the highlighted part, colour or paintjob is put on the car (server-side, so the car
   really changes); leaving takes off whatever wasn't bought. The camera frames the category's part
   of the car (front, rear, side, roof).
@@ -186,8 +197,10 @@ Low Co. (LS) and Wheel Arch Angels (SF), all open.
   what was bought (element data `vana:garage`), not in the garage's dimension with a part on trial.
 - **Data:** `config/carmods_data.lua` (part IDs from `veh_mods.ide`, the palette from `carcols.dat`)
   is seeded by `tools/seed/seed_carmods.py`; stock and prices are read from `data/shopping.dat`.
+  `config/spoilers_data.lua` (each model's spoilers) is seeded by `tools/seed/seed_spoilers.py` from
+  MTA Neon's `Server/mods/deathmatch/logic/CVehicleUpgrades.cpp`.
 - `garagetest` (console): the stock resolves, a Blade's menu builds, a police car takes the
-  universal parts. Warp names for the doorways: `transfender`, `transfender.sf`, `transfender.lv`,
+  universal parts, and spoilers go by model (a Sentinel takes one, a police car and a Blade none). Warp names for the doorways: `transfender`, `transfender.sf`, `transfender.lv`,
   `locolow`, `waa`.
 - **Not done:** the door closing behind you as vanilla's does, vanilla's per-part camera moves, the bonnet ornaments 1111/1112
   (MTA refuses them on every model).
@@ -263,8 +276,8 @@ gyms and Madd Dogg's home gym. Vanilla's gym scripts (`GYMBIKE`, `GYMBENC`, `GYM
   `X711S3` (24.5, -2646.6) is kept commented out in `entrances.map`.
 - **The LV sex shop** (`SEXSHOP`, ours): a misc counter with a clerk (246, VHFYST3) and its own stock
   (`stocks` in `config/shops.lua`: a dildo and flowers).
-- **Wardrobe:** vanilla's safehouse wardrobe script (`WARROBE`) isn't ported; our closet is the
-  menu in the shared changing room.
+- **Wardrobe:** vanilla's first menu picks a chain, then its categories; ours lists the categories
+  straight away, every chain's items together.
 - **Hostile keepers:** keepers can be killed (back after a minute) but don't react; vanilla's react
   when attacked (the Ammu-Nation clerk fights back).
 - **Other shops:** car mod shops (TransFender, Loco Low Co., Wheel Arch Angels).

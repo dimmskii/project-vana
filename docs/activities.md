@@ -99,7 +99,10 @@ clock runs out. Each fare adds distance x 100 ms to the clock, falling to 60 ms 
 Pay is distance / 40, or / 16 if the tip bar is still up (SPEED BONUS!); damage eats the tip. Every
 5 fares in a row pays $500, then $1000 and so on. A trashed taxi loses its fare until repaired. 50
 fares in total (saved) earns vanilla's reward: nitro in every taxi you drive. Ours: fares spawn
-60-180 m away and ride 300-1500 m; 10 s to get back in the taxi.
+60-180 m away and ride 300-1500 m; 10 s to get back in the taxi. A fare let out (`Activity.letOut`)
+gets out through their own door with GTA's exit, taken out beside it if still seated after a few
+tries (never under the car), then walks on as one of vana-peds' pedestrians; one fleeing a trashed
+taxi runs from you. Without vana-peds (or a sidewalk near) they go after 15 s.
 
 ### Paramedic (`AMBULAN`)
 

@@ -1,15 +1,24 @@
--- Vanilla's programme for one station: a port of CAERadioTrackManager (US 1.0; addresses and the
--- tables in docs/radio.md), playing the story as complete. Plain Lua, no MTA calls: tools can run it.
--- VanillaStation.new(radio) for vanilla's radio ID (0 the police scanner, 1 Playback FM .. 11 WCTR);
--- :next(ctx) gives the next stretch, as ChooseTracksForStation does: a list of { track, kind },
--- kind "ident", "advert", "banter", "intro", "body" or "outro". ctx: { hour, weather(id) -> bool }
--- (weather(id): that weather is due, as CWeather::ForecastWeather(id, 3)).
+-- Vanilla's programme for one station: a port of CAERadioTrackManager (US 1.0; see docs/radio.md),
+-- with the story treated as complete. Plain Lua with no MTA calls, so tools can run it too.
+
+---@class VanillaStation
+---@field radio integer vanilla radio ID: 0 police scanner, 1 Playback FM .. 11 WCTR
+---@field data table RadioData.stations entry
+---@field excluded table<integer, true> adverts this station never plays
+---@field random fun(lo: integer?, hi: integer?): number
+---@field music integer[] recent song indices, newest first
+---@field idents integer[]
+---@field adverts integer[]
+---@field banter integer[]
 VanillaStation = {}
 VanillaStation.__index = VanillaStation
 
 local WCTR, SCANNER = 11, 0
 local MUSIC_HISTORY, IDENT_HISTORY, ADVERT_HISTORY, BANTER_HISTORY = 20, 8, 40, 15
 
+---@param radio integer
+---@param random? fun(lo: integer?, hi: integer?): number defaults to math.random
+---@return VanillaStation
 function VanillaStation.new(radio, random)
     local data = RadioData.stations[radio + 1]
     assert(data, "no vanilla radio station " .. tostring(radio))
@@ -19,102 +28,133 @@ function VanillaStation.new(radio, random)
                           music = {}, idents = {}, adverts = {}, banter = {} }, VanillaStation)
 end
 
--- CAEAudioUtility: ResolveProbability, and GetRandomNumberInRange (inclusive).
-function VanillaStation:chance(p) return self.random() < p end
-function VanillaStation:range(lo, hi) return self.random(lo, hi) end
+--- CAEAudioUtility::ResolveProbability.
+---@param probability number
+---@return boolean
+function VanillaStation:chance(probability)
+    return self.random() < probability
+end
 
-local function recent(history, value, depth)
+--- CAEAudioUtility::GetRandomNumberInRange (inclusive).
+---@param lo integer
+---@param hi integer
+---@return integer
+function VanillaStation:range(lo, hi)
+    return self.random(lo, hi)
+end
+
+---@param history integer[]
+---@param value integer
+---@param depth integer
+---@return boolean
+local function isRecent(history, value, depth)
     for i = 1, depth do
         if history[i] == value then return true end
     end
     return false
 end
 
--- Add*IndexToHistory: newest first, not twice in a row.
+--- Add*IndexToHistory: newest first, never the same twice in a row.
+---@param history integer[]
+---@param value integer?
+---@param size integer
 local function remember(history, value, size)
     if value == nil or history[1] == value then return end
     table.insert(history, 1, value)
     history[size + 1] = nil
 end
 
--- ChooseMusicTrackIndex: any song but the station's last few. WCTR's talk shows (ChooseTalkRadioShow)
--- depend on story progress: all count as available, drawn the same way.
+--- ChooseMusicTrackIndex: any song but the last few. WCTR's talk shows (ChooseTalkRadioShow) all
+--- count as available.
+---@return integer songIndex 0-based
 function VanillaStation:chooseSong()
-    local n = #self.data.songs
-    local depth = math.min(MUSIC_HISTORY, self.radio == WCTR and n - 1 or n - 2)
+    local count = #self.data.songs
+    local depth = math.min(MUSIC_HISTORY, self.radio == WCTR and count - 1 or count - 2)
     local index
-    repeat index = self:range(0, n - 1) until not recent(self.music, index, depth)
+    repeat index = self:range(0, count - 1) until not isRecent(self.music, index, depth)
     return index
 end
 
--- ChooseIdentIndex.
+--- ChooseIdentIndex.
+---@return integer? track
 function VanillaStation:chooseIdent()
     local range = self.data.idents
     if not range then return end
     local depth = math.min(IDENT_HISTORY, range[2] - range[1] - 1)
     local id
-    repeat id = self:range(range[1], range[2]) until not recent(self.idents, id, depth)
+    repeat id = self:range(range[1], range[2]) until not isRecent(self.idents, id, depth)
     return id
 end
 
--- ChooseAdvertIndex: any advert but the station's excluded ones and its last 40.
+--- ChooseAdvertIndex: any advert but the excluded ones and the last 40.
+---@return integer track
 function VanillaStation:chooseAdvert()
     local lo, hi = RadioData.adverts[1], RadioData.adverts[2]
     local id
-    repeat id = self:range(lo, hi) until not self.excluded[id] and not recent(self.adverts, id, ADVERT_HISTORY)
+    repeat id = self:range(lo, hi) until not self.excluded[id] and not isRecent(self.adverts, id, ADVERT_HISTORY)
     return id
 end
 
--- Picks from one of the station's banter lists, from a random place onwards, the first one not
--- played lately; nil if every one was. The history depth comes from the general list's size, for
--- every list (as vanilla).
+--- The first banter line of a list, from a random start, not played lately. Every list uses the
+--- general list's history depth, as vanilla does.
+---@param kind string "general", "rain", "fog", "morning", "evening" or "night"
+---@return integer? track nil when every line was played lately
 function VanillaStation:fromList(kind)
     local range = self.data.banter[kind]
     if not range then return end
     local general = self.data.banter.general
     local depth = general and math.min(BANTER_HISTORY, general[2] - general[1] - 1) or 0
-    local n = range[2] - range[1] + 1
-    local start = self:range(0, n - 1)
-    for k = 0, n - 1 do
-        local id = range[1] + (start + k) % n
-        if not recent(self.banter, id, depth) then return id end
+    local count = range[2] - range[1] + 1
+    local start = self:range(0, count - 1)
+    for offset = 0, count - 1 do
+        local id = range[1] + (start + offset) % count
+        if not isRecent(self.banter, id, depth) then return id end
     end
 end
 
--- ChooseDJBanterIndex: nil (the caller plays an advert instead) 40% of the time; otherwise by the
--- weather due, then the time of day. Vanilla only talks outdoors (area 0) and the scanner switches
--- lists during the riots: neither applies to a server-wide station.
-function VanillaStation:chooseBanter(ctx)
+--- ChooseDJBanterIndex: nothing 40% of the time (the caller plays an advert), else by the weather
+--- due, then the time of day. Vanilla only talks outdoors and switches the scanner's lists during
+--- the riots; neither applies to a server-wide station.
+---@param context { hour: integer, weather: fun(id: integer): boolean }
+---@return integer? track
+function VanillaStation:chooseBanter(context)
     if self.radio == SCANNER then return self:fromList("general") end
     if not self:chance(0.6) then return end
     local id
-    local w = ctx.weather
-    if w(16) or w(8) then
+    local weatherDue = context.weather
+    if weatherDue(16) or weatherDue(8) then
         if self:chance(0.5) then id = self:fromList("rain") end
-    elseif w(9) and self:chance(0.5) then
-        -- The sunny list's own condition (hour under 8 and at least 6) never holds: on to fog.
+    elseif weatherDue(9) and self:chance(0.5) then
+        -- The sunny list's condition (hour under 8 and at least 6) never holds, so it goes to fog.
         id = self:fromList("fog")
     end
     if id then return id end
-    local h = ctx.hour
-    if h >= 6 and h < 9 then
+    local hour = context.hour
+    if hour >= 6 and hour < 9 then
         if self:chance(0.3) then id = self:fromList("morning") end
-    elseif h >= 18 and h < 21 then
+    elseif hour >= 18 and hour < 21 then
         if self:chance(0.3) then id = self:fromList("evening") end
-    elseif (h >= 22 or h < 3) and self:chance(0.3) then
+    elseif (hour >= 22 or hour < 3) and self:chance(0.3) then
         id = self:fromList("night")
     end
     return id or self:fromList("general")
 end
 
-local function pick(range, self)
+---@param range integer[]?
+---@return integer?
+function VanillaStation:pickIn(range)
     return range and self:range(range[1], range[2]) or nil
 end
 
--- QueueUpTracksForStation: adds one kind of piece; false when there was none (no banter).
-function VanillaStation:queue(out, kind, ctx)
-    local function add(track, what)
-        if track then out[#out + 1] = { track = track, kind = what } end
+--- QueueUpTracksForStation: appends one piece. Music kinds: "intro" (intro, body, outro), "track"
+--- (body, outro), "outro" (a new song's outro only).
+---@param out table[] { track, kind } list to append to
+---@param kind string "ident", "advert", "banter", "intro", "track" or "outro"
+---@param context table
+---@return boolean queued false when there was nothing to play (no ident or banter)
+function VanillaStation:queue(out, kind, context)
+    local function add(track, label)
+        if track then out[#out + 1] = { track = track, kind = label } end
     end
     if kind == "ident" then
         local id = self:chooseIdent()
@@ -127,49 +167,50 @@ function VanillaStation:queue(out, kind, ctx)
         add(id, "advert")
         return true
     elseif kind == "banter" then
-        local id = self:chooseBanter(ctx)
+        local id = self:chooseBanter(context)
         remember(self.banter, id, BANTER_HISTORY)
         add(id, "banter")
         return id ~= nil
     end
-    -- Music: "intro" is intro + body + outro, "track" body + outro, "outro" a newly picked song's outro.
     local index = self:chooseSong()
     local song = self.data.songs[index + 1]
     remember(self.music, index, MUSIC_HISTORY)
-    if kind == "intro" then add(pick(song.intros, self), "intro") end
+    if kind == "intro" then add(self:pickIn(song.intros), "intro") end
     if kind ~= "outro" then add(song.body, "body") end
-    add(pick(song.outros, self), "outro")
+    add(self:pickIn(song.outros), "outro")
     return true
 end
 
--- ChooseTracksForStation.
-function VanillaStation:next(ctx)
+--- ChooseTracksForStation: the next stretch of the programme.
+---@param context table
+---@return { track: integer, kind: string }[]
+function VanillaStation:next(context)
     local out = {}
-    local function q(kind) return self:queue(out, kind, ctx) end
-    local function talk() -- maybe an ident, then banter or else an advert
-        if self:chance(0.5) then q("ident") end
-        if not q("banter") then q("advert") end
+    local function queue(kind) return self:queue(out, kind, context) end
+    local function talk()
+        if self:chance(0.5) then queue("ident") end
+        if not queue("banter") then queue("advert") end
     end
     if self:chance(0.95) then
         if self:chance(0.9) then
-            q("track")
+            queue("track")
         elseif self:chance(0.5) then
-            if self:chance(0.5) then q("ident") end
-            q("intro")
+            if self:chance(0.5) then queue("ident") end
+            queue("intro")
         else
-            q("outro")
+            queue("outro")
             if self.radio == SCANNER then
-                q("banter")
+                queue("banter")
             elseif self:chance(0.5) then
-                if self:chance(0.5) then q("ident") end
-                q("intro")
+                if self:chance(0.5) then queue("ident") end
+                queue("intro")
             else
                 talk()
             end
         end
     else
-        if self.radio == SCANNER then q("banter") else talk() end
-        q("intro")
+        if self.radio == SCANNER then queue("banter") else talk() end
+        queue("intro")
     end
     return out
 end

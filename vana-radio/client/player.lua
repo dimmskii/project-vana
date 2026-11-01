@@ -1,95 +1,102 @@
--- The client side of the stations: the server's clock, each station's schedule, and emitters, the
--- places a station is heard from (the car you're in, a car outside, a speaker). An emitter plays
--- whatever segment of its station is due, at the position it's due at, and loads the next one ahead
--- so they join without a gap.
-local R = RadioConfig
-Radio = { stations = {}, volume = 1 }
+-- The client side of the stations: the server clock, each station's schedule, and emitters (the car
+-- you're in, a car outside, a speaker). An emitter plays the segment due on its station at the
+-- position due, and preloads the next one so they join without a gap.
+
+local config = RadioConfig
+
+---@class Emitter
+---@field station integer
+---@field volume number?
+---@field is3D boolean
+---@field element element? followed by a 3D sound
+---@field x number?
+---@field y number?
+---@field z number?
+---@field interior integer?
+---@field dimension integer?
+---@field minDistance number?
+---@field maxDistance number?
+---@field muffle table? parametric EQ settings
+---@field playing table? { sound, segment, checkedAt } or { sound, url }
+---@field preloaded table? { sound, segment }
+
+Radio = { stations = {}, volume = 1, byId = {} }
+for _, def in ipairs(config.stations) do Radio.byId[def.id] = def end
+
+---@type table<Emitter, true>
 local emitters = {}
+---@type { roundTrip: integer, offset: number }[] newest last
+local clockSamples = {}
+---@type number?
+local clockOffset
+local streamsPlaying = 0
+local debugOverlay = false
 
-----------------------------------------------------------------------------------------------------
--- The server's clock: our offset from it, from the ping with the shortest round trip lately.
+--- The server clock, or nil before the first sync.
+---@return number?
+function Radio.now()
+    return clockOffset and getTickCount() + clockOffset
+end
 
-local samples = {} -- { rtt, offset }, newest last
-local offset
+--- Export: the server clock (its getTickCount) on this client, or false before the first sync.
+---@return number|false
+function getServerTime()
+    return Radio.now() or false
+end
 
-function Radio.now() return offset and getTickCount() + offset end
+local function ping()
+    triggerServerEvent("vana-radio:ping", resourceRoot, getTickCount())
+end
 
--- For other resources (export): the server's clock (its getTickCount) here, or false before the
--- first sync.
-function getServerTime() return Radio.now() or false end
-
-local function ping() triggerServerEvent("vana-radio:ping", resourceRoot, getTickCount()) end
-
-addEvent("vana-radio:pong", true)
-addEventHandler("vana-radio:pong", resourceRoot, function(sent, serverNow)
-    local now = getTickCount()
-    local rtt = now - sent
-    samples[#samples + 1] = { rtt, serverNow + rtt / 2 - now }
-    if #samples > 8 then table.remove(samples, 1) end
-    local best = samples[1]
-    for _, s in ipairs(samples) do if s[1] < best[1] then best = s end end
-    offset = best[2]
-end)
-
-----------------------------------------------------------------------------------------------------
--- Schedules
-
-local byId = {}
-for _, def in ipairs(R.stations) do byId[def.id] = def end
-Radio.byId = byId
-
-addEvent("vana-radio:schedule", true)
-addEventHandler("vana-radio:schedule", resourceRoot, function(all, speakers)
-    for id, st in pairs(all) do Radio.stations[id] = { segments = st.segments or {}, url = st.url } end
-    Radio.speakers = speakers or {}
-end)
-
-addEvent("vana-radio:segments", true)
-addEventHandler("vana-radio:segments", resourceRoot, function(id, added)
-    local st = Radio.stations[id]
-    if not st then return end
-    for _, seg in ipairs(added) do st.segments[#st.segments + 1] = seg end
-    local now = Radio.now()
-    while now and st.segments[1] and st.segments[1].at + st.segments[1].length < now - 5000 do table.remove(st.segments, 1) end
-end)
-
--- The segment due at `now` on a station, and the one after it.
+--- The segment due at `now` on a station, and the one after it.
+---@param id integer
+---@param now number?
+---@return table? current
+---@return table? following
 function Radio.segmentAt(id, now)
-    local st = Radio.stations[id]
-    if not st or not now then return end
-    for i, seg in ipairs(st.segments) do
-        if now < seg.at + seg.length then
-            if now >= seg.at then return seg, st.segments[i + 1] end
-            return nil, seg
+    local station = Radio.stations[id]
+    if not station or not now then return end
+    for i, segment in ipairs(station.segments) do
+        if now < segment.at + segment.length then
+            if now >= segment.at then return segment, station.segments[i + 1] end
+            return nil, segment
         end
     end
 end
 
-----------------------------------------------------------------------------------------------------
--- Emitters. opts: station, volume; 3D ones: element (followed) or x, y, z, interior, dimension,
--- minDistance, maxDistance, muffle (parameq settings).
-
--- A vanilla track ID's archive (playSFX's name) and 1-based place in it.
+--- A vanilla track ID's audio archive (playSFX's name) and 1-based index in it.
+---@param track integer
+---@return string? archive
+---@return integer? index
 local function archiveOf(track)
-    for _, s in ipairs(RadioStreams) do
-        if track < s[2] then return s[1], track + 1 end
-        track = track - s[2]
+    for _, stream in ipairs(RadioStreams) do
+        local name, count = stream[1], stream[2]
+        if track < count then return name, track + 1 end
+        track = track - count
     end
 end
 
-local streamsPlaying = 0
+---@param emitter Emitter
+---@return number
+local function emitterVolume(emitter)
+    return (emitter.volume or 1) * Radio.volume
+end
 
-local function makeSound(e, seg, url)
+---@param emitter Emitter
+---@param segment table?
+---@param url string? a stream to play instead of a segment
+---@return sound?
+local function createSound(emitter, segment, url)
     local sound
     if url then
-        if streamsPlaying >= R.maxStreams then return end
-        sound = e.is3D and playSound3D(url, e.x or 0, e.y or 0, e.z or 0) or playSound(url)
+        if streamsPlaying >= config.maxStreams then return end
+        sound = emitter.is3D and playSound3D(url, emitter.x or 0, emitter.y or 0, emitter.z or 0) or playSound(url)
     else
-        local archive, index = archiveOf(seg.track)
+        local archive, index = archiveOf(segment.track)
         if not archive then return end
-        if e.is3D then
-            local x, y, z = e.x or 0, e.y or 0, e.z or 0
-            if e.element and isElement(e.element) then x, y, z = getElementPosition(e.element) end
+        if emitter.is3D then
+            local x, y, z = emitter.x or 0, emitter.y or 0, emitter.z or 0
+            if isElement(emitter.element) then x, y, z = getElementPosition(emitter.element) end
             sound = playSFX3D("radio", archive, index, x, y, z, false)
         else
             sound = playSFX("radio", archive, index, false)
@@ -97,170 +104,223 @@ local function makeSound(e, seg, url)
     end
     if not sound then return end
     if url then streamsPlaying = streamsPlaying + 1 end
-    setSoundVolume(sound, (e.volume or 1) * Radio.volume)
-    if e.is3D then
-        setSoundMinDistance(sound, e.minDistance or 3)
-        setSoundMaxDistance(sound, e.maxDistance or 30)
-        if e.muffle then
+    setSoundVolume(sound, emitterVolume(emitter))
+    if emitter.is3D then
+        setSoundMinDistance(sound, emitter.minDistance or 3)
+        setSoundMaxDistance(sound, emitter.maxDistance or 30)
+        if emitter.muffle then
             setSoundEffectEnabled(sound, "parameq", true)
-            for key, value in pairs(e.muffle) do setSoundEffectParameter(sound, "parameq", key, value) end
+            for key, value in pairs(emitter.muffle) do setSoundEffectParameter(sound, "parameq", key, value) end
         end
-        if e.element and isElement(e.element) then
-            setElementInterior(sound, getElementInterior(e.element))
-            setElementDimension(sound, getElementDimension(e.element))
-            attachElements(sound, e.element)
+        if isElement(emitter.element) then
+            setElementInterior(sound, getElementInterior(emitter.element))
+            setElementDimension(sound, getElementDimension(emitter.element))
+            attachElements(sound, emitter.element)
         else
-            setElementInterior(sound, e.interior or 0)
-            setElementDimension(sound, e.dimension or 0)
+            setElementInterior(sound, emitter.interior or 0)
+            setElementDimension(sound, emitter.dimension or 0)
         end
     end
     return sound
 end
 
-local function drop(e, which)
-    local s = e[which]
-    if s and isElement(s.sound) then
-        destroyElement(s.sound)
-        if s.url then streamsPlaying = streamsPlaying - 1 end
+---@param emitter Emitter
+---@param slot "playing"|"preloaded"
+local function dropSound(emitter, slot)
+    local held = emitter[slot]
+    if held and isElement(held.sound) then
+        destroyElement(held.sound)
+        if held.url then streamsPlaying = streamsPlaying - 1 end
     end
-    e[which] = nil
+    emitter[slot] = nil
 end
 
-local function stopAll(e)
-    drop(e, "playing")
-    drop(e, "loaded")
+---@param emitter Emitter
+local function stopEmitter(emitter)
+    dropSound(emitter, "playing")
+    dropSound(emitter, "preloaded")
 end
 
-function Radio.addEmitter(opts)
-    local e = {}
-    for k, v in pairs(opts) do e[k] = v end
-    e.is3D = opts.element ~= nil or opts.x ~= nil
-    emitters[e] = true
-    return e
+---@param options table station, volume; for 3D: element or x/y/z/interior/dimension, minDistance, maxDistance, muffle
+---@return Emitter
+function Radio.addEmitter(options)
+    local emitter = {}
+    for key, value in pairs(options) do emitter[key] = value end
+    emitter.is3D = options.element ~= nil or options.x ~= nil
+    emitters[emitter] = true
+    return emitter
 end
 
-function Radio.removeEmitter(e)
-    if not e or not emitters[e] then return end
-    stopAll(e)
-    emitters[e] = nil
+---@param emitter Emitter?
+function Radio.removeEmitter(emitter)
+    if not emitter or not emitters[emitter] then return end
+    stopEmitter(emitter)
+    emitters[emitter] = nil
 end
 
-function Radio.setEmitterStation(e, id)
-    if e.station == id then return end
-    stopAll(e)
-    e.station = id
+---@param emitter Emitter
+---@param id integer
+function Radio.setEmitterStation(emitter, id)
+    if emitter.station == id then return end
+    stopEmitter(emitter)
+    emitter.station = id
 end
 
--- Volume changes reach the playing sounds.
+--- Applies a changed Radio.volume to every playing sound.
 function Radio.refreshVolume()
-    for e in pairs(emitters) do
-        if e.playing and isElement(e.playing.sound) then setSoundVolume(e.playing.sound, (e.volume or 1) * Radio.volume) end
+    for emitter in pairs(emitters) do
+        if emitter.playing and isElement(emitter.playing.sound) then
+            setSoundVolume(emitter.playing.sound, emitterVolume(emitter))
+        end
     end
 end
 
-local function update(e, now)
-    local st = Radio.stations[e.station]
-    if not st then return stopAll(e) end
-    if st.url then
-        if not e.playing or e.playing.url ~= st.url then
-            stopAll(e)
-            local sound = makeSound(e, nil, st.url)
-            if sound then e.playing = { sound = sound, url = st.url } end
-        end
-        return
+---@param emitter Emitter
+---@param url string
+local function updateStream(emitter, url)
+    if emitter.playing and emitter.playing.url == url then return end
+    stopEmitter(emitter)
+    local sound = createSound(emitter, nil, url)
+    if sound then emitter.playing = { sound = sound, url = url } end
+end
+
+---@param emitter Emitter
+---@param now number
+local function updateEmitter(emitter, now)
+    local station = Radio.stations[emitter.station]
+    if not station then return stopEmitter(emitter) end
+    if station.url then return updateStream(emitter, station.url) end
+
+    local segment, following = Radio.segmentAt(emitter.station, now)
+    if emitter.preloaded and segment == emitter.preloaded.segment then
+        dropSound(emitter, "playing")
+        emitter.playing, emitter.preloaded = emitter.preloaded, nil
+        setSoundPaused(emitter.playing.sound, false)
+        setSoundVolume(emitter.playing.sound, emitterVolume(emitter))
+        emitter.playing.checkedAt = now
     end
-    local seg, nextSeg = Radio.segmentAt(e.station, now)
-    -- The loaded next segment is due: start it.
-    if e.loaded and seg == e.loaded.seg then
-        drop(e, "playing")
-        e.playing, e.loaded = e.loaded, nil
-        setSoundPaused(e.playing.sound, false)
-        setSoundVolume(e.playing.sound, (e.volume or 1) * Radio.volume)
-        e.playing.checked = now
-    end
-    if not e.playing or e.playing.seg ~= seg then
-        drop(e, "playing")
-        if seg and seg.track then
-            local sound = makeSound(e, seg)
-            if sound then
-                setSoundPosition(sound, (now - seg.at) / 1000)
-                e.playing = { sound = sound, seg = seg, checked = now }
-            else
-                e.playing = { seg = seg } -- no audio for it: don't retry every frame
-            end
-        elseif seg then
-            e.playing = { seg = seg }
-        end
-    end
-    local p = e.playing
-    -- A routine fades out over its last `fade` ms.
-    if p and p.sound and isElement(p.sound) and seg and seg.fade then
-        local left = seg.at + seg.length - now
-        local share = left < seg.fade and math.max(0, left / seg.fade) or 1
-        setSoundVolume(p.sound, (e.volume or 1) * Radio.volume * share)
-    end
-    -- Keep it in place: a sound drifts (loading, frame hitches).
-    if p and p.sound and isElement(p.sound) and now - p.checked > 2000 then
-        p.checked = now
-        local want = now - seg.at
-        if math.abs(getSoundPosition(p.sound) * 1000 - want) > R.resyncMs then setSoundPosition(p.sound, want / 1000) end
-    end
-    -- Load the next one shortly before it's due, paused.
-    if nextSeg and nextSeg.track and nextSeg.at - now < R.preloadMs and (not e.loaded or e.loaded.seg ~= nextSeg) then
-        drop(e, "loaded")
-        local sound = makeSound(e, nextSeg)
+    if not emitter.playing or emitter.playing.segment ~= segment then
+        dropSound(emitter, "playing")
+        local sound = segment and segment.track and createSound(emitter, segment)
         if sound then
-            setSoundPaused(sound, true)
-            setSoundVolume(sound, 0)
-            e.loaded = { sound = sound, seg = nextSeg }
+            setSoundPosition(sound, (now - segment.at) / 1000)
+            emitter.playing = { sound = sound, segment = segment, checkedAt = now }
+        elseif segment then
+            -- No audio for this segment: remember it so it isn't retried every frame.
+            emitter.playing = { segment = segment }
+        end
+    end
+
+    local playing = emitter.playing
+    local sound = playing and playing.sound
+    if sound and isElement(sound) then
+        if segment.fade then
+            local left = segment.at + segment.length - now
+            local share = left < segment.fade and math.max(0, left / segment.fade) or 1
+            setSoundVolume(sound, emitterVolume(emitter) * share)
+        end
+        -- Sounds drift (loading, frame hitches): put them back in place every 2 s.
+        if now - playing.checkedAt > 2000 then
+            playing.checkedAt = now
+            local due = now - segment.at
+            if math.abs(getSoundPosition(sound) * 1000 - due) > config.resyncMs then setSoundPosition(sound, due / 1000) end
+        end
+    end
+
+    local preloadDue = following and following.track and following.at - now < config.preloadMs
+    if preloadDue and (not emitter.preloaded or emitter.preloaded.segment ~= following) then
+        dropSound(emitter, "preloaded")
+        local next = createSound(emitter, following)
+        if next then
+            setSoundPaused(next, true)
+            setSoundVolume(next, 0)
+            emitter.preloaded = { sound = next, segment = following }
         end
     end
 end
+
+---@return string[]
+local function debugLines()
+    local now = Radio.now()
+    local best
+    for _, sample in ipairs(clockSamples) do
+        if not best or sample.roundTrip < best.roundTrip then best = sample end
+    end
+    local native = getRadioPlaybackState()
+    local lines = {
+        ("native: channel %s, mode %s, station %s, track %s"):format(tostring(getRadioChannel()), tostring(native and native.mode),
+            tostring(native and native.station), tostring(native and native.trackId)),
+        ("clock: offset %s ms, best round trip %s ms"):format(clockOffset and math.floor(clockOffset) or "-", best and best.roundTrip or "-"),
+    }
+    for emitter in pairs(emitters) do
+        local playing = emitter.playing
+        local segment = playing and playing.segment
+        local line = ("%s station %s: "):format(emitter.is3D and "3D" or "2D", tostring(emitter.station))
+        if segment and now then
+            local archive, index = archiveOf(segment.track or 0)
+            line = line .. ("%s %s (%s #%s) due %.1fs / %.1fs"):format(segment.kind or "?", tostring(segment.track or segment.label),
+                tostring(archive), tostring(index), (now - segment.at) / 1000, segment.length / 1000)
+            if playing.sound and isElement(playing.sound) then
+                line = line .. (", sound at %.1fs"):format(getSoundPosition(playing.sound))
+            else
+                line = line .. ", no sound"
+            end
+        else
+            line = line .. (playing and playing.url or "nothing")
+        end
+        if emitter.preloaded then line = line .. (" | next %s loaded"):format(tostring(emitter.preloaded.segment.track)) end
+        lines[#lines + 1] = line
+    end
+    return lines
+end
+
+addEvent("vana-radio:pong", true)
+addEventHandler("vana-radio:pong", resourceRoot, function(sentAt, serverNow)
+    local now = getTickCount()
+    local roundTrip = now - sentAt
+    clockSamples[#clockSamples + 1] = { roundTrip = roundTrip, offset = serverNow + roundTrip / 2 - now }
+    if #clockSamples > 8 then table.remove(clockSamples, 1) end
+    local best = clockSamples[1]
+    for _, sample in ipairs(clockSamples) do
+        if sample.roundTrip < best.roundTrip then best = sample end
+    end
+    clockOffset = best.offset
+end)
+
+addEvent("vana-radio:schedule", true)
+addEventHandler("vana-radio:schedule", resourceRoot, function(schedule, speakers)
+    for id, station in pairs(schedule) do Radio.stations[id] = { segments = station.segments or {}, url = station.url } end
+    Radio.speakers = speakers or {}
+end)
+
+addEvent("vana-radio:segments", true)
+addEventHandler("vana-radio:segments", resourceRoot, function(id, added)
+    local station = Radio.stations[id]
+    if not station then return end
+    for _, segment in ipairs(added) do station.segments[#station.segments + 1] = segment end
+    local now = Radio.now()
+    while now and station.segments[1] and station.segments[1].at + station.segments[1].length < now - 5000 do
+        table.remove(station.segments, 1)
+    end
+end)
 
 -- Every frame, so a segment starts within a frame of when it's due.
 addEventHandler("onClientRender", root, function()
     local now = Radio.now()
-    if not now then return end
-    for e in pairs(emitters) do update(e, now) end
-end)
-
--- /radiodebug: the game's own radio, the clock, and what each emitter plays against what's due.
-local debugOn = false
-addCommandHandler("radiodebug", function() debugOn = not debugOn end)
-
-addEventHandler("onClientRender", root, function()
-    if not debugOn then return end
-    local now = Radio.now()
-    local best
-    for _, s in ipairs(samples) do if not best or s[1] < best[1] then best = s end end
-    local n = getRadioPlaybackState()
-    local lines = {
-        ("native: channel %s, mode %s, station %s, track %s"):format(tostring(getRadioChannel()), tostring(n and n.mode),
-            tostring(n and n.station), tostring(n and n.trackId)),
-        ("clock: offset %s ms, best round trip %s ms"):format(offset and math.floor(offset) or "-", best and best[1] or "-"),
-    }
-    for e in pairs(emitters) do
-        local p = e.playing
-        local seg = p and p.seg
-        local line = ("%s station %s: "):format(e.is3D and "3D" or "2D", tostring(e.station))
-        if seg and now then
-            local archive, index = archiveOf(seg.track or 0)
-            line = line .. ("%s %s (%s #%s) due %.1fs / %.1fs"):format(seg.kind or "?", tostring(seg.track or seg.label),
-                tostring(archive), tostring(index), (now - seg.at) / 1000, seg.length / 1000)
-            if p.sound and isElement(p.sound) then line = line .. (", sound at %.1fs"):format(getSoundPosition(p.sound)) else line = line .. ", no sound" end
-        else
-            line = line .. (p and p.url or "nothing")
-        end
-        if e.loaded then line = line .. (" | next %s loaded"):format(tostring(e.loaded.seg.track)) end
-        lines[#lines + 1] = line
+    if now then
+        for emitter in pairs(emitters) do updateEmitter(emitter, now) end
     end
-    dxDrawText(table.concat(lines, "\n"), 21, 301, 0, 0, tocolor(0, 0, 0, 220), 1, "default-bold")
-    dxDrawText(table.concat(lines, "\n"), 20, 300, 0, 0, tocolor(255, 255, 255, 230), 1, "default-bold")
+    if debugOverlay then
+        local text = table.concat(debugLines(), "\n")
+        dxDrawText(text, 21, 301, 0, 0, tocolor(0, 0, 0, 220), 1, "default-bold")
+        dxDrawText(text, 20, 300, 0, 0, tocolor(255, 255, 255, 230), 1, "default-bold")
+    end
 end)
+
+addCommandHandler("radiodebug", function() debugOverlay = not debugOverlay end)
 
 addEventHandler("onClientResourceStart", resourceRoot, function()
     triggerServerEvent("vana-radio:hello", resourceRoot)
-    -- A few quick pings for a first offset, then one every 30 s.
     for i = 0, 4 do setTimer(ping, 50 + i * 400, 1) end
     setTimer(ping, 30000, 0)
 end)

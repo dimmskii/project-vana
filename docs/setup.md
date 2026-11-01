@@ -273,3 +273,9 @@ The mod garages' part IDs and colour palette (`vana-shops/config/carmods_data.lu
 ```sh
 python3 tools/seed/seed_carmods.py "/path/to/GTA San Andreas" "vana-shops/config"
 ```
+
+Each model's spoilers (`vana-shops/config/spoilers_data.lua`) come from MTA Neon's source:
+
+```sh
+python3 tools/seed/seed_spoilers.py "/path/to/mtasa-neon/Server/mods/deathmatch/logic/CVehicleUpgrades.cpp" "vana-shops/config"
+```

@@ -40,19 +40,17 @@ local function playerCall(fn, ...)
     return ok and result or nil
 end
 
--- The menu for one shop and player: { key, label, price, category, owned } per item. Clothes carry
--- their apparel category (shopping.dat's clothes type) and whether the player already owns them,
--- plus a "take off" entry per category.
-local closetPoint = { kind = "closet" }
-
 -- A misc counter's stock: its own (config/shops.lua stocks) or the 24/7's.
 local function miscStock(shopName)
     local own = ShopConfig.stocks[shopName]
     return own and own.items or ShopConfig.misc
 end
 
+-- The menu for one shop and player: { key, label, price, category, owned } per item. Clothes carry
+-- their apparel category (shopping.dat's clothes type) and whether the player already owns them,
+-- plus a "take off" entry per category.
 local function catalogue(shopName, player)
-    local point = shopName == "CLOSET" and closetPoint or ShopPoints[shopName]
+    local point = ShopPoints[shopName]
     local items = {}
     if point.kind == "closet" then
         -- Every clothing item the player owns, all chains combined, by category.
@@ -247,9 +245,6 @@ local function savePlayer(player)
     if res and getResourceState(res) == "running" then pcall(function() exports["vana-player"]:savePlayer(player) end) end
 end
 
--- Closets: the changing room safehouse closet doors lead into. Arriving there opens the closet.
-local closets = {} -- player -> point where they arrived
-
 -- Trying things on: wearable menus snapshot the player's clothes when they open, previews are
 -- applied on top of it, and closing puts the snapshot back. A purchase becomes the new snapshot.
 local WEARABLE = { clothes = true, closet = true, hair = true, tattoo = true }
@@ -305,7 +300,7 @@ end
 addEvent("vana-shops:preview", true)
 addEventHandler("vana-shops:preview", resourceRoot, function(key)
     local shopName = open[client]
-    local point = shopName == "CLOSET" and closets[client] or shopName and ShopPoints[shopName]
+    local point = shopName and ShopPoints[shopName]
     if not point then return end
     local item
     for _, entry in ipairs(type(key) == "string" and catalogue(shopName, client) or {}) do
@@ -317,19 +312,10 @@ addEventHandler("vana-shops:preview", resourceRoot, function(key)
     if item then deliver(client, point.kind, key, shopName) end
 end)
 
-addEventHandler("onPlayerUseEntrance", root, function(name, _, toInterior, atHub)
-    if name ~= ShopConfig.closetEntrance or not atHub then return end
-    local player = source
-    local x, y, z = getElementPosition(player)
-    closets[player] = { kind = "closet", interior = toInterior, x = x, y = y, z = z - 1 }
-    local ok, why = openMenu(player, "CLOSET", "closet", ShopConfig.clothesCategories)
-    if not ok then Actions.status(player, why) end
-end)
-
 addEvent("vana-shops:buy", true)
 addEventHandler("vana-shops:buy", resourceRoot, function(key)
     local shopName = open[client]
-    local point = shopName == "CLOSET" and closets[client] or shopName and ShopPoints[shopName]
+    local point = shopName and ShopPoints[shopName]
     -- At the counter, or served by its keeper (a 24/7 clerk serves you from across the shop).
     if not point or type(key) ~= "string" or not (nearPoint(client, point) or keeperServes(shopName, client)) then return end
     local item
@@ -385,6 +371,7 @@ local ACTIONS = {
     clothes = { "buyclothes", "Buy clothes", "buy clothes" }, misc = { "buyitems", "Buy something", "shop" },
     fighting = { "learnstyle", "Learn a fighting style", "learn a fighting style" },
     hair = { "haircut", "Get a haircut", "get a haircut" }, tattoo = { "tattoo", "Get a tattoo", "get a tattoo" },
+    closet = { "changeclothes", "Change clothes", "change clothes" },
 }
 
 local function actionOf(point) return point.action or (ACTIONS[point.kind] or ACTIONS.misc)[1] end
@@ -459,7 +446,7 @@ end)
 
 addEventHandler("onPlayerQuit", root, function()
     keeperLeave(source, true)
-    open[source], closets[source], lastVend[source], outfits[source] = nil, nil, nil, nil
+    open[source], lastVend[source], outfits[source] = nil, nil, nil
 end)
 addEventHandler("onPlayerWasted", root, function() if open[source] then closeMenu(source, true) end end)
 

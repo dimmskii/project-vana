@@ -323,9 +323,25 @@ Flows.clothes = {
     end,
 }
 
+-- A shop with no staff (the closet): only its layout's door, seat and camera.
+local function staffless(k) return not k.model and not k.models end
+
+local function placeDoor(shopName)
+    local k, point = Keepers[shopName], ShopPoints[shopName]
+    local layout = KeeperLayouts[k.layout]
+    if layout.door and k.door and not props[shopName] then
+        local dx, dy, dz, dh = spot(shopName, layout.door)
+        local d = createObject(k.door, dx, dy, dz, 0, 0, dh)
+        setElementInterior(d, point.interior)
+        setElementDimension(d, point.instance or 0)
+        props[shopName] = d
+    end
+end
+
 local function spawnKeeper(shopName)
     local k, point = Keepers[shopName], ShopPoints[shopName]
     local layout = KeeperLayouts[k.layout]
+    if staffless(k) then return placeDoor(shopName) end
     local x, y, z, heading
     if k.keeper then x, y, z, heading = unpack(k.keeper) else x, y, z, heading = spot(shopName, layout.keeper) end
     -- A clerk from the shop's pool (24/7s: the locals' faces) or its one vanilla model.
@@ -344,13 +360,7 @@ local function spawnKeeper(shopName)
         setElementDimension(kit, point.instance or 0)
         props[shopName] = kit
     end
-    if layout.door and k.door and not props[shopName] then
-        local dx, dy, dz, dh = spot(shopName, layout.door)
-        local d = createObject(k.door, dx, dy, dz, 0, 0, dh)
-        setElementInterior(d, point.interior)
-        setElementDimension(d, point.instance or 0)
-        props[shopName] = d
-    end
+    placeDoor(shopName)
 end
 
 -- The shop's keeper is serving this player now (its menu open, in the same room and close).
@@ -366,9 +376,11 @@ end
 function keeperSeat(player, shopName)
     local k = Keepers[shopName]
     if not k then return true end
-    if serving[shopName] and serving[shopName] ~= player then return false, "You look a bit busy, why don't you come back later." end
+    if serving[shopName] and serving[shopName] ~= player then
+        return false, staffless(k) and "Someone's already using it." or "You look a bit busy, why don't you come back later."
+    end
     local ped = staff[shopName]
-    if not isElement(ped) or isPedDead(ped) then return false, "There's nobody here to serve you." end
+    if not staffless(k) and (not isElement(ped) or isPedDead(ped)) then return false, "There's nobody here to serve you." end
     if robberies[shopName] then return false, "The shop's closed." end
     serving[shopName] = player
     customers[player] = { shop = shopName, layout = k.layout, token = 0 }
@@ -442,11 +454,13 @@ end)
 -- For shoptest: how many staffed shops have a live keeper.
 function keeperStatus()
     local alive, total = 0, 0
-    for shopName in pairs(Keepers) do
-        total = total + 1
-        local ped = staff[shopName]
-        if isElement(ped) and not isPedDead(ped) and getElementInterior(ped) == ShopPoints[shopName].interior
-            and getElementDimension(ped) == (ShopPoints[shopName].instance or 0) then alive = alive + 1 end
+    for shopName, k in pairs(Keepers) do
+        if not staffless(k) then
+            total = total + 1
+            local ped = staff[shopName]
+            if isElement(ped) and not isPedDead(ped) and getElementInterior(ped) == ShopPoints[shopName].interior
+                and getElementDimension(ped) == (ShopPoints[shopName].instance or 0) then alive = alive + 1 end
+        end
     end
     return alive, total
 end

@@ -63,7 +63,8 @@ ClerkModels = {
 }
 
 -- Shops with staff: layout, keeper model (vanilla's) and the shop's offset from the layout. A `keeper`
--- point here replaces the layout's (clothes clerks stand at each chain's own counter).
+-- point here replaces the layout's (clothes clerks stand at each chain's own counter). One without a
+-- model (or models) has no staff: just the layout's door, seat and camera.
 Keepers = {
     BARBERS = { layout = "hair", model = 156, offset = { 0, 0, 0 } },
     BARBER2 = { layout = "hair", model = 177, offset = { 6.987, -61.401, 0 } },
@@ -99,4 +100,7 @@ Keepers = {
     X711S3 = { layout = "convenience", models = ClerkModels.country, keeper = { 2.12, -30.70, 1002.55, 2 } }, -- no street door (a country store, when it gets one)
     SEXSHOP = { layout = "convenience", model = 246, keeper = { -103.80, -24.21, 999.72, 1 } }, -- VHFYST3, the LV sex shop's
     CSEXL = { layout = "clothes", model = 217, offset = { 1.2, -114.524, -1.51 }, keeper = { 204.366, -157.789, 999.563, 180 }, door = 2879 },
+    -- The safehouse closet (vanilla WARROBE): the clothes shops' changing room in the room every
+    -- closet door leads into, with Binco's door (CJ_BINCO_DOOR) and nobody behind a counter.
+    CLOSET = { layout = "clothes", offset = { 43.529, 0.694, 0.012 }, door = 2877 },
 }

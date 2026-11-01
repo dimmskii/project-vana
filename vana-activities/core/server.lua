@@ -320,6 +320,63 @@ function Activity.streetSpot(x, y, z, minD, maxD, kind, sameNetworkAs)
     end
 end
 
+-- Passengers let out (Activity.letOut): a fare at the end of the ride. They get out the way GTA's peds
+-- do, through their own door (core/client.lua, run by `player`, who syncs them); still seated after
+-- LETOUT_TRIES, they're taken out beside that door, never left under the car. Once on foot they walk
+-- on as one of vana-peds' pedestrians (an encounter, e.g. { mode = "flee", target = player }, starts
+-- straight away); if vana-peds can't take them (stopped, or no sidewalk near) they go after LETOUT_GONE_MS.
+local LETOUT_RETRY_MS, LETOUT_TRIES, LETOUT_GONE_MS = 1500, 3, 15000
+local lettingOut = {} -- ped -> { player, encounter, since, at, tries }
+
+-- Beside the seat's door: right-hand seats (1, 3) out to the right, rear seats (2, 3) further back.
+local function besideDoor(ped, vehicle, seat)
+    removePedFromVehicle(ped)
+    local m = getElementMatrix(vehicle)
+    local side = (seat == 1 or seat == 3) and 2.2 or -2.2
+    local along = seat >= 2 and -0.9 or 0.3
+    setElementPosition(ped, m[4][1] + m[1][1] * side + m[2][1] * along,
+        m[4][2] + m[1][2] * side + m[2][2] * along, m[4][3] + 0.3)
+    local _, _, rz = getElementRotation(vehicle)
+    setElementRotation(ped, 0, 0, rz + (side > 0 and -90 or 90), "default", true)
+end
+
+function Activity.letOut(ped, player, encounter)
+    if not isElement(ped) then return end
+    if isElement(player) then setElementSyncer(ped, player, true, true) end
+    lettingOut[ped] = { player = player, encounter = encounter, since = getTickCount(), at = 0, tries = 0 }
+end
+
+setTimer(function()
+    local now = getTickCount()
+    for ped, info in pairs(lettingOut) do
+        if not isElement(ped) then
+            lettingOut[ped] = nil
+        elseif isPedDead(ped) or now - info.since > LETOUT_GONE_MS then
+            lettingOut[ped] = nil
+            destroyElement(ped)
+        elseif getPedOccupiedVehicle(ped) then
+            local vehicle = getPedOccupiedVehicle(ped)
+            if now - info.at >= LETOUT_RETRY_MS then
+                info.at, info.tries = now, info.tries + 1
+                if info.tries > LETOUT_TRIES or not isElement(info.player) then
+                    besideDoor(ped, vehicle, getPedOccupiedVehicleSeat(ped) or 1)
+                else
+                    triggerClientEvent(info.player, "vana-activities:letOut", resourceRoot, ped)
+                end
+            end
+        else
+            local e = info.encounter
+            if e and not isElement(e.target) then e = nil end
+            local res = getResourceFromName("vana-peds")
+            local ok, adopted = false, false
+            if res and getResourceState(res) == "running" then
+                ok, adopted = pcall(function() return exports["vana-peds"]:adoptPed(ped, "civilian", nil, nil, e) end)
+            end
+            if ok and adopted then lettingOut[ped] = nil end
+        end
+    end
+end, 500, 0)
+
 -- Pick lists (core/client.lua): Activity.menu(player, title, items, onChoose(player, index), hint).
 local menus = {} -- player -> { id, onChoose }
 local menuId = 0
